@@ -1,0 +1,16 @@
+*.pyc
+.*.swp
+*~
+.ropeproject
+django/website/local_settings.py
+django/website/private_settings.py
+django/website/.ve
+django/website/distribute-*.tar.gz
+django/website/*.sqlite
+django/website/static
+django/website/uploads
+reports/*
+.DS_Store
+.pydevproject
+*.sql
+*.sql.gz

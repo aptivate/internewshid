@@ -1,0 +1,41 @@
+# NOTE After setup, consider pinning to a vertion or commit
+
+-e git+git://github.com/aptivate/dye.git@develop#egg=dye
+
+# core django
+Django
+pytz
+MySQL-python
+
+# testing
+
+pytest-django
+
+
+
+django-jenkins
+
+
+# ========================================================================
+
+### Apps Aptivate likes that we may want to use
+
+## ---------Search 
+#django-haystack
+#pyelasticsearch
+
+## ---------Custom apps
+#django-crispy-forms
+#django-extended-choices
+#django-recaptcha
+#django-registration
+
+## ---------Development
+#django-extensions
+#django-debug-toolbar
+
+## ---------CSS and assets
+#django-assets
+#webassets
+#pyScss
+#cssmin
