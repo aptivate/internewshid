@@ -131,6 +131,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'hid',
+    'users',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -190,8 +191,8 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 ########## Custom user app defaults
 # Select the correct user model
-# AUTH_USER_MODEL = "users.User"
-# LOGIN_REDIRECT_URL = "users:redirect"
+AUTH_USER_MODEL = "users.User"
+LOGIN_REDIRECT_URL = "users:redirect"
 ########## END Custom user app defaults
 
 
