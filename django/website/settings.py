@@ -126,11 +126,11 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    
+
 )
 
 LOCAL_APPS = (
-    
+
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -161,7 +161,7 @@ ROOT_URLCONF = 'urls'
 ########## django-secure - intended for sites that use SSL
 SECURE = False
 if SECURE:
-    INSTALLED_APPS += ("djangosecure", )
+    INSTALLED_APPS += ("djangosecure",)
 
     # set this to 60 seconds and then to 518400 when you can prove it works
     SECURE_HSTS_SECONDS = 60
@@ -178,11 +178,11 @@ if SECURE:
 ########## AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    #"allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 # Some really nice defaults
-#ACCOUNT_AUTHENTICATION_METHOD = "username"
+# ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ########## END AUTHENTICATION CONFIGURATION
@@ -190,13 +190,13 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 ########## Custom user app defaults
 # Select the correct user model
-#AUTH_USER_MODEL = "users.User"
-#LOGIN_REDIRECT_URL = "users:redirect"
+# AUTH_USER_MODEL = "users.User"
+# LOGIN_REDIRECT_URL = "users:redirect"
 ########## END Custom user app defaults
 
 
 ########## SLUGLIFIER
-#AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
+# AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 ########## END SLUGLIFIER
 
 
@@ -265,7 +265,7 @@ def update_recursive(dest, source):
 # tasks.py expects to find local_settings.py so the database stuff is there
 #--------------------------------
 # local settings import
-#from http://djangosnippets.org/snippets/1873/
+# from http://djangosnippets.org/snippets/1873/
 #--------------------------------
 try:
     import local_settings
