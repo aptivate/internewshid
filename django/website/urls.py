@@ -6,6 +6,8 @@ from django.views.generic.base import RedirectView
 
 from django.contrib import admin
 from django.conf import settings
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -18,11 +20,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-
-    # This requires that static files are served from the 'static' folder.
-    # The apache conf is set up to do this for you, but you will need to do it
-    # on dev
-    (r'^favicon.ico$', RedirectView.as_view(url='{0}images/favicon.ico'.format(settings.STATIC_URL))),
+    url(r'^accounts/', include('users.urls')),
+    url(r'^', include('hid.urls')),
 )
 
 if settings.DEBUG:
@@ -30,4 +29,5 @@ if settings.DEBUG:
         url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
         url(r'', include('django.contrib.staticfiles.urls')),
+        (r'^favicon.ico$', RedirectView.as_view(url='{0}images/favicon.ico'.format(settings.STATIC_URL))),
     ) + urlpatterns
