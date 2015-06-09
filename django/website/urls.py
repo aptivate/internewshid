@@ -10,7 +10,8 @@ from django.conf import settings
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Examples:
     # url(r'^$', 'myapp.views.home', name='home'),
     # url(r'^myapp/', include('myapp.urls')),
@@ -25,9 +26,15 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-    urlpatterns = patterns('',
-        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    urlpatterns = patterns(
+        '',
+        url(
+            r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}
+        ),
         url(r'', include('django.contrib.staticfiles.urls')),
-        (r'^favicon.ico$', RedirectView.as_view(url='{0}images/favicon.ico'.format(settings.STATIC_URL))),
+        url(r'^favicon.ico$', RedirectView.as_view(
+            url='{0}images/favicon.ico'.format(settings.STATIC_URL),
+            permanent=True
+        )),
     ) + urlpatterns
