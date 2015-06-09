@@ -13,12 +13,12 @@ from os import path
 project_name = "internewshid"
 
 # repository type can be "cvs", "svn" or "git"
-#repo_type = "svn"
-#repository = 'https://svn.aptivate.org/svn/' + project_name + '/dev'
+# repo_type = "svn"
+# repository = 'https://svn.aptivate.org/svn/' + project_name + '/dev'
 
 repo_type = "git"
 repository = 'git@git.aptivate.org:' + project_name + '.git'
-#repository = 'git@github.com:aptivate/' + project_name + '.git'
+# repository = 'git@github.com:aptivate/' + project_name + '.git'
 
 ##################################################################
 # THESE SETTINGS MAY WELL BE CORRECT FOR A STANDARD DJANGO PROJECT
@@ -57,8 +57,8 @@ requirements_per_env = False
 local_requirements_file = path.join(local_deploy_dir, 'pip_packages.txt')
 
 # the requirements directory
-#requirements_per_env = True
-#local_requirements_dir = path.join(local_deploy_dir, 'requirements')
+# requirements_per_env = True
+# local_requirements_dir = path.join(local_deploy_dir, 'requirements')
 # and the files should be path.join(requirements_dir, '%s.txt' % environment)
 
 test_cmd = ' manage.py test'
@@ -72,7 +72,7 @@ host_list = {
 # this is the default git branch to use on each server
 default_branch = {
     'production':   'master',
-    'staging':      'master',
+    'staging':      'staging',
 }
 
 # where on the server the django apps are deployed
@@ -97,5 +97,5 @@ if socket.getfqdn().endswith('.fen.aptivate.org'):
 
 # if you have an ssh key and particular user you need to use
 # then uncomment the next 2 lines
-#user = "root"
-#key_filename = ["/home/shared/keypair.rsa"]
+# user = "root"
+# key_filename = ["/home/shared/keypair.rsa"]
