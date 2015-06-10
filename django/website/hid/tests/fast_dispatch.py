@@ -39,14 +39,18 @@ class FakeSession(collections.MutableMapping):
     def set_test_cookie(self):
         pass
 
+    def flush(self):
+        pass
+
+
 class FastDispatchMixin(object):
 
     default_cms_page = None
 
-    def get_fake_request(self, path, method='get', get_params=None, 
+    def get_fake_request(self, path, method='get', get_params=None,
         post_params=None, request_extras=None, file_params=None):
 
-        get_params  = get_params  if get_params  else {}
+        get_params = get_params  if get_params  else {}
         post_params = post_params if post_params else {}
         file_params = file_params if file_params else {}
 
@@ -107,12 +111,12 @@ class FastDispatchMixin(object):
 
         return request
 
-    def fast_dispatch(self, view_name, method='get', url_args=None, 
+    def fast_dispatch(self, view_name, method='get', url_args=None,
         url_kwargs=None, post_params=None, get_params=None, language=None,
         request_extras=None, file_params=None):
 
-        url_args    = url_args    if url_args    else []
-        url_kwargs  = url_kwargs  if url_kwargs  else {}
+        url_args = url_args    if url_args    else []
+        url_kwargs = url_kwargs  if url_kwargs  else {}
 
         from django.utils.translation import override
         with override(language):

@@ -18,3 +18,18 @@ class SiteNeedsAuthenticationTests(FastDispatchMixin, SimpleTestCase):
         response.render()
 
         self.assertIn('dashboard', response.content)
+
+    def test_logout_view_logs_user_out(self):
+        self.user = User()
+
+        self.fast_dispatch('dashboard')
+
+        # The user when logged out should be None or AnonymousUser
+        # We check that logout works by getting the user from the logout
+        # request and using it as the user for the next one.
+        response = self.fast_dispatch('logout')
+        self.user = response.view.request.user
+
+        response = self.fast_dispatch('dashboard')
+
+        self.assertEqual(settings.LOGIN_URL + '?next=' + reverse('dashboard'), response['Location'])
