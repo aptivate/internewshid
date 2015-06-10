@@ -2,6 +2,8 @@
 
 -e git://github.com/aptivate/dye.git@b881bdfcfa1bfda7912a24167ad8d0bd3b6aac97#egg=dye
 
+linecache2==1.0.0
+
 # core django
 Django==1.8.2
 pytz==2015.4
