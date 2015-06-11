@@ -1,5 +1,6 @@
 <!doctype html>
-
+{% load bootstrap3 %}
+{% load i18n %}
 <html>
 <head>
   <meta charset="utf-8">
@@ -7,11 +8,34 @@
   <title>internewshid</title>
   <meta name="description" content="internewshid - Humanitarian Information Dashboard for Internews">
   <meta name="author" content="Mark Skipper">
+  {% bootstrap_css %}
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% if 'javascript_in_head'|bootstrap_setting %}{% bootstrap_javascript jquery=True %}{% endif %}
+  {% block bootstrap3_extra_head %}{% endblock %}
+  <link href="{{ STATIC_URL }}css/styles.css" media="all" rel="stylesheet" />
 </head>
 
 <body>
     
     {% block content %}
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <div class="container-fluid">
+        <div class="row-fluid">
+	        <div class="col-sm-2 col-sd-2 sidebar internews-sidebar">
+	            <h2>{% trans "Internews" %}</h2>
+	            <p>{% trans "humanitarian information dashboard (HID)" %} <a href=".">{% trans "info" %}</a></p>
+	        </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main internews-main">
+            {% block maincontent %}
+            {% endblock maincontent %}
+            </div>
+        </div>
+    </div>
     {% endblock content %}
     
 </body>

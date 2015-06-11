@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+.internews-sidebar {
+	background-color: #000;
+	color: #FFF;
+	position: fixed;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.internews-main, .internews-sidebar {
+	margin-bottom: -9999px;
+	padding-bottom: 9999px;
+}
