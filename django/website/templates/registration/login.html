@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 
-{% block content %}
-<form action="." method="post">{% csrf_token %}
-<h1>{% trans "Log in" %}</h1>
-{{ form.as_p }}
-<input type="submit" name="submit" value="{% trans "Submit" %}" />
-</form>
-{% endblock content %}
+{% block maincontent %}
+    <div class="login_form">
+		<form action="." method="post">{% csrf_token %}
+		{% bootstrap_form form show_label=False %}
+		<a href=".">{% trans "forgot password?" %}</a> {% bootstrap_button "Log in" button_type="submit" value="Log in" %}
+		</form>
+	</div>
+{% endblock maincontent %}

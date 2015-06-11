@@ -41,3 +41,4 @@ django-jenkins==0.17.0
 #webassets
 #pyScss
 #cssmin
+django-bootstrap3
