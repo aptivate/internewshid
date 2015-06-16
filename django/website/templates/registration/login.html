@@ -7,7 +7,7 @@
     <div class="login_form">
 		<form action="." method="post">{% csrf_token %}
 		{% bootstrap_form form show_label=False %}
-		<a href=".">{% trans "forgot password?" %}</a> {% bootstrap_button "Log in" button_type="submit" value="Log in" %}
+		<a href=".">{% trans "Forgot password?" %}</a> {% bootstrap_button "Log in" button_type="submit" value="Log in" %}
 		</form>
 	</div>
 {% endblock maincontent %}

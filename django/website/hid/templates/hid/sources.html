@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block maincontent %}
+    <h2>{% trans "Sources" %}</h2>
+    <ul class="list-unstyled">
+        {% for source in sources %}
+        <li class="item-source clearfix">
+            <div class="item-source-info pull-left">
+                <h3>{{ source.name }}</h3>
+            </div>
+
+            <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions pull-right">
+                {% csrf_token %}
+                <a class="btn btn-primary btn-block" value="View/Edit data" type="button" href="{% url "sources-edit" source.src %}">View/Edit data</a>
+                {% bootstrap_form source.form show_label=False %}
+                {% bootstrap_button "Upload" button_type="submit" value="Upload" button_class="item-source-upload btn-block btn-primary" %}
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock maincontent %}
+
+{% block lastjs %}
+<script>
+$(function () {
+    $(".item-source-upload").on("click", function (e) {
+        e.preventDefault();
+        $(this).parents("form").find('[type="file"]').click();
+    });
+
+    $('.item-source [type="file"]').on("change", function (e) {
+        e.preventDefault();
+        $(this).parents("form")[0].submit();
+    });
+});
+</script>
+{% endblock lastjs %}
