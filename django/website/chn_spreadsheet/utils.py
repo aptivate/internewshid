@@ -60,7 +60,9 @@ def order_columns(profile_columns, first_row=None):
                 error_msg = _('Unknown column: %s') % label
                 raise SheetImportException(error_msg)
     else:
-        columns = profile_columns[:]
+        columns = [d.copy() for d in profile_columns]
+        for col in columns:
+            del col['name']  # Unify with first row version
 
     return columns
 
