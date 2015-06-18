@@ -1,3 +1,4 @@
+import dateutil.parser
 from decimal import Decimal
 
 from django.utils.translation import ugettext as _
@@ -54,7 +55,7 @@ def order_columns(profile_columns, first_row=None):
         col_map = get_columns_map(profile_columns)
         for label in first_row:
             try:
-                columns.append(col_map['label'])
+                columns.append(col_map[label])
             except:
                 error_msg = _('Unknown column: %s') % label
                 raise SheetImportException(error_msg)
@@ -70,15 +71,20 @@ def get_fields_and_types(columns):
     return fields, types
 
 
+def parse_date(value):
+    return dateutil.parser.parse(value, dayfirst=True).date()
+
+
 def convert_row(orig_values, types, row_number):
     converters = {
         'text': lambda x: x,
-        'date': lambda x: x,
+        'date': parse_date,
         'integer': lambda x: int(x),
         'number': lambda x: Decimal(x)
     }
     row = []
     for value_type, value in zip(types, orig_values):
+
         if value_type not in converters:
             err_msg = _(u"Unknown data type '%s' on row %d ") % \
                 (value_type, row_number)
@@ -92,19 +98,29 @@ def convert_row(orig_values, types, row_number):
     return row
 
 
+def normalize_row(raw_row):
+    # Unify difference between CSV and openpyxl cells
+    row = []
+    for val in raw_row:
+        value = val.value if hasattr(val, "value") else val
+        row.append(value)
+    return row
+
+
 def process_rows(spreadsheet, profile):
     file_format = profile.get('format')
     rows = get_rows_iterator(spreadsheet, file_format)
 
     # If skip_header, then use profile's order of columns, otherwise
     # use header line to check mapping and define order
-    first_row = rows.next() if not profile['skip_header'] else None
-    columns = order_columns(profile['columns'], first_row)
+    first_row = rows.next() if profile['skip_header'] else None
+    columns = order_columns(profile['columns'], normalize_row(first_row))
 
     fields, types = get_fields_and_types(columns)
 
     objects = []
-    for i, row in enumerate(rows):
+    for i, raw_row in enumerate(rows):
+        row = normalize_row(raw_row)
         row_num = i + 2 if first_row else i + 1
         values = convert_row(row, types, row_num)
         obj = dict(zip(fields, values))
