@@ -11,6 +11,11 @@ html, body {
     overflow: hidden;
 }
 
+.messages > li {
+    margin-bottom: .5em;
+    padding: 1em;
+}
+
 .internews-main, .internews-sidebar {
 	margin-bottom: -2999px;
 	padding-bottom: 2999px;

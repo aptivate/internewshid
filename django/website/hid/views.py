@@ -1,8 +1,11 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
+from chn_spreadsheet.utils import store_spreadsheet, SheetImportException
 from .forms import UploadForm, get_spreadsheet_choices
 
 
@@ -36,6 +39,13 @@ class UploadSpreadsheetView(FormView):
         data = form.cleaned_data
         source = data['source']
         uploaded_file = data['file']
-        print source, uploaded_file
+
+        try:
+            saved = store_spreadsheet(source, uploaded_file)
+            msg = _("Upload successful! %d entries have been added.") % saved
+            messages.success(self.request, msg)
+        except SheetImportException as exc:
+            msg = exc.message
+            messages.error(self.request, msg)
 
         return HttpResponseRedirect(self.get_success_url())

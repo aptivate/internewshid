@@ -30,13 +30,21 @@
 	            <p>{% trans "humanitarian information dashboard (HID)" %} <a href="/">{% trans "info" %}</a></p>
 
                 {% if request.user.is_authenticated %}
-                <ul>
+                <ul class="list-unstyled">
                     <li><a href="{% url "sources" %}">Sources</a></li>
                 </ul>
                 {% endif %}
 
 	        </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main internews-main">
+                {% if messages %}
+                <ul class="messages list-unstyled">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }} {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
             {% block maincontent %}
             {% endblock maincontent %}
             </div>

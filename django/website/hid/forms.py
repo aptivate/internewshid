@@ -1,13 +1,5 @@
 from django import forms
-
-
-UPLOAD_CHOICES = (
-    ('geopoll', 'Geopoll'),
-)
-
-
-def get_spreadsheet_choices():
-    return UPLOAD_CHOICES
+from chn_spreadsheet.models import get_spreadsheet_choices
 
 
 class UploadForm(forms.Form):
