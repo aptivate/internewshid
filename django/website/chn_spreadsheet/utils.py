@@ -85,7 +85,9 @@ def convert_row(orig_values, types, row_number):
     row = []
     for value_type, value in zip(types, orig_values):
 
-        if value_type not in converters:
+        if value_type == 'ignore':
+            continue
+        elif value_type not in converters:
             err_msg = _(u"Unknown data type '%s' on row %d ") % \
                 (value_type, row_number)
             raise SheetImportException(err_msg)
