@@ -20,3 +20,15 @@ class HandlerTests(TestCase):
         outmessage = models.Message.objects.get()
         self.assertEqual(outmessage.body, "Text")
         self.assertEqual(outmessage.timestamp, now)
+
+    def test_message_list_empty(self):
+        messages = handlers.Message.list()
+        self.assertEqual(len(list(messages)), 0)
+
+    def test_message_list_one(self):
+        models.Message(body="Test").save()
+
+        [message] = handlers.Message.list()
+
+        self.assertEqual(message['body'], "Test")
+
