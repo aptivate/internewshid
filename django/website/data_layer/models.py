@@ -9,4 +9,4 @@ class DataLayerModel(models.Model):
 
 class Message(DataLayerModel):
     body = models.TextField()
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(null=True)
