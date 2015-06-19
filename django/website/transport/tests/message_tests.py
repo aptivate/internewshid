@@ -9,11 +9,21 @@ from transport import data_layer_transport as dl
 class TransportLayerMessageTests(SimpleTestCase):
 
     def test_get_messages_exists(self):
-        models = dl.get_messages()
-        self.assertEqual(len(models), 0)
+        messages = dl.get_messages()
+        self.assertEqual(len(messages), 0)
 
     def test_store_messages_exists(self):
-        message = dict(body="text", timestamp=datetime.now())
+        message = dict()
         dl.store_message(message)
 
+    def test_stored_messages_can_be_gotten(self):
+        now = datetime.now()
+        message = dict(body="Text", timestamp=now)
 
+        dl.store_message(message)
+        messages = dl.get_messages()
+
+        self.assertEqual(len(messages), 1)
+        outmessage = messages[1]
+        self.assertEqual(outmessage['body'], "Text")
+        self.assertEqual(outmessage['timestamp'],  now)
