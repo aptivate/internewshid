@@ -1,3 +1,8 @@
+from data_layer import models
 
-def post_message(message):
-    pass
+
+class Message(object):
+
+    @classmethod
+    def create(cls, message):
+        models.Message(**message).save()

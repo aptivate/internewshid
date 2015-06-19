@@ -1,13 +1,22 @@
 from __future__ import unicode_literals, absolute_import
-from datetime import datetime
 
-from django.test.testcases import SimpleTestCase
+from django.test import TestCase
+from django.utils import timezone
 
 from data_layer import handlers
+from data_layer import models
 
 
-class HandlerTests(SimpleTestCase):
+class HandlerTests(TestCase):
 
-    def test_message_post_handler(self):
-        message = dict(body="Text", timestamp=datetime.now())
-        handlers.post_message(message)
+    def test_message_create(self):
+        now = timezone.now().replace(
+            microsecond=0  # MySQL discards microseconds
+        )
+        inmessage = dict(body="Text", timestamp=now)
+
+        handlers.Message.create(inmessage)
+
+        outmessage = models.Message.objects.get()
+        self.assertEqual(outmessage.body, "Text")
+        self.assertEqual(outmessage.timestamp, now)
