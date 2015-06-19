@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 
 from .utils import (
     get_profile, get_columns_map, order_columns, get_fields_and_types,
-    parse_date, normalize_row, get_rows_iterator, convert_row,
+    parse_date, normalize_row, get_rows_iterator, convert_row, process_rows,
     SheetProfile, SheetImportException
 )
 
@@ -169,3 +169,46 @@ def test_normalize_row_differences():
     row = [5, 'London', Cell('1.1.2015')]
     result = normalize_row(row)
     assert result == [5, 'London', '1.1.2015']
+
+
+def test_normalize_row_works_with_none():
+    assert normalize_row(None) is None
+
+
+def __test_process_rows_without_or_with_header(with_header):
+    def _rows_generator():
+        rows = [
+            ('Province', 'Message'),
+            ('London', 'Short message'),
+            ('Cambridge', 'What?'),
+        ]
+        if not with_header:
+            rows = rows[1:]
+        for row in rows:
+            yield row
+
+    columns = [d.copy() for d in COLUMN_LIST]
+    columns[0]['type'] = 'text'
+    rows = _rows_generator()
+
+    objects = process_rows(rows, columns, with_header)
+    expected_objects = [
+        {
+            'message.location': 'London',
+            'message.content': 'Short message'
+        },
+        {
+            'message.location': 'Cambridge',
+            'message.content': 'What?'
+        },
+    ]
+
+    assert objects == expected_objects
+
+
+def test_process_rows_without_header():
+    __test_process_rows_without_or_with_header(False)
+
+
+def test_process_rows_with_header():
+    __test_process_rows_without_or_with_header(True)

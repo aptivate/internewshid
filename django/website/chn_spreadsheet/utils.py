@@ -104,21 +104,20 @@ def convert_row(orig_values, types, row_number):
 
 def normalize_row(raw_row):
     # Unify difference between CSV and openpyxl cells
-    row = []
-    for val in raw_row:
-        value = val.value if hasattr(val, "value") else val
-        row.append(value)
-    return row
+    if raw_row:
+        row = []
+        for val in raw_row:
+            value = val.value if hasattr(val, "value") else val
+            row.append(value)
+        return row
+    return None
 
 
-def process_rows(spreadsheet, profile):
-    file_format = profile.get('format')
-    rows = get_rows_iterator(spreadsheet, file_format)
-
-    # If skip_header, then use profile's order of columns, otherwise
-    # use header line to check mapping and define order
-    first_row = rows.next() if profile['skip_header'] else None
-    columns = order_columns(profile['columns'], normalize_row(first_row))
+def process_rows(rows, profile_columns, skip_header=False):
+    # If there is no header (skip_header=False), then use profile's order of
+    # columns, otherwise use header line to check mapping and define order
+    first_row = rows.next() if skip_header else None
+    columns = order_columns(profile_columns, normalize_row(first_row))
 
     fields, types = get_fields_and_types(columns)
 
@@ -140,5 +139,10 @@ def save_rows(objects, data_type):
 
 def store_spreadsheet(label, fobject):
     profile = get_profile(label)
-    items = process_rows(fobject, profile)
+
+    file_format = profile.get('format')
+    skip_header = profile.get('skip_header', False)
+
+    rows = get_rows_iterator(fobject, file_format)
+    items = process_rows(rows, profile['columns'], skip_header)
     return save_rows(items, 'message')
