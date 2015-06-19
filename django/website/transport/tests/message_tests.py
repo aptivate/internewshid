@@ -1,29 +1,32 @@
 from __future__ import unicode_literals, absolute_import
-from datetime import datetime
 
-from django.test.testcases import SimpleTestCase
+from django.test import TestCase
+from django.utils import timezone
 
 from transport import data_layer_transport as dl
 
 
-class TransportLayerMessageTests(SimpleTestCase):
+# TODO use mock here to verify the handler methods are being called instead of
+# verifying the store behaviour
+class TransportLayerMessageTests(TestCase):
 
     def test_get_messages_exists(self):
         messages = dl.get_messages()
-        self.assertEqual(len(messages), 0)
+        self.assertEqual(len(list(messages)), 0)
 
     def test_store_messages_exists(self):
         message = dict()
         dl.store_message(message)
 
     def test_stored_messages_can_be_gotten(self):
-        now = datetime.now()
+        now = timezone.now().replace(
+            microsecond=0  # MySQL discards microseconds
+        )
         message = dict(body="Text", timestamp=now)
 
         dl.store_message(message)
-        messages = dl.get_messages()
+        messagelist = list(dl.get_messages())
+        [outmessage] = messagelist
 
-        self.assertEqual(len(messages), 1)
-        outmessage = messages[1]
         self.assertEqual(outmessage['body'], "Text")
         self.assertEqual(outmessage['timestamp'],  now)

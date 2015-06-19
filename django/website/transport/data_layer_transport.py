@@ -1,9 +1,9 @@
-
+from data_layer.handlers import Message
 
 
 def get_messages():
-    return []
+    return Message.list()
 
 
 def store_message(message):
-    pass
+    Message.create(message)
