@@ -12,7 +12,7 @@ MySQL-python==1.2.5
 # testing
 
 pytest-django==2.8.0
-
+mock
 
 
 django-jenkins==0.17.0
