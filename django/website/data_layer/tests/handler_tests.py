@@ -13,7 +13,7 @@ class HandlerTests(TestCase):
         now = timezone.now().replace(
             microsecond=0  # MySQL discards microseconds
         )
-        inmessage = dict(body="Text", timestamp=now)
+        inmessage = {'body': "Text", 'timestamp': now}
 
         handlers.Message.create(inmessage)
 
