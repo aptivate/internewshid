@@ -31,4 +31,3 @@ class HandlerTests(TestCase):
         [message] = handlers.Message.list()
 
         self.assertEqual(message['body'], "Test")
-
