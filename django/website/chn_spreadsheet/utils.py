@@ -74,7 +74,12 @@ def get_fields_and_types(columns):
 
 
 def parse_date(value):
-    return dateutil.parser.parse(value, dayfirst=True).date()
+    if isinstance(value, basestring):
+        date_time = dateutil.parser.parse(value, dayfirst=True)
+    else:
+        date_time = value
+
+    return date_time.date()
 
 
 def convert_row(orig_values, types, row_number):

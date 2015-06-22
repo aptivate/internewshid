@@ -119,7 +119,8 @@ def test_successful_runs_of_parse_date():
         '05/01/2015',
         '5.1.2015',
         '5/1/15',
-        '05-01-2015'
+        '05-01-2015',
+        datetime.datetime(2015, 1, 5, 0, 0)
     )
     expected = datetime.date(2015, 1, 5)
     for date in dates:
