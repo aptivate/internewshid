@@ -17,10 +17,11 @@
   <![endif]-->
   {% block bootstrap3_extra_head %}{% endblock %}
   <link href="{{ STATIC_URL }}css/styles.css" media="all" rel="stylesheet" />
+  <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico?v=1"/>
 </head>
 
 <body>
-    
+
     {% block content %}
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <div class="container-fluid">
@@ -51,7 +52,7 @@
         </div>
     </div>
     {% endblock content %}
-    
+
     {% block bootstrap3_extra_js %}
 {% bootstrap_javascript jquery=True %}
     {% endblock %}
