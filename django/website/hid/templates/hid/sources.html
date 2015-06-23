@@ -13,7 +13,7 @@
 
             <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions pull-right">
                 {% csrf_token %}
-                <a class="btn btn-primary btn-block" value="View/Edit data" type="button" href="{% url "sources-edit" source.src %}">View/Edit data</a>
+                <a class="btn btn-primary btn-block" value="View/Edit data" type="button" href="{% url "data-view" %}">View/Edit data</a>
                 {% bootstrap_form source.form show_label=False %}
                 {% bootstrap_button "Upload" button_type="submit" value="Upload" button_class="item-source-upload btn-block btn-primary" %}
             </form>
