@@ -4,10 +4,14 @@
 
 
 {% block maincontent %}
-    <div class="login_form">
-		<form action="." method="post">{% csrf_token %}
-		{% bootstrap_form form show_label=False %}
-		<a href=".">{% trans "forgot password?" %}</a> {% bootstrap_button "Log in" button_type="submit" value="Log in" %}
-		</form>
-	</div>
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default login-form">
+            <div class="form-group panel-body">
+                <form action="." method="post">{% csrf_token %}
+                {% bootstrap_form form show_label=False %}
+                {% bootstrap_button "Log in" button_type="submit" value="Log in" button_class="pull-right" %}
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock maincontent %}

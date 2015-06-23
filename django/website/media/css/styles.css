@@ -15,3 +15,9 @@ html, body {
 	margin-bottom: -9999px;
 	padding-bottom: 9999px;
 }
+
+/* ------------- login form ---------------- */
+
+.login-form {
+    margin-top: 100px;
+}
