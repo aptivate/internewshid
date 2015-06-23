@@ -5,5 +5,5 @@ def get_messages():
     return Message.list()
 
 
-def store_message(message):
+def create_message(message):
     Message.create(message)

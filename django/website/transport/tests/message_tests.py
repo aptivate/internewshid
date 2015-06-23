@@ -18,5 +18,5 @@ class TransportLayerMessageTests(TestCase):
     @patch('data_layer.handlers.Message.create')
     def test_store_message_uses_create(self, create):
         message = {}
-        dl.store_message(message)
+        dl.create_message(message)
         create.assert_called_with(message)
