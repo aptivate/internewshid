@@ -7,6 +7,7 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default login-form">
             <div class="form-group panel-body">
+                <h3> {% bootstrap_icon "user" %} HID login </h3>
                 <form action="." method="post">{% csrf_token %}
                 {% bootstrap_form form show_label=False %}
                 {% bootstrap_button "Log in" button_type="submit" value="Log in" button_class="pull-right" %}
