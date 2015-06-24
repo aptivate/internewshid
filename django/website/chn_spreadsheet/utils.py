@@ -109,28 +109,21 @@ def convert_row(orig_values, types, row_number):
 
 def normalize_row(raw_row):
     # Unify difference between CSV and openpyxl cells
-    if raw_row:
-        row = []
-        for val in raw_row:
-            value = val.value if hasattr(val, "value") else val
-            row.append(value)
-        return row
-    return None
+    return [getattr(v, 'value', v) for v in raw_row]
 
 
 def process_rows(rows, profile_columns, skip_header=False):
     # If there is no header (skip_header=False), then use profile's order of
     # columns, otherwise use header line to check mapping and define order
-    first_row = rows.next() if skip_header else None
-    columns = order_columns(profile_columns, normalize_row(first_row))
+    first_row = normalize_row(rows.next()) if skip_header else None
+    columns = order_columns(profile_columns, first_row)
 
     fields, types = get_fields_and_types(columns)
 
     objects = []
-    for i, raw_row in enumerate(rows):
+    for i, raw_row in enumerate(rows, 2 if first_row else 1):
         row = normalize_row(raw_row)
-        row_num = i + 2 if first_row else i + 1
-        values = convert_row(row, types, row_num)
+        values = convert_row(row, types, i)
         obj = dict(zip(fields, values))
         objects.append(obj)
     return objects
