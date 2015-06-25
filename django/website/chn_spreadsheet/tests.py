@@ -2,6 +2,7 @@ import datetime
 import decimal
 from os import path
 import pytest
+import pytz
 
 from django.utils.translation import ugettext as _
 
@@ -9,7 +10,7 @@ from .utils import (
     convert_value,
     get_profile, get_columns_map, order_columns, get_fields_and_types,
     parse_date, normalize_row, get_rows_iterator, process_row, process_rows,
-    store_spreadsheet,
+    save_rows, store_spreadsheet,
     SheetProfile, SheetImportException
 )
 
@@ -284,3 +285,20 @@ def test_items_imported():
 
     items = Message.objects.all()
     assert len(items) > 0
+
+
+@pytest.mark.django_db
+def test_date_imported_correctly():
+    objects = [{
+        'timestamp': datetime.datetime(2015, 6, 1)
+        }]
+
+    save_rows(objects, 'message')
+
+    item = Message.objects.all()[0]
+
+    print item.timestamp
+
+    expected_date = pytz.utc.localize(datetime.datetime(2015, 6, 1))
+
+    assert item.timestamp == expected_date
