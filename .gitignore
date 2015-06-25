@@ -14,3 +14,4 @@ reports/*
 .pydevproject
 *.sql
 *.sql.gz
+TAGS
