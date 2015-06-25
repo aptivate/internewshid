@@ -11,9 +11,27 @@ html, body {
     overflow: hidden;
 }
 
+.messages > li {
+    margin-bottom: .5em;
+    padding: 1em;
+}
+
 .internews-main, .internews-sidebar {
-	margin-bottom: -9999px;
-	padding-bottom: 9999px;
+    margin-bottom: -2999px;
+    padding-bottom: 2999px;
+}
+.internews-main {
+    padding-top: 2em;
+}
+
+.item-source {
+    margin-bottom: 1em;
+    padding: 1em;
+    border: 1px solid silver;
+}
+
+.item-source input[type="file"] {
+    display: none;
 }
 
 /* ------------- login form ---------------- */
