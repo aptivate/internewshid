@@ -7,6 +7,7 @@ class DataLayerModel(models.Model):
     class Meta:
         abstract = True
 
+
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)

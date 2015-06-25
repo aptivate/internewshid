@@ -148,7 +148,6 @@ def process_rows(rows, profile_columns, skip_header=False):
     # columns = [{'field': "...", 'type': "..."}, ...]
 
     objects = []
-    errors = []
     for i, row in enumerate(rows, 2 if first_row else 1):
         try:
             objects.append(process_row(row, columns))
