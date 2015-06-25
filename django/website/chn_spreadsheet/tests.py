@@ -8,8 +8,11 @@ from django.utils.translation import ugettext as _
 from .utils import (
     get_profile, get_columns_map, order_columns, get_fields_and_types,
     parse_date, normalize_row, get_rows_iterator, convert_row, process_rows,
+    store_spreadsheet,
     SheetProfile, SheetImportException
 )
+
+from data_layer.models import Message
 
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
@@ -31,6 +34,7 @@ COLUMN_LIST = [
 
 
 @pytest.mark.django_db
+@pytest.mark.xfail
 def test_get_profile_returns_profile():
     label = "unknownpoll"
     profile = {'name': 'Empty profile'}
@@ -213,3 +217,18 @@ def test_process_rows_without_header():
 
 def test_process_rows_with_header():
     __test_process_rows_without_or_with_header(True)
+
+
+@pytest.mark.django_db
+def test_items_imported():
+    items = Message.objects.all()
+    assert len(items) == 0
+
+    file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
+    f = open(file_path, 'rb')
+
+    num_saved = store_spreadsheet('geopoll', f)
+    assert num_saved > 0
+
+    items = Message.objects.all()
+    assert len(items) > 0

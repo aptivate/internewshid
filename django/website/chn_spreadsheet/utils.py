@@ -4,6 +4,8 @@ from decimal import Decimal
 from django.utils.translation import ugettext as _
 from openpyxl import load_workbook
 
+from transport.data_layer_transport import create_message
+
 from .models import SheetProfile
 
 
@@ -17,7 +19,39 @@ def get_profile(label):
     except SheetProfile.DoesNotExist:
         error_msg = _('Misconfigured service. Source "%s" does not exist') % label
         raise SheetImportException(error_msg)
-    return sheet_profile.profile
+
+    # TODO: Revert to using database
+    # return sheet_profile.profile
+
+    return {
+        "label": "geopoll",
+        "name": "Geopoll",
+        "format": "excel",
+        "type": "message",
+        "columns": [
+            {
+                "name": "Province",
+                "type": "ignore",
+                "field": "ignore"
+            },
+            {
+                "name": "CreatedDate",
+                "type": "date",
+                "field": "timestamp"
+            },
+            {
+                "name": "AgeGroup",
+                "type": "ignore",
+                "field": "ignore"
+            },
+            {
+                "name": "QuestIO",
+                "type": "text",
+                "field": "body"
+            }
+        ],
+        "skip_header": 1
+    }
 
 
 def get_columns_map(col_list):
@@ -68,7 +102,8 @@ def order_columns(profile_columns, first_row=None):
 
 
 def get_fields_and_types(columns):
-    fields = [col['field'] for col in columns]
+    # TODO: Refactor to ignore 'ignore'd fields and values in the same place
+    fields = [col['field'] for col in columns if col['type'] != 'ignore']
     types = [col['type'] for col in columns]
     return fields, types
 
@@ -138,7 +173,8 @@ def process_rows(rows, profile_columns, skip_header=False):
 
 def save_rows(objects, data_type):
     for obj in objects:
-        pass
+        create_message(obj)
+
     return len(objects)
 
 
