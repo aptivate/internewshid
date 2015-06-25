@@ -176,10 +176,6 @@ def test_normalize_row_differences():
     assert result == [5, 'London', '1.1.2015']
 
 
-def test_normalize_row_works_with_none():
-    assert normalize_row(None) is None
-
-
 def __test_process_rows_without_or_with_header(with_header):
     def _rows_generator():
         rows = [
