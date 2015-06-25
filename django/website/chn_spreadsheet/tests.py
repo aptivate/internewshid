@@ -172,8 +172,7 @@ def test_process_row():
         }
     ]
 
-    row_no = 4
-    converted = process_row(row, columns, row_no)
+    converted = process_row(row, columns)
     assert converted == {
         'message': 'Short message',
         'age': 5,
@@ -187,8 +186,8 @@ def test_convert_value_raises_on_unknown_type():
     type = 'location'
 
     with pytest.raises(SheetImportException) as excinfo:
-        convert_value(value, type, 5)
-    assert excinfo.value.message == _(u"Unknown data type 'location' on row 5 ")
+        convert_value(value, type)
+    assert excinfo.value.message == _(u"Unknown data type 'location' ")
 
 
 def test_convert_value_raises_on_malformed_value():
@@ -196,8 +195,8 @@ def test_convert_value_raises_on_malformed_value():
     type = 'integer'
 
     with pytest.raises(SheetImportException) as excinfo:
-        convert_value(value, type, 3)
-    assert excinfo.value.message == _(u"Can not process value 'not_integer' of type 'integer' on row 3 ")
+        convert_value(value, type)
+    assert excinfo.value.message == _(u"Can not process value 'not_integer' of type 'integer' ")
 
 
 def test_normalize_row_differences():
@@ -247,6 +246,29 @@ def test_process_rows_without_header():
 
 def test_process_rows_with_header():
     __test_process_rows_without_or_with_header(True)
+
+
+def test_process_rows_displays_line_number_on_error():
+    def _rows_generator():
+        rows = [
+            ('Province', 'Message'),
+            ('London', 'Short message'),
+            ('Cambridge', 'What?'),
+        ]
+
+        for row in rows:
+            yield row
+
+    columns = [d.copy() for d in COLUMN_LIST]
+    columns[0]['type'] = 'location'
+    rows = _rows_generator()
+
+    with_header = True
+    with pytest.raises(SheetImportException) as excinfo:
+        process_rows(rows, columns, with_header)
+
+    assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
+    assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
 
 @pytest.mark.django_db

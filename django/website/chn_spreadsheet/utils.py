@@ -1,5 +1,6 @@
 import dateutil.parser
 from decimal import Decimal
+import sys
 
 from django.utils.translation import ugettext as _
 from openpyxl import load_workbook
@@ -116,7 +117,7 @@ def parse_date(value):
     return date_time.date()
 
 
-def convert_value(value, type, row_number):
+def convert_value(value, type):
     converters = {
         'text': lambda x: x,
         'date': parse_date,
@@ -125,13 +126,13 @@ def convert_value(value, type, row_number):
     }
     if type not in converters:
         raise SheetImportException(
-            _(u"Unknown data type '%s' on row %d ") % (type, row_number))
+            _(u"Unknown data type '%s' ") % (type))
     try:
         return converters[type](value)
     except:
         raise SheetImportException(
-            _(u"Can not process value '%s' of type '%s' on row %d ") %
-            (value, type, row_number))
+            _(u"Can not process value '%s' of type '%s' ") %
+            (value, type))
 
 
 def normalize_row(raw_row):
@@ -147,12 +148,18 @@ def process_rows(rows, profile_columns, skip_header=False):
     # columns = [{'field': "...", 'type': "..."}, ...]
 
     objects = []
+    errors = []
     for i, row in enumerate(rows, 2 if first_row else 1):
-        objects.append(process_row(row, columns, i))
+        try:
+            objects.append(process_row(row, columns))
+        except SheetImportException as e:
+            raise type(e), type(e)(e.message +
+                                   'in row %d ' % i), sys.exc_info()[2]
+
     return objects
 
 
-def process_row(row, columns, row_no):
+def process_row(row, columns):
     values = normalize_row(row)
     return reduce(
         lambda object_dict, converter: converter.add_to(object_dict),
@@ -170,7 +177,7 @@ class CellConverter(object):
     def add_to(self, object_dict):
         if self.type != 'ignore':
             object_dict[self.field] = convert_value(
-                self.value, self.type, 0)
+                self.value, self.type)
         return object_dict
 
 
