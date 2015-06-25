@@ -102,8 +102,7 @@ def order_columns(profile_columns, first_row=None):
 
 
 def get_fields_and_types(columns):
-    # TODO: Refactor to ignore 'ignore'd fields and values in the same place
-    fields = [col['field'] for col in columns if col['type'] != 'ignore']
+    fields = [col['field'] for col in columns]
     types = [col['type'] for col in columns]
     return fields, types
 
@@ -117,29 +116,22 @@ def parse_date(value):
     return date_time.date()
 
 
-def convert_row(orig_values, types, row_number):
+def convert_value(value, type, row_number):
     converters = {
         'text': lambda x: x,
         'date': parse_date,
         'integer': lambda x: int(x),
         'number': lambda x: Decimal(x)
     }
-    row = []
-    for value_type, value in zip(types, orig_values):
-
-        if value_type == 'ignore':
-            continue
-        elif value_type not in converters:
-            err_msg = _(u"Unknown data type '%s' on row %d ") % \
-                (value_type, row_number)
-            raise SheetImportException(err_msg)
-        try:
-            row.append(converters[value_type](value))
-        except:
-            err_msg = _(u"Can not process value '%s' of type '%s' on row %d ") % \
-                (value, value_type, row_number)
-            raise SheetImportException(err_msg)
-    return row
+    if type not in converters:
+        raise SheetImportException(
+            _(u"Unknown data type '%s' on row %d ") % (type, row_number))
+    try:
+        return converters[type](value)
+    except:
+        raise SheetImportException(
+            _(u"Can not process value '%s' of type '%s' on row %d ") %
+            (value, type, row_number))
 
 
 def normalize_row(raw_row):
@@ -152,16 +144,34 @@ def process_rows(rows, profile_columns, skip_header=False):
     # columns, otherwise use header line to check mapping and define order
     first_row = normalize_row(rows.next()) if skip_header else None
     columns = order_columns(profile_columns, first_row)
-
-    fields, types = get_fields_and_types(columns)
+    # columns = [{'field': "...", 'type': "..."}, ...]
 
     objects = []
-    for i, raw_row in enumerate(rows, 2 if first_row else 1):
-        row = normalize_row(raw_row)
-        values = convert_row(row, types, i)
-        obj = dict(zip(fields, values))
-        objects.append(obj)
+    for i, row in enumerate(rows, 2 if first_row else 1):
+        objects.append(process_row(row, columns, i))
     return objects
+
+
+def process_row(row, columns, row_no):
+    values = normalize_row(row)
+    return reduce(
+        lambda object_dict, converter: converter.add_to(object_dict),
+        map(CellConverter, values, columns),
+        {}
+    )
+
+
+class CellConverter(object):
+    def __init__(self, value, col_spec):
+        self.value = value
+        self.type = col_spec['type']
+        self.field = col_spec['field']
+
+    def add_to(self, object_dict):
+        if self.type != 'ignore':
+            object_dict[self.field] = convert_value(
+                self.value, self.type, 0)
+        return object_dict
 
 
 def save_rows(objects, data_type):

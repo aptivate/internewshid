@@ -6,8 +6,9 @@ import pytest
 from django.utils.translation import ugettext as _
 
 from .utils import (
+    convert_value,
     get_profile, get_columns_map, order_columns, get_fields_and_types,
-    parse_date, normalize_row, get_rows_iterator, convert_row, process_rows,
+    parse_date, normalize_row, get_rows_iterator, process_row, process_rows,
     store_spreadsheet,
     SheetProfile, SheetImportException
 )
@@ -137,32 +138,65 @@ def test_exception_raised_on_faulty_dates():
         parse_date(bad_date)
 
 
-def test_convert_row():
+def test_process_row():
     row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
-    types = ('text', 'integer', 'number', 'date', 'ignore')
 
     number = decimal.Decimal('10.4')
     date = datetime.date(2015, 5, 1)
 
-    converted = convert_row(row, types, 4)
-    assert converted == ['Short message', 5, number, date]
+    columns = [
+        {
+            'name': 'Message',
+            'field': 'message',
+            'type': 'text'
+        },
+        {
+            'name': 'Age',
+            'field': 'age',
+            'type': 'integer'
+        },
+        {
+            'name': 'Cost',
+            'field': 'price',
+            'type': 'number'
+        },
+        {
+            'name': 'CreatedDate',
+            'field': 'created',
+            'type': 'date'
+        },
+        {
+            'name': 'Province',
+            'field': 'province',
+            'type': 'ignore'
+        }
+    ]
+
+    row_no = 4
+    converted = process_row(row, columns, row_no)
+    assert converted == {
+        'message': 'Short message',
+        'age': 5,
+        'price': number,
+        'created': date
+    }
 
 
-def test_convert_row_raises_on_unknown_type():
-    row = ['Short message']
-    types = ['location']
+def test_convert_value_raises_on_unknown_type():
+    value = 'Short message'
+    type = 'location'
 
     with pytest.raises(SheetImportException) as excinfo:
-        convert_row(row, types, 5)
+        convert_value(value, type, 5)
     assert excinfo.value.message == _(u"Unknown data type 'location' on row 5 ")
 
 
-def test_convert_row_raises_on_malformed_value():
-    row = ['not_integer']
-    types = ['integer']
+def test_convert_value_raises_on_malformed_value():
+    value = 'not_integer'
+    type = 'integer'
 
     with pytest.raises(SheetImportException) as excinfo:
-        convert_row(row, types, 3)
+        convert_value(value, type, 3)
     assert excinfo.value.message == _(u"Can not process value 'not_integer' of type 'integer' on row 3 ")
 
 
