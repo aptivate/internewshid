@@ -5,8 +5,12 @@ from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
+from django_tables2 import SingleTableView
+
 from chn_spreadsheet.utils import store_spreadsheet, SheetImportException
+import transport
 from .forms import UploadForm, get_spreadsheet_choices
+from .tables import ItemTable
 
 
 class ListSources(TemplateView):
@@ -49,3 +53,17 @@ class UploadSpreadsheetView(FormView):
             messages.error(self.request, msg)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+#
+#  VIEW & EDIT ITEMS VIEWS
+#
+class ViewItems(SingleTableView):
+    template_name = 'hid/view.html'
+    table_class = ItemTable
+    table_pagination = {
+        'per_page':25
+    }
+
+    def get_queryset(self):
+        return transport.get_items()

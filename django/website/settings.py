@@ -127,6 +127,7 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'bootstrap3',
+    'django_tables2',
 )
 
 LOCAL_APPS = (

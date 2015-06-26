@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load render_table from django_tables2 %}
 
 {% block maincontent %}
 <h2>View data</h2>
-<p>{% trans "This is the view data page." %}</p>
+
+{% render_table table %}
 
 {% endblock maincontent %}
