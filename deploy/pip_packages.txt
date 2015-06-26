@@ -26,7 +26,7 @@ python-dateutil==2.4.2
 
 ### Apps Aptivate likes that we may want to use
 
-## ---------Search 
+## ---------Search
 #django-haystack
 #pyelasticsearch
 
@@ -46,3 +46,5 @@ python-dateutil==2.4.2
 #pyScss
 #cssmin
 django-bootstrap3
+
+# vi: filetype=conf
