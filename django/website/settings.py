@@ -133,11 +133,15 @@ LOCAL_APPS = (
     'hid',
     'users',
     'chn_spreadsheet',
-    'transport',
-    'data_layer',
 )
 
-INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
+DATA_LAYER_APPS = (
+    'transport',
+    'data_layer',
+    'rest_api',
+)
+
+INSTALLED_APPS = LOCAL_APPS + DATA_LAYER_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
 ########## END APP CONFIGURATION
 
