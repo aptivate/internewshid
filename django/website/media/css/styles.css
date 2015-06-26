@@ -17,8 +17,8 @@ html, body {
 }
 
 .internews-main, .internews-sidebar {
-	margin-bottom: -2999px;
-	padding-bottom: 2999px;
+    margin-bottom: -2999px;
+    padding-bottom: 2999px;
 }
 .internews-main {
     padding-top: 2em;
@@ -32,4 +32,10 @@ html, body {
 
 .item-source input[type="file"] {
     display: none;
+}
+
+/* ------------- login form ---------------- */
+
+.login-form {
+    margin-top: 100px;
 }

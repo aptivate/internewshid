@@ -3,6 +3,6 @@
 
 {% block maincontent %}
 <p>{% trans "This is the dashboard page." %}</p>
-<p><a href="{% url "logout" %}">{% trans "Log out" %}</a></p>
+<p><a href="{% url "logout" %}?next={% url 'login' %}">{% trans "Log out" %}</a></p>
 
 {% endblock maincontent %}
