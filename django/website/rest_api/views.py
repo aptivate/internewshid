@@ -1,9 +1,9 @@
-from rest_framework import views, response
-from data_layer import handlers
+from rest_framework import generics
+from data_layer.models import Item
+from data_layer.serializers import ItemSerializer
 
 
-class ItemList(views.APIView):
+class ItemList(generics.ListAPIView):
 
-    def get(self, request, format=None):
-        items = handlers.Item.list()
-        return response.Response(items)
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
