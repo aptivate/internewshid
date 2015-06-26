@@ -11,3 +11,6 @@ class DataLayerModel(models.Model):
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
+
+# TODO: rename this class
+Item = Message

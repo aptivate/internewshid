@@ -9,5 +9,9 @@ class Message(object):
 
     @classmethod
     def list(cls):
-        # TODO: I think we should probably use a DRF serializer here
+        # TODO: probably use a DRF serializer here instead of .values()?
         return models.Message.objects.values().iterator()
+
+
+# TODO rename this class?
+Item = Message
