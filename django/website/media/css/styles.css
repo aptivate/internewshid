@@ -8,7 +8,7 @@ html, body {
     height: 100%;
     background-color: #000;
 }
-.dont-stretch-vertical {
+.stretch-vertical {
     display: flex;
     align-content: stretch;
     align-items: stretch;
@@ -28,6 +28,7 @@ html, body {
 }
 .internews-sidebar,
 .internews-main {
+    overflow: auto;
 }
 
 .sidebar-user {
