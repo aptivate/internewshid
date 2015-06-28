@@ -1,10 +1,21 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 
 {% block maincontent %}
 <h2>View data</h2>
 
-{% render_table table %}
+<form action="">
+    {% with pagination_class="pull-left" %}
+    {% render_table table %}
+    {% endwith %}
+
+    {% block table_finished %}
+    <div class="col-sm-2 pull-right">
+        {% bootstrap_button "Save" button_type="submit" value="Save" button_class="btn-block btn-primary table-submit" %}
+    </div>
+    {% endblock table_finished %}
+</form>
 
 {% endblock maincontent %}

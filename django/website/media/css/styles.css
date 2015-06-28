@@ -61,7 +61,7 @@ html, body {
     margin-top: 100px;
 }
 
-/* ------------- pagination ---------------- */
+/* ------------- table & pagination ---------------- */
 .current {
     margin-left: 1em;
     margin-right: 1em;
@@ -71,4 +71,8 @@ html, body {
 }
 .pagination > li > a {
     float: none;  /* Fix for bootstrap floating */
+}
+
+.table-submit {
+    margin-top: 14px;
 }
