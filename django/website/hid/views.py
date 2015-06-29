@@ -62,8 +62,18 @@ class ViewItems(SingleTableView):
     template_name = 'hid/view.html'
     table_class = ItemTable
     table_pagination = {
-        'per_page':25
+        'per_page': 25
     }
+
+    def get_success_url(self):
+        return reverse("data-view")
 
     def get_queryset(self):
         return transport.get_items()
+
+
+def process_items(request):
+    '''
+    Process edit actions on items list and redirect back to its page.
+    '''
+    return HttpResponseRedirect(reverse("data-view"))

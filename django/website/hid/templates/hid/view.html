@@ -6,7 +6,8 @@
 {% block maincontent %}
 <h2>View data</h2>
 
-<form action="">
+<form action="{% url "data-view-process" %}" method="post">{% csrf_token %}
+
     {% with pagination_class="pull-left" %}
     {% render_table table %}
     {% endwith %}
