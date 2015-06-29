@@ -62,6 +62,11 @@ USE_L10N = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
+
+SHORT_DATETIME_FORMAT = 'm/d/y H:i'
+# TODO this is used in hid/tables.py
+# and should probably use FORMAT_MODULE_PATH instead.?
+
 ########## END GENERAL CONFIGURATION
 
 
