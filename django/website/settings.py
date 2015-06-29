@@ -134,8 +134,8 @@ LOCAL_APPS = (
     'hid',
     'users',
     'chn_spreadsheet',
-    'transport',
     'data_layer',
+    'transport',
 )
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
