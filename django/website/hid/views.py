@@ -72,8 +72,21 @@ class ViewItems(SingleTableView):
         return transport.get_items()
 
 
+def get_deleted(params):
+    return [int(x) for x in params.getlist("delete", [])]
+
+
 def process_items(request):
-    '''
-    Process edit actions on items list and redirect back to its page.
-    '''
-    return HttpResponseRedirect(reverse("data-view"))
+    redirect_url = reverse("data-view")
+    if request.method == "POST":
+        deleted = get_deleted(request.POST)
+        if len(deleted):
+            try:
+                transport.delete_items(deleted)
+                msg = _("Successfully deleted %d items.") % len(deleted)
+                messages.success(request, msg)
+            except:
+                msg = _("There was an error while deleting.")
+                messages.error(request, msg)
+
+    return HttpResponseRedirect(redirect_url)
