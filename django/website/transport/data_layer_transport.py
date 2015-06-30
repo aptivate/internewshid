@@ -7,3 +7,11 @@ def get_messages():
 
 def create_message(message):
     Message.create(message)
+
+
+def delete_item(message_id):
+    Message.delete(message_id)
+
+
+def delete_items(message_ids):
+    Message.delete_items(message_ids)
