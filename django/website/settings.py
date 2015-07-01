@@ -127,6 +127,7 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'bootstrap3',
+    'rest_framework',
 )
 
 LOCAL_APPS = (
@@ -251,7 +252,11 @@ LOGGING = {
 
 ########## DJANGO REST FRAMEWORK
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 }
 ########## END DJANGO REST FRAMEWORK
 
