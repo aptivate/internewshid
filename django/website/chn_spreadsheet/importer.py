@@ -14,185 +14,176 @@ class SheetImportException(Exception):
     pass
 
 
-def get_profile(label):
-    try:
-        sheet_profile = SheetProfile.objects.get(label=label)
-    except SheetProfile.DoesNotExist:
-        error_msg = _('Misconfigured service. Source "%s" does not exist') % label
-        raise SheetImportException(error_msg)
-
-    # TODO: Revert to using database
-    # return sheet_profile.profile
-
-    return {
-        "label": "geopoll",
-        "name": "Geopoll",
-        "format": "excel",
-        "type": "message",
-        "columns": [
-            {
-                "name": "Province",
-                "type": "ignore",
-                "field": "ignore"
-            },
-            {
-                "name": "CreatedDate",
-                "type": "date",
-                "field": "timestamp"
-            },
-            {
-                "name": "AgeGroup",
-                "type": "ignore",
-                "field": "ignore"
-            },
-            {
-                "name": "QuestIO",
-                "type": "text",
-                "field": "body"
-            }
-        ],
-        "skip_header": 1
-    }
-
-
-def get_columns_map(col_list):
-    '''This function assumes that column names are unique for spreadsheet.
-    If they are not, then you already have a problem.'''
-
-    # Python 2.7 (should be faster than a loop)
-    cols = {
-        column['name']: {
-            'type': column['type'],
-            'field': column['field']
-        } for column in col_list
-    }
-    return cols
-
-
-def get_rows_iterator(spreadsheet, file_format):
-    if file_format == 'excel':
+class Importer(object):
+    def get_profile(self, label):
         try:
-            wb = load_workbook(spreadsheet, read_only=True)
-            ws = wb[wb.sheetnames[0]]
-        except:
-            error_msg = _('Expected excel file. Received file in an unrecognized format.')
+            sheet_profile = SheetProfile.objects.get(label=label)
+        except SheetProfile.DoesNotExist:
+            error_msg = _('Misconfigured service. Source "%s" does not exist') % label
             raise SheetImportException(error_msg)
-        rows = ws.rows
-    else:
-        error_msg = _('Unsupported file format: %s') % file_format
-        raise SheetImportException(error_msg)
-    return rows
 
+        # TODO: Revert to using database
+        # return sheet_profile.profile
 
-def order_columns(profile_columns, first_row=None):
-    columns = []
-    if first_row:
-        col_map = get_columns_map(profile_columns)
-        for label in first_row:
+        return {
+            "label": "geopoll",
+            "name": "Geopoll",
+            "format": "excel",
+            "type": "message",
+            "columns": [
+                {
+                    "name": "Province",
+                    "type": "ignore",
+                    "field": "ignore"
+                },
+                {
+                    "name": "CreatedDate",
+                    "type": "date",
+                    "field": "timestamp"
+                },
+                {
+                    "name": "AgeGroup",
+                    "type": "ignore",
+                    "field": "ignore"
+                },
+                {
+                    "name": "QuestIO",
+                    "type": "text",
+                    "field": "body"
+                }
+            ],
+            "skip_header": 1
+        }
+
+    def get_columns_map(self, col_list):
+        '''This function assumes that column names are unique for spreadsheet.
+        If they are not, then you already have a problem.'''
+
+        # Python 2.7 (should be faster than a loop)
+        cols = {
+            column['name']: {
+                'type': column['type'],
+                'field': column['field']
+            } for column in col_list
+        }
+        return cols
+
+    def get_rows_iterator(self, spreadsheet, file_format):
+        if file_format == 'excel':
             try:
-                columns.append(col_map[label])
+                wb = load_workbook(spreadsheet, read_only=True)
+                ws = wb[wb.sheetnames[0]]
             except:
-                error_msg = _('Unknown column: %s') % label
+                error_msg = _('Expected excel file. Received file in an unrecognized format.')
                 raise SheetImportException(error_msg)
-    else:
-        columns = [d.copy() for d in profile_columns]
-        for col in columns:
-            del col['name']  # Unify with first row version
+            rows = ws.rows
+        else:
+            error_msg = _('Unsupported file format: %s') % file_format
+            raise SheetImportException(error_msg)
 
-    return columns
+        return rows
 
+    def order_columns(self, profile_columns, first_row=None):
+        columns = []
+        if first_row:
+            col_map = self.get_columns_map(profile_columns)
+            for label in first_row:
+                try:
+                    columns.append(col_map[label])
+                except:
+                    error_msg = _('Unknown column: %s') % label
+                    raise SheetImportException(error_msg)
+        else:
+            columns = [d.copy() for d in profile_columns]
+            for col in columns:
+                del col['name']  # Unify with first row version
 
-def get_fields_and_types(columns):
-    fields = [col['field'] for col in columns]
-    types = [col['type'] for col in columns]
-    return fields, types
+        return columns
 
+    def get_fields_and_types(self, columns):
+        fields = [col['field'] for col in columns]
+        types = [col['type'] for col in columns]
 
-def parse_date(value):
-    if isinstance(value, basestring):
-        date_time = dateutil.parser.parse(value, dayfirst=True)
-    else:
-        date_time = value
+        return fields, types
 
-    return date_time.date()
+    def normalize_row(self, raw_row):
+        # Unify difference between CSV and openpyxl cells
+        return [getattr(v, 'value', v) for v in raw_row]
 
+    def process_rows(self, rows, profile_columns, skip_header=False):
+        # If there is no header (skip_header=False), then use profile's order of
+        # columns, otherwise use header line to check mapping and define order
+        first_row = self.normalize_row(rows.next()) if skip_header else None
+        columns = self.order_columns(profile_columns, first_row)
+        # columns = [{'field': "...", 'type': "..."}, ...]
 
-def convert_value(value, type):
-    converters = {
-        'text': lambda x: x,
-        'date': parse_date,
-        'integer': lambda x: int(x),
-        'number': lambda x: Decimal(x)
-    }
-    if type not in converters:
-        raise SheetImportException(
-            _(u"Unknown data type '%s' ") % (type))
-    try:
-        return converters[type](value)
-    except:
-        raise SheetImportException(
-            _(u"Can not process value '%s' of type '%s' ") %
-            (value, type))
+        objects = []
+        for i, row in enumerate(rows, 2 if first_row else 1):
+            try:
+                objects.append(self.process_row(row, columns))
+            except SheetImportException as e:
+                raise type(e), type(e)(e.message +
+                                       'in row %d ' % i), sys.exc_info()[2]
 
+        return objects
 
-def normalize_row(raw_row):
-    # Unify difference between CSV and openpyxl cells
-    return [getattr(v, 'value', v) for v in raw_row]
+    def process_row(self, row, columns):
+        values = self.normalize_row(row)
+        return reduce(
+            lambda object_dict, converter: converter.add_to(object_dict),
+            map(self.CellConverter, values, columns),
+            {}
+        )
 
+    class CellConverter(object):
+        def __init__(self, value, col_spec):
+            self.value = value
+            self.type = col_spec['type']
+            self.field = col_spec['field']
 
-def process_rows(rows, profile_columns, skip_header=False):
-    # If there is no header (skip_header=False), then use profile's order of
-    # columns, otherwise use header line to check mapping and define order
-    first_row = normalize_row(rows.next()) if skip_header else None
-    columns = order_columns(profile_columns, first_row)
-    # columns = [{'field': "...", 'type': "..."}, ...]
+        def add_to(self, object_dict):
+            if self.type != 'ignore':
+                object_dict[self.field] = self.convert_value()
+            return object_dict
 
-    objects = []
-    for i, row in enumerate(rows, 2 if first_row else 1):
-        try:
-            objects.append(process_row(row, columns))
-        except SheetImportException as e:
-            raise type(e), type(e)(e.message +
-                                   'in row %d ' % i), sys.exc_info()[2]
+        def convert_value(self):
+            converters = {
+                'text': lambda x: x,
+                'date': self.parse_date,
+                'integer': lambda x: int(x),
+                'number': lambda x: Decimal(x)
+            }
+            if self.type not in converters:
+                raise SheetImportException(
+                    _(u"Unknown data type '%s' ") % (self.type))
+            try:
+                return converters[self.type](self.value)
+            except:
+                raise SheetImportException(
+                    _(u"Can not process value '%s' of type '%s' ") %
+                    (self.value, self.type))
 
-    return objects
+        def parse_date(self, value):
+            if isinstance(value, basestring):
+                date_time = dateutil.parser.parse(value, dayfirst=True)
+            else:
+                date_time = value
 
+            return date_time.date()
 
-def process_row(row, columns):
-    values = normalize_row(row)
-    return reduce(
-        lambda object_dict, converter: converter.add_to(object_dict),
-        map(CellConverter, values, columns),
-        {}
-    )
+    def save_rows(self, objects, data_type):
+        for obj in objects:
+            create_message(obj)
 
+        return len(objects)
 
-class CellConverter(object):
-    def __init__(self, value, col_spec):
-        self.value = value
-        self.type = col_spec['type']
-        self.field = col_spec['field']
+    def store_spreadsheet(self, label, fobject):
+        profile = self.get_profile(label)
 
-    def add_to(self, object_dict):
-        if self.type != 'ignore':
-            object_dict[self.field] = convert_value(
-                self.value, self.type)
-        return object_dict
+        file_format = profile.get('format')
+        skip_header = profile.get('skip_header', False)
 
+        rows = self.get_rows_iterator(fobject, file_format)
+        items = self.process_rows(rows, profile['columns'], skip_header)
 
-def save_rows(objects, data_type):
-    for obj in objects:
-        create_message(obj)
-
-    return len(objects)
-
-
-def store_spreadsheet(label, fobject):
-    profile = get_profile(label)
-
-    file_format = profile.get('format')
-    skip_header = profile.get('skip_header', False)
-
-    rows = get_rows_iterator(fobject, file_format)
-    items = process_rows(rows, profile['columns'], skip_header)
-    return save_rows(items, 'message')
+        return self.save_rows(items, 'message')
