@@ -1,29 +1,51 @@
 @CHARSET "UTF-8";
 
 .internews-sidebar {
-	background-color: #000;
-	color: #FFF;
-	position: fixed;
+    color: #FFF;
 }
 
 html, body {
     height: 100%;
-    overflow: hidden;
+    background-color: #000;
+}
+.stretch-vertical {
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+    width: 100%;
 }
 
 .messages > li {
     margin-bottom: .5em;
+    margin-top: .5em;
     padding: 1em;
 }
 
-.internews-main, .internews-sidebar {
-	margin-bottom: -2999px;
-	padding-bottom: 2999px;
+.container-row {
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+    width: 100%;
 }
+.internews-sidebar,
 .internews-main {
-    padding-top: 2em;
+    overflow: auto;
 }
 
+.sidebar-user {
+    margin-right: 1.5em;
+}
+.sidebar-options > li {
+    margin: 1em 0;
+}
+.sidebar-options .glyphicon {
+    font-size: 1.5em;
+    margin-right: .2em;
+}
+
+.internews-main {
+    background-color: #fff;
+}
 .item-source {
     margin-bottom: 1em;
     padding: 1em;
@@ -32,4 +54,26 @@ html, body {
 
 .item-source input[type="file"] {
     display: none;
+}
+
+/* ------------- login form ---------------- */
+
+.login-form {
+    margin-top: 100px;
+}
+
+/* ------------- table & pagination ---------------- */
+.current {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.cardinality {
+    margin-left: 3em;
+}
+.pagination > li > a {
+    float: none;  /* Fix for bootstrap floating */
+}
+
+.table-submit {
+    margin-top: 14px;
 }

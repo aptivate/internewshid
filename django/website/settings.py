@@ -62,6 +62,11 @@ USE_L10N = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
+
+SHORT_DATETIME_FORMAT = 'd M Y H:i'
+# TODO this is used in hid/tables.py
+# and should probably use FORMAT_MODULE_PATH instead.?
+
 ########## END GENERAL CONFIGURATION
 
 
@@ -127,17 +132,18 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'bootstrap3',
+    'django_tables2',
 )
 
 LOCAL_APPS = (
     'hid',
     'users',
     'chn_spreadsheet',
-    'transport',
     'data_layer',
+    'transport',
 )
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
 ########## END APP CONFIGURATION
 

@@ -13,7 +13,7 @@ MySQL-python==1.2.5
 
 pytest-django==2.8.0
 mock
-
+py==1.4.29
 
 django-jenkins==0.17.0
 
@@ -26,7 +26,7 @@ python-dateutil==2.4.2
 
 ### Apps Aptivate likes that we may want to use
 
-## ---------Search 
+## ---------Search
 #django-haystack
 #pyelasticsearch
 
@@ -35,6 +35,7 @@ python-dateutil==2.4.2
 #django-extended-choices
 #django-recaptcha
 #django-registration
+django-tables2==1.0.4
 
 ## ---------Development
 #django-extensions
