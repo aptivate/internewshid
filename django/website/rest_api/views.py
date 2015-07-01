@@ -3,7 +3,7 @@ from data_layer.models import Item
 from .serializers import ItemSerializer
 
 
-class ItemList(generics.ListAPIView):
+class ItemList(generics.ListCreateAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
