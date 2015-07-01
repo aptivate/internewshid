@@ -21,12 +21,13 @@ def test_get_items_returns_empty_if_no_items():
 
 @pytest.mark.django_db
 def test_get_items_returns_all_items():
-    item = ItemFactory()
+    item = ItemFactory(body='test')
 
-    payload = get(ItemList, '/items').data
+    items = get(ItemList, '/items').data
 
-    assert len(payload) == 1
-    assert payload[0]['body'] == item.body
+    assert len(items) == 1
+    [item] = items
+    assert item['body'] == 'test'
 
 @pytest.mark.django_db
 def test_filter_by_body():
