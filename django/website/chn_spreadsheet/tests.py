@@ -5,7 +5,7 @@ import pytest
 
 from django.utils.translation import ugettext as _
 
-from .utils import (
+from .importer import (
     convert_value,
     get_profile, get_columns_map, order_columns, get_fields_and_types,
     parse_date, normalize_row, get_rows_iterator, process_row, process_rows,
