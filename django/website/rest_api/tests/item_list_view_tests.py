@@ -33,7 +33,7 @@ def test_get_items_returns_all_items():
 def test_filter_by_body():
     item1 = ItemFactory(body="one")
     item2 = ItemFactory(body="two")
-    payload = get(ItemList, '/items', {'body': 'one'}).data
+    payload = get(ItemList, '/items', data={'body': 'one'}).data
 
     assert len(payload) == 1
     assert payload[0]['body'] == "one"

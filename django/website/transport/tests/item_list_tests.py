@@ -16,5 +16,19 @@ def test_get_items_returns_items():
     item = ItemFactory(body="test")
 
     items = dl.get_messages()
+
+    assert len(items) == 1
     [item] = items
     assert item['body'] == 'test'
+
+
+@pytest.mark.django_db
+def test_get_items_filters_by_body():
+    item1 = ItemFactory(body="one")
+    item2 = ItemFactory(body="two")
+
+    items = dl.get_messages(body='one')
+
+    assert len(items) == 1
+    [item] = items
+    assert item['body'] == 'one'
