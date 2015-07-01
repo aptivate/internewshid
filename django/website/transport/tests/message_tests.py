@@ -1,7 +1,7 @@
 from __future__ import unicode_literals, absolute_import
 import pytest
 
-from data_layer.serializers import ItemSerializer
+from rest_api.serializers import ItemSerializer
 from data_layer.tests.factories import ItemFactory
 from transport import data_layer_transport as dl
 

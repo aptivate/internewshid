@@ -1,6 +1,6 @@
 from rest_framework import generics
 from data_layer.models import Item
-from data_layer.serializers import ItemSerializer
+from .serializers import ItemSerializer
 
 
 class ItemList(generics.ListAPIView):
