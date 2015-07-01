@@ -1,7 +1,9 @@
 import dateutil.parser
 from decimal import Decimal
+import pytz
 import sys
 
+from django.utils.timezone import is_naive
 from django.utils.translation import ugettext as _
 from openpyxl import load_workbook
 
@@ -169,7 +171,10 @@ class Importer(object):
             else:
                 date_time = value
 
-            return date_time.date()
+            if is_naive(date_time):
+                date_time = pytz.utc.localize(date_time)
+
+            return date_time
 
     def save_rows(self, objects, data_type):
         for obj in objects:

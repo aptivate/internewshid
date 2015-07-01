@@ -139,7 +139,7 @@ def test_successful_runs_of_parse_date():
         '05-01-2015',
         datetime.datetime(2015, 1, 5, 0, 0)
     )
-    expected = datetime.date(2015, 1, 5)
+    expected = pytz.utc.localize(datetime.datetime(2015, 1, 5))
     for date in dates:
         converter = Importer.CellConverter(date, {'type': '', 'field': ''})
 
@@ -157,7 +157,7 @@ def test_process_row():
     row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
 
     number = decimal.Decimal('10.4')
-    date = datetime.date(2015, 5, 1)
+    date = pytz.utc.localize(datetime.datetime(2015, 5, 1))
 
     columns = [
         {
@@ -307,21 +307,3 @@ def test_items_imported():
 
     items = Message.objects.all()
     assert len(items) > 0
-
-
-@pytest.mark.django_db
-def test_date_imported_correctly():
-    objects = [{
-        'timestamp': datetime.datetime(2015, 6, 1)
-        }]
-
-    importer = Importer()
-    importer.save_rows(objects, 'message')
-
-    item = Message.objects.all()[0]
-
-    print item.timestamp
-
-    expected_date = pytz.utc.localize(datetime.datetime(2015, 6, 1))
-
-    assert item.timestamp == expected_date
