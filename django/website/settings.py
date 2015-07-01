@@ -249,6 +249,11 @@ LOGGING = {
 }
 ########## END LOGGING CONFIGURATION
 
+########## DJANGO REST FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
+########## END DJANGO REST FRAMEWORK
 
 ########## BINDER STUFF
 # Usually included by adding intranet_binder as a git submodule

@@ -7,3 +7,4 @@ class ItemList(generics.ListAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    filter_fields = ('created', 'body', 'timestamp', )
