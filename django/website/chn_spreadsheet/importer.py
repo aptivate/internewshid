@@ -1,5 +1,6 @@
 import dateutil.parser
 from decimal import Decimal
+import datetime
 import pytz
 import sys
 
@@ -41,7 +42,8 @@ class Importer(object):
                 {
                     "name": "CreatedDate",
                     "type": "date",
-                    "field": "timestamp"
+                    "field": "timestamp",
+                    "date_format": "%m/%d/%y"
                 },
                 {
                     "name": "AgeGroup",
@@ -61,14 +63,19 @@ class Importer(object):
         '''This function assumes that column names are unique for spreadsheet.
         If they are not, then you already have a problem.'''
 
-        # Python 2.7 (should be faster than a loop)
-        cols = {
-            column['name']: {
+        columns_map = {}
+
+        for column in col_list:
+            col_dict = {
                 'type': column['type'],
-                'field': column['field']
-            } for column in col_list
-        }
-        return cols
+                'field': column['field']}
+
+            if 'date_format' in column:
+                col_dict['date_format'] = column['date_format']
+
+            columns_map[column['name']] = col_dict
+
+        return columns_map
 
     def get_rows_iterator(self, spreadsheet, file_format):
         if file_format == 'excel':
@@ -133,7 +140,7 @@ class Importer(object):
         values = self.normalize_row(row)
         return reduce(
             lambda object_dict, converter: converter.add_to(object_dict),
-            map(self.CellConverter, values, columns),
+            [self.CellConverter(val, col) for val, col in zip(values, columns)],
             {}
         )
 
@@ -142,6 +149,7 @@ class Importer(object):
             self.value = value
             self.type = col_spec['type']
             self.field = col_spec['field']
+            self.date_format = col_spec.get('date_format', None)
 
         def add_to(self, object_dict):
             if self.type != 'ignore':
@@ -149,9 +157,11 @@ class Importer(object):
             return object_dict
 
         def convert_value(self):
+            if self.type == 'date':
+                return self.convert_date()
+
             converters = {
                 'text': lambda x: x,
-                'date': self.parse_date,
                 'integer': lambda x: int(x),
                 'number': lambda x: Decimal(x)
             }
@@ -165,14 +175,28 @@ class Importer(object):
                     _(u"Can not process value '%s' of type '%s' ") %
                     (self.value, self.type))
 
-        def parse_date(self, value):
-            if isinstance(value, basestring):
-                date_time = dateutil.parser.parse(value, dayfirst=True)
+        def convert_date(self):
+            if isinstance(self.value, basestring):
+                date_time = self.parse_date()
             else:
-                date_time = value
+                date_time = self.value
 
             if is_naive(date_time):
                 date_time = pytz.utc.localize(date_time)
+
+            return date_time
+
+        def parse_date(self):
+            if self.date_format is None:
+                raise SheetImportException(
+                    _(u"Date format not specified for '%s' ") %
+                    (self.field))
+
+            try:
+                date_time = datetime.datetime.strptime(self.value,
+                                                       self.date_format)
+            except:
+                date_time = dateutil.parser.parse(self.value)
 
             return date_time
 
