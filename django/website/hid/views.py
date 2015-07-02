@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
@@ -14,7 +15,7 @@ from .tables import ItemTable
 
 
 class ListSources(TemplateView):
-    template_name = 'hid/sources.html'
+    template_name = "hid/sources.html"
 
     def get_sources(self):
         sources = []
@@ -34,7 +35,7 @@ class ListSources(TemplateView):
 
 class UploadSpreadsheetView(FormView):
     form_class = UploadForm
-    template_name = 'hid/upload.html'
+    template_name = "hid/upload.html"
 
     def get_success_url(self):
         return reverse("data-view")
@@ -46,7 +47,9 @@ class UploadSpreadsheetView(FormView):
 
         try:
             saved = store_spreadsheet(source, uploaded_file)
-            msg = _("Upload successful! %d entries have been added.") % saved
+            msg = ungettext("Upload successful! %d entry has been added.",
+                            "Upload successful! %d entries have been added.",
+                            saved) % saved
             messages.success(self.request, msg)
         except SheetImportException as exc:
             msg = exc.message
@@ -83,7 +86,10 @@ def process_items(request):
         if len(deleted):
             try:
                 transport.delete_items(deleted)
-                msg = _("Successfully deleted %d items.") % len(deleted)
+                num_deleted = len(deleted)
+                msg = ungettext("Successfully deleted %d item.",
+                                "Successfully deleted %d items.",
+                                num_deleted) % num_deleted
                 messages.success(request, msg)
             except:
                 msg = _("There was an error while deleting.")
