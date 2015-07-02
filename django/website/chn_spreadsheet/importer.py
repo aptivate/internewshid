@@ -140,65 +140,9 @@ class Importer(object):
         values = self.normalize_row(row)
         return reduce(
             lambda object_dict, converter: converter.add_to(object_dict),
-            [self.CellConverter(val, col) for val, col in zip(values, columns)],
+            [CellConverter(val, col) for val, col in zip(values, columns)],
             {}
         )
-
-    class CellConverter(object):
-        def __init__(self, value, col_spec):
-            self.value = value
-            self.type = col_spec['type']
-            self.field = col_spec['field']
-            self.date_format = col_spec.get('date_format', None)
-
-        def add_to(self, object_dict):
-            if self.type != 'ignore':
-                object_dict[self.field] = self.convert_value()
-            return object_dict
-
-        def convert_value(self):
-            if self.type == 'date':
-                return self.convert_date()
-
-            converters = {
-                'text': lambda x: x,
-                'integer': lambda x: int(x),
-                'number': lambda x: Decimal(x)
-            }
-            if self.type not in converters:
-                raise SheetImportException(
-                    _(u"Unknown data type '%s' ") % (self.type))
-            try:
-                return converters[self.type](self.value)
-            except:
-                raise SheetImportException(
-                    _(u"Can not process value '%s' of type '%s' ") %
-                    (self.value, self.type))
-
-        def convert_date(self):
-            if isinstance(self.value, basestring):
-                date_time = self.parse_date()
-            else:
-                date_time = self.value
-
-            if is_naive(date_time):
-                date_time = pytz.utc.localize(date_time)
-
-            return date_time
-
-        def parse_date(self):
-            if self.date_format is None:
-                raise SheetImportException(
-                    _(u"Date format not specified for '%s' ") %
-                    (self.field))
-
-            try:
-                date_time = datetime.datetime.strptime(self.value,
-                                                       self.date_format)
-            except:
-                date_time = dateutil.parser.parse(self.value)
-
-            return date_time
 
     def save_rows(self, objects, data_type):
         for obj in objects:
@@ -216,3 +160,60 @@ class Importer(object):
         items = self.process_rows(rows, profile['columns'], skip_header)
 
         return self.save_rows(items, 'message')
+
+
+class CellConverter(object):
+    def __init__(self, value, col_spec):
+        self.value = value
+        self.type = col_spec['type']
+        self.field = col_spec['field']
+        self.date_format = col_spec.get('date_format', None)
+
+    def add_to(self, object_dict):
+        if self.type != 'ignore':
+            object_dict[self.field] = self.convert_value()
+        return object_dict
+
+    def convert_value(self):
+        if self.type == 'date':
+            return self.convert_date()
+
+        converters = {
+            'text': lambda x: x,
+            'integer': lambda x: int(x),
+            'number': lambda x: Decimal(x)
+        }
+        if self.type not in converters:
+            raise SheetImportException(
+                _(u"Unknown data type '%s' ") % (self.type))
+        try:
+            return converters[self.type](self.value)
+        except:
+            raise SheetImportException(
+                _(u"Can not process value '%s' of type '%s' ") %
+                (self.value, self.type))
+
+    def convert_date(self):
+        if isinstance(self.value, basestring):
+            date_time = self.parse_date()
+        else:
+            date_time = self.value
+
+        if is_naive(date_time):
+            date_time = pytz.utc.localize(date_time)
+
+        return date_time
+
+    def parse_date(self):
+        if self.date_format is None:
+            raise SheetImportException(
+                _(u"Date format not specified for '%s' ") %
+                (self.field))
+
+        try:
+            date_time = datetime.datetime.strptime(self.value,
+                                                   self.date_format)
+        except:
+            date_time = dateutil.parser.parse(self.value)
+
+        return date_time

@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.utils.translation import ugettext as _
 
 from .importer import (
-    Importer,
+    CellConverter, Importer,
     SheetProfile, SheetImportException
 )
 
@@ -130,20 +130,20 @@ class ImporterTests(TestCase):
         )
         expected = pytz.utc.localize(datetime.datetime(2015, 1, 5))
         for date, date_format in dates:
-            converter = Importer.CellConverter(date,
-                                               {'type': 'date',
-                                                'field': '',
-                                                'date_format': date_format})
+            converter = CellConverter(date,
+                                      {'type': 'date',
+                                       'field': '',
+                                       'date_format': date_format})
 
             assert converter.convert_value() == expected
 
     def test_exception_raised_on_faulty_dates(self):
         bad_date = '05x01-2015'
         with pytest.raises(ValueError):
-            converter = Importer.CellConverter(bad_date,
-                                               {'type': 'date',
-                                                'field': '',
-                                                'date_format': '%m-%d-%Y'})
+            converter = CellConverter(bad_date,
+                                      {'type': 'date',
+                                       'field': '',
+                                       'date_format': '%m-%d-%Y'})
             converter.convert_value()
 
     def test_process_row(self):
@@ -193,7 +193,7 @@ class ImporterTests(TestCase):
         value = 'Short message'
         type = 'location'
 
-        converter = Importer.CellConverter(value, {'type': type, 'field': ''})
+        converter = CellConverter(value, {'type': type, 'field': ''})
         with pytest.raises(SheetImportException) as excinfo:
             converter.convert_value()
         assert excinfo.value.message == _(u"Unknown data type 'location' ")
@@ -202,7 +202,7 @@ class ImporterTests(TestCase):
         value = 'not_integer'
         type = 'integer'
 
-        converter = Importer.CellConverter(value, {'type': type, 'field': ''})
+        converter = CellConverter(value, {'type': type, 'field': ''})
 
         with pytest.raises(SheetImportException) as excinfo:
             converter.convert_value()
@@ -211,7 +211,7 @@ class ImporterTests(TestCase):
     def test_convert_value_raises_on_date_without_format(self):
         value = '1.5.2015'
 
-        converter = Importer.CellConverter(value, {
+        converter = CellConverter(value, {
             'type': 'date',
             'field': 'created'})
 
