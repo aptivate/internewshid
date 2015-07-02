@@ -42,14 +42,14 @@ def test_get_deleted_returns_empty_list_on_empty_selection():
 
 def test_get_deleted_returns_submitted_values_as_ints():
     params = mock.MagicMock()
-    params.getlist.return_value = ['201', '199', '3']
+    params.getlist.return_value = ["201", "199", "3"]
 
     assert get_deleted(params) == [201, 199, 3]
 
 
 def test_process_items_always_redirects_to_data_view():
-    url = reverse("data-view-process")
-    redirect_url = reverse("data-view")
+    url = reverse('data-view-process')
+    redirect_url = reverse('data-view')
 
     request = ReqFactory.get(url)
 
@@ -66,17 +66,17 @@ def test_process_items_always_redirects_to_data_view():
 
 @pytest.mark.django_db
 def test_process_items_deletes_items():
-    msg = {'body': 'Message text'}
+    msg = {'body': "Message text"}
     transport.create_item(msg)
 
     [item] = list(transport.get_items())
 
-    url = reverse("data-view-process")
+    url = reverse('data-view-process')
     request = ReqFactory.post(url, {'delete': [item['id']]})
     request = fix_messages(request)
 
     process_items(request)
-    assert check_message(request, u'Successfully deleted 1 items.') is True
+    assert check_message(request, u"Successfully deleted 1 item.") is True
 
     items = list(transport.get_items())
     assert len(list(items)) == 0
