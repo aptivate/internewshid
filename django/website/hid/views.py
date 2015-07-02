@@ -76,10 +76,20 @@ def get_deleted(params):
     return [int(x) for x in params.getlist("delete", [])]
 
 
+def get_categories(params, removed=[]):
+    cat_id = lambda x: int(x[9:])
+    is_cat = lambda x: x.startswith("category-")
+
+    categories = [(cat_id(key), val) for key, val in params.items() if is_cat(key)]
+    return [cat for cat in categories if cat[0] not in set(removed)]
+
+
 def process_items(request):
     redirect_url = reverse("data-view")
     if request.method == "POST":
         deleted = get_deleted(request.POST)
+        categories = get_categories(request.POST)
+        print categories
         if len(deleted):
             try:
                 transport.delete_items(deleted)
