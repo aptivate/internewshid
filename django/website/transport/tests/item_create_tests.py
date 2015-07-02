@@ -16,7 +16,6 @@ def test_create_message_creates_item():
 
     response = dl.create_message(item)
 
-    assert response.status_code == 201
-    assert 'id' in response.data
+    assert 'id' in response
     new_count = Item.objects.count()
     assert new_count > old_count

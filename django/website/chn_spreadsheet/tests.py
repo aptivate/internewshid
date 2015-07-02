@@ -273,8 +273,7 @@ def test_process_rows_displays_line_number_on_error():
 
 @pytest.mark.django_db
 def test_items_imported():
-    items = Message.objects.all()
-    assert len(items) == 0
+    assert Message.objects.count() == 0
 
     file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
     f = open(file_path, 'rb')
@@ -282,5 +281,4 @@ def test_items_imported():
     num_saved = store_spreadsheet('geopoll', f)
     assert num_saved > 0
 
-    items = Message.objects.all()
-    assert len(items) > 0
+    assert Message.objects.count() > 0
