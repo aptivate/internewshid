@@ -8,6 +8,7 @@
   <title>internewshid</title>
   <meta name="description" content="internewshid - Humanitarian Information Dashboard for Internews">
   <meta name="author" content="Aptivate">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   {% bootstrap_css %}
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,28 +21,31 @@
   <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico?v=1"/>
 </head>
 
-<body>
+<body class="stretch-vertical">
 
     {% block content %}
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-2 col-sd-2 sidebar internews-sidebar">
+    <div class="container-fluid stretch-vertical">
+        <div class="row container-row">
+            <div class="col-sm-3 col-md-2 sidebar internews-sidebar">
                 <h2>{% trans "Internews" %}</h2>
                 <p>{% trans "humanitarian information dashboard (HID)" %} <a href="/">{% trans "info" %}</a></p>
-
-                {% if request.user.is_authenticated %}
-                <ul class="list-unstyled">
-                    <li> 
-                        {% bootstrap_icon "user" %} 
-                        {{ request.user }} 
-                        <a href="{% url "logout" %}?next={% url 'login' %}">{% bootstrap_icon "log-out" %} {% trans "Log out" %}</a>
-                    </li>
-                    <li><a href="{% url "sources" %}">Sources</a></li>
-                </ul>
+                <nav>
+                    {% if request.user.is_authenticated %}
+                    <ul class="list-unstyled sidebar-options">
+                        <li> 
+                            <span class="sidebar-user">
+                                {% bootstrap_icon "user" %} 
+                                {{ request.user }} 
+                            </span>
+                            <a href="{% url "logout" %}?next={% url 'login' %}" class="">{% bootstrap_icon "log-out" %} {% trans "Log out" %}</a>
+                        </li>
+                        <li><a href="{% url "sources" %}">{% bootstrap_icon "cloud-download" %} Sources</a></li>
+                        <li><a href="{% url "data-view" %}">{% bootstrap_icon "pencil" %} View & Edit</a></li>
+                    </ul>
+                </nav>
                 {% endif %}
             </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main internews-main">
+            <div class="col-sm-9 col-md-10 main internews-main">
                 {% if messages %}
                 <ul class="messages list-unstyled">
                     {% for message in messages %}

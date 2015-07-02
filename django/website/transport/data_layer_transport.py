@@ -20,3 +20,15 @@ def create_message(item):  # TODO rename create_item
     else:
         response.data['status_code'] = response.status_code
         raise TransportException(response.data)
+
+
+def delete_item(message_id):
+    # Message.delete(message_id)
+    # TODO: reimplement with API
+    pass
+
+
+def delete_items(message_ids):
+    # Message.delete_items(message_ids)
+    # TODO: reimplement with API
+    pass
