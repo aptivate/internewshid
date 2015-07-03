@@ -175,10 +175,8 @@ class CellConverter(object):
         return object_dict
 
     def convert_value(self):
-        if self.type == 'date':
-            return self.convert_date()
-
         converters = {
+            'date': lambda x: self.convert_date(),
             'text': lambda x: x,
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x)
@@ -188,10 +186,9 @@ class CellConverter(object):
                 _(u"Unknown data type '%s' ") % (self.type))
         try:
             return converters[self.type](self.value)
-        except:
-            raise SheetImportException(
-                _(u"Can not process value '%s' of type '%s' ") %
-                (self.value, self.type))
+        except Exception as e:
+            message = _("%s\nCan not process value '%s' of type '%s' ") % (e.message, self.value, self.type)
+            raise SheetImportException(message), None, sys.exc_info()[2]
 
     def convert_date(self):
         if isinstance(self.value, basestring):
