@@ -1,6 +1,6 @@
 # NOTE After setup, consider pinning to a version or commit
 
--e git://github.com/aptivate/dye.git@b881bdfcfa1bfda7912a24167ad8d0bd3b6aac97#egg=dye
+-e git://github.com/martinburchell/dye.git@c7e1ed5069f0be7f3335dacebf22eab368a011c7#egg=dye
 
 linecache2==1.0.0
 
@@ -26,7 +26,7 @@ python-dateutil==2.4.2
 
 ### Apps Aptivate likes that we may want to use
 
-## ---------Search 
+## ---------Search
 #django-haystack
 #pyelasticsearch
 
