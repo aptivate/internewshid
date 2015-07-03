@@ -64,6 +64,7 @@ def test_process_items_always_redirects_to_data_view():
     assert isinstance(response, HttpResponseRedirect) is True
 
 
+@pytest.mark.xfail  # Pending reimplementation of Delete via API
 @pytest.mark.django_db
 def test_process_items_deletes_items():
     msg = {'body': "Message text"}
