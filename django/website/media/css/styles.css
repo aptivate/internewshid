@@ -63,6 +63,9 @@ html, body {
 }
 
 /* ------------- table & pagination ---------------- */
+th label {
+    padding-left: .25em;
+}
 .current {
     margin-left: 1em;
     margin-right: 1em;
