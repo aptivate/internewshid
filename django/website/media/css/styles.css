@@ -63,6 +63,9 @@ html, body {
 }
 
 /* ------------- table & pagination ---------------- */
+th.delete {
+    min-width: 6em;  /* So that checkbox and Delete are in same line */
+}
 th label {
     padding-left: .25em;
 }
