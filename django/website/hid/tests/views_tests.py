@@ -91,11 +91,9 @@ def test_get_categories_filters_out_removed():
     assert sorted(get_categories(post_params, removed)) == sorted(expected)  # Order is not important
 
 
-def delete_item(delete_function):
-    '''
-    Create item and request, run delete function with them and check
-    that created item was deleted.
-    '''
+@pytest.fixture
+def request_item():
+    '''Create item and request'''
     msg = {'body': "Message text"}
     transport.create_item(msg)
 
@@ -105,7 +103,10 @@ def delete_item(delete_function):
     request = ReqFactory.post(url, {'delete': [item['id']]})
     request = fix_messages(request)
 
-    delete_function(request, item)
+    return [request, item]
+
+
+def check_item_was_deleted(request):
     assert check_message(request, u"Successfully deleted 1 item.") is True
 
     items = list(transport.get_items())
@@ -113,15 +114,17 @@ def delete_item(delete_function):
 
 
 @pytest.mark.django_db
-def test_delete_items_deletes_items():
-    del_func = lambda req, item: delete_items(req, [item['id']])
-    delete_item(del_func)
+def test_delete_items_deletes_items(request_item):
+    req, item = request_item
+    delete_items(req, [item['id']])
+    check_item_was_deleted(req)
 
 
 @pytest.mark.django_db
-def test_process_items_deletes_items():
-    del_func = lambda req, item: process_items(req)
-    delete_item(del_func)
+def test_process_items_deletes_items(request_item):
+    req, item = request_item
+    process_items(req)
+    check_item_was_deleted(req)
 
 
 def test_process_items_always_redirects_to_data_view():
