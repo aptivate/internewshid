@@ -18,7 +18,7 @@ django-filter==0.10.0
 pytest-django==2.8.0
 factory_boy
 mock
-
+py==1.4.29
 
 django-jenkins==0.17.0
 

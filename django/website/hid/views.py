@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 
 from django_tables2 import SingleTableView
 
-from chn_spreadsheet.utils import store_spreadsheet, SheetImportException
+from chn_spreadsheet.importer import Importer, SheetImportException
 import transport
 from .forms import UploadForm, get_spreadsheet_choices
 from .tables import ItemTable
@@ -46,10 +46,12 @@ class UploadSpreadsheetView(FormView):
         uploaded_file = data['file']
 
         try:
-            saved = store_spreadsheet(source, uploaded_file)
+            importer = Importer()
+            saved = importer.store_spreadsheet(source, uploaded_file)
             msg = ungettext("Upload successful! %d entry has been added.",
                             "Upload successful! %d entries have been added.",
                             saved) % saved
+
             messages.success(self.request, msg)
         except SheetImportException as exc:
             msg = exc.message

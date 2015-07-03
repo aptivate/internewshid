@@ -2,14 +2,13 @@ import datetime
 import decimal
 from os import path
 import pytest
+import pytz
 
+from django.test import TestCase
 from django.utils.translation import ugettext as _
 
-from .utils import (
-    convert_value,
-    get_profile, get_columns_map, order_columns, get_fields_and_types,
-    parse_date, normalize_row, get_rows_iterator, process_row, process_rows,
-    store_spreadsheet,
+from .importer import (
+    CellConverter, Importer,
     SheetProfile, SheetImportException
 )
 
@@ -34,251 +33,271 @@ COLUMN_LIST = [
 ]
 
 
-@pytest.mark.django_db
-@pytest.mark.xfail
-def test_get_profile_returns_profile():
-    label = "unknownpoll"
-    profile = {'name': 'Empty profile'}
+class ImporterTests(TestCase):
+    def setUp(self):
+        super(ImporterTests, self).setUp()
+        self.importer = Importer()
 
-    SheetProfile.objects.create(label=label, profile=profile)
+    @pytest.mark.django_db
+    @pytest.mark.xfail
+    def test_get_profile_returns_profile(self):
+        label = "unknownpoll"
+        profile = {'name': 'Empty profile'}
 
-    sprofile = get_profile(label)
-    assert sprofile == profile
+        SheetProfile.objects.create(label=label, profile=profile)
 
+        sprofile = self.importer.get_profile(label)
+        assert sprofile == profile
 
-@pytest.mark.django_db
-def test_get_profile_raises_on_unknown_label():
-    with pytest.raises(SheetImportException) as excinfo:
-        get_profile('unknownlabel')
-    assert excinfo.value.message == _('Misconfigured service. Source "unknownlabel" does not exist')
+    @pytest.mark.django_db
+    def test_get_profile_raises_on_unknown_label(self):
 
+        with pytest.raises(SheetImportException) as excinfo:
+            self.importer.get_profile('unknownlabel')
+        assert excinfo.value.message == _('Misconfigured service. Source "unknownlabel" does not exist')
 
-def test_get_columns_map():
-    expected_result = {
-        'Province': {
-            'type': 'location',
-            'field': 'message.location'
-        },
-        'Message': {
-            'type': 'text',
-            'field': 'message.content'
-        },
-    }
-    result = get_columns_map(COLUMN_LIST)
-    assert result == expected_result
-
-
-def test_get_rows_iterator_raises_on_non_excel_files():
-    with pytest.raises(SheetImportException) as excinfo:
-        get_rows_iterator('not_a_file', 'excel')
-    assert excinfo.value.message == _('Expected excel file. Received file in an unrecognized format.')
-
-    with pytest.raises(SheetImportException) as excinfo:
-        get_rows_iterator(None, 'pdf')
-    assert excinfo.value.message == _('Unsupported file format: pdf')
-
-
-def test_get_rows_iterator_works_on_excel_files():
-    file_path = path.join(TEST_DIR, 'sample_excel.xlsx')
-    f = open(file_path, 'rb')
-    rows = list(get_rows_iterator(f, 'excel'))
-
-    # 2x2 spreadsheet
-    assert len(rows) == 2
-    assert len(rows[0]) == 2
-    assert len(rows[1]) == 2
-
-
-def _make_columns_row(column_list):
-    row = [d.copy() for d in column_list]
-    for col in row:
-        del col['name']  # Unify with first row version
-    return row
-
-
-def test_order_columns_with_no_first_row_returns_original_order():
-    expected = _make_columns_row(COLUMN_LIST)
-    ordered = order_columns(COLUMN_LIST)
-    assert ordered == expected
-
-
-def test_order_columns_with_first_row_return_first_row_order():
-    cleaned = _make_columns_row(COLUMN_LIST)
-
-    first_row = ['Message', 'Province']
-    ordered = order_columns(COLUMN_LIST, first_row)
-    assert ordered == [cleaned[1], cleaned[0]]
-
-
-def test_get_fields_and_types():
-    fields, types = get_fields_and_types(COLUMN_LIST)
-    expected_types = ['location', 'text']
-    expected_fields = ['message.location', 'message.content']
-
-    assert fields == expected_fields
-    assert types == expected_types
-
-
-def test_successful_runs_of_parse_date():
-    dates = (
-        '05/01/2015',
-        '5.1.2015',
-        '5/1/15',
-        '05-01-2015',
-        datetime.datetime(2015, 1, 5, 0, 0)
-    )
-    expected = datetime.date(2015, 1, 5)
-    for date in dates:
-        assert parse_date(date) == expected
-
-
-def test_exception_raised_on_faulty_dates():
-    bad_date = '05x01-2015'
-    with pytest.raises(ValueError):
-        parse_date(bad_date)
-
-
-def test_process_row():
-    row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
-
-    number = decimal.Decimal('10.4')
-    date = datetime.date(2015, 5, 1)
-
-    columns = [
-        {
-            'name': 'Message',
-            'field': 'message',
-            'type': 'text'
-        },
-        {
-            'name': 'Age',
-            'field': 'age',
-            'type': 'integer'
-        },
-        {
-            'name': 'Cost',
-            'field': 'price',
-            'type': 'number'
-        },
-        {
-            'name': 'CreatedDate',
-            'field': 'created',
-            'type': 'date'
-        },
-        {
-            'name': 'Province',
-            'field': 'province',
-            'type': 'ignore'
+    def test_get_columns_map(self):
+        expected_result = {
+            'Province': {
+                'type': 'location',
+                'field': 'message.location'
+            },
+            'Message': {
+                'type': 'text',
+                'field': 'message.content'
+            },
         }
-    ]
 
-    converted = process_row(row, columns)
-    assert converted == {
-        'message': 'Short message',
-        'age': 5,
-        'price': number,
-        'created': date
-    }
+        result = self.importer.get_columns_map(COLUMN_LIST)
 
+        assert result == expected_result
 
-def test_convert_value_raises_on_unknown_type():
-    value = 'Short message'
-    type = 'location'
+    def test_get_rows_iterator_raises_on_non_excel_files(self):
 
-    with pytest.raises(SheetImportException) as excinfo:
-        convert_value(value, type)
-    assert excinfo.value.message == _(u"Unknown data type 'location' ")
+        with pytest.raises(SheetImportException) as excinfo:
+            self.importer.get_rows_iterator('not_a_file', 'excel')
+        assert excinfo.value.message == _('Expected excel file. Received file in an unrecognized format.')
 
+        with pytest.raises(SheetImportException) as excinfo:
+            self.importer.get_rows_iterator(None, 'pdf')
+        assert excinfo.value.message == _('Unsupported file format: pdf')
 
-def test_convert_value_raises_on_malformed_value():
-    value = 'not_integer'
-    type = 'integer'
+    def test_get_rows_iterator_works_on_excel_files(self):
 
-    with pytest.raises(SheetImportException) as excinfo:
-        convert_value(value, type)
-    assert excinfo.value.message == _(u"Can not process value 'not_integer' of type 'integer' ")
+        file_path = path.join(TEST_DIR, 'sample_excel.xlsx')
+        f = open(file_path, 'rb')
+        rows = list(self.importer.get_rows_iterator(f, 'excel'))
 
+        # 2x2 spreadsheet
+        assert len(rows) == 2
+        assert len(rows[0]) == 2
+        assert len(rows[1]) == 2
 
-def test_normalize_row_differences():
-    class Cell(object):
-        def __init__(self, value):
-            self.value = value
+    def _make_columns_row(self, column_list):
+        row = [d.copy() for d in column_list]
+        for col in row:
+            del col['name']  # Unify with first row version
+        return row
 
-    row = [5, 'London', Cell('1.1.2015')]
-    result = normalize_row(row)
-    assert result == [5, 'London', '1.1.2015']
+    def test_order_columns_with_no_first_row_returns_original_order(self):
+        expected = self._make_columns_row(COLUMN_LIST)
+        ordered = self.importer.order_columns(COLUMN_LIST)
+        assert ordered == expected
 
+    def test_order_columns_with_first_row_return_first_row_order(self):
+        cleaned = self._make_columns_row(COLUMN_LIST)
 
-def __test_process_rows_without_or_with_header(with_header):
-    def _rows_generator():
-        rows = [
-            ('Province', 'Message'),
-            ('London', 'Short message'),
-            ('Cambridge', 'What?'),
+        first_row = ['Message', 'Province']
+
+        ordered = self.importer.order_columns(COLUMN_LIST, first_row)
+        assert ordered == [cleaned[1], cleaned[0]]
+
+    def test_get_fields_and_types(self):
+        fields, types = self.importer.get_fields_and_types(COLUMN_LIST)
+        expected_types = ['location', 'text']
+        expected_fields = ['message.location', 'message.content']
+
+        assert fields == expected_fields
+        assert types == expected_types
+
+    def test_successful_runs_of_parse_date(self):
+        dates = (
+            ('05/01/2015', '%d/%m/%Y'),
+            ('5.1.2015', '%d.%m.%Y'),
+            ('5/1/15', '%d/%m/%y'),
+            ('05-01-2015', '%d-%m-%Y'),
+            (datetime.datetime(2015, 1, 5, 0, 0), None)
+        )
+        expected = pytz.utc.localize(datetime.datetime(2015, 1, 5))
+        for date, date_format in dates:
+            converter = CellConverter(date,
+                                      {'type': 'date',
+                                       'field': '',
+                                       'date_format': date_format})
+
+            assert converter.convert_value() == expected
+
+    def test_exception_raised_on_faulty_dates(self):
+        bad_date = '05x01-2015'
+        with pytest.raises(ValueError):
+            converter = CellConverter(bad_date,
+                                      {'type': 'date',
+                                       'field': '',
+                                       'date_format': '%m-%d-%Y'})
+            converter.convert_value()
+
+    def test_process_row(self):
+        row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
+
+        number = decimal.Decimal('10.4')
+        date = pytz.utc.localize(datetime.datetime(2015, 5, 1))
+
+        columns = [
+            {
+                'name': 'Message',
+                'field': 'message',
+                'type': 'text'
+            },
+            {
+                'name': 'Age',
+                'field': 'age',
+                'type': 'integer'
+            },
+            {
+                'name': 'Cost',
+                'field': 'price',
+                'type': 'number'
+            },
+            {
+                'name': 'CreatedDate',
+                'field': 'created',
+                'type': 'date',
+                'date_format': '%d.%m.%Y'
+            },
+            {
+                'name': 'Province',
+                'field': 'province',
+                'type': 'ignore'
+            }
         ]
-        if not with_header:
-            rows = rows[1:]
-        for row in rows:
-            yield row
 
-    columns = [d.copy() for d in COLUMN_LIST]
-    columns[0]['type'] = 'text'
-    rows = _rows_generator()
+        converted = self.importer.process_row(row, columns)
+        assert converted == {
+            'message': 'Short message',
+            'age': 5,
+            'price': number,
+            'created': date
+        }
 
-    objects = process_rows(rows, columns, with_header)
-    expected_objects = [
-        {
-            'message.location': 'London',
-            'message.content': 'Short message'
-        },
-        {
-            'message.location': 'Cambridge',
-            'message.content': 'What?'
-        },
-    ]
+    def test_convert_value_raises_on_unknown_type(self):
+        value = 'Short message'
+        type = 'location'
 
-    assert objects == expected_objects
+        converter = CellConverter(value, {'type': type, 'field': ''})
+        with pytest.raises(SheetImportException) as excinfo:
+            converter.convert_value()
+        assert excinfo.value.message == _(u"Unknown data type 'location' ")
 
+    def test_convert_value_raises_on_malformed_value(self):
+        value = 'not_integer'
+        type = 'integer'
 
-def test_process_rows_without_header():
-    __test_process_rows_without_or_with_header(False)
+        converter = CellConverter(value, {'type': type, 'field': ''})
 
+        with pytest.raises(SheetImportException) as excinfo:
+            converter.convert_value()
+        assert excinfo.value.message == _(u"Can not process value 'not_integer' of type 'integer' ")
 
-def test_process_rows_with_header():
-    __test_process_rows_without_or_with_header(True)
+    def test_convert_value_raises_on_date_without_format(self):
+        value = '1.5.2015'
 
+        converter = CellConverter(value, {
+            'type': 'date',
+            'field': 'created'})
 
-def test_process_rows_displays_line_number_on_error():
-    def _rows_generator():
-        rows = [
-            ('Province', 'Message'),
-            ('London', 'Short message'),
-            ('Cambridge', 'What?'),
+        with pytest.raises(SheetImportException) as excinfo:
+            converter.convert_value()
+        assert excinfo.value.message == _(u"Date format not specified for 'created' ")
+
+    def test_normalize_row_differences(self):
+        class Cell(object):
+            def __init__(self, value):
+                self.value = value
+
+        row = [5, 'London', Cell('1.1.2015')]
+        result = self.importer.normalize_row(row)
+        assert result == [5, 'London', '1.1.2015']
+
+    def __test_process_rows_without_or_with_header(self, with_header):
+        def _rows_generator():
+            rows = [
+                ('Province', 'Message'),
+                ('London', 'Short message'),
+                ('Cambridge', 'What?'),
+            ]
+            if not with_header:
+                rows = rows[1:]
+            for row in rows:
+                yield row
+
+        columns = [d.copy() for d in COLUMN_LIST]
+        columns[0]['type'] = 'text'
+        rows = _rows_generator()
+
+        objects = self.importer.process_rows(rows, columns, with_header)
+        expected_objects = [
+            {
+                'message.location': 'London',
+                'message.content': 'Short message'
+            },
+            {
+                'message.location': 'Cambridge',
+                'message.content': 'What?'
+            },
         ]
 
-        for row in rows:
-            yield row
+        assert objects == expected_objects
 
-    columns = [d.copy() for d in COLUMN_LIST]
-    columns[0]['type'] = 'location'
-    rows = _rows_generator()
+    def test_process_rows_without_header(self):
+        self.__test_process_rows_without_or_with_header(False)
 
-    with_header = True
-    with pytest.raises(SheetImportException) as excinfo:
-        process_rows(rows, columns, with_header)
+    def test_process_rows_with_header(self):
+        self.__test_process_rows_without_or_with_header(True)
 
-    assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
-    assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
+    def test_process_rows_displays_line_number_on_error(self):
+        def _rows_generator():
+            rows = [
+                ('Province', 'Message'),
+                ('London', 'Short message'),
+                ('Cambridge', 'What?'),
+            ]
 
+            for row in rows:
+                yield row
 
-@pytest.mark.django_db
-def test_items_imported():
-    assert Message.objects.count() == 0
+        columns = [d.copy() for d in COLUMN_LIST]
+        columns[0]['type'] = 'location'
+        rows = _rows_generator()
 
-    file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
-    f = open(file_path, 'rb')
+        with_header = True
+        with pytest.raises(SheetImportException) as excinfo:
+            self.importer.process_rows(rows, columns, with_header)
 
-    num_saved = store_spreadsheet('geopoll', f)
-    assert num_saved > 0
+        assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
+        assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
-    assert Message.objects.count() > 0
+    @pytest.mark.django_db
+    def test_items_imported(self):
+        assert Message.objects.count() == 0
+        file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
+        f = open(file_path, 'rb')
+
+        num_saved = self.importer.store_spreadsheet('geopoll', f)
+        assert num_saved > 0
+
+        items = Message.objects.all()
+        assert len(items) > 0
+
+        assert items[0].body == "What  is  the  cuse  of  ebola?"
+        assert items[0].timestamp == pytz.utc.localize(
+            datetime.datetime(2015, 5, 1))
