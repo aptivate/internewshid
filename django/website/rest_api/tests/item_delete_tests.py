@@ -27,19 +27,20 @@ def test_delete_item():
 
 
 def delete_items(item_ids):
-    request = APIRequestFactory().delete('/items/', item_ids)
+    request = APIRequestFactory().delete('/items/', {'ids': item_ids})
+    view = ItemList.as_view()
     return view(request)
 
 
-@pytest.mark.xfail
 @pytest.mark.django_db
 def test_delete_items():
     ItemFactory()
     ItemFactory()
-    messages = list(Item.objects.all())
-    assert len(messages) == 2
+    items = list(Item.objects.all())
+    assert len(items) == 2
 
-    response = delete_items([msg['id'] for msg in messages])
+    import ipdb; ipdb.set_trace()
+    response = delete_items([i.id for i in items])
 
     assert status.is_success(response.status_code)
     assert len(Item.objects.count()) == 0
