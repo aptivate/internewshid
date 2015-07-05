@@ -3,7 +3,6 @@ import pytest
 
 from transport import data_layer_transport as dl
 from django.utils import timezone
-from data_layer.models import Item
 
 
 @pytest.mark.django_db
@@ -12,10 +11,10 @@ def test_create_message_creates_item():
         microsecond=0  # MySQL discards microseconds
     )
     item = {'body': "Text", 'timestamp': now}
-    old_count = Item.objects.count()
+    old_count = len(dl.get_messages())
 
     response = dl.create_message(item)
 
     assert 'id' in response
-    new_count = Item.objects.count()
+    new_count = len(dl.get_messages())
     assert new_count > old_count
