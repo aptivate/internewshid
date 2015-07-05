@@ -1,21 +1,23 @@
 from __future__ import unicode_literals, absolute_import
 import pytest
 
-from rest_api.serializers import ItemSerializer
 from data_layer.tests.factories import ItemFactory
-from transport import data_layer_transport as dl
+from transport.data_layer_transport import ItemTransport
 
 
 @pytest.mark.django_db
-def test_get_items_exists():
-    items = dl.get_messages()
+def test_list_items_exists():
+    item_transport = ItemTransport()  # TODO: Should probably be a pytest fixture?
+    items = item_transport.list()
     assert items == []
 
+
 @pytest.mark.django_db
-def test_get_items_returns_items():
+def test_list_items_returns_items():
+    item_transport = ItemTransport()  # TODO: Should probably be a pytest fixture?
     item = ItemFactory(body="test")
 
-    items = dl.get_messages()
+    items = item_transport.list()
 
     assert len(items) == 1
     [item] = items
@@ -23,11 +25,12 @@ def test_get_items_returns_items():
 
 
 @pytest.mark.django_db
-def test_get_items_filters_by_body():
-    item1 = ItemFactory(body="one")
-    item2 = ItemFactory(body="two")
+def test_list_items_filters_by_body():
+    item_transport = ItemTransport()  # TODO: Should probably be a pytest fixture?
+    ItemFactory(body="one")
+    ItemFactory(body="two")
 
-    items = dl.get_messages(body='one')
+    items = item_transport.list(body='one')
 
     assert len(items) == 1
     [item] = items

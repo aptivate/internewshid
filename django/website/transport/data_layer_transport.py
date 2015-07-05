@@ -45,6 +45,15 @@ class ItemTransport(object):
             response.data['status_code'] = response.status_code
             raise TransportException(response.data)
 
+    def delete(self, id):
+        """ Delete the Item wit the given ID """
+        view = self.get_view()
+        request = self.request_factory.delete(self.url, id)
+        return view(request)
+
+    def bulk_delete(self, ids):
+        pass
+
 
 def get_messages(**kwargs):  # TODO rename get_items
     return ItemTransport().list(**kwargs)
