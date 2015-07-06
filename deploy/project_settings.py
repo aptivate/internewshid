@@ -12,14 +12,6 @@ from os import path
 # application
 project_name = "internewshid"
 
-django_apps = [
-    'chn_spreadsheet',
-    'data_layer',
-    'hid',
-    'transport',
-    'users'
-]
-
 # repository type can be "cvs", "svn" or "git"
 # repo_type = "svn"
 # repository = 'https://svn.aptivate.org/svn/' + project_name + '/dev'
