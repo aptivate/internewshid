@@ -14,3 +14,14 @@ def test_delete_item():
     item_transport.delete(item.id)
 
     assert len(item_transport.list()) == 0
+
+
+@pytest.mark.django_db
+def test_delete_items():
+    item_transport = ItemTransport()  # TODO: Should probably be a pytest fixture?
+    ids = [ItemFactory().id for i in range(10)]
+    assert len(item_transport.list()) == 10
+
+    item_transport.bulk_delete(ids)
+
+    assert len(item_transport.list()) == 0

@@ -12,7 +12,7 @@ class ItemTransport(object):
     actions = {
         'get': 'list',
         'post': 'create',
-        'delete': 'destroy',
+        'delete': 'bulk_destroy',
     }
     request_factory = APIRequestFactory()
 
@@ -46,6 +46,9 @@ class ItemTransport(object):
             response.data['status_code'] = response.status_code
             raise TransportException(response.data)
 
+    # TODO: I suspect we're actually not using this. Because the tool currently
+    # uses bulk delete. And of course we could use bulk delete and filter for
+    # the one item to delete.
     def delete(self, id):
         """ Delete the Item wit the given ID """
         view = self.get_view()
@@ -55,7 +58,9 @@ class ItemTransport(object):
 
     def bulk_delete(self, ids):
         """ Delete all Items whose ids appear in the given list """
-        pass
+        view = self.get_view()
+        request = self.request_factory.delete(self.url, ids=ids)
+        return view(request)
 
 
 def get_messages(**kwargs):  # TODO rename get_items
@@ -71,6 +76,4 @@ def delete_item(message_id):
 
 
 def delete_items(message_ids):
-    # Message.delete_items(message_ids)
-    # TODO: reimplement with API
-    pass
+    return ItemTransport().bulk_delete(message_ids)
