@@ -42,3 +42,13 @@ def test_filter_by_body():
 
     assert len(payload) == 1
     assert payload[0]['body'] == "one"
+
+
+@pytest.mark.django_db
+def test_filter_by_id_list():
+    ItemFactory()
+    item_ids = [ItemFactory().id for i in range(10)]
+
+    payload = get(data={'ids': item_ids}).data
+
+    assert len(payload) == 10

@@ -8,5 +8,12 @@ from .serializers import ItemSerializer
 
 class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     serializer_class = ItemSerializer
-    queryset = Item.objects.all()
     filter_fields = ('created', 'body', 'timestamp', )
+
+    def get_queryset(self):
+        items = Item.objects.all()
+        ids = self.request.query_params.getlist('ids')
+        if ids:
+            items = items.filter(id__in=ids)
+
+        return items

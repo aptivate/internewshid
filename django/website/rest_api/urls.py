@@ -1,8 +1,9 @@
 from rest_framework import routers
+from rest_framework_bulk.routes import BulkRouter
 
 from .views import ItemViewSet
 
-router = routers.SimpleRouter()
+router = BulkRouter()
 router.register(
     r'items',
     ItemViewSet,
