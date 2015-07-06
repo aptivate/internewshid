@@ -1,6 +1,7 @@
 from data_layer import models
 
 
+#TODO: delete all this
 class Message(object):
 
     @classmethod

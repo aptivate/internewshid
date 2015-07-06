@@ -12,6 +12,7 @@ class ItemTransport(object):
     actions = {
         'get': 'list',
         'post': 'create',
+        'delete': 'destroy',
     }
     request_factory = APIRequestFactory()
 
@@ -48,10 +49,12 @@ class ItemTransport(object):
     def delete(self, id):
         """ Delete the Item wit the given ID """
         view = self.get_view()
-        request = self.request_factory.delete(self.url, id)
-        return view(request)
+        url = '/items/{}/'.format(id)
+        request = self.request_factory.delete(url)
+        return view(request, pk=id)
 
     def bulk_delete(self, ids):
+        """ Delete all Items whose ids appear in the given list """
         pass
 
 
@@ -64,9 +67,7 @@ def create_message(item):  # TODO rename create_item
 
 
 def delete_item(message_id):
-    # Message.delete(message_id)
-    # TODO: reimplement with API
-    pass
+    return ItemTransport().delete(message_id)
 
 
 def delete_items(message_ids):
