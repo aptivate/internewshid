@@ -28,19 +28,15 @@ def test_delete_item():
 
 def delete_items(item_ids):
     request = APIRequestFactory().delete('/items/', {'ids': item_ids})
-    view = ItemViewSet.as_view()
+    view = ItemViewSet.as_view(actions={'delete': 'bulk_destroy'})
     return view(request)
 
 
-@pytest.mark.xfail  # awaiting bulk
 @pytest.mark.django_db
 def test_delete_items():
-    ItemFactory()
-    ItemFactory()
-    items = list(Item.objects.all())
-    assert len(items) == 2
+    items = [ItemFactory().id for i in range(10)]
 
-    response = delete_items([i.id for i in items])
+    response = delete_items(items)
 
     assert status.is_success(response.status_code)
-    assert len(Item.objects.count()) == 0
+    assert Item.objects.count() == 0
