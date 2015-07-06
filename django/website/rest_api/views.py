@@ -6,19 +6,7 @@ from data_layer.models import Item
 from .serializers import ItemSerializer
 
 
-class ItemList(generics.ListCreateAPIView, BulkDestroyModelMixin):
-    pass
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    filter_fields = ('created', 'body', 'timestamp', )
-
-
-class ItemView(generics.DestroyAPIView):
-
-    queryset = Item.objects.all()
-
-
-class ItemViewSet(viewsets.ModelViewSet):
+class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
     filter_fields = ('created', 'body', 'timestamp', )
