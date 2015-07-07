@@ -64,13 +64,13 @@ def test_process_items_always_redirects_to_data_view():
     assert isinstance(response, HttpResponseRedirect) is True
 
 
-@pytest.mark.xfail  # Pending reimplementation of Delete via API
 @pytest.mark.django_db
 def test_process_items_deletes_items():
+    items = transport.ItemTransport()
     msg = {'body': "Message text"}
-    transport.create_item(msg)
+    items.create(msg)
 
-    [item] = list(transport.get_items())
+    [item] = list(items.list())
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {'delete': [item['id']]})
@@ -79,5 +79,5 @@ def test_process_items_deletes_items():
     process_items(request)
     assert check_message(request, u"Successfully deleted 1 item.") is True
 
-    items = list(transport.get_items())
+    items = list(items.list())
     assert len(list(items)) == 0

@@ -69,12 +69,13 @@ class ViewItems(SingleTableView):
     table_pagination = {
         'per_page': 25
     }
+    items = transport.ItemTransport()
 
     def get_success_url(self):
         return reverse("data-view")
 
     def get_queryset(self):
-        return transport.get_items()
+        return self.items.list()
 
 
 def get_deleted(params):
@@ -82,12 +83,13 @@ def get_deleted(params):
 
 
 def process_items(request):
+    items = transport.ItemTransport()  # TODO: create this here or once somewhere in module scope?
     redirect_url = reverse("data-view")
     if request.method == "POST":
         deleted = get_deleted(request.POST)
         if len(deleted):
             try:
-                transport.delete_items(deleted)
+                items.bulk_delete(deleted)
                 num_deleted = len(deleted)
                 msg = ungettext("Successfully deleted %d item.",
                                 "Successfully deleted %d items.",

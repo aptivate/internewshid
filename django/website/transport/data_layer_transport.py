@@ -61,19 +61,3 @@ class ItemTransport(object):
         view = self.get_view()
         request = self.request_factory.delete(self.url, ids=ids)
         return view(request)
-
-
-def get_messages(**kwargs):  # TODO rename get_items
-    return ItemTransport().list(**kwargs)
-
-
-def create_message(item):  # TODO rename create_item
-    return ItemTransport().create(item)
-
-
-def delete_item(message_id):
-    return ItemTransport().delete(message_id)
-
-
-def delete_items(message_ids):
-    return ItemTransport().bulk_delete(message_ids)
