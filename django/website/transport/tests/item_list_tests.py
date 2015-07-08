@@ -2,21 +2,19 @@ from __future__ import unicode_literals, absolute_import
 import pytest
 
 from data_layer.tests.factories import ItemFactory
-from transport import ItemTransport
+import transport
 
 
 @pytest.mark.django_db
 def test_list_items_exists():
-    # TODO: Should ItemTransport probably be a pytest fixture?
-    assert ItemTransport().list() == []
+    assert transport.items.list() == []
 
 
 @pytest.mark.django_db
 def test_list_items_returns_items():
     item = ItemFactory(body="test")
 
-    # TODO: Should ItemTransport probably be a pytest fixture?
-    items = ItemTransport().list()
+    items = transport.items.list()
 
     assert len(items) == 1
     [item] = items
@@ -28,8 +26,7 @@ def test_list_items_filters_by_body():
     ItemFactory(body="one")
     ItemFactory(body="two")
 
-    # TODO: Should ItemTransport probably be a pytest fixture?
-    items = ItemTransport().list(body='one')
+    items = transport.items.list(body='one')
 
     assert len(items) == 1
     [item] = items

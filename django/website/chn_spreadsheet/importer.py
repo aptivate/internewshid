@@ -8,7 +8,7 @@ from django.utils.timezone import is_naive
 from django.utils.translation import ugettext as _
 from openpyxl import load_workbook
 
-from transport import ItemTransport
+import transport
 
 from .models import SheetProfile
 
@@ -18,8 +18,6 @@ class SheetImportException(Exception):
 
 
 class Importer(object):
-
-    items = ItemTransport()
 
     def get_profile(self, label):
         try:
@@ -149,7 +147,7 @@ class Importer(object):
 
     def save_rows(self, objects, data_type):
         for obj in objects:
-            self.items.create(obj)
+            transport.items.create(obj)
 
         return len(objects)
 

@@ -94,11 +94,10 @@ def test_get_categories_filters_out_removed():
 @pytest.fixture
 def request_item():
     '''Create item and request'''
-    items = transport.ItemTransport()
     msg = {'body': "Message text"}
-    items.create(msg)
+    transport.items.create(msg)
 
-    [item] = list(items.list())
+    [item] = list(transport.items.list())
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {'delete': [item['id']]})
@@ -110,7 +109,7 @@ def request_item():
 def check_item_was_deleted(request):
     assert check_message(request, u"Successfully deleted 1 item.") is True
 
-    items = list(transport.ItemTransport().list())
+    items = list(transport.items.list())
     assert len(list(items)) == 0
 
 
@@ -143,22 +142,3 @@ def test_process_items_always_redirects_to_data_view():
     response = process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
-
-
-@pytest.mark.django_db
-def test_process_items_deletes_items():
-    items = transport.ItemTransport()
-    msg = {'body': "Message text"}
-    items.create(msg)
-
-    [item] = list(items.list())
-
-    url = reverse('data-view-process')
-    request = ReqFactory.post(url, {'delete': [item['id']]})
-    request = fix_messages(request)
-
-    process_items(request)
-    assert check_message(request, u"Successfully deleted 1 item.") is True
-
-    items = list(items.list())
-    assert len(list(items)) == 0

@@ -1,21 +1,20 @@
 from __future__ import unicode_literals, absolute_import
 import pytest
 
-from transport.data_layer_transport import ItemTransport
+from transport import items
 from django.utils import timezone
 
 
 @pytest.mark.django_db
 def test_create_message_creates_item():
-    item_transport = ItemTransport()
     now = timezone.now().replace(
         microsecond=0  # MySQL discards microseconds
     )
     item = {'body': "Text", 'timestamp': now}
-    old_count = len(item_transport.list())
+    old_count = len(items.list())
 
-    response = item_transport.create(item)
+    response = items.create(item)
 
     assert 'id' in response
-    new_count = len(item_transport.list())
+    new_count = len(items.list())
     assert new_count > old_count
