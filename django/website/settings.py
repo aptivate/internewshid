@@ -204,6 +204,15 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "dashboard"
 ########## END Custom user app defaults
 
+########## BOOTSTRAP3
+BOOTSTRAP3 = {
+
+    # The URL to the jQuery JavaScript file
+    'jquery_url': STATIC_URL + '/js/jquery.min.js',
+    'javascript_url': STATIC_URL + '/bootstrap/js/bootstrap.min.js',
+
+}
+########## END BOOTSTRAP
 
 ########## SLUGLIFIER
 # AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"

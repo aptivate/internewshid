@@ -12,7 +12,7 @@ body {
 
 #page-wrapper {
     padding: 30px 15px;
-    min-height: 568px;
+    min-height: 1000px;
     background-color: white;
     .box-shadow-inset(inset, 5px, 0px);
 }
@@ -22,7 +22,6 @@ body {
         position: inherit;
         margin: 0 0 0 250px;
         padding: 30px;
-        border-left: 1px solid darken(@gray-lightest, 6.5%);
     }
 }
 
@@ -32,13 +31,31 @@ body {
   font-size:24px;
 }
 
+.subtitle {
+    display: block;
+    float: right;
+    width: 15em;
+}
+
+.subtitle {
+    font-size: 12px;
+    line-height: 1em;
+    padding-left: 1em;
+}
+
 .site-info {
     bottom: 0;
+    width:250px;
+    position: fixed;
+
+}
+
+.site-info {
     color: #78716e;
     font-size: 13px;
-    position: fixed;
     text-align: center;
-    width:250px;
+    padding:@padding-base-vertical;
+    background-color:@gray-lighter;
     a {
       color:@gray;
       text-decoration:underline;
@@ -71,7 +88,8 @@ body {
     min-height: 50px;
 }
 
-.navbar-top-links > li > a {
+.navbar-top-links > li > a,
+.navbar-top-links > li > a > i {
   color:@body-bg;
 }
 
@@ -117,7 +135,8 @@ body {
     left: auto;
 }
 
-.navbar-top-links > li > a:hover {
+.navbar-top-links > li > a:hover,
+.navbar-top-links > .open > a:focus {
   background-color:@brand-secondary;
 }
 
@@ -136,7 +155,6 @@ body {
 }
 
 .sidebar ul li {
-    border-bottom: 1px solid darken(@gray-lightest, 6.5%);
     a {
         &.active {
             background-color: @gray-lightest;
@@ -187,6 +205,7 @@ body {
 
 .nav.nav-tabs.navbar-right {
     padding-top: 43px;
+    margin-right:@padding-small-horizontal;
 }
 
 // Buttons
@@ -225,6 +244,10 @@ body {
     color: white;
 }
 
+.btn-primary > i {
+  color:@body-bg;
+}
+
 
 // Login Page
 
@@ -255,6 +278,20 @@ body {
 .created, .timestamp {
   color:@gray;
   font-size:@font-size-small;
+}
+
+.view-items-actions {
+  position:relative;
+  bottom:65px;
+  padding-right:0;
+}
+
+.view-items-form .pagination {
+    margin-top: 0;
+    padding-right: 0;
+    li {
+      padding:10px;
+    }
 }
 
 // Circle Buttons 
@@ -356,4 +393,3 @@ body {
   color:@brand-secondary;
   margin-right:5px;
 }
-

@@ -6478,7 +6478,7 @@ body {
 }
 #page-wrapper {
   padding: 30px 15px;
-  min-height: 568px;
+  min-height: 1000px;
   background-color: white;
   -webkit-box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
@@ -6490,19 +6490,32 @@ body {
     position: inherit;
     margin: 0 0 0 250px;
     padding: 30px;
-    border-left: 1px solid #eeeeee;
   }
 }
 .navbar-brand {
   font-size: 24px;
 }
+.subtitle {
+  display: block;
+  float: right;
+  width: 15em;
+}
+.subtitle {
+  font-size: 12px;
+  line-height: 1em;
+  padding-left: 1em;
+}
 .site-info {
   bottom: 0;
+  width: 250px;
+  position: fixed;
+}
+.site-info {
   color: #78716e;
   font-size: 13px;
-  position: fixed;
   text-align: center;
-  width: 250px;
+  padding: 10px;
+  background-color: #f0efed;
 }
 .site-info a {
   color: #78716e;
@@ -6529,7 +6542,8 @@ body {
   padding: 15px;
   min-height: 50px;
 }
-.navbar-top-links > li > a {
+.navbar-top-links > li > a,
+.navbar-top-links > li > a > i {
   color: #ffffff;
 }
 .navbar-top-links .dropdown-menu li {
@@ -6565,7 +6579,8 @@ body {
   right: 0;
   left: auto;
 }
-.navbar-top-links > li > a:hover {
+.navbar-top-links > li > a:hover,
+.navbar-top-links > .open > a:focus {
   background-color: #404965;
 }
 .sidebar {
@@ -6577,9 +6592,6 @@ body {
 }
 .sidebar .sidebar-search {
   padding: 15px;
-}
-.sidebar ul li {
-  border-bottom: 1px solid #eeeeee;
 }
 .sidebar ul li a.active {
   background-color: #ffffff;
@@ -6617,6 +6629,7 @@ body {
 }
 .nav.nav-tabs.navbar-right {
   padding-top: 43px;
+  margin-right: 10px;
 }
 .btn-outline {
   color: inherit;
@@ -6645,6 +6658,9 @@ body {
 .btn-danger.btn-outline:hover {
   color: white;
 }
+.btn-primary > i {
+  color: #ffffff;
+}
 .login-panel {
   margin-top: 25%;
 }
@@ -6665,6 +6681,18 @@ body {
 .timestamp {
   color: #78716e;
   font-size: 13px;
+}
+.view-items-actions {
+  position: relative;
+  bottom: 65px;
+  padding-right: 0;
+}
+.view-items-form .pagination {
+  margin-top: 0;
+  padding-right: 0;
+}
+.view-items-form .pagination li {
+  padding: 10px;
 }
 .btn-circle {
   width: 30px;
