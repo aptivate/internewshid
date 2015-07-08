@@ -1,6 +1,6 @@
 # NOTE After setup, consider pinning to a version or commit
 
--e git://github.com/aptivate/dye.git@b881bdfcfa1bfda7912a24167ad8d0bd3b6aac97#egg=dye
+-e git://github.com/aptivate/dye.git@f158d7c3f3446d82b361cb60a01f6d08d9558d29#egg=dye
 
 linecache2==1.0.0
 

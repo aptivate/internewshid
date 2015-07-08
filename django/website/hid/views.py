@@ -77,26 +77,64 @@ class ViewItems(SingleTableView):
     def get_queryset(self):
         return self.items.list()
 
+    def get_category_options(self, categories_id=None):
+        '''
+        TODO: Fetch categories based on their id
+        '''
+        return (
+            ('first', 'First'),
+            ('second', 'Second option with a long name'),
+            ('third', 'Third'),
+            ('fourth', 'Fourth'),
+        )
+
+    def get_table(self, **kwargs):
+        kwargs['categories'] = self.get_category_options()
+        return super(ViewItems, self).get_table(**kwargs)
+
 
 def get_deleted(params):
     return [int(x) for x in params.getlist("delete", [])]
 
 
-def process_items(request):
+def get_categories(params, deleted_ids=[]):
+    removed = set(deleted_ids)
+    cat_id = lambda x: int(x[9:])
+    is_cat = lambda x: x.startswith("category-")
+
+    categories = [(cat_id(key), val) for key, val in params.items() if is_cat(key)]
+    return [cat for cat in categories if cat[0] not in removed]
+
+
+def delete_items(request, deleted):
     items = transport.ItemTransport()  # TODO: create this here or once somewhere in module scope?
+    try:
+        items.bulk_delete(deleted)
+        num_deleted = len(deleted)
+        msg = ungettext("Successfully deleted %d item.",
+                        "Successfully deleted %d items.",
+                        num_deleted) % num_deleted
+        messages.success(request, msg)
+    except:
+        msg = _("There was an error while deleting.")
+        messages.error(request, msg)
+
+
+def process_items(request):
+    '''
+    If POST request, then:
+    - delete items that were checked
+    - update categories on those that weren't deleted.
+    '''
     redirect_url = reverse("data-view")
+    # Just redirect back to items view on GET
     if request.method == "POST":
         deleted = get_deleted(request.POST)
+        categories = get_categories(request.POST, deleted)
         if len(deleted):
-            try:
-                items.bulk_delete(deleted)
-                num_deleted = len(deleted)
-                msg = ungettext("Successfully deleted %d item.",
-                                "Successfully deleted %d items.",
-                                num_deleted) % num_deleted
-                messages.success(request, msg)
-            except:
-                msg = _("There was an error while deleting.")
-                messages.error(request, msg)
+            delete_items(request, deleted)
+        if len(categories):
+            # Update categories as well
+            pass
 
     return HttpResponseRedirect(redirect_url)
