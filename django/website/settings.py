@@ -137,6 +137,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'hid',
+    'dashboard',
     'users',
     'chn_spreadsheet',
     'data_layer',
