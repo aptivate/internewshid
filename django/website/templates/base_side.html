@@ -48,7 +48,14 @@
     <!-- Main Content -->
     <div id="page-wrapper">
         <div class="row">
-            <div class="col-lg-12 ">
+            <div class="col-lg-12 messages-box">
+            	{% if messages %}
+			        <ul class="list-unstyled">
+			            {% for message in messages %}
+			            <li{% if message.tags %} class="alert {{ message.tags }} {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}"{% endif %}>{{ message }}</li>
+			            {% endfor %}
+			        </ul>
+			       {% endif %}
             	{% block maincontent %}
             	{% endblock maincontent %}
         	</div>

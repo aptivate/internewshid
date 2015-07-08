@@ -6672,28 +6672,6 @@ body {
   width: 100%;
   height: 100%;
 }
-.table .form-control {
-  line-height: 1em;
-  height: inherit;
-  padding: 5px;
-}
-.created,
-.timestamp {
-  color: #78716e;
-  font-size: 13px;
-}
-.view-items-actions {
-  position: relative;
-  bottom: 65px;
-  padding-right: 0;
-}
-.view-items-form .pagination {
-  margin-top: 0;
-  padding-right: 0;
-}
-.view-items-form .pagination li {
-  padding: 10px;
-}
 .btn-circle {
   width: 30px;
   height: 30px;
@@ -6955,6 +6933,35 @@ a.list-group-item-danger.active:focus {
 }
 .popover {
   color: #282625;
+}
+.table .form-control {
+  line-height: 1em;
+  height: inherit;
+  padding: 5px;
+}
+.created,
+.timestamp {
+  color: #78716e;
+  font-size: 13px;
+}
+.view-items-actions {
+  position: relative;
+  bottom: 65px;
+  padding-right: 0;
+}
+.view-items-form .pagination {
+  margin-top: 0;
+  padding-right: 0;
+}
+.view-items-form .pagination li {
+  padding: 10px;
+}
+.messages-box .alert {
+  padding: 5px 10px;
+  margin-top: 40px;
+}
+.bootstrap3-multi-input {
+  display: none;
 }
 .clearfix:before,
 .clearfix:after,
