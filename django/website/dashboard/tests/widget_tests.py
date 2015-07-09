@@ -11,6 +11,8 @@ class TestWidget(object):
         of get_context_data
     """
     template_name = 'test-widget-template'
+    javascript = ['app/file.js', 'app/file2.js']
+    css = ['app/file.css', 'app/file2/css']
 
     def get_context_data(self, **kwargs):
         return {

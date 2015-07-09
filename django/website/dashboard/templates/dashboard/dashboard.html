@@ -1,14 +1,28 @@
 {% extends "base.html" %}
 {% load render_widget %}
 {% load i18n %}
-{% block maincontent %}
-    {% for row in rows %}
-        <div class='row'>
-            {% for widget in row %}
-            <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }}'>
-                    {{ widget|render_widget }}
-                </div>
-            {% endfor %}
-        </div>
+
+{% block bootstrap3_extra_head %}
+    {% for stylesheet in css %}
+        <link href='{{STATIC_URL}}{{stylesheet}}' rel='stylesheet' />
     {% endfor %}
+{% endblock %}
+{% block maincontent %}
+    <div id='dashboard-{{name}}' class='dashboard'>
+        {% for row in rows %}
+            <div class='row'>
+                {% for widget in row %}
+                <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }} widget-height-{{ widget.height }}'>
+                        {{ widget|render_widget }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock maincontent %}
+{% block lastjs %}
+    {{ block.super }}
+    {% for library in javascript %}
+    <script src='{{STATIC_URL}}{{ library }}'></script>
+    {% endfor %}
+{% endblock %}
