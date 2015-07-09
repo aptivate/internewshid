@@ -10,13 +10,17 @@ class TestWidget(object):
     """ A test widget with a template name and an implementation of
         of get_context_data
     """
-    template_name = 'test-widget-template'
+    def __init__(self, template_name=None, context=None):
+        self.template_name = template_name
+        self.context = context
 
     def get_context_data(self, **kwargs):
-        return {
-            'is_test_widget': True,
-            'value': kwargs['setting']
-        }
+        if self.context:
+            ret = dict(self.context)
+        else:
+            ret = {}
+        ret['kwargs'] = kwargs
+        return ret
 
 
 class TestWidgetNoContextData(object):
@@ -41,93 +45,110 @@ class MockWidgetInstance(object):
         widget_type: The widget type to associate with this
                      instance
     """
-    widget_type = 'test-widget'
-    settings = {
-        'setting': 'carrot'
-    }
-
-    def __init__(self, widget_type):
+    def __init__(self, widget_type, settings=None):
         self.widget_type = widget_type
+        if settings is not None:
+            self.settings = settings
+        else:
+            self.settings = {}
 
 
 class WidgetPoolTestCase(TestCase):
     def setUp(self):
-        # Setup the main widget and widget instance
-        self.test_widget = TestWidget()
-        register_widget('test-widget', self.test_widget)
-        self.widget_instance = MockWidgetInstance('test-widget')
-        # Setup the widget & instance without get_context_data
-        # implementation
-        self.test_widget_no_ctx = TestWidgetNoContextData()
-        register_widget(
-            'test-widget-no-ctx',
-            self.test_widget_no_ctx
+        # Path to the render_to_string method we want to patch for some of
+        # the tests.
+        self.render_to_string_method = (
+            'dashboard.templatetags.render_widget.render_to_string'
         )
-        self.widget_instance_no_ctx = MockWidgetInstance('test-widget-no-ctx')
-        # Setup the widget & instance without the template name
-        self.test_widget_no_tpl = TestWidgetNoTemplateName()
-        register_widget(
-            'test-widget-no-tpl',
-            self.test_widget_no_tpl
-        )
-        self.widget_instance_no_tpl = MockWidgetInstance('test-widget-no-tpl')
+
+    def get_mock_render_to_string_parameter(self, mock, parameter):
+        """ Helper function to return arguments a mock instance
+            of render_to_string has been invoked with.
+
+            Args:
+                mock: A Mock object
+                parameter: either 'template_name' or 'context'
+            Returns:
+                The value of the given parameter for the last invocation
+                of the given mock with the render_to_string signature.
+            Raises:
+                ValueError: If parameter is not 'template_name' or 'context'
+        """
+        if parameter == 'template_name':
+            return mock.call_args[0][0]
+        elif parameter == 'context':
+            return mock.call_args[0][1]
+        else:
+            raise ValueError()
 
     def test_widget_is_registered(self):
-        self.assertEqual(self.test_widget, get_widget('test-widget'))
+        test_widget = TestWidget()
+        register_widget('test-widget', test_widget)
+        self.assertEqual(get_widget('test-widget'), test_widget)
 
     def test_registering_twice_overrides_existing_widget(self):
+        test_widget = TestWidget()
+        register_widget('test-widget', test_widget)
         test_widget_2 = TestWidget()
-        try:
-            register_widget('test-widget', test_widget_2)
-            self.assertEqual(test_widget_2, get_widget('test-widget'))
-        finally:
-            # Clean up.
-            register_widget('test-widget', self.test_widget)
+        register_widget('test-widget', test_widget_2)
+        self.assertEqual(get_widget('test-widget'), test_widget_2)
 
-    @patch('dashboard.templatetags.render_widget.render_to_string')
-    def test_render_widget_loads_widget_type(self, mock_render_to_string):
-        render_widget(self.widget_instance)
-        self.assertTrue(
-            mock_render_to_string.call_args[0][1]['is_test_widget']
-        )
+    def test_render_widget_loads_widget_type(self):
+        test_widget = TestWidget(context={'is_test_widget': True})
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            context = self.get_mock_render_to_string_parameter(mock, 'context')
+        self.assertTrue(context['is_test_widget'])
 
-    @patch('dashboard.templatetags.render_widget.render_to_string')
-    def test_render_widget_uses_template_name(self, mock_render_to_string):
-        render_widget(self.widget_instance)
-        self.assertEqual(
-            mock_render_to_string.call_args[0][0],
-            'test-widget-template'
-        )
+    def test_render_widget_uses_template_name(self):
+        test_widget = TestWidget(template_name='test-widget-template')
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            template_name = self.get_mock_render_to_string_parameter(
+                mock, 'template_name'
+            )
+        self.assertEqual(template_name, 'test-widget-template')
 
-    @patch('dashboard.templatetags.render_widget.render_to_string')
-    def test_render_widget_calls_get_context_data(self, mock_render_to_string):
+    def test_render_widget_calls_get_context_data(self):
         """ Test render widget calls get_context_data with the widget
             instance settings.
         """
-        render_widget(self.widget_instance)
-        self.assertEqual(
-            mock_render_to_string.call_args[0][1]['value'],
-            'carrot'
-        )
+        test_widget = TestWidget()
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget', {'test': 'value'})
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            context = self.get_mock_render_to_string_parameter(mock, 'context')
+        self.assertEqual(context['kwargs'], {'test': 'value'})
 
-    @patch('dashboard.templatetags.render_widget.render_to_string')
-    def test_render_widget_without_get_ctx_data(self, mock_render_to_string):
+    def test_render_widget_without_get_ctx_data(self):
         """ Test render widget accepts widget types that do not implement
             get_context_data.
         """
-        render_widget(self.widget_instance_no_ctx)
-        self.assertEqual(
-            mock_render_to_string.call_args[0][1],
-            {}
-        )
+        test_widget = TestWidgetNoContextData()
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            context = self.get_mock_render_to_string_parameter(mock, 'context')
+        self.assertEqual(context, {})
 
-    @patch('dashboard.templatetags.render_widget.render_to_string')
-    def test_render_widget_without_template_name(self, mock_render_to_string):
+    def test_render_widget_without_template_name(self):
         """ Test render widget uses a default template when template_name
             is missing from the widget type object
         """
-        render_widget(self.widget_instance_no_tpl)
+        test_widget = TestWidgetNoTemplateName()
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            template_name = self.get_mock_render_to_string_parameter(
+                mock, 'template_name'
+            )
         self.assertEqual(
-            mock_render_to_string.call_args[0][0],
-            'dashboard/widget-missing-template.html'
+            template_name, 'dashboard/widget-missing-template.html'
         )
