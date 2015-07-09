@@ -13,5 +13,5 @@ urlpatterns = patterns('',
     url(r'^sources/$', login_required(ListSources.as_view()), name='sources'),
     url(r'^view/process/$', login_required(process_items), name="data-view-process"),
     url(r'^view/$', login_required(ViewItems.as_view()), name="data-view"),
-    url(r'^$', DashboardView.as_view()),
+    url(r'^$', login_required(DashboardView.as_view()), name='dashboard'),
 )
