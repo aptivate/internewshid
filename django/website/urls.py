@@ -22,7 +22,8 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('users.urls')),
-    url(r'^', include('hid.urls')),
+    url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^', include('hid.urls'))
 )
 
 if settings.DEBUG:

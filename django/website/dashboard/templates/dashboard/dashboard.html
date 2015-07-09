@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load render_widget %}
+{% load i18n %}
+{% block maincontent %}
+    {% for row in rows %}
+        <div class='row'>
+            {% for widget in row %}
+            <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }}'>
+                    {{ widget|render_widget }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock maincontent %}
