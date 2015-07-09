@@ -1,0 +1,21 @@
+.dashboard .widget {
+    overflow: scroll;
+}
+.dashboard .widget-height-small {
+    height: 120px;
+}
+.dashboard .widget-height-small .panel {
+    height: 100px;
+}
+.dashboard .widget-height-medium {
+    height: 300px;
+}
+.dashboard .widget-height-medium .panel {
+    height: 280px;
+}
+.dashboard .widget-height-tall {
+    height: 420px;
+}
+.dashboard .widget-height-tall .panel {
+    height: 400px;
+}

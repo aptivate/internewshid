@@ -31,14 +31,19 @@ def get_widget(name):
 
 
 class BasicTextWidget(object):
-    """ A simple text widget that displays the text
-        configured as 'text'
+    """ A simple text widget.
+
+    Settings:
+        title: The widget title
+        text: The widget text
     """
     template_name = 'dashboard/basic-text-widget.html'
 
     def get_context_data(self, **kwargs):
+        title = kwargs.get('title', '(no title')
         text = kwargs.get('text', '(no text)')
         return {
+            'title': title,
             'text': text
         }
 
