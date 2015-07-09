@@ -35,7 +35,7 @@ class TestWidgetNoTemplateName(object):
 
 
 class MockWidgetInstance(object):
-    """ A Mock class to represent a windget instance
+    """ A Mock class to represent a widget instance
 
     Args:
         widget_type: The widget type to associate with this
