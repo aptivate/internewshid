@@ -6,7 +6,7 @@ from jsonfield import JSONField
 class Dashboard(models.Model):
     """ Model to represent a dashboard.
 
-    A Dashboard is defined by it's name, and
+    A Dashboard is defined by its name, and
     a list of widget instances.
     """
     name = models.CharField(
@@ -21,7 +21,7 @@ class Dashboard(models.Model):
 class WidgetInstance(models.Model):
     """ Model to represent an instance of a widget.
 
-    A WidgetInstance is defined by it's widget type,
+    A WidgetInstance is defined by its widget type,
     widget settings (stored as a JSON string),
     the dashboard the instance is associated with,
     and the position within that dashboard (row,
