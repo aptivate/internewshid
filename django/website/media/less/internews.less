@@ -13,7 +13,7 @@ body {
 #page-wrapper {
     padding: 30px 15px;
     min-height: 1000px;
-    background-color: white;
+    background-color: @gray-lighter;
     .box-shadow-inset(inset, 5px, 0px);
 }
 
@@ -310,10 +310,43 @@ body {
     margin: 15px 0;
 }
 
-// Custom Colored Panels
+// Panel customisation
 
 .huge {
     font-size: 40px;
+}
+
+.panel  {
+  border:none;
+  border-color:transparent;
+  .box-shadow(0px, 0px, 5px, 4);
+}
+
+.panel-heading {
+ font-weight:bold;
+ padding:25px;
+ border:none;
+ i {
+   font-size:22px;
+ }
+}
+
+.panel-blue, .panel-primary {
+    border-color: @brand-primary;
+    .panel-heading {
+        border-color: @brand-primary;
+        color: white;
+        background-color: @brand-primary;
+        i {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-success;
+        &:hover {
+            color: darken(@brand-success, 15%);
+        }
+    }
 }
 
 .panel-green {
@@ -322,6 +355,9 @@ body {
         border-color: @brand-success;
         color: white;
         background-color: @brand-success;
+        i {
+        color:white;
+      }
     }
     a {
         color: @brand-success;
@@ -337,6 +373,9 @@ body {
         border-color: @brand-danger;
         color: white;
         background-color: @brand-danger;
+        i {
+        color:white;
+      }
     }
     a {
         color: @brand-danger;
@@ -363,7 +402,7 @@ body {
 
 //icons 
 .fa-fw {
-  color:@brand-secondary;
+  color:@gray-base;
   margin-right:5px;
 }
 

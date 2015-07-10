@@ -10,10 +10,6 @@
 {% endblock %}
 
 {% block maincontent %}
-<ul class="nav nav-tabs navbar-right">
-    <li class="active"><a href="#home" data-toggle="tab">Ebola Questions</a></li>
-    <li><a href="#profile" data-toggle="tab">Rumors</a></li>
-</ul>
 <h1 class="page-header"><i class="fa fa-dashboard fa-fw"></i>{% trans "Dashboard" %}</h1>
 {# Actual widgets #}
 {% for row in rows %}
@@ -28,7 +24,7 @@
 {# "Example canned data" #}
 <div class="row">
     <div class="col-lg-8">
-        <div class="panel panel-default">
+        <div class="panel panel-red">
             <div class="panel-heading">
                 <i class="fa fa-bar-chart-o fa-fw"></i>Ebola Questions this week
             </div>
@@ -42,7 +38,7 @@
     </div>
     <!-- /.col-lg-8 -->
      <div class="col-lg-4">
-        <div class="panel panel-default">
+        <div class="panel panel-blue">
             <div class="panel-heading">
                 <i class="fa fa-list fa-fw"></i>Blank widget space
             </div>
