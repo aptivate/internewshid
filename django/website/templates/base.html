@@ -37,7 +37,9 @@
     {% endblock content %}
 
     {% block bootstrap3_extra_js %}
-{% bootstrap_javascript jquery=True %}
+        {% bootstrap_javascript jquery=True %}
+        <script src="{{ STATIC_URL }}js/underscore.js"></script>
+        <script src="{{ STATIC_URL }}js/backbone.js"></script>
     {% endblock %}
     {% block lastjs %}
     {% endblock %}
