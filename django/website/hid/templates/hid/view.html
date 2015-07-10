@@ -1,24 +1,22 @@
-{% extends "base.html" %}
+{% extends "base_side.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 
 {% block maincontent %}
-<h2>{% trans "View data" %}</h2>
-
-<form action="{% url "data-view-process" %}" method="post" class="view-items-form">{% csrf_token %}
-
-    {% with pagination_class="pull-left" %}
-    {% render_table table %}
-    {% endwith %}
-
-    {% block table_finished %}
-    <div class="col-sm-2 pull-right">
-        {% bootstrap_button "Update" button_type="submit" value="Update" button_class="btn-block btn-primary table-submit" %}
-    </div>
-    {% endblock table_finished %}
-</form>
-
+<h1 class="page-header"><i class="fa fa-pencil fa-fw"></i>{% trans "View &amp; Edit" %}</h1>
+	<form action="{% url "data-view-process" %}" method="post" class="view-items-form">{% csrf_token %}
+	    {% with pagination_class="col-lg-12 pull-right pager" %}
+	    <div class="col-lg-4 pull-right view-items-actions">
+		    	{% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn-sm pull-right btn-primary table-submit" %}
+	    </div>
+	    {% render_table table %}
+	    {% endwith %}
+	
+	    {% block table_finished %}
+	        {% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn-sm btn-primary pull-right table-submit" %}
+	    {% endblock table_finished %}
+	</form>
 {% endblock maincontent %}
 
 {% block lastjs %}

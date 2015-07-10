@@ -11,3 +11,13 @@ class DataLayerModel(models.Model):
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
+
+    def __unicode__(self):
+        return "{}: '{}' @{}".format(
+            self.id,
+            self.body,
+            self.timestamp
+        )
+
+# TODO: rename this class
+Item = Message

@@ -9,7 +9,6 @@
   <meta name="description" content="internewshid - Humanitarian Information Dashboard for Internews">
   <meta name="author" content="Aptivate">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  {% bootstrap_css %}
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -18,6 +17,7 @@
   <![endif]-->
   {% block bootstrap3_extra_head %}{% endblock %}
   <link href="{{ STATIC_URL }}css/styles.css" media="all" rel="stylesheet" />
+  <link href="{{ STATIC_URL }}fonts/font-awesome-4.3.0/css/font-awesome.min.css" media="all" rel="stylesheet" />
   <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico?v=1"/>
 </head>
 
@@ -26,33 +26,8 @@
     {% block content %}
     <div class="container-fluid stretch-vertical">
         <div class="row container-row">
-            <div class="col-sm-3 col-md-2 sidebar internews-sidebar">
-                <h2>{% trans "Internews" %}</h2>
-                <p>{% trans "humanitarian information dashboard (HID)" %} <a href="/">{% trans "info" %}</a></p>
-                <nav>
-                    {% if request.user.is_authenticated %}
-                    <ul class="list-unstyled sidebar-options">
-                        <li> 
-                            <span class="sidebar-user">
-                                {% bootstrap_icon "user" %} 
-                                {{ request.user }} 
-                            </span>
-                            <a href="{% url "logout" %}?next={% url 'login' %}" class="">{% bootstrap_icon "log-out" %} {% trans "Log out" %}</a>
-                        </li>
-                        <li><a href="{% url "sources" %}">{% bootstrap_icon "cloud-download" %} Sources</a></li>
-                        <li><a href="{% url "data-view" %}">{% bootstrap_icon "pencil" %} View & Edit</a></li>
-                    </ul>
-                </nav>
-                {% endif %}
-            </div>
-            <div class="col-sm-9 col-md-10 main internews-main">
-                {% if messages %}
-                <ul class="messages list-unstyled">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }} {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+            
+            <div class="col-sm-12 col-md-12 main internews-main">
 
             {% block maincontent %}
             {% endblock maincontent %}
@@ -64,7 +39,6 @@
     {% block bootstrap3_extra_js %}
 {% bootstrap_javascript jquery=True %}
     {% endblock %}
-
     {% block lastjs %}
     {% endblock %}
 </body>

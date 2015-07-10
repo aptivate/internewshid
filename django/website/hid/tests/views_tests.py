@@ -95,9 +95,9 @@ def test_get_categories_filters_out_removed():
 def request_item():
     '''Create item and request'''
     msg = {'body': "Message text"}
-    transport.create_item(msg)
+    transport.items.create(msg)
 
-    [item] = list(transport.get_items())
+    [item] = list(transport.items.list())
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {'delete': [item['id']]})
@@ -109,7 +109,7 @@ def request_item():
 def check_item_was_deleted(request):
     assert check_message(request, u"Successfully deleted 1 item.") is True
 
-    items = list(transport.get_items())
+    items = list(transport.items.list())
     assert len(list(items)) == 0
 
 

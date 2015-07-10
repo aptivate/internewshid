@@ -74,7 +74,7 @@ class ViewItems(SingleTableView):
         return reverse("data-view")
 
     def get_queryset(self):
-        return transport.get_items()
+        return transport.items.list()
 
     def get_category_options(self, categories_id=None):
         '''
@@ -98,16 +98,16 @@ def get_deleted(params):
 
 def get_categories(params, deleted_ids=[]):
     removed = set(deleted_ids)
-    cat_id = lambda x: int(x[9:])
-    is_cat = lambda x: x.startswith("category-")
 
-    categories = [(cat_id(key), val) for key, val in params.items() if is_cat(key)]
+    categories = [(int(key[9:]), val)
+                  for key, val in params.items()
+                  if key.startswith("category-")]
     return [cat for cat in categories if cat[0] not in removed]
 
 
 def delete_items(request, deleted):
     try:
-        transport.delete_items(deleted)
+        transport.items.bulk_delete(deleted)
         num_deleted = len(deleted)
         msg = ungettext("Successfully deleted %d item.",
                         "Successfully deleted %d items.",
