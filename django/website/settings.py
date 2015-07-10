@@ -63,7 +63,7 @@ USE_L10N = True
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-SHORT_DATETIME_FORMAT = 'd M Y H:i'
+SHORT_DATETIME_FORMAT = 'D d/m/y H:i'
 # TODO this is used in hid/tables.py
 # and should probably use FORMAT_MODULE_PATH instead.?
 
@@ -205,6 +205,15 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "dashboard"
 ########## END Custom user app defaults
 
+########## BOOTSTRAP3
+BOOTSTRAP3 = {
+
+    # The URL to the jQuery JavaScript file
+    'jquery_url': STATIC_URL + '/js/jquery.min.js',
+    'javascript_url': STATIC_URL + '/bootstrap/js/bootstrap.min.js',
+
+}
+########## END BOOTSTRAP
 
 ########## SLUGLIFIER
 # AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
