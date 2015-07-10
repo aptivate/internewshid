@@ -6480,10 +6480,10 @@ body {
   padding: 30px 15px;
   min-height: 1000px;
   background-color: #edecec;
-  -webkit-box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
-  -o-box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 5px 0px 10px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0px 0px 10px rgba(51, 51, 51, 0.38);
+  -moz-box-shadow: inset 0px 0px 10px rgba(51, 51, 51, 0.38);
+  -o-box-shadow: inset 0px 0px 10px rgba(51, 51, 51, 0.38);
+  box-shadow: inset 0px 0px 10px rgba(51, 51, 51, 0.38);
 }
 @media (min-width: 768px) {
   #page-wrapper {
