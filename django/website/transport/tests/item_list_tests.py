@@ -51,3 +51,14 @@ def test_date_fields_are_converted_to_datetimes():
         )
 
         assert stored_date == retrieved_item[date_field]
+
+
+@pytest.mark.django_db
+def test_null_date_field_not_converted_to_datetime():
+    ItemFactory(timestamp=None)
+
+    retrieved_items = transport.items.list()
+
+    [retrieved_item] = retrieved_items
+
+    assert retrieved_item['timestamp'] is None
