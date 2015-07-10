@@ -23,7 +23,8 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('users.urls')),
     url(r'^api/', include('rest_api.urls')),
-    url(r'^', include('hid.urls')),
+    url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^', include('hid.urls'))
 )
 
 if settings.DEBUG:
