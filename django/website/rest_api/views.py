@@ -1,4 +1,3 @@
-from rest_framework import generics
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_framework import viewsets
 
