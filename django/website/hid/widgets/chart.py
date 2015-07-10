@@ -27,7 +27,6 @@ class QuestionChartWidget(object):
 
         return {
             'name': kwargs['name'],
-            'height': kwargs['height'],
             'options': {
                 'series': {
                     'bars': {
