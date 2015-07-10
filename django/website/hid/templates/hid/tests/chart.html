@@ -1,0 +1,20 @@
+{% extends "djangojs/qunit-runner.html" %}
+{% block js_content %}
+    <script>
+        QUnit.test('Models and views are created', function(assert) {
+            assert.equal(1, FlotChart.models.length);
+            assert.equal(1, FlotChart.views.length);
+        });
+        QUnit.test('Model is created from the data attributes', function(assert) {
+            assert.deepEqual(FlotChart.models[0].get('data'), [[[0, 1], [2,3]]]);
+            assert.deepEqual(FlotChart.models[0].get('options'), {'a': 'b'});
+        });
+    </script>
+{% endblock %}
+{% block body_content %}
+    <div class='flot-chart' 
+         data-data='[[[0, 1], [2, 3]]]'
+         data-options='{"a":"b"}'
+         style='width:300px; height:300px'
+    ></div>
+{% endblock %}
