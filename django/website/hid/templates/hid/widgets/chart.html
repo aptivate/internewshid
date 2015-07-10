@@ -1,0 +1,15 @@
+{% load json_data %}
+<div class='panel panel-default'>
+    <div class='panel-heading'>
+        <i class='fa fa-bar-chart-o fa-fw'></i>
+        {{name}}
+    </div>
+    <div class='panel-body'>
+        <div class='flot-chart' 
+             data-options='{{ options|json_data }}'
+             data-data='{{ data|json_data }}'
+             data-height='{{ height|json_data }}'
+        >
+        </div>
+    </div>
+</div>
