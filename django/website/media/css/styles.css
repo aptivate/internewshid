@@ -6789,6 +6789,9 @@ body {
   color: white;
   background-color: #f29e30;
 }
+.panel-yellow .panel-heading i {
+  color: white;
+}
 .panel-yellow a {
   color: #f29e30;
 }
@@ -6988,6 +6991,12 @@ td.created,
 td.timestamp {
   color: #78716e;
   font-size: 13px;
+}
+th.delete > input {
+  margin-right: 10px;
+}
+th.delete > label {
+  margin-bottom: 0;
 }
 .view-items-actions {
   position: relative;

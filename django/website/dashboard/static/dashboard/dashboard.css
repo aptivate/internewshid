@@ -1,10 +1,11 @@
+.dashboard .panel-heading {
+	padding:10px 15px;
+}
+
 .dashboard .panel {
     margin-bottom: 20px;
 }
-.dashboard .panel-heading {
-    height: 40px;
-    padding: 10px 15px;
-}
+
 .dashboard .widget-height-small {
     height: 120px;
 }
@@ -21,7 +22,7 @@
     height: 280px;
 }
 .dashboard .widget-height-medium .panel-body {
-    height: 240px;
+    height: 210px;
 }
 .dashboard .widget-height-tall {
     height: 420px;
