@@ -6,7 +6,6 @@ from rest_api.views import ItemViewSet
 from .exceptions import TransportException
 
 
-url_name = 'item-list'
 actions = {
     'get': 'list',
     'post': 'create',
@@ -15,8 +14,12 @@ actions = {
 request_factory = APIRequestFactory()
 
 
-def url():
-    return reverse(url_name)
+def list_url():
+    return reverse('item-list')
+
+
+def detail_url(id):
+    return reverse('item-detail', args=[id])
 
 
 def get_view():
@@ -31,14 +34,14 @@ def list(**kwargs):
     """
     # FIXME: currently only body exact filtering is supported
     view = get_view()
-    request = request_factory.get(url(), kwargs)
+    request = request_factory.get(list_url(), kwargs)
     return view(request).data
 
 
 def create(item):
     """ Create an Item from the given dict """
     view = get_view()
-    request = request_factory.post(url(), item)
+    request = request_factory.post(list_url(), item)
     response = view(request)
     if status.is_success(response.status_code):
         return response.data
@@ -49,10 +52,8 @@ def create(item):
 
 def delete(id):
     """ Delete the Item wit the given ID """
-    print("deleting {}".format(id))
     view = get_view()
-    url = '/items/{}/'.format(id)
-    request = request_factory.delete(url)
+    request = request_factory.delete(detail_url(id))
     return view(request, pk=id)
 
 
