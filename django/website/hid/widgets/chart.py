@@ -31,16 +31,34 @@ class QuestionChartWidget(object):
             'options': {
                 'series': {
                     'bars': {
-                        'show': True
-                    }
+                        'show': True,
+                        'fillColor': '#0B62A4'
+                    },
+                    'color': '#0B62A4'
                 },
                 'bars': {
                     'horizontal': True,
                     'barWidth': 0.5,
-                    'align': 'center'
+                    'align': 'center',
+                    'fill': True,
+                    'lineWidth': 1,
                 },
                 'yaxis': {
-                    'ticks': yticks
+                    'ticks': yticks,
+                    'tickLength': 0,
+                    'color': '#282625',
+                    'font': {
+                        'size': 12,
+                        'style': 'normal',
+                        'weight': 'normal',
+                        'family': 'sans-serif'
+                    }
+                },
+                'xaxis': {
+                    'autoscaleMargin': 0.1
+                },
+                'grid': {
+                    'hoverable': True
                 }
             },
             'data': [values]

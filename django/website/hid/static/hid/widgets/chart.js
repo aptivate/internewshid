@@ -24,6 +24,7 @@
             this.chart = options.chart;
             this.$container = this.$el.closest('.panel-body');
             $(window).on('resize', _.bind(this.resize, this));
+            this.$el.on('plothover', _.bind(this.tooltip, this));
         },
 
         /* Remove the view */
@@ -40,6 +41,7 @@
                 this.chart.get('data'), 
                 this.chart.get('options')
             );
+
             return this;
         },
 
@@ -48,6 +50,22 @@
             this.$el.width(this.$container.width());
             this.$el.height(this.$container.height());
         },
+
+        /* Display tooltip */
+        tooltip: function(event, pos, item) {
+            if (this.$tooltip) {
+                this.$tooltip.remove();
+                this.$tooltip = null;
+            }
+            if (item) {
+                this.$tooltip = $('<div>' + item.datapoint[0] + '</div>');
+                this.$tooltip.css({
+                    position: 'absolute',
+                    top: item.pageY - 10,
+                    left: item.pageX + 10
+                }).appendTo('body').fadeIn('fast');
+            }
+        }
     });
 
     /**
