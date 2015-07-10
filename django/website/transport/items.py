@@ -24,6 +24,16 @@ def get_view():
     return ItemViewSet.as_view(actions)
 
 
+def _parse_date_fields(item):
+    date_fields = ('created', 'timestamp')
+    item_dict = dict(item)
+    for date_field in date_fields:
+        value = item_dict[date_field]
+        if value is not None:
+            item_dict[date_field] = parse_datetime(value)
+    return item_dict
+
+
 def list(**kwargs):
     """ Return a list of Items
 
@@ -36,16 +46,8 @@ def list(**kwargs):
 
     items = view(request).data
 
-    date_fields = ('created', 'timestamp')
-
     for item in items:
-        item_dict = dict(item)
-        for date_field in date_fields:
-            value = item_dict[date_field]
-            if value is not None:
-                item_dict[date_field] = parse_datetime(value)
-
-        item.update(item_dict)
+        item.update(_parse_date_fields(item))
 
     return items
 
