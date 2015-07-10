@@ -39,4 +39,5 @@ if settings.DEBUG:
             url='{0}images/favicon.ico'.format(settings.STATIC_URL),
             permanent=True
         )),
+        url(r'^djangojs/', include('djangojs.url'))
     ) + urlpatterns
