@@ -1,4 +1,6 @@
 from __future__ import unicode_literals, absolute_import
+
+from datetime import datetime
 import pytest
 
 from data_layer.tests.factories import ItemFactory
@@ -31,3 +33,21 @@ def test_list_items_filters_by_body():
     assert len(items) == 1
     [item] = items
     assert item['body'] == 'one'
+
+
+@pytest.mark.django_db
+def test_date_fields_are_converted_to_datetimes():
+    stored_item = ItemFactory()
+
+    retrieved_items = transport.items.list()
+
+    [retrieved_item] = retrieved_items
+
+    date_fields = ('timestamp', 'created')
+
+    for date_field in date_fields:
+        stored_date = getattr(stored_item, date_field).replace(
+            microsecond=0  # MySQL discards microseconds
+        )
+
+        assert stored_date == retrieved_item[date_field]
