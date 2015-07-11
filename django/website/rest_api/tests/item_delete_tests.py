@@ -17,26 +17,12 @@ def delete_item(id):
 
 @pytest.mark.django_db
 def test_delete_item():
+    ItemFactory(body="test1")
     item = ItemFactory()
-    assert Item.objects.count() == 1
+    assert Item.objects.count() == 2
 
     response = delete_item(item.id)
 
     assert status.is_success(response.status_code)
-    assert Item.objects.count() == 0
-
-
-def delete_items(item_ids):
-    request = APIRequestFactory().delete('/items/', {'ids': item_ids})
-    view = ItemViewSet.as_view(actions={'delete': 'bulk_destroy'})
-    return view(request)
-
-
-@pytest.mark.django_db
-def test_delete_items():
-    items = [ItemFactory().id for i in range(10)]
-
-    response = delete_items(items)
-
-    assert status.is_success(response.status_code)
-    assert Item.objects.count() == 0
+    assert Item.objects.count() == 1
+    assert Item.objects.get().body == "test1"
