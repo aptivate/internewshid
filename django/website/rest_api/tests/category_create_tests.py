@@ -16,6 +16,7 @@ def create_category(name):
     return view(request, pk=id)
 
 
+@pytest.mark.django_db
 def test_create_a_category():
 
     create_category('Animal')

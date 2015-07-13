@@ -144,9 +144,10 @@ LOCAL_APPS = (
 )
 
 DATA_LAYER_APPS = (
-    'transport',
+    'taxonomies',
     'data_layer',
     'rest_api',
+    'transport',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DATA_LAYER_APPS + THIRD_PARTY_APPS + DJANGO_APPS

@@ -1,8 +1,14 @@
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_framework import viewsets
 
-from data_layer.models import Item
-from .serializers import ItemSerializer
+from data_layer.models import (
+    Item,
+    Taxonomy,
+)
+from .serializers import (
+    ItemSerializer,
+    TaxonomySerializer,
+)
 
 
 class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
@@ -16,3 +22,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             items = items.filter(id__in=ids)
 
         return items
+
+
+class TaxonomyViewSet(viewsets.ModelViewSet):
+    serializer_class = TaxonomySerializer
+
+    queryset = Taxonomy.objects.all()
