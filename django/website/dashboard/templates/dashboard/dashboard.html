@@ -17,9 +17,9 @@
 <h1 class="page-header"><i class="fa fa-dashboard fa-fw"></i>{% trans "Dashboard" %}</h1>
 {# Actual widgets #}
 {% for row in rows %}
-    <div class='row'>
+    <div class='row dashboard'>
         {% for widget in row %}
-        <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }}'>
+        <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }} widget-height-{{ widget.height }}'>
                 {{ widget|render_widget }}
         </div>
         {% endfor %}
