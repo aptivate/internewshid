@@ -7,17 +7,20 @@ from rest_api.views import ItemViewSet
 from .exceptions import TransportException
 
 
-url_name = 'item-list'
 actions = {
     'get': 'list',
     'post': 'create',
-    'delete': 'bulk_destroy',
+    'delete': 'destroy',
 }
 request_factory = APIRequestFactory()
 
 
-def url():
-    return reverse(url_name)
+def list_url():
+    return reverse('item-list')
+
+
+def detail_url(id):
+    return reverse('item-detail', args=[id])
 
 
 def get_view():
@@ -42,7 +45,7 @@ def list(**kwargs):
     """
     # FIXME: currently only body exact filtering is supported
     view = get_view()
-    request = request_factory.get(url(), kwargs)
+    request = request_factory.get(list_url(), kwargs)
 
     items = view(request).data
 
@@ -55,7 +58,7 @@ def list(**kwargs):
 def create(item):
     """ Create an Item from the given dict """
     view = get_view()
-    request = request_factory.post(url(), item)
+    request = request_factory.post(list_url(), item)
     response = view(request)
     if status.is_success(response.status_code):
         return response.data
@@ -63,18 +66,17 @@ def create(item):
         response.data['status_code'] = response.status_code
         raise TransportException(response.data)
 
-# TODO: I suspect we're actually not using this. Because the tool currently
-# uses bulk delete. And of course we could use bulk delete and filter for
-# the one item to delete.
+
 def delete(id):
     """ Delete the Item wit the given ID """
     view = get_view()
-    url = '/items/{}/'.format(id)
-    request = request_factory.delete(url)
+    request = request_factory.delete(detail_url(id))
     return view(request, pk=id)
+
 
 def bulk_delete(ids):
     """ Delete all Items whose ids appear in the given list """
-    view = get_view()
-    request = request_factory.delete(url(), ids=ids)
-    return view(request)
+    # DELETE http requests appear not to send query parameters so
+    # for the moment I'm mapping this onto multiple calls to delete()
+    for id in ids:
+        delete(id)
