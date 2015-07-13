@@ -43,6 +43,15 @@ class WidgetInstance(models.Model):
             MaxValueValidator(12, 'width must be between 1 and 12')
         ]
     )
+    height = models.CharField(
+        max_length=6,
+        default='medium',
+        choices=(
+            ('small', 'Small'),
+            ('medium', 'Medium'),
+            ('tall', 'Tall')
+        )
+    )
     settings = JSONField(blank=True)
 
     def __unicode__(self):

@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 
 from dashboard.models import Dashboard
+from dashboard.widget_pool import get_widget
 
 
 class DashboardView(TemplateView):
@@ -21,7 +22,7 @@ class DashboardView(TemplateView):
         dashboard = Dashboard.objects.get(name=name)
         context['name'] = dashboard.name
 
-        # Get widgets
+        # Get widgets and sort them by row
         widgets = dashboard.widgetinstance_set.all().order_by('row', 'column')
         context['rows'] = []
         current_row = []
@@ -37,5 +38,25 @@ class DashboardView(TemplateView):
         if len(current_row) > 0:
             context['rows'].append(current_row)
 
+        # Get all the javascript & css dependencies
+        context['javascript'] = []
+        context['css'] = ['dashboard/dashboard.css']
+        for widget in widgets:
+            widget_type = get_widget(widget.widget_type)
+            if hasattr(widget_type, 'javascript'):
+                context['javascript'] += widget_type.javascript
+            if hasattr(widget_type, 'css'):
+                context['css'] += widget_type.css
+        context['javascript'] = self._remove_duplicates(context['javascript'])
+        context['css'] = self._remove_duplicates(context['css'])
+
         # Return the context
         return context
+
+    def _remove_duplicates(self, the_list):
+        """ Remove duplicates whilst preseving order """
+        out = []
+        for e in the_list:
+            if e not in out:
+                out.append(e)
+        return out

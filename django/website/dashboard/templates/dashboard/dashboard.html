@@ -3,26 +3,28 @@
 {% load bootstrap3 %}
 {% load render_widget %}
 
+{% block bootstrap3_extra_head %}
+    {% for stylesheet in css %}
+        <link href='{{STATIC_URL}}{{stylesheet}}' rel='stylesheet' />
+    {% endfor %}
+{% endblock %}
+
 {% block maincontent %}
-<ul class="nav nav-tabs navbar-right">
-    <li class="active"><a href="#home" data-toggle="tab">Ebola Questions</a></li>
-    <li><a href="#profile" data-toggle="tab">Rumors</a></li>
-</ul>
 <h1 class="page-header"><i class="fa fa-dashboard fa-fw"></i>{% trans "Dashboard" %}</h1>
 {# Actual widgets #}
 {% for row in rows %}
-    <div class='row'>
+    <div class='row dashboard'>
         {% for widget in row %}
-        <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }}'>
+        <div class='col-lg-{{ widget.width }} col-md-{{ widget.width }} col-sm-{{ widget.width }} widget-height-{{ widget.height }}'>
                 {{ widget|render_widget }}
-            </div>
+        </div>
         {% endfor %}
     </div>
 {% endfor %}
 {# "Example canned data" #}
-<div class="row">
+<div class="row dashboard">
     <div class="col-lg-8">
-        <div class="panel panel-default">
+        <div class="panel panel-red">
             <div class="panel-heading">
                 <i class="fa fa-bar-chart-o fa-fw"></i>Ebola Questions this week
             </div>
@@ -36,7 +38,7 @@
     </div>
     <!-- /.col-lg-8 -->
      <div class="col-lg-4">
-        <div class="panel panel-default">
+        <div class="panel panel-blue">
             <div class="panel-heading">
                 <i class="fa fa-list fa-fw"></i>Blank widget space
             </div>
@@ -51,7 +53,7 @@
     <!-- /.col-lg-4 -->
 </div>
 <!-- /.row -->
-<div class="row">
+<div class="row dashboard">
 	<div class="col-lg-12">
 	   <div class="panel panel-default">
 	        <div class="panel-heading">
@@ -150,5 +152,12 @@
 	        <!-- /.panel-body -->
 	    </div>
 	 </div><!-- /.col-lg-12 -->
-
+</div>
 {% endblock maincontent %}
+
+{% block lastjs %}
+    {{ block.super }}
+    {% for library in javascript %}
+        <script src='{{STATIC_URL}}{{ library }}'></script>
+    {% endfor %}
+{% endblock %}
