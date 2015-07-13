@@ -4,6 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 
 class Taxonomy(models.Model):
 
+    class Meta:
+        abstract = True
+
     name = models.CharField(
         _('Name'),
         max_length=250,
@@ -34,8 +37,6 @@ class Taxonomy(models.Model):
     # To do Categories or limited vocabularies, you use 'optional' and 'admin',
     # to do free taggingn use 'multiple' and 'user'
 
-    class Meta:
-        abstract = True
 
 
 class Term(models.Model):
@@ -54,6 +55,7 @@ class Term(models.Model):
     taxonomy = models.ForeignKey(
         Taxonomy,
         verbose_name=_('Taxonomy'),
+        related_name="%(app_label)s_%(class)s_term"
     )
 
     long_name = models.TextField(

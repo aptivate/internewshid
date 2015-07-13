@@ -27,3 +27,7 @@ Item = Message
 
 class Taxonomy(taxonomies.models.Taxonomy):
     pass
+
+
+class Term(taxonomies.models.Term):
+    pass
