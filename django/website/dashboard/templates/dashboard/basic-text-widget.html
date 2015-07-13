@@ -4,6 +4,10 @@
         {{ title }}
     </div>
     <div class='panel-body'>
-        {{ text }}
+        {% if html %}
+            {{ text|safe }}
+        {% else %}
+            {{ text }}
+        {% endif %}
     </div>
 </div>
