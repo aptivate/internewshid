@@ -25,17 +25,17 @@ class Taxonomy(models.Model):
     #   )
     # )
     #
-    # modifyable_by = models.CharField(
+    # vocabulary = models.CharField(
     #   ...
     #   choices=(
-    #      ('system', _('Not modifyable by any user')),
-    #      ('admin', _('Only users who have permission to definen taxonomies')),
-    #      ('user', _('Any user who has permission to use taxonomies')),
+    #      ('fixed', _('Not modifiable by any user, system only')),
+    #      ('closed', _('Only admin users who have permission to define and edit taxonomies')),
+    #      ('open', _('Any user who has permission to use taxonomies')),
     #   )
     # )
 
-    # To do Categories or limited vocabularies, you use 'optional' and 'admin',
-    # to do free taggingn use 'multiple' and 'user'
+    # To do Categories, you use 'optional' and 'closed',
+    # to do free tagging use 'multiple' and 'open'
 
 
 
