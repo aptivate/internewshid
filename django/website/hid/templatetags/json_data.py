@@ -9,4 +9,4 @@ def json_data(value):
     """ Django custom template tag used to embed arbitrary
         values as json within html5 data- attributes.
     """
-    return json.dumps(value).replace("'", "\\'")
+    return json.dumps(value)
