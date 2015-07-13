@@ -62,12 +62,15 @@ FlotChart = {
                 this.$tooltip = null;
             }
             if (item) {
-                this.$tooltip = $('<div>' + item.datapoint[0] + '</div>');
-                this.$tooltip.css({
-                    position: 'absolute',
-                    top: item.pageY - 10,
-                    left: item.pageX + 10
-                }).appendTo('body').fadeIn('fast');
+                this.$tooltip = $('<div>');
+                this.$tooltip.html(item.datapoint[0])
+                    .addClass('flot-chart-tooltip')
+                    .css({
+                        position: 'absolute',
+                        top: item.pageY - 10,
+                        left: item.pageX + 10
+                     });
+                this.$tooltip.appendTo('body').fadeIn('fast');
             }
         }
     });
