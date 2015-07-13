@@ -6594,7 +6594,7 @@ body {
   padding: 15px;
 }
 .sidebar ul li a.active {
-  background-color: #ffffff;
+  background-color: #edecec;
 }
 .sidebar .arrow {
   float: right;
@@ -7027,6 +7027,9 @@ th.delete > label {
 .nav-hanging-tabs > li > a {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 14px 18px;
+}
+#side-menu {
+  padding-top: 14.5px;
 }
 .clearfix:before,
 .clearfix:after,
