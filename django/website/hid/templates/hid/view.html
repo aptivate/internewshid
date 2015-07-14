@@ -4,19 +4,41 @@
 {% load render_table from django_tables2 %}
 
 {% block maincontent %}
-<h1 class="page-header"><i class="fa fa-pencil fa-fw"></i>{% trans "View &amp; Edit" %}</h1>
-	<form action="{% url "data-view-process" %}" method="post" class="view-items-form">{% csrf_token %}
-	    {% with pagination_class="col-lg-12 pull-right pager" %}
-	    <div class="col-lg-4 pull-right view-items-actions">
-		    	{% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn-sm pull-right btn-primary table-submit" %}
-	    </div>
-	    {% render_table table %}
-	    {% endwith %}
-	
-	    {% block table_finished %}
-	        {% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn-sm btn-primary pull-right table-submit" %}
-	    {% endblock table_finished %}
-	</form>
+<ul class="nav nav-pills navbar-right nav-hanging-tabs">
+    <li class="active"><a href="#home" data-toggle="tab">All</a></li>
+    <li><a href="#profile" data-toggle="tab">Questions</a></li>
+    <li><a href="#profile" data-toggle="tab">Rumors</a></li>
+
+</ul>
+<h1 class="page-header"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
+ <div class='row'>
+    <div class="col-lg-12">
+        <form action="{% url "data-view-process" %}" method="post" class="view-items-form">{% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="fa fa-table fa-fw"></span> Questions
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            {% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn btn-success btn-sm table-submit" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {% with pagination_class="pagination-circle-nav" %}
+                    {% render_table table %}
+                    {% endwith %}
+
+                </div>
+                <div class="panel-footer clearfix">
+                        {% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn btn-success pull-right btn-sm table-submit" %}
+
+                </div>
+                </div>
+
+        </form>
+    </div>
+</div>
+
 {% endblock maincontent %}
 
 {% block lastjs %}

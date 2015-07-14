@@ -1,14 +1,28 @@
 // View/edit 
 
+.table-no-border > thead > tr > th, .table > tbody > tr > th,
+.table-no-border > tfoot > tr > th, .table > thead > tr > td, 
+.table-no-border > tbody > tr > td, .table > tfoot > tr > td {
+  border:none;
+}
+
 .table .form-control {
   line-height:1em;
   height:inherit;
   padding:5px;
 }
 
-.created, .timestamp {
+td.created, td.timestamp {
   color:@gray;
   font-size:@font-size-small;
+}
+
+th.delete > input {
+  margin-right:10px;
+}
+
+th.delete > label {
+  margin-bottom:0;
 }
 
 .view-items-actions {
@@ -25,7 +39,24 @@
     }
 }
 
-.messages-box .alert {
-  padding:5px 10px;
+.messages-box > ul {
   margin-top:40px;
+  color:#fff;
 }
+
+.messages-box > ul > li {
+  padding:5px 10px;
+}
+
+//circle navigation 
+
+.pagination-circle-nav .btn-primary, 
+.pagination-circle-nav > li:first-child > a {
+  border:none;
+  padding:7px;
+  background-color:@brand-primary;
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+  float:inherit;
+}
+
