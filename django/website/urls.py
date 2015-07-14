@@ -38,5 +38,5 @@ if settings.DEBUG:
         url(r'^favicon.ico$', RedirectView.as_view(
             url='{0}images/favicon.ico'.format(settings.STATIC_URL),
             permanent=True
-        )),
+        ))
     ) + urlpatterns

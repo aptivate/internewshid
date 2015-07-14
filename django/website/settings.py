@@ -134,6 +134,7 @@ THIRD_PARTY_APPS = (
     'bootstrap3',
     'rest_framework',
     'django_tables2',
+    'djangojs'
 )
 
 LOCAL_APPS = (

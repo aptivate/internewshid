@@ -1,3 +1,7 @@
+FlotChart = {
+    models: [],
+    views: []
+};
 (function($) {
     /**
      * FlotChart model
@@ -6,7 +10,7 @@
      * single flot chart.
      *
      */
-    var FlotChart = Backbone.Model.extend({
+    FlotChart.model = Backbone.Model.extend({
         defaults: {
             data: [],
             options: {}
@@ -18,7 +22,7 @@
      *
      * Displays a single FlotChart model
      */
-    var FlotChartView = Backbone.View.extend({
+    FlotChart.view = Backbone.View.extend({
         /* Create the view */
         initialize: function(options) {
             this.chart = options.chart;
@@ -58,12 +62,15 @@
                 this.$tooltip = null;
             }
             if (item) {
-                this.$tooltip = $('<div>' + item.datapoint[0] + '</div>');
-                this.$tooltip.css({
-                    position: 'absolute',
-                    top: item.pageY - 10,
-                    left: item.pageX + 10
-                }).appendTo('body').fadeIn('fast');
+                this.$tooltip = $('<div>');
+                this.$tooltip.html(item.datapoint[0])
+                    .addClass('flot-chart-tooltip')
+                    .css({
+                        position: 'absolute',
+                        top: item.pageY - 10,
+                        left: item.pageX + 10
+                     });
+                this.$tooltip.appendTo('body').fadeIn('fast');
             }
         }
     });
@@ -77,14 +84,17 @@
      *     data: flot data
      *     options: flot options
      */
-    $(document).ready(function() {
+    FlotChart.initialize = function() {
         $('.flot-chart').each(function() {
-            var flot_chart = new FlotChart($(this).data());
-            var flot_chart_view = new FlotChartView({
+            var flot_chart = new FlotChart.model($(this).data());
+            var flot_chart_view = new FlotChart.view({
                 el: this,
                 chart: flot_chart
             });
             flot_chart_view.render();
+            FlotChart.models.push(flot_chart);
+            FlotChart.views.push(flot_chart_view);
         });
-    });
+    };
 })(jQuery);
+jQuery(document).ready(FlotChart.initialize);
