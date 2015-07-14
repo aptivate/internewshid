@@ -6543,7 +6543,7 @@ body {
   min-height: 50px;
 }
 .navbar-top-links > li > a,
-.navbar-top-links > li > a > i {
+.navbar-top-links > li > a > .fa {
   color: #ffffff;
 }
 .navbar-top-links .dropdown-menu li {
@@ -6658,7 +6658,7 @@ body {
 .btn-danger.btn-outline:hover {
   color: white;
 }
-.btn-primary > i {
+.btn-primary > .fa {
   color: #ffffff;
 }
 .login-panel {
@@ -6722,7 +6722,7 @@ body {
   padding: 25px;
   border: none;
 }
-.panel-heading i {
+.panel-heading .fa {
   font-size: 22px;
 }
 .panel-blue,
@@ -6735,8 +6735,8 @@ body {
   color: white;
   background-color: #0f6cb6;
 }
-.panel-blue .panel-heading i,
-.panel-primary .panel-heading i {
+.panel-blue .panel-heading .fa,
+.panel-primary .panel-heading .fa {
   color: white;
 }
 .panel-blue a,
@@ -6755,7 +6755,7 @@ body {
   color: white;
   background-color: #56ac4a;
 }
-.panel-green .panel-heading i {
+.panel-green .panel-heading .fa {
   color: white;
 }
 .panel-green a {
@@ -6772,7 +6772,7 @@ body {
   color: white;
   background-color: #d8502f;
 }
-.panel-red .panel-heading i {
+.panel-red .panel-heading .fa {
   color: white;
 }
 .panel-red a {
@@ -6789,7 +6789,7 @@ body {
   color: white;
   background-color: #f29e30;
 }
-.panel-yellow .panel-heading i {
+.panel-yellow .panel-heading .fa {
   color: white;
 }
 .panel-yellow a {

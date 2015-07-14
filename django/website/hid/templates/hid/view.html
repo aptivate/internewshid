@@ -10,13 +10,13 @@
     <li><a href="#profile" data-toggle="tab">Rumors</a></li>
     
 </ul>
-<h1 class="page-header"><i class="fa fa-pencil fa-fw"></i>{% trans "View &amp; Edit" %}</h1>
+<h1 class="page-header"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
  <div class='row'>
  	<div class="col-lg-12">
  		<form action="{% url "data-view-process" %}" method="post" class="view-items-form">{% csrf_token %}
 	 		<div class="panel panel-default">
 	 			<div class="panel-heading">
-		            <i class="fa fa-table fa-fw"></i> Questions
+		            <span class="fa fa-table fa-fw"></span> Questions
 		            <div class="pull-right">
 		                <div class="btn-group">
 		                    {% bootstrap_button "Save Changes" button_type="submit" value="Update" button_class="btn btn-success btn-sm table-submit" %}
