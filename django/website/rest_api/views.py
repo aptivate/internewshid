@@ -3,8 +3,12 @@ from rest_framework import viewsets
 
 from data_layer.models import (
     Item,
+)
+
+from taxonomies.models import (
     Taxonomy,
 )
+
 from .serializers import (
     ItemSerializer,
     TaxonomySerializer,

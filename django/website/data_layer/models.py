@@ -1,7 +1,5 @@
 from django.db import models
 
-import taxonomies.models
-
 
 class DataLayerModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -23,11 +21,3 @@ class Message(DataLayerModel):
 
 # TODO: rename this class
 Item = Message
-
-
-class Taxonomy(taxonomies.models.Taxonomy):
-    pass
-
-
-class Term(taxonomies.models.Term):
-    pass

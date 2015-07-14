@@ -5,7 +5,7 @@ import pytest
 from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 
-from data_layer.models import Taxonomy, Term
+from taxonomies.models import Taxonomy, Term
 from ..views import TaxonomyViewSet
 
 

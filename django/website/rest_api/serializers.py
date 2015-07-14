@@ -3,8 +3,9 @@ from rest_framework import serializers
 
 from data_layer.models import (
     Item,
-    Taxonomy,
 )
+
+from taxonomies.models import Taxonomy
 
 
 class ItemSerializer(serializers.ModelSerializer):
