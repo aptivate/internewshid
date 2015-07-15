@@ -47,14 +47,29 @@ def add_term(**kwargs):
 
 @pytest.mark.django_db
 def test_add_term_to_taxonomy():
-    create_category('Ebola Questions')
-    [category] = Taxonomy.objects.all()
+    taxonomy = Taxonomy(name='Ebola Questions')
+    taxonomy.save()
 
-    response1 = add_term(taxonomy=category.slug, name='Vaccine')
-    response2 = add_term(taxonomy=category.slug, name='Time')
+    response1 = add_term(taxonomy=taxonomy.slug, name='Vaccine')
+    response2 = add_term(taxonomy=taxonomy.slug, name='Time')
 
     assert status.is_success(response1.status_code), response1.data
     assert status.is_success(response2.status_code), response2.data
     terms = Term.objects.all()
     assert len(terms) == 2
-    assert all(term.taxonomy.name == category.name for term in terms)
+    assert all(term.taxonomy.name == taxonomy.name for term in terms)
+
+
+@pytest.mark.django_db
+def test_terms_have_long_name():
+    taxonomy = Taxonomy(name='Ebola Questions')
+    taxonomy.save()
+
+    add_term(
+        taxonomy=taxonomy.slug,
+        name="Vaccine",
+        long_name="Is there a vaccine?"
+    )
+
+    [term] = Term.objects.all()
+    assert term.long_name == "Is there a vaccine?"
