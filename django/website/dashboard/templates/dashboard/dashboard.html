@@ -3,12 +3,6 @@
 {% load bootstrap3 %}
 {% load render_widget %}
 
-{% block bootstrap3_extra_head %}
-    {% for stylesheet in css %}
-        <link href='{{STATIC_URL}}{{stylesheet}}' rel='stylesheet' />
-    {% endfor %}
-{% endblock %}
-
 {% block maincontent %}
 <ul class="nav nav-tabs navbar-right">
     <li class="active"><a href="#home" data-toggle="tab">Ebola Questions</a></li>
@@ -158,9 +152,3 @@
 	 </div><!-- /.col-lg-12 -->
 {% endblock maincontent %}
 
-{% block lastjs %}
-    {{ block.super }}
-    {% for library in javascript %}
-        <script src='{{STATIC_URL}}{{ library }}'></script>
-    {% endfor %}
-{% endblock %}
