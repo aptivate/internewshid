@@ -1,16 +1,28 @@
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 
 class Taxonomy(models.Model):
 
     name = models.CharField(
-        _('Name'),
+        verbose_name=_('Name'),
         max_length=250,
         help_text=_('Taxonomy Name'),
         unique=True,
         db_index=True,
     )
+    slug = models.SlugField(
+        verbose_name=_('Slug'),
+        max_length=250,
+        unique=True,  # Should be true already
+        db_index=True,  #  Should be true by implication
+        # https://docs.djangoproject.com/en/1.8/ref/models/fields/#slugfield
+    )
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Taxonomy, self).save(*args, **kwargs)
 
     # My thoughts on how this grows...
     #
@@ -38,9 +50,9 @@ class Taxonomy(models.Model):
 class Term(models.Model):
 
     name = models.CharField(
-        _('Name'),
+        verbose_name=_('Name'),
         max_length=250,
-        help_text=_('Taxonomy Name'),
+        help_text=_('Tag or Category Name'),
         unique=True,
         db_index=True,
     )

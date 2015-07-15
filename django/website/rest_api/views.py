@@ -7,11 +7,13 @@ from data_layer.models import (
 
 from taxonomies.models import (
     Taxonomy,
+    Term,
 )
 
 from .serializers import (
     ItemSerializer,
     TaxonomySerializer,
+    TermSerializer,
 )
 
 
@@ -32,3 +34,9 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
     serializer_class = TaxonomySerializer
 
     queryset = Taxonomy.objects.all()
+
+
+class TermViewSet(viewsets.ModelViewSet):
+    serializer_class = TermSerializer
+
+    queryset = Term.objects.all()  # Will need to filter by taxonomy eventually

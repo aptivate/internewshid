@@ -3,6 +3,7 @@ from rest_framework_bulk.routes import BulkRouter
 from .views import (
     ItemViewSet,
     TaxonomyViewSet,
+    TermViewSet,
 )
 
 router = BulkRouter()
@@ -14,6 +15,9 @@ router.register(
 router.register(
     r'taxonomies',
     TaxonomyViewSet,
-    base_name='category'
+)
+router.register(
+    r'terms',
+    TermViewSet,
 )
 urlpatterns = router.urls
