@@ -49,10 +49,15 @@ django-tables2==1.0.4
 #django-debug-toolbar
 
 ## ---------CSS and assets
-#django-assets
+# django-assets==0.10
+# We need the version of django_assets that contains the following fix:
+# https://github.com/miracle2k/django-assets/issues/52
+git+git://github.com/miracle2k/django-assets.git@97005b92d092827cfebe798e48e00dba25f83597
 #webassets
 #pyScss
 #cssmin
+cssmin==0.2.0
+jsmin==2.1.2
 django-bootstrap3
 
 # vi: filetype=conf
