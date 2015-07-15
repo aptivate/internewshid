@@ -31,7 +31,8 @@ def test_create_a_category():
     assert taxonomy.name == 'Ebola Questions'
 
 
-# TODO: test_get_categories
+# TODO: write test for getting taxonomies and terms, so we can re-write all
+# these tests using only the API (as Functional tests)
 
 
 def add_term(**kwargs):
