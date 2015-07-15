@@ -1,0 +1,59 @@
+{% extends "djangojs/qunit-runner.html" %}
+{% block js_content %}
+    <script>
+        QUnit.test('Models and views are created', function(assert) {
+            assert.equal(1, FlotChart.models.length);
+            assert.equal(1, FlotChart.views.length);
+        });
+
+        QUnit.test('Model is created from the data attributes', function(assert) {
+            assert.deepEqual(FlotChart.models[0].get('data'), [[[23, 0], [10, 1], [150, 2], [50, 3]]]);
+            assert.deepEqual(FlotChart.models[0].get('options'), {
+                'series': {
+                    'bars': {
+                        'show': true
+                    }
+                },
+                'bars': {
+                    'horizontal': true
+                },
+                'yaxis': {
+                    'ticks': [[0, "q1"], [1, "q2"], [2, "q3"], [3, "q4"]]
+                }
+            });
+        });
+
+        QUnit.test('Tooltip method adds tooltip to page', function(assert) {
+            assert.equal(jQuery('.flot-chart-tooltip').length, 0);
+            FlotChart.views[0].tooltip(null, null, {
+                datapoint: [1234],
+                pageY: 10,
+                pageX: 10
+            });
+            assert.equal(jQuery('.flot-chart-tooltip').length, 1);
+            // Ensure the tooltip is removed
+            FlotChart.views[0].tooltip(null, null, null);
+        });
+
+        QUnit.test('Tooltip html contains data point', function(assert) {
+            FlotChart.views[0].tooltip(null, null, {
+                datapoint: [1234],
+                pageY: 10,
+                pageX: 10
+            });
+            assert.equal(jQuery('.flot-chart-tooltip').html(), '1234');
+            // Ensure the tooltip is removed
+            FlotChart.views[0].tooltip(null, null, null);
+        });
+        QUnit.test('Canvas is created on page', function(assert) {
+            assert.ok(jQuery('.flot-chart canvas').length > 0);
+        });
+    </script>
+{% endblock %}
+{% block body_content %}
+    <div class='flot-chart' 
+         data-data='[[[23, 0], [10, 1], [150, 2], [50, 3]]]'
+         data-options='{"series": {"bars": {"show": true}}, "bars": {"horizontal": true}, "yaxis": {"ticks": [[0, "q1"], [1, "q2"], [2, "q3"], [3, "q4"]]}}'
+         style='width:300px; height:300px'
+    ></div>
+{% endblock %}
