@@ -5,7 +5,7 @@
 <div class="table-container">
 {% endif %}
 {% block table %}
-<table{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+<table class="table table-hover table-striped table-no-border"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
     {% nospaceless %}
     {% block table.thead %}
     <thead>
@@ -53,9 +53,11 @@
 {% with table.page.paginator.count as total %}
 {% with table.page.object_list|length as count %}
 {% block pagination %}
+
+
 <ul class="pagination {{ pagination_class }}">
     {% if table.page.has_previous %}
-    {% nospaceless %}{% block pagination.previous %}<li class="previous"><a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}">{% trans "Previous" %}</a></li>{% endblock pagination.previous %}{% endnospaceless %}
+    {% nospaceless %}{% block pagination.previous %}<li class="previous"><a title="previous" class="btn btn-primary btn-circle" href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}"><span class="fa fa-chevron-left fw"></span></a></li>{% endblock pagination.previous %}{% endnospaceless %}
     {% endif %}
 
     {% if table.page.has_previous or table.page.has_next %}
@@ -63,7 +65,7 @@
     {% endif %}
 
     {% if table.page.has_next %}
-    {% nospaceless %}{% block pagination.next %}<li class="next"><a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}">{% trans "Next" %}</a></li>{% endblock pagination.next %}{% endnospaceless %}
+    {% nospaceless %}{% block pagination.next %}<li class="next"><a class="btn btn-primary btn-circle" title="next" href="{% querystring table.prefixed_page_field=table.page.next_page_number %}"><span class="fa fa-chevron-right fw"></span></a></li>{% endblock pagination.next %}{% endnospaceless %}
     {% endif %}
 
     {% nospaceless %}{% block pagination.cardinality %}<li class="cardinality">{% if total != count %}{% blocktrans %}{{ count }} of {{ total }}{% endblocktrans %}{% else %}{{ total }}{% endif %} {% if total == 1 %}{{ table.data.verbose_name }}{% else %}{{ table.data.verbose_name_plural }}{% endif %}</li>{% endblock pagination.cardinality %}{% endnospaceless %}
