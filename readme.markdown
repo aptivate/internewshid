@@ -237,9 +237,28 @@ See above Create Items with tags and categories
 
 e.g.:
 
-    '/items/2314/ebola-questions/' GET
+    '/items/2314/taxonomies/ebola-questions/' GET
 
 - Return list of ebola questions for item 2314
+
+OR
+
+    '/items/2314/taxonomies/terms/' GET
+
+- list all terms for 2314.
+
+- Add qyery parameters to select for a given taxonomy
+
+    '/items/2314/taxonomies/terms/?taxonomy=ebola-questions' GET
+
+- To delete a single term
+
+    '/items/2314/taxonomies/terms/<term-slug>/'  DELETE
+
+- Where term slug is the unique slug for the term. 
+e.g.
+    '/items/2314/taxonomies/terms/ebola-questions-
+
 
 In which case you can add a term to an object like this
 
