@@ -16,7 +16,7 @@ class Taxonomy(models.Model):
         verbose_name=_('Slug'),
         max_length=250,
         unique=True,  # Should be true already
-        db_index=True,  #  Should be true by implication
+        db_index=True,  # Should be true by implication
         # https://docs.djangoproject.com/en/1.8/ref/models/fields/#slugfield
     )
 
@@ -58,7 +58,7 @@ class Term(models.Model):
     )
 
     taxonomy = models.ForeignKey(
-        'taxonomies.Taxonomy',
+        Taxonomy,
         verbose_name=_('Taxonomy'),
         related_name="%(app_label)s_%(class)s_term"
     )
