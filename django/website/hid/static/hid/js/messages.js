@@ -4,7 +4,8 @@
 
 jQuery(window).load(function(){
   setTimeout(function(){ 
-      jQuery('.messages-box > ul').fadeOut();
+      jQuery('.messages-box > ul').fadeOut(3000, 'swing');
       }, 3000);
 });
+
 
