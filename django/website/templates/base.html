@@ -39,13 +39,7 @@
         {% bootstrap_javascript jquery=True %}
         <script src="{{ STATIC_URL }}js/underscore.js"></script>
         <script src="{{ STATIC_URL }}js/backbone.js"></script>
-        <script type="text/javascript">
-		    $(function(){
-			    $('a, button, .btn').click(function() {
-			    	$('.spinner').toggleClass('active');
-			    });
-			});
-		</script>
+        <script src="{{ STATIC_URL }}hid/js/spinner.js"></script>
     {% endblock %}
     {% block lastjs %}
     {% endblock %}
