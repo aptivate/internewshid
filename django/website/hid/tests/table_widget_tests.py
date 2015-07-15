@@ -55,3 +55,14 @@ class TestTableWidget(TestCase):
                 self.assertEqual(processed_rows, [
                     {'a': 4}, {'a': 2}, {'a': 1}
                 ])
+
+    def test_get_context_data_table_excludes_category_and_delete(self):
+        widget = TableWidget()
+        with patch('hid.widgets.table.transport.items.list') as mock:
+            mock.return_value = []
+            with patch('hid.widgets.table.ItemTable') as mock_table:
+                widget.get_context_data()
+                excludes = mock_table.call_args[1]['exclude']
+                self.assertEqual(set(excludes), set([
+                    'category', 'delete'
+                ]))
