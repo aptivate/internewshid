@@ -6,19 +6,21 @@ A Humanitarian Dashboard.
 ## API Documentation
 
 
-URL
+### Items
 
-### /items/
+Base URL '/items/'
 
-#### POST
+#### Create Items
 
-- create an item. Should return the object, including its unique ID  and the
-  system allocated  creation time.
+'/items/' POST 
 
     { 
         "body": "blah", 
         "timestamp": "..." 
     }  
+
+- create an item. Should return the object, including its unique ID  and the
+  system allocated  creation time.
 
 
 #### Create item with tags and categories
@@ -46,7 +48,9 @@ We need either the `slug` or the `name` (from which the slug can be derived),
 and a list of relevant terms. If the name and slug don't match, obviously there
 should be an exception.
 
-#### GET 
+#### List items
+
+'/items/' GET
 
 - returns a list of Items
 
@@ -81,9 +85,9 @@ should be an exception.
 They need their own list and details urls, and we should include them in
 the expanded `Item` JSON somehow too.
 
-## '/taxonomies/'
+### List all Taxonomies
 
-### GET
+'/taxonomies/' GET
 
 - Return list of taxonomies
 
@@ -115,7 +119,10 @@ when someone tries to create "Ebola Questions" and "ebola-questions" as
 taxonomies? Do they map onto the same slug? How do we handle that since
 the unique field is derived from the given one?
 
-### POST
+
+### Add a new Taxonomy
+
+'/taxonomies/' POST
 
       { "name": "Ebola Question Type",
         "slug": "ebola-question-type", // do we supply this or is it calculated?
@@ -130,24 +137,76 @@ the unique field is derived from the given one?
         ]
       },
 
-Adds a taxonomy including terms. If the slug is calculated we have to return
-it.
+Adds a taxonomy (optionally including terms). The slug is calculated it should
+be returned by the call.
 
-## '/taxonomies/<taxonomy-slug>/'
+### Taxonomy details
 
-### GET
-- details of the taxonomy
+'/taxonomies/<taxonomy-slug>/' GET
 
-E.g.: `/taxonomies/ebola-questions/`.
+      { "name": "Ebola Question Type",
+        "slug": "ebola-question-type", // calculated from name
+        "long_name": "Question Type",  
+        "cardinality": "optional",
+        "vocabulary": "closed",
+        "terms": [
+            {"name": "Is Ebola Real", 
+             "long name": ...
+            },
+            ...
+        ]
+      },
+
+e.g. `/taxonomies/ebola-questions/`  
 
 - Taxonomy details URL should use the taxonomy's sluggified name
 
-## '/terms/'
+### Update Taxonomy Details 
 
-Get list of all terms
+`/taxonomies/ebola-questions/`  POST
 
-### GET
+      { 
+        "long_name": "Question Type",  
+        "cardinality": "optional",
+        "vocabulary": "closed",
+      },
 
+- Use the slug as unique id (i.e. don't deal with the internal numeric id)
+
+### List terms per taxonomy
+
+`/taxonomies/<taxonomy-slug>/terms/ GET
+
+- returns list of terms
+
+### Add a term to a taxonomy
+
+We could do 
+`/taxonomies/ebola-questions/terms/`  POST { 'name': 'vaccine' }
+
+But for the moment we;re doing
+
+`/terms/` POST { 'name': 'vaccine', 'taxonomy': 'ebola-questions' }
+
+
+### List all Terms (all taxonomies)
+
+'/terms/' GET
+
+Get list of all terms (from all taxonomies).
+Could add query params to limit to a certain Taxonomy
+
+'/terms/?taxonomy=ebola-questions' GET
+
+Or item
+
+'/terms/?item=416' GET
+
+Or both
+
+'/terms/?taxonomy=ebola-questions&item=416' GET
+
+Returns a list of terms:
 
     [ { "name": "Ebola Real?",
         "long_name": "Is Ebola Real?",
@@ -162,15 +221,6 @@ Get list of all terms
 
 
 
-### POST
-
-- Update the details of a Taxonomy.
-
-- Use the slug as unique id (i.e. don't deal with the internal numeric id)
-
-## '/taxonomies/'
-
-
 ## Taxonomies as Item metadata:
 
 These categories and tags will be used to store all the variable metadata
@@ -179,119 +229,23 @@ And also to allow Item POST requests to add metadata terms.
 
 ### To create items with metadata
 
-TODO
+See above Create Items with tags and categories
 
-### /item/<item-id>/<taxonomy-id>/
+### List terms for an item
+
+/item/<item-id>/<taxonomy-id>/ GET
 
 e.g.:
 
-    '/items/2314/ebola-questions/'
+    '/items/2314/ebola-questions/' GET
 
-#### GET on this would give the same list of term objects.
+- Return list of ebola questions for item 2314
 
-- Returns a subset of the terms for the given taxo' that apply to the
-  specified item. 
+In which case you can add a term to an object like this
 
-    [ { "name": "...",
-        "long-name", "...",
-      }
-    ]
+    '/items/2314/ebola-questions/' POST { 'name': 'Duration' }
 
-PUT { "name": "term" } updates a category
+And you can remove one like this
 
-If the taxonomy has cardinality `optional` this sets its value, irrespective of
-what it was before. If it has `multiple` this could either:
+    '/items/2314/ebola-questions/duration' DELETE
 
-- cause an exception (you expect a list), or
-- set the list to the given singleton (I don't like this)
-
-
-POST { "name": "term" } adds a term
-
-Adds it to the item so long as the cardinality constraint is not violated.
-
-PUT [ { "name": "term" }, ... ]
-
-- sets the values to those given, for cardinality `multiple`
-- throws error for `optional` 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/items/
-
-        { body="kljlik" }
-
-
-/items/67/
-
-    POST  { long_name="new name!" }
-
-    POST  { terms: [
-                { "taxonomy": "ebola-questions",
-                  "name": "vaccine",
-                },
-                ...
-            ]
-    }
-
-/items/67/metadata/ebola-questions/
-
-    POST { "name": "health" }
-    POST [ { "name": "health" }]
-    POST []
-
-
-
-
-
-
-    GET /items/67/
-
-        { id:87, 
-          body:"lsdfkljasd",  
-          meta: {
-             "ebola-questions": "vaccine",
-             ...
-          }
-        }
-
-
-        { id:87, 
-          body:"lsdfkljasd",  
-          meta: [
-             { "taxonomy": "ebola-questions",
-               "name": "vaccine",
-               "long_name": "when will there be a vaccine"
-             },
-             ...
-          ]
-        }
-
-
-Removing a tag from an item
-
-/items/65/ebola-questions/vaccine
-
-        DELETE
-
-/taxonomies/ebola-questions/vaccine/65 
-        DELETE
