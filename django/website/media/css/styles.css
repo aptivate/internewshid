@@ -7029,6 +7029,9 @@ th.delete > label {
 .view-items-form .pagination li {
   padding: 10px;
 }
+.messages-box {
+  margin: 0;
+}
 .messages-box > ul {
   margin-top: 40px;
   color: #fff;
@@ -7051,12 +7054,16 @@ th.delete > label {
 .spinner {
   display: none;
   height: 50px;
-  margin: 40px auto 0;
-  width: 120px;
+  margin: 20px auto 0;
+  position: absolute;
+  text-align: center;
+  bottom: 20px;
+  width: 100%;
 }
 .spinner > span {
-  display: block;
-  float: left;
+  display: inline-block;
+  position: relative;
+  top: -20px;
 }
 .spinner > div {
   height: 100%;
