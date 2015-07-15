@@ -1,4 +1,5 @@
 from django.db import models
+from taxonomies.models import Term
 
 
 class DataLayerModel(models.Model):
@@ -11,6 +12,7 @@ class DataLayerModel(models.Model):
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
+    terms = models.ManyToManyField(Term)
 
     def __unicode__(self):
         return "{}: '{}' @{}".format(

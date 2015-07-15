@@ -135,19 +135,27 @@ it.
 
 ## '/taxonomies/<taxonomy-slug>/'
 
+### GET
+- details of the taxonomy
+
 E.g.: `/taxonomies/ebola-questions/`.
 
 - Taxonomy details URL should use the taxonomy's sluggified name
 
+## '/terms/'
+
+Get list of all terms
+
 ### GET
 
-- list of all Terms in the Taxon
 
     [ { "name": "Ebola Real?",
-        "long_name": "Is Ebola Real?"
+        "long_name": "Is Ebola Real?",
+        "taxonomy": "ebola-questions",
       },
       { "name": "Timescale",
         "long_name": "When will Liberia be free of Ebola?"
+        "taxonomy": "ebola-questions",
       },
       ...
     ]
@@ -162,12 +170,6 @@ E.g.: `/taxonomies/ebola-questions/`.
 
 ## '/taxonomies/'
 
-### POST
-
-- Create a new term within the given taxonomy
-
-- Post details of a `Term` in JSON
-
 
 ## Taxonomies as Item metadata:
 
@@ -177,6 +179,7 @@ And also to allow Item POST requests to add metadata terms.
 
 ### To create items with metadata
 
+TODO
 
 ### /item/<item-id>/<taxonomy-id>/
 
@@ -211,3 +214,84 @@ PUT [ { "name": "term" }, ... ]
 
 - sets the values to those given, for cardinality `multiple`
 - throws error for `optional` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/items/
+
+        { body="kljlik" }
+
+
+/items/67/
+
+    POST  { long_name="new name!" }
+
+    POST  { terms: [
+                { "taxonomy": "ebola-questions",
+                  "name": "vaccine",
+                },
+                ...
+            ]
+    }
+
+/items/67/metadata/ebola-questions/
+
+    POST { "name": "health" }
+    POST [ { "name": "health" }]
+    POST []
+
+
+
+
+
+
+    GET /items/67/
+
+        { id:87, 
+          body:"lsdfkljasd",  
+          meta: {
+             "ebola-questions": "vaccine",
+             ...
+          }
+        }
+
+
+        { id:87, 
+          body:"lsdfkljasd",  
+          meta: [
+             { "taxonomy": "ebola-questions",
+               "name": "vaccine",
+               "long_name": "when will there be a vaccine"
+             },
+             ...
+          ]
+        }
+
+
+Removing a tag from an item
+
+/items/65/ebola-questions/vaccine
+
+        DELETE
+
+/taxonomies/ebola-questions/vaccine/65 
+        DELETE
