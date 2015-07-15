@@ -1,3 +1,7 @@
+import transport
+from hid.tables import ItemTable
+
+
 class TableWidget(object):
     """ A table widget.
 
@@ -15,13 +19,32 @@ class TableWidget(object):
     template_name = 'hid/widgets/table.html'
 
     def get_context_data(self, **kwargs):
+        # Read settings
         title = kwargs.get('title', '(no title)')
-        headers = kwargs.get('headers', [])
-        rows = kwargs.get('rows', [])
-        html = kwargs.get('html', False)
+        filters = kwargs.get('filters', {})
+        count = kwargs.get('count', 10)
+        order_by = kwargs.get('order_by', None)
+
+        # Fetch items. Eventually sorting & limiting
+        # number of items will be sorted by the API.
+        items = transport.items.list(**filters)
+        if order_by:
+            if order_by.startswith('-'):
+                items.sort(key=lambda e: e[order_by[1:]], reverse=True)
+            else:
+                items.sort(key=lambda e: e[order_by])
+        items = items[0:count]
+
+        # Prepare table object
+        table = ItemTable(
+            items,
+            categories=[],
+            orderable=False,
+            exclude=('category', 'delete')
+        )
+
+        # And return context
         return {
             'title': title,
-            'headers': headers,
-            'rows': rows,
-            'html': html
+            'table': table
         }

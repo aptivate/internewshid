@@ -1,40 +1,10 @@
+{% load render_table from django_tables2 %}
 <div class='panel panel-default'>
     <div class='panel-heading'>
         <i class='fa fa-table fa-w'></i>
         {{ title }}
     </div>
     <div class='panel-body'>
-        <div class='table-responsive'>
-            <table class='table table-bordered table-hover table-stripped'>
-                <thead>
-                    <tr>
-                        {% for header in headers %}
-                            <th>
-                                {% if html %}
-                                    {{ header|safe }}
-                                {% else %}
-                                    {{ header }}
-                                {% endif %}
-                            </th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in rows %}
-                        <tr>
-                            {% for column in row %}
-                                <td>
-                                    {% if html %}
-                                        {{ column|safe }}
-                                    {% else %}
-                                        {{ column }}
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        {% render_table table %}
     </div>
 </div>
