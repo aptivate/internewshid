@@ -6519,7 +6519,6 @@ body {
 }
 .site-info a {
   color: #78716e;
-  text-decoration: underline;
 }
 .navbar-static-top {
   position: fixed;
@@ -6582,6 +6581,9 @@ body {
 .navbar-top-links > li > a:hover,
 .navbar-top-links > .open > a:focus {
   background-color: #002d62;
+}
+#side-menu {
+  padding-top: 14.5px;
 }
 .sidebar {
   margin-top: 51px;
@@ -6724,6 +6726,8 @@ body {
 }
 .panel-heading i {
   font-size: 22px;
+  position: relative;
+  top: 3px;
 }
 .panel-blue,
 .panel-primary {
@@ -6982,6 +6986,14 @@ a.list-group-item-danger.active:focus {
 .popover {
   color: #282625;
 }
+.nav-hanging-tabs {
+  margin-top: 40px;
+  margin-right: 0;
+}
+.nav-hanging-tabs > li > a {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 14px 18px;
+}
 .table-no-border > thead > tr > th,
 .table > tbody > tr > th,
 .table-no-border > tfoot > tr > th,
@@ -7037,16 +7049,71 @@ th.delete > label {
 .bootstrap3-multi-input {
   display: none;
 }
-.nav-hanging-tabs {
-  margin-top: 20px;
-  margin-right: 0;
+.spinner {
+  display: none;
+  height: 50px;
+  margin: 40px auto 0;
+  width: 120px;
 }
-.nav-hanging-tabs > li > a {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 14px 18px;
+.spinner > span {
+  display: block;
+  float: left;
 }
-#side-menu {
-  padding-top: 14.5px;
+.spinner > div {
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+.spinner.active {
+  display: block;
+}
+.spinner > span {
+  font-size: 14px;
+  padding: 15px 5px;
+  color: #0f6cb6;
+}
+.spinner > div {
+  background-color: #0f6cb6;
+}
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+.spinner .rect3 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+@-webkit-keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scaleY(0.4);
+  }
+  20% {
+    -webkit-transform: scaleY(1);
+  }
+}
+@keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1);
+    -webkit-transform: scaleY(1);
+  }
 }
 .clearfix:before,
 .clearfix:after,
