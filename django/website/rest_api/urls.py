@@ -1,4 +1,7 @@
-from rest_framework_bulk.routes import BulkRouter
+from django.conf.urls import patterns, include, url
+
+from rest_framework import routers
+
 
 from .views import (
     ItemViewSet,
@@ -6,7 +9,7 @@ from .views import (
     TermViewSet,
 )
 
-router = BulkRouter()
+router = routers.SimpleRouter()
 router.register(
     r'items',
     ItemViewSet,
@@ -20,4 +23,5 @@ router.register(
     r'terms',
     TermViewSet,
 )
+
 urlpatterns = router.urls

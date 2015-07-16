@@ -1,5 +1,7 @@
+from rest_framework import viewsets, status
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
-from rest_framework import viewsets
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 
 from data_layer.models import (
     Item,
@@ -28,6 +30,18 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             items = items.filter(id__in=ids)
 
         return items
+
+    @detail_route(methods=['post'])
+    def add_term(self, request, item_pk):
+        item = Item.objects.get(pk=item_pk)
+        term_data = request.data
+        term = Term.objects.get(
+            taxonomy__slug=term_data['taxonomy'],
+            name=term_data['name'],
+        )
+        item.terms.add(term)
+        data = {}  # TODO should be the item containing the new term
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class TaxonomyViewSet(viewsets.ModelViewSet):

@@ -24,6 +24,9 @@ class Taxonomy(models.Model):
         self.slug = slugify(self.name)
         super(Taxonomy, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        return self.name
+
     # My thoughts on how this grows...
     #
     # multiplicity = models.CharField(
@@ -53,7 +56,6 @@ class Term(models.Model):
         verbose_name=_('Name'),
         max_length=250,
         help_text=_('Tag or Category Name'),
-        unique=True,
         db_index=True,
     )
 
@@ -67,3 +69,13 @@ class Term(models.Model):
         verbose_name=_('Long Name'),
         blank=True,
     )
+
+    def __unicode__(self):
+        return "{}:{}".format(
+            self.taxonomy.name,
+            self.name
+        )
+
+    class Meta:
+        unique_together = ('name', 'taxonomy')
+        index_together = ['name', 'taxonomy']
