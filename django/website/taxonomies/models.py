@@ -54,7 +54,20 @@ class TermManager(models.Manager):
 
     def by_taxonomy(self, taxonomy, term_name):
         """ Fetch an existing  Term by its name and its
-        Taxonomy slug which, together should be unique.
+        Taxonomy slug which, together should be unique together.
+
+        args:
+            taxonomy: [Taxonomy|string]
+                Taxonomy instance or taxonomy slug.
+
+            term_name: string: the name of an existing term
+
+        returns:
+            The term object with the given name in the given Taxonomy.
+
+        throws:
+            DoesNotExist if no Term matches the given combination
+            ValueError if taxonomy is not one of the allowed types
         """
         if isinstance(taxonomy, basestring):
             taxonomy_slug = taxonomy
