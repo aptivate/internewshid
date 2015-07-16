@@ -17,8 +17,9 @@ class ItemSerializer(serializers.ModelSerializer):
 class TaxonomySerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(
         required=False,
-        # max_length=250, causes AppRegistryNotReady excpetion!" Go figure
+        # FIXME: max_length=250, causes AppRegistryNotReady excpetion!" Go figure
     )
+
     class Meta:
         model = Taxonomy
 
@@ -28,5 +29,6 @@ class TermSerializer(serializers.ModelSerializer):
         slug_field='slug',
         queryset=Taxonomy.objects.all()
     )
+
     class Meta:
         model = Term
