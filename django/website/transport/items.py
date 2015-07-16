@@ -63,3 +63,17 @@ def bulk_delete(ids):
     # for the moment I'm mapping this onto multiple calls to delete()
     for id in ids:
         delete(id)
+
+
+def add_term_url(item_id):
+    return reverse('item-add-term', kwargs={'pk': item_id})
+
+
+def add_term(item_id, taxonomy_slug, name):
+    view = ItemViewSet.as_view(actions={'post': 'add_term'})
+
+    term = {'taxonomy': taxonomy_slug, 'name': name}
+    request = request_factory.post(add_term_url(item_id), term)
+    response = view(request, item_pk=item_id)
+
+    return response.data

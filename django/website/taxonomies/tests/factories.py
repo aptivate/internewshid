@@ -1,7 +1,10 @@
 from factory.django import DjangoModelFactory
 from factory import fuzzy, SubFactory
 
-from ..models import Term, Taxonomy
+from ..models import (
+    Taxonomy,
+    Term,
+)
 
 
 class TaxonomyFactory(DjangoModelFactory):
