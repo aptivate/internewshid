@@ -6,31 +6,30 @@
         <div class="featured-image">
                <img class="img-responsive" src="{{ STATIC_URL }}images/rsz_west-african-girl.jpg" alt="West African girl" />
             </div>
-        <nav class="sidebar-nav navbar-collapse">
+        <nav class="sidebar-nav navbar-collapse collapse">
             <ul class="nav" id="side-menu">
                 <li><a class="active" href="{% url "dashboard" %}"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a></li>
                 <li><a href="{% url "sources" %}"><span class="fa fa-download fa-fw"></span> Sources</a></li>
                 <li><a href="{% url "data-view" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit</a></li>
             </ul>
         </nav>
-        <div class="site-info">
-           <p>a project of <a href="http://www.internews.org" title="Internews website">Internews</a><br />
-            developed by<a href="http://www.aptivate.org" title="Aptivate website"> Aptivate</a></p>
-        </div>
         <!-- /.sidebar-collapse -->
     </div>
     <!-- /.sidebar -->
     <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-            </button>
-            <a class="navbar-brand pull-left" href="/">{% trans "HID  " %}<span class="subtitle">{% trans "Humanitarian Information Dashboard" %}</span></a>
-        </div>
+                <button title="show/hide menu" data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand pull-left" href="/">{% trans "HID  " %}<span class="subtitle">{% trans "Humanitarian Information Dashboard" %}</span></a>
+            </div>
         <!-- /.navbar-header -->
         {% if request.user.is_authenticated %}
         <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
+            <li class="dropdown pull-right">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <span class="fa fa-user fa-fw"></span>  {{ request.user }}  <span class="fa fa-caret-down"> </span>
                 </a>
@@ -68,8 +67,17 @@
                 </div>
                 {% block maincontent %}
                 {% endblock maincontent %}
+                <div class="row site-info">
+                    <div class="col-lg-12">
+                        <p>developed by<a href="http://www.aptivate.org" title="Aptivate website"> Aptivate</a></p>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+    
+    <div class="project-info">
+        <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
     </div>
     <!-- /Main Content -->
 {% endblock content %}
