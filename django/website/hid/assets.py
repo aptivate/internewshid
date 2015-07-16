@@ -34,7 +34,9 @@ _assets = [
     'js/backbone.js',
     'flot/jquery.flot.js',
     'flot/jquery.flot.resize.js',
-    'hid/widgets/chart.js'
+    'hid/widgets/chart.js',
+    'hid/js/spinner.js',
+    'hid/js/messages.js'
 ]
 
 
