@@ -50,6 +50,23 @@ class Taxonomy(models.Model):
     # to do free tagging use 'multiple' and 'open'
 
 
+class TermManager(models.Manager):
+
+    def by_taxonomy(self, taxonomy, term_name):
+        """ Fetch an existing  Term by its name and its
+        Taxonomy slug which, together should be unique.
+        """
+        if isinstance(taxonomy, basestring):
+            taxonomy_slug = taxonomy
+        elif isinstance(taxonomy, Taxonomy):
+            taxonomy_slug = taxonomy.slug
+        else:
+            raise ValueError(
+                "taxonomy must be a Taxonomy instance "
+                "or a valid taxonomy slug")
+        return self.get(taxonomy__slug=taxonomy_slug, name=term_name)
+
+
 class Term(models.Model):
 
     name = models.CharField(
@@ -75,6 +92,9 @@ class Term(models.Model):
             self.taxonomy.name,
             self.name
         )
+
+    # Custom Manager
+    objects = TermManager()
 
     class Meta:
         unique_together = ('name', 'taxonomy')
