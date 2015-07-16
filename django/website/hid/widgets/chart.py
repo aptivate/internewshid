@@ -9,6 +9,7 @@ class QuestionChartWidget(object):
             name: Name of the chart
             questions: Dictionary of question to value
     """
+            
     template_name = 'hid/widgets/chart.html'
     javascript = [
         'flot/jquery.flot.js',
@@ -31,21 +32,21 @@ class QuestionChartWidget(object):
                 'series': {
                     'bars': {
                         'show': True,
-                        'fillColor': '#0B62A4'
+                        'fillColor': '#f29e30'
                     },
-                    'color': '#0B62A4'
+                    'color': 'transparent'
                 },
                 'bars': {
                     'horizontal': True,
-                    'barWidth': 0.5,
+                    'barWidth': 0.6,
                     'align': 'center',
                     'fill': True,
-                    'lineWidth': 1,
+                    'lineWidth': 0,
                 },
                 'yaxis': {
                     'ticks': yticks,
                     'tickLength': 0,
-                    'color': '#282625',
+                    'color': '#333333',
                     'font': {
                         'size': 12,
                         'style': 'normal',
@@ -57,7 +58,11 @@ class QuestionChartWidget(object):
                     'autoscaleMargin': 0.1
                 },
                 'grid': {
-                    'hoverable': True
+                    'hoverable': True,
+                    'borderWidth': 2,
+                    'borderColor':'#eeeeee',
+                    'margin':10,
+                    'labelMargin': 20
                 }
             },
             'data': [values]
