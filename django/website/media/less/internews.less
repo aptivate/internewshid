@@ -1,8 +1,7 @@
 // Global Styles
 
 body {
-    background-color: @gray-lightest;
-    min-width:320px;
+    min-width:420px;
 }
 
 
@@ -32,7 +31,15 @@ body {
 // Branding
 
 .navbar-brand {
-  font-size:24px;
+  font-size:30px;
+  padding-top:30px;
+}
+
+@media(min-width:768px){
+  .navbar-brand {
+    font-size:24px;
+    padding-top:15px;
+  }
 }
 
 .subtitle {
@@ -55,6 +62,7 @@ body {
   .box-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
   border:none;
   top:0;
+  z-index:1;
 }
 
 @media(min-width:768px) {
@@ -62,7 +70,6 @@ body {
         position:fixed;
       }
 }
-
 
 .navbar-top-links {
     margin-right: 0;
@@ -84,7 +91,7 @@ body {
 
 @media(max-width:768px){
   .navbar-top-links li a {
-    padding-top:0;
+    padding:5px;
     min-height:10px;
   }
 }
@@ -153,6 +160,20 @@ body {
         padding-right: 0;
     }
     margin-top:51px;
+    margin-bottom:20px;
+}
+
+@media(max-width:768px){
+  .navbar-collapse {
+   padding-bottom:20px;
+   background-color:#CFEBFF; 
+  }
+}
+
+@media(min-width:481px) and (max-width:768px){
+  .navbar-collapse {
+    padding-top:40px; 
+   }
 }
 
 .sidebar .sidebar-search {
@@ -227,6 +248,17 @@ body {
   width: 250px;
   font-size:12.5px;
   margin:0;
+}
+
+@media(max-width:768px){
+  .project-info{
+    width: 100%;
+    background-color: @gray-lightest;
+    height: 50px;
+    .box-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
+    bottom: 0;
+    padding-top: 5px;
+  }
 }
 
 .project-info > a {
