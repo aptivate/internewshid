@@ -4,7 +4,7 @@ from factory import fuzzy, SubFactory
 from ..models import Term, Taxonomy
 
 
-class TaxonmyFactory(DjangoModelFactory):
+class TaxonomyFactory(DjangoModelFactory):
 
     class Meta:
         model = Taxonomy
@@ -19,4 +19,4 @@ class TermFactory(DjangoModelFactory):
 
     name = fuzzy.FuzzyText()
 
-    taxonomy = SubFactory(TaxonmyFactory)
+    taxonomy = SubFactory(TaxonomyFactory)
