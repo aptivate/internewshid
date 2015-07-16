@@ -2,7 +2,7 @@
 
 body {
     background-color: @gray-lightest;
-    min-width:480px;
+    min-width:320px;
 }
 
 
@@ -15,6 +15,7 @@ body {
 
 .page-header {
   margin-top:0;
+  padding:10px;
 }
 
 @media(min-width:768px) {
@@ -79,6 +80,13 @@ body {
 .navbar-top-links li a {
     padding: 15px;
     min-height: 50px;
+}
+
+@media(max-width:768px){
+  .navbar-top-links li a {
+    padding-top:0;
+    min-height:10px;
+  }
 }
 
 .navbar-top-links > li > a,
@@ -189,10 +197,17 @@ body {
         margin-left: auto;
     }
 }
+ 
+@media(min-width: 481px) and (max-width:768px) {
+    .featured-image > img {
+      display:none;
+    }
+ }
 
 @media(max-width:480px) {
     .featured-image > img {
       width:100%;
+      display:block;
     }
  }
 
