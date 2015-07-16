@@ -52,7 +52,7 @@ class Taxonomy(models.Model):
 
 class TermManager(models.Manager):
 
-    def by_taxonomy(self, taxonomy, term_name):
+    def by_taxonomy(self, taxonomy, name):
         """ Fetch an existing  Term by its name and its
         Taxonomy slug which, together should be unique together.
 
@@ -60,7 +60,7 @@ class TermManager(models.Manager):
             taxonomy: [Taxonomy|string]
                 Taxonomy instance or taxonomy slug.
 
-            term_name: string: the name of an existing term
+            name: string: the name of an existing term
 
         returns:
             The term object with the given name in the given Taxonomy.
@@ -77,7 +77,7 @@ class TermManager(models.Manager):
             raise ValueError(
                 "taxonomy must be a Taxonomy instance "
                 "or a valid taxonomy slug")
-        return self.get(taxonomy__slug=taxonomy_slug, name=term_name)
+        return self.get(taxonomy__slug=taxonomy_slug, name=name)
 
 
 class Term(models.Model):

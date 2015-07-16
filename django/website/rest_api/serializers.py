@@ -20,7 +20,6 @@ class TaxonomySerializer(serializers.ModelSerializer):
     )
 
 
-
 class TermSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -33,7 +32,6 @@ class TermSerializer(serializers.ModelSerializer):
     )
 
 
-
 class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -44,13 +42,12 @@ class ItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """ Create an item with nested metadata terms
         The validated data looks something like this:
-        { "body": "some text",
+        {   "body": "some text",
             "terms": [
                 {"taxonomy": "animal", "name": "Dog"},
                 {"taxonomy": "thing", "name": "foo"}
             ],
         }
-
         """
         # find all terms listed in term_data and link to item
         # in future, we might theoreteically be adding new tags here too,
@@ -60,11 +57,9 @@ class ItemSerializer(serializers.ModelSerializer):
         term_list = validated_data.pop('terms', [])
         item = Item.objects.create(**validated_data)
         for term_data in term_list:
-            term = Term.objects.get(
+            term = Term.objects.by_taxonomy(
                 taxonomy=term_data['taxonomy'],
                 name=term_data['name'],
             )
             item.terms.add(term)
         return item
-
-

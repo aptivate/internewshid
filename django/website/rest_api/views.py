@@ -35,8 +35,8 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     def add_term(self, request, item_pk):
         item = Item.objects.get(pk=item_pk)
         term_data = request.data
-        term = Term.objects.get(
-            taxonomy__slug=term_data['taxonomy'],
+        term = Term.objects.by_taxonomy(
+            taxonomy=term_data['taxonomy'],
             name=term_data['name'],
         )
         item.terms.add(term)

@@ -19,7 +19,7 @@ def term_with_context():
 def test_term_by_taxonomy_with_taxonomies_with_slug(term_with_context):
     term = Term.objects.by_taxonomy(
         taxonomy=term_with_context.taxonomy.slug,
-        term_name=term_with_context.name,
+        name=term_with_context.name,
     )
 
     assert term.name == term_with_context.name
@@ -30,7 +30,7 @@ def test_term_by_taxonomy_with_taxonomies_with_slug(term_with_context):
 def test_term_by_taxonomy_with_taxonomies_with_taxonomy(term_with_context):
     term = Term.objects.by_taxonomy(
         taxonomy=term_with_context.taxonomy,
-        term_name=term_with_context.name,
+        name=term_with_context.name,
     )
 
     assert term.name == term_with_context.name
