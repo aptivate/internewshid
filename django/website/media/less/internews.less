@@ -17,6 +17,10 @@ body {
     .box-shadow-inset(inset, 0px, 0px); 
 }
 
+.page-header {
+  margin-top:0;
+}
+
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
@@ -58,7 +62,6 @@ body {
     background-color:@gray-lighter;
     a {
       color:@gray;
-      text-decoration:underline;
     }
 }
 
@@ -67,7 +70,8 @@ body {
 .navbar-static-top {
   position:fixed;
   width:100%;
-  .box-shadow(0px, 5px);
+  .box-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
+  border:none;
 }
 
 
@@ -142,6 +146,10 @@ body {
 
 // --Sidebar
 
+#side-menu {
+  padding-top:@navbar-padding-vertical;
+}
+
 .sidebar {
     .sidebar-nav.navbar-collapse {
         padding-left: 0;
@@ -152,14 +160,6 @@ body {
 
 .sidebar .sidebar-search {
     padding: 15px;
-}
-
-.sidebar ul li {
-    a {
-        &.active {
-            background-color: @gray-lighter;
-        }
-    }
 }
 
 .sidebar .arrow {
@@ -328,6 +328,8 @@ body {
  border:none;
  .fa {
    font-size:22px;
+   position:relative;
+   top:3px;
  }
 }
 
