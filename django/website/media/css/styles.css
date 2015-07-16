@@ -7108,6 +7108,14 @@ th.delete > label {
 .bootstrap3-multi-input {
   display: none;
 }
+.item-source-info > h2 {
+  margin: 15px;
+}
+@media (max-width: 768px) {
+  .item-source-info > h2 > img {
+    max-width: 120px;
+  }
+}
 .spinner {
   bottom: 0;
   height: 25px;
