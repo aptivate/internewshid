@@ -25,6 +25,7 @@ class TermSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Term
+        fields = ('taxonomy', 'name', 'long_name', )
 
     taxonomy = serializers.SlugRelatedField(
         slug_field='slug',

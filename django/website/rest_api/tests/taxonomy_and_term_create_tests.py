@@ -7,10 +7,12 @@ from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
 from taxonomies.models import Taxonomy, Term
+from ..serializers import TermSerializer
 from ..views import (
     TaxonomyViewSet,
     TermViewSet,
 )
+from taxonomies.tests.factories import TermFactory
 
 
 def create_category(name):
@@ -74,3 +76,12 @@ def test_terms_have_long_name():
 
     [term] = Term.objects.all()
     assert term.long_name == "Is there a vaccine?"
+
+
+@pytest.mark.django_db
+def test_id_field_not_in_serialized_terms():
+    term = TermFactory()
+
+    serialzed = TermSerializer(term).data
+
+    assert 'id' not in serialzed
