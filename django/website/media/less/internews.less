@@ -13,8 +13,12 @@ body {
 #page-wrapper {
     padding: 30px 15px;
     min-height: 1000px;
-    background-color: white;
-    .box-shadow-inset(inset, 5px, 0px);
+    background-color: @gray-lighter;
+    .box-shadow-inset(inset, 0px, 0px); 
+}
+
+.page-header {
+  margin-top:0;
 }
 
 @media(min-width:768px) {
@@ -58,7 +62,6 @@ body {
     background-color:@gray-lighter;
     a {
       color:@gray;
-      text-decoration:underline;
     }
 }
 
@@ -67,7 +70,8 @@ body {
 .navbar-static-top {
   position:fixed;
   width:100%;
-  .box-shadow(0px, 5px);
+  .box-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
+  border:none;
 }
 
 
@@ -89,7 +93,7 @@ body {
 }
 
 .navbar-top-links > li > a,
-.navbar-top-links > li > a > i {
+.navbar-top-links > li > a > .fa {
   color:@body-bg;
 }
 
@@ -142,6 +146,10 @@ body {
 
 // --Sidebar
 
+#side-menu {
+  padding-top:@navbar-padding-vertical;
+}
+
 .sidebar {
     .sidebar-nav.navbar-collapse {
         padding-left: 0;
@@ -152,14 +160,6 @@ body {
 
 .sidebar .sidebar-search {
     padding: 15px;
-}
-
-.sidebar ul li {
-    a {
-        &.active {
-            background-color: @gray-lightest;
-        }
-    }
 }
 
 .sidebar .arrow {
@@ -244,7 +244,7 @@ body {
     color: white;
 }
 
-.btn-primary > i {
+.btn-primary > .fa {
   color:@body-bg;
 }
 
@@ -310,10 +310,45 @@ body {
     margin: 15px 0;
 }
 
-// Custom Colored Panels
+// Panel customisation
 
 .huge {
     font-size: 40px;
+}
+
+.panel  {
+  border:none;
+  border-color:transparent;
+  .box-shadow(0px, 0px, 5px, 4);
+}
+
+.panel-heading {
+ font-weight:bold;
+ padding:25px;
+ border:none;
+ .fa {
+   font-size:22px;
+   position:relative;
+   top:3px;
+ }
+}
+
+.panel-blue, .panel-primary {
+    border-color: @brand-primary;
+    .panel-heading {
+        border-color: @brand-primary;
+        color: white;
+        background-color: @brand-primary;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-success;
+        &:hover {
+            color: darken(@brand-success, 15%);
+        }
+    }
 }
 
 .panel-green {
@@ -322,6 +357,9 @@ body {
         border-color: @brand-success;
         color: white;
         background-color: @brand-success;
+        .fa {
+        color:white;
+      }
     }
     a {
         color: @brand-success;
@@ -337,6 +375,9 @@ body {
         border-color: @brand-danger;
         color: white;
         background-color: @brand-danger;
+        .fa {
+        color:white;
+      }
     }
     a {
         color: @brand-danger;
@@ -352,6 +393,9 @@ body {
         border-color: @brand-warning;
         color: white;
         background-color: @brand-warning;
+        .fa {
+        color:white;
+      }
     }
     a {
         color: @brand-warning;
@@ -363,7 +407,7 @@ body {
 
 //icons 
 .fa-fw {
-  color:@brand-secondary;
+  color:@gray-base;
   margin-right:5px;
 }
 
