@@ -36,9 +36,14 @@ def test_terms_can_be_added_to_item(item_data):
 
 @pytest.mark.django_db
 def test_add_term_fails_if_term_does_not_exist(item_data):
-    with pytest.raises(TransportException):
+    with pytest.raises(TransportException) as excinfo:
         items.add_term(
             item_data['id'],
             "unknown-slug",
             "unknown term name",
         )
+
+    error = excinfo.value.message
+
+    assert error['status_code'] == 400
+    assert error['detail'] == "Term matching query does not exist."
