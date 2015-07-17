@@ -59,10 +59,10 @@ class QuestionChartWidget(object):
                 },
                 'grid': {
                     'hoverable': True,
-                    'borderWidth': 2,
-                    'borderColor':'#eeeeee',
+                    'borderWidth': 0,
                     'margin':10,
-                    'labelMargin': 20
+                    'labelMargin': 20,
+                    'backgroundColor': '#fafafa'
                 }
             },
             'data': [values]
