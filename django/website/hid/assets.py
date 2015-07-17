@@ -3,7 +3,7 @@
     way of building the resources for high latency and low
     bandwidth setups.
 
-    The list of assets is not dynamic - to be build for production
+    The list of assets is not dynamic - to be built for production
     the list of assets in _assets must be defined in this file.
 
     Asset type is determined by file extension:
