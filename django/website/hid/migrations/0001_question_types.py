@@ -6,7 +6,7 @@ from django.db import migrations
 
 def create_question_types(apps, schema_editor):
     Taxonomy = apps.get_model('taxonomies', 'Taxonomy')
-    taxonomy = Taxonomy(name="ebola-questions")
+    taxonomy = Taxonomy(name="Ebola Questions", slug="ebola-questions")
     taxonomy.save()
 
     question_types = (
