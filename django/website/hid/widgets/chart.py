@@ -9,7 +9,6 @@ class QuestionChartWidget(object):
             name: Name of the chart
             questions: Dictionary of question to value
     """
-            
     template_name = 'hid/widgets/chart.html'
     javascript = [
         'flot/jquery.flot.js',
@@ -60,7 +59,7 @@ class QuestionChartWidget(object):
                 'grid': {
                     'hoverable': True,
                     'borderWidth': 0,
-                    'margin':10,
+                    'margin': 10,
                     'labelMargin': 20,
                     'backgroundColor': '#fafafa'
                 }
