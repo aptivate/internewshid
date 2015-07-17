@@ -89,4 +89,8 @@ def add_term(item_id, taxonomy_slug, name):
     request = request_factory.post(add_term_url(item_id), term)
     response = view(request, item_pk=item_id)
 
-    return response.data
+    if status.is_success(response.status_code):
+        return response.data
+    else:
+        response.data['status_code'] = response.status_code
+        raise TransportException(response.data)
