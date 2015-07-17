@@ -63,9 +63,9 @@ def test_item_can_haz_category(category, term, item):
 def test_categorize_item_fails_gracefully_if_term_not_found(item):
     response = categorize_item(
         item_id=item['id'],
-        taxonomy_slug='uknown-slug',
+        taxonomy_slug='unknown-slug',
         term_name='unknown-term',
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert False, "further assertion about error message"
+    assert response.data['detail'] == "Term matching query does not exist."
