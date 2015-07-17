@@ -1,4 +1,5 @@
 <!doctype html>
+{% load assets %}
 {% load bootstrap3 %}
 {% load i18n %}
 <html>
@@ -16,8 +17,9 @@
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
   {% block bootstrap3_extra_head %}{% endblock %}
-  <link href="{{ STATIC_URL }}css/styles.css" media="all" rel="stylesheet" />
-  <link href="{{ STATIC_URL }}fonts/font-awesome-4.3.0/css/font-awesome.min.css" media="all" rel="stylesheet" />
+  {% assets "css_assets" %}
+      <link href="{{ ASSET_URL }}" medial="all" rel="stylesheet" />
+  {% endassets %}
   <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico?v=1"/>
 </head>
 
@@ -36,15 +38,11 @@
     {% endblock content %}
 
     {% block bootstrap3_extra_js %}
-        {% bootstrap_javascript jquery=True %}
-        <script src="{{ STATIC_URL }}js/underscore.js"></script>
-        <script src="{{ STATIC_URL }}js/backbone.js"></script>
-        <script src="{{ STATIC_URL }}hid/js/spinner.js"></script>
-        <script src="{{ STATIC_URL }}hid/js/messages.js"></script>
-        <script src="{{ STATIC_URL }}hid/js/automatic_file_upload.js"></script>
+        {% assets "javascript_assets" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
     {% endblock %}
     {% block lastjs %}
     {% endblock %}
-     
 </body>
 </html>

@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView
 
+from hid.assets import require_assets
+
 from dashboard.models import Dashboard
 from dashboard.widget_pool import get_widget
 
@@ -38,25 +40,14 @@ class DashboardView(TemplateView):
         if len(current_row) > 0:
             context['rows'].append(current_row)
 
-        # Get all the javascript & css dependencies
-        context['javascript'] = []
-        context['css'] = ['dashboard/dashboard.css']
+        # Ensure we have all the javascript & css dependencies
+        require_assets('dashboard/dashboard.css')
         for widget in widgets:
             widget_type = get_widget(widget.widget_type)
             if hasattr(widget_type, 'javascript'):
-                context['javascript'] += widget_type.javascript
+                require_assets(*widget_type.javascript)
             if hasattr(widget_type, 'css'):
-                context['css'] += widget_type.css
-        context['javascript'] = self._remove_duplicates(context['javascript'])
-        context['css'] = self._remove_duplicates(context['css'])
+                require_assets(*widget_type.css)
 
         # Return the context
         return context
-
-    def _remove_duplicates(self, the_list):
-        """ Remove duplicates whilst preseving order """
-        out = []
-        for e in the_list:
-            if e not in out:
-                out.append(e)
-        return out

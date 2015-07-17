@@ -6,6 +6,10 @@
     margin-bottom: 20px;
 }
 
+.dashboard .panel-body {
+    overflow: auto;
+}
+
 .dashboard .widget-height-small {
     height: 120px;
 }
