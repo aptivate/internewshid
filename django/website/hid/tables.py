@@ -32,10 +32,18 @@ class ItemTable(tables.Table):
         super(ItemTable, self).__init__(*args, **kwargs)
 
     def render_category(self, record, value):
+        # TODO: Test this
         Template = loader.get_template('hid/categories_column.html')
         ctx = {
             'categories': self.categories,
-            'category': self.categories[2][0],
+            'category': self.get_category(value),
             'record': record
         }
+
         return Template.render(ctx)
+
+    def get_category(self, value):
+        if value is None:
+            return None
+
+        return self.categories[value]
