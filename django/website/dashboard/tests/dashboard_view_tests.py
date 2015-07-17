@@ -1,8 +1,11 @@
+from mock import patch
+
 from django.test import TestCase
 
 from dashboard.models import Dashboard
 from dashboard.views import DashboardView
 from dashboard.widget_pool import register_widget
+from hid.assets import use_assets
 
 
 class TestWidget(object):
@@ -62,16 +65,15 @@ class TestDashboardView(TestCase):
         dashboard_view = DashboardView()
         view_args = {'name': 'dashboard1'}
         dashboard_view.kwargs = view_args
-        return dashboard_view.get_context_data(**view_args)
-
-    def test_remove_duplicates(self):
-        """ Ensure duplicates are removed and the order is kept"""
-        dashboard_view = DashboardView()
-        test_array = [1, 2, 5, 1, 3, 2, 5, 3, 1, 4]
-        self.assertEqual(
-            dashboard_view._remove_duplicates(test_array),
-            [1, 2, 5, 3, 4]
-        )
+        assets = [
+            'file.js', 'app/file.js', 'file.css',
+            'app/file.css', 'some.js', 'app2/file.js',
+            'some.css', 'app2/file.css',
+            'dashboard/dashboard.css'
+        ]
+        with use_assets(*assets):
+            context_data = dashboard_view.get_context_data(**view_args)
+        return context_data
 
     def test_context_data_includes_dashboard_name(self):
         self.setup_dashboard('dashboard1')
@@ -142,7 +144,7 @@ class TestDashboardView(TestCase):
             ['test-widget-4', 'test-widget-2']
         ])
 
-    def test_context_data_includes_javascript(self):
+    def test_context_data_requires_assets(self):
         self.setup_dashboard('dashboard1', [
             {
                 'widget_type': 'test-widget-1',
@@ -155,28 +157,15 @@ class TestDashboardView(TestCase):
                 'column': 1
             }
         ])
-        context = self.get_dashboard_view_context('dashboard1')
-        self.assertEqual(context['javascript'], [
+        required_assets = []
+        with patch('dashboard.views.require_assets') as mock:
+            self.get_dashboard_view_context('dashboard1')
+            for call_args in mock.call_args_list:
+                required_assets += call_args[0]
+        self.assertEqual(set([
             'file.js', 'app/file.js',
-            'some.js', 'app2/file.js'
-        ])
-
-    def test_context_data_includes_css(self):
-        self.setup_dashboard('dashboard1', [
-            {
-                'widget_type': 'test-widget-1',
-                'row': 0,
-                'column': 0
-            },
-            {
-                'widget_type': 'test-widget-2',
-                'row': 0,
-                'column': 1
-            }
-        ])
-        context = self.get_dashboard_view_context('dashboard1')
-        self.assertEqual(context['css'], [
-            'dashboard/dashboard.css',
+            'some.js', 'app2/file.js',
             'file.css', 'app/file.css',
-            'some.css', 'app2/file.css'
-        ])
+            'some.css', 'app2/file.css',
+            'dashboard/dashboard.css'
+        ]), set(required_assets))
