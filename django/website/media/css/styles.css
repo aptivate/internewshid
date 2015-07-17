@@ -6809,6 +6809,11 @@ body {
   padding: 25px;
   border: none;
 }
+.panel-heading h2 {
+  display: inline;
+  font-size: 15px;
+  font-weight: bold;
+}
 .panel-heading .fa {
   font-size: 22px;
   position: relative;
