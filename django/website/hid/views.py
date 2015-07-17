@@ -15,6 +15,9 @@ from .forms import UploadForm, get_spreadsheet_choices
 from .tables import ItemTable
 
 
+QUESTION_TYPE_TAXONOMY = 'ebola-questions'
+
+
 class ListSources(TemplateView):
     template_name = "hid/sources.html"
 
@@ -121,6 +124,24 @@ def delete_items(request, deleted):
         messages.error(request, msg)
 
 
+def add_categories(categories):
+    """ Add specified category Terms to The items
+    as specified in categories list.
+
+    args:
+        categories: a list of item ids and term names:
+            [ (<item-id>, <term-name>), ... ]
+    """
+    for item_id, term_name in categories:
+        transport.items.add_term(
+            item_id,
+            QUESTION_TYPE_TAXONOMY,
+            term_name,
+        )
+    # Did we want to test for any failures or exceptions ?
+    # TODO: Add messages/success/error reporting here?
+
+
 def process_items(request):
     '''
     If POST request, then:
@@ -135,7 +156,6 @@ def process_items(request):
         if len(deleted):
             delete_items(request, deleted)
         if len(categories):
-            # Update categories as well
-            pass
+            add_categories(categories)
 
     return HttpResponseRedirect(redirect_url)

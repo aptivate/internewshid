@@ -70,6 +70,19 @@ def add_term_url(item_id):
 
 
 def add_term(item_id, taxonomy_slug, name):
+    """ Add term named `name` within the Taxonomy with `taxonomy_slug` to the
+    Item with id `item_id`
+
+    args:
+        item_id: e.g. 67
+        taxonomy_slug: e.g. 'ebola-questions'
+        name: name of a Term in the Taxonomy with given slug
+
+    returns:
+        response from the server
+
+    For the moment both the taxonomy and term must already exist.
+    """
     view = ItemViewSet.as_view(actions={'post': 'add_term'})
 
     term = {'taxonomy': taxonomy_slug, 'name': name}
