@@ -37,8 +37,8 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         term_data = request.data
 
         try:
-            term = Term.objects.get(
-                taxonomy__slug=term_data['taxonomy'],
+            term = Term.objects.by_taxonomy(
+                taxonomy=term_data['taxonomy'],
                 name=term_data['name'],
             )
         except Term.DoesNotExist as e:
