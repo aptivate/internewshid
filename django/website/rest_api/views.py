@@ -35,7 +35,6 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     def add_term(self, request, item_pk):
         item = Item.objects.get(pk=item_pk)
         term_data = request.data
-
         try:
             term = Term.objects.by_taxonomy(
                 taxonomy=term_data['taxonomy'],
@@ -45,7 +44,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             data = {'detail': e.message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        item.terms.add(term)
+        item.apply_term(term)
         data = {}  # TODO should be the item containing the new term
         return Response(data, status=status.HTTP_200_OK)
 

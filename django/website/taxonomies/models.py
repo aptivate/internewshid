@@ -24,6 +24,11 @@ class Taxonomy(models.Model):
         self.slug = slugify(self.name)
         super(Taxonomy, self).save(*args, **kwargs)
 
+    @property
+    def is_optional(self):
+        #  return self.multiplicity == self.OPTIONAL
+        return True
+
     def __unicode__(self):
         return self.name
 
