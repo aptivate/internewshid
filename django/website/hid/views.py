@@ -98,10 +98,10 @@ class ViewItems(SingleTableView):
         return super(ViewItems, self).get_table(**kwargs)
 
     def get_context_data(self, **kwargs):
-            context = super(ViewItems, self).get_context_data(**kwargs)
-            context['type_label'] = _('Questions')
-            context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
-            return context
+        context = super(ViewItems, self).get_context_data(**kwargs)
+        context['type_label'] = _('Questions')
+        context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
+        return context
 
 
 def get_deleted(params):
