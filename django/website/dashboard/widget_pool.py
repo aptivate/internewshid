@@ -36,15 +36,19 @@ class BasicTextWidget(object):
     Settings:
         title: The widget title
         text: The widget text
+        html: If true, the content contains html.
+              If false, the content should be escaped.
     """
     template_name = 'dashboard/basic-text-widget.html'
 
     def get_context_data(self, **kwargs):
         title = kwargs.get('title', '(no title')
         text = kwargs.get('text', '(no text)')
+        html = kwargs.get('html', False)
         return {
             'title': title,
-            'text': text
+            'text': text,
+            'html': html
         }
 
 register_widget('basic-text-widget', BasicTextWidget())

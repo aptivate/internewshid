@@ -6,7 +6,19 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.test import RequestFactory
 
-from ..views import get_deleted, process_items, get_categories, delete_items
+from ..views import (
+    get_deleted,
+    process_items,
+    get_categories,
+    delete_items,
+    ViewItems,
+)
+
+from taxonomies.tests.factories import (
+    TaxonomyFactory,
+    TermFactory,
+)
+
 import transport
 
 
@@ -143,3 +155,58 @@ def test_process_items_always_redirects_to_data_view():
     response = process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
+
+
+@pytest.mark.django_db
+def test_get_category_options_uses_terms():
+    # TODO: Rewrite tests to use transport layer
+    ebola_questions = TaxonomyFactory(name="Ebola Questions")
+    other_taxonomy = TaxonomyFactory(name="Should be ignored")
+    type_1 = TermFactory(
+        name="Measures",
+        taxonomy=ebola_questions,
+        long_name="What measures could end Ebola?",
+    )
+    type_2 = TermFactory(
+        name="Survivors",
+        taxonomy=ebola_questions,
+        long_name="Are survivors stigmatized?",
+    )
+    type_3 = TermFactory(
+        name="Victims",
+        taxonomy=ebola_questions,
+        long_name="Number of Victims?",
+    )
+    other_term = TermFactory(
+        name="Should be ignored",
+        taxonomy=other_taxonomy,
+    )
+
+    view = ViewItems()
+    options = view.get_category_options(ebola_questions.id)
+
+    assert (type_1.name, type_1.long_name) in options
+    assert (type_2.name, type_2.long_name) in options
+    assert (type_3.name, type_3.long_name) in options
+    assert (other_term.name, other_term.long_name) not in options
+
+@pytest.mark.django_db
+def test_get_category_options_with_no_taxonomy_returns_all():
+    # TODO: Rewrite tests to use transport layer
+    ebola_questions = TaxonomyFactory(name="Ebola Questions")
+    other_taxonomy = TaxonomyFactory(name="Should be ignored")
+    type_1 = TermFactory(
+        name="Measures",
+        taxonomy=ebola_questions,
+        long_name="What measures could end Ebola?",
+    )
+    other_term = TermFactory(
+        name="Some other thing",
+        taxonomy=other_taxonomy,
+    )
+
+    view = ViewItems()
+    options = view.get_category_options()
+
+    assert (type_1.name, type_1.long_name) in options
+    assert (other_term.name, other_term.long_name) in options

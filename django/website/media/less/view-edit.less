@@ -29,11 +29,7 @@ td.created, td.timestamp {
   font-size:@font-size-small;
 }
 
-th.delete > input {
-  margin-right:10px;
-}
-
-th.delete > label {
+.delete > label {
   margin-bottom:0;
 }
 
@@ -57,6 +53,13 @@ th.delete > label {
   min-height: 30px;
 }
 
+@media(max-width:@screen-sm){
+  .messages-box {
+  margin-top:0;
+  min-height:0;
+  }
+}
+
 .messages-box > ul {
   margin-top:15px;
   color:#fff;
@@ -65,6 +68,7 @@ th.delete > label {
 .messages-box > ul > li {
   padding:5px 10px;
 }
+
 
 //circle navigation 
 
@@ -78,3 +82,45 @@ th.delete > label {
   float:inherit;
 }
 
+// Checkboxes
+
+td.delete,
+th.delete {
+  background-color:rgba(0,0,0,0.05);
+  text-align:center;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  background-color: white;
+  background-image:url(../images/checkbox-sprite.png);
+  background-position:top left;
+}
+
+@-moz-document url-prefix() { 
+    input[type="checkbox"] {
+       background-image:none;
+    }
+  }
+
+input[type="checkbox"]:hover {
+   background-position:top center;
+}
+
+input[type="checkbox"]:checked {
+ background-color:@brand-primary;
+ background-position:top right;
+ outline:0;
+ border:none;
+}
+
+// Place the upload button in the header.
+form.header-upload-form {
+    position: absolute;
+    top: 10px;
+    right: 150px;
+}

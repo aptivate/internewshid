@@ -106,6 +106,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_assets.finders.AssetsFinder'
 )
 ########## END STATIC FILE CONFIGURATION
 
@@ -134,7 +135,8 @@ THIRD_PARTY_APPS = (
     'bootstrap3',
     'rest_framework',
     'django_tables2',
-    'djangojs'
+    'djangojs',
+    'django_assets'
 )
 
 LOCAL_APPS = (
@@ -145,9 +147,10 @@ LOCAL_APPS = (
 )
 
 DATA_LAYER_APPS = (
-    'transport',
+    'taxonomies',
     'data_layer',
     'rest_api',
+    'transport',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DATA_LAYER_APPS + THIRD_PARTY_APPS + DJANGO_APPS

@@ -11,11 +11,11 @@
                 <h2><img  alt="{{ source.name }}" src="{{ STATIC_URL }}images/logo-{{ source.name }}.png"/></h2>
             </div>
 
-            <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions pull-right">
+            <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions auto-upload-file pull-right">
                 {% csrf_token %}
                 <a class="btn btn-primary btn-block btn-sm" value="View/Edit data" type="button" href="{% url "data-view" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit data</a>
                 {% bootstrap_form source.form show_label=False %}
-                <a class="btn btn-sm item-source-upload btn-block btn-primary" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span> Upload</a>
+                <a class="btn btn-sm item-source-upload upload-button btn-block btn-primary" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span> Upload</a>
             </form>
         </li>
         {% endfor %}
@@ -23,18 +23,3 @@
 
 {% endblock maincontent %}
 
-{% block lastjs %}
-<script>
-$(function () {
-    $(".item-source-upload").on("click", function (e) {
-        e.preventDefault();
-        $(this).parents("form").find('[type="file"]').click();
-    });
-
-    $('.item-source [type="file"]').on("change", function (e) {
-        e.preventDefault();
-        $(this).parents("form")[0].submit();
-    });
-});
-</script>
-{% endblock lastjs %}

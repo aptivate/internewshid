@@ -24,7 +24,10 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
     )
     body = tables.Column(verbose_name='Message')
-    category = tables.TemplateColumn(template_name='hid/categories_column.html')
+    category = tables.TemplateColumn(
+        template_name='hid/categories_column.html',
+        accessor='terms.0.name',
+    )
     delete = NamedCheckBoxColumn(accessor='id', verbose_name='Delete')
 
     def __init__(self, *args, **kwargs):
@@ -32,10 +35,12 @@ class ItemTable(tables.Table):
         super(ItemTable, self).__init__(*args, **kwargs)
 
     def render_category(self, record, value):
+        # TODO: Test this
         Template = loader.get_template('hid/categories_column.html')
         ctx = {
             'categories': self.categories,
-            'category': self.categories[2][0],
+            'category': value,
             'record': record
         }
+
         return Template.render(ctx)
