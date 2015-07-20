@@ -81,10 +81,15 @@ class ViewItems(SingleTableView):
         TODO: Fetch categories based on their id
         '''
         return (
-            ('first', 'First'),
-            ('second', 'Second option with a long name'),
-            ('third', 'Third'),
-            ('fourth', 'Fourth'),
+            ('updates', 'Ebola updates'),
+            ('authenticity', 'Ebola authenticity'),
+            ('prevention', 'Ebola prevention'),
+            ('origins', 'Ebola origins'),
+            ('concerns', 'Non-Ebola concerns'),
+            ('symptons', 'Ebola symptons'),
+            ('vaccine', 'Ebola vaccine'),
+            ('liberia-free', 'Liberia Ebola-free'),
+            ('unknown', 'Unknown'),
         )
 
     def get_table(self, **kwargs):
