@@ -81,31 +81,21 @@ class ViewItems(SingleTableView):
         return transport.items.list()
 
     def get_category_options(self, categories_id=None):
-        '''
-        TODO: Fetch categories based on their id
-        '''
-        return (
-            ('updates', 'Ebola updates'),
-            ('authenticity', 'Ebola authenticity'),
-            ('prevention', 'Ebola prevention'),
-            ('origins', 'Ebola origins'),
-            ('concerns', 'Non-Ebola concerns'),
-            ('symptons', 'Ebola symptons'),
-            ('vaccine', 'Ebola vaccine'),
-            ('liberia-free', 'Liberia Ebola-free'),
-            ('unknown', 'Unknown'),
-        )
+        # TODO: Use data layer
+        terms = self.get_matching_terms(categories_id)
+
+        return tuple((t.name, t.long_name) for t in terms)
+
+    def get_matching_terms(self, categories_id):
+        if categories_id is None:
+            return Term.objects.all()
+
+        return Term.objects.filter(taxonomy__id=categories_id)
 
     def get_table(self, **kwargs):
         # TODO: Filter on taxonomy
         kwargs['categories'] = self.get_category_options()
         return super(ViewItems, self).get_table(**kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(ViewItems, self).get_context_data(**kwargs)
-        context['type_label'] = _('Questions')
-        context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
-        return context
 
 
 def get_deleted(params):
