@@ -81,15 +81,26 @@ class ViewItems(SingleTableView):
         TODO: Fetch categories based on their id
         '''
         return (
-            ('first', 'First'),
-            ('second', 'Second option with a long name'),
-            ('third', 'Third'),
-            ('fourth', 'Fourth'),
+            ('updates', 'Ebola updates'),
+            ('authenticity', 'Ebola authenticity'),
+            ('prevention', 'Ebola prevention'),
+            ('origins', 'Ebola origins'),
+            ('concerns', 'Non-Ebola concerns'),
+            ('symptons', 'Ebola symptons'),
+            ('vaccine', 'Ebola vaccine'),
+            ('liberia-free', 'Liberia Ebola-free'),
+            ('unknown', 'Unknown'),
         )
 
     def get_table(self, **kwargs):
         kwargs['categories'] = self.get_category_options()
         return super(ViewItems, self).get_table(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ViewItems, self).get_context_data(**kwargs)
+        context['type_label'] = _('Questions')
+        context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
+        return context
 
 
 def get_deleted(params):
