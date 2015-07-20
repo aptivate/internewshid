@@ -35,6 +35,7 @@ def create_question_types(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('hid', '0001_initial')
     ]
 
     operations = [
