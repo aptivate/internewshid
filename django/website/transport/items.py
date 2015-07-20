@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.utils.dateparse import parse_datetime
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from rest_api.views import ItemViewSet
@@ -26,6 +27,16 @@ def get_view():
     return ItemViewSet.as_view(actions)
 
 
+def _parse_date_fields(item):
+    date_fields = ('created', 'timestamp')
+    item_dict = dict(item)
+    for date_field in date_fields:
+        value = item_dict[date_field]
+        if value is not None:
+            item_dict[date_field] = parse_datetime(value)
+    return item_dict
+
+
 def list(**kwargs):
     """ Return a list of Items
 
@@ -35,7 +46,13 @@ def list(**kwargs):
     # FIXME: currently only body exact filtering is supported
     view = get_view()
     request = request_factory.get(list_url(), kwargs)
-    return view(request).data
+
+    items = view(request).data
+
+    for item in items:
+        item.update(_parse_date_fields(item))
+
+    return items
 
 
 def create(item):

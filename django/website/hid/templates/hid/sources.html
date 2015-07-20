@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 
 {% block maincontent %}
-    <h1 class="page-header"><i class="fa fa-download fa-fw"></i>{% trans "Sources" %}</h1>
+    <h1 class="page-header"><span class="fa fa-download fa-fw"></span>{% trans "Sources" %}</h1>
     <ul class="list-unstyled">
         {% for source in sources %}
         <li class="well item-source clearfix">
@@ -13,9 +13,9 @@
 
             <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions pull-right">
                 {% csrf_token %}
-                <a class="btn btn-primary btn-block btn-sm" value="View/Edit data" type="button" href="{% url "data-view" %}"><i class="fa fa-pencil fa-fw"></i> View &amp; Edit data</a>
+                <a class="btn btn-primary btn-block btn-sm" value="View/Edit data" type="button" href="{% url "data-view" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit data</a>
                 {% bootstrap_form source.form show_label=False %}
-                <a class="btn-sm item-source-upload btn-block btn-primary" type="button" value="Upload" href="{% url "data-view" %}"><i class="fa fa-upload fa-fw"></i> Upload</a>
+                <a class="btn btn-sm item-source-upload btn-block btn-primary" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span> Upload</a>
             </form>
         </li>
         {% endfor %}

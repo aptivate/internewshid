@@ -106,6 +106,7 @@ def test_get_categories_filters_out_removed():
 @pytest.fixture
 def request_item():
     '''Create item and request'''
+
     msg = {'body': "Message text"}
     transport.items.create(msg)
 

@@ -8,20 +8,20 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-base:              #000;
+@gray-base:              #5e5e5e;
 @gray:                   #78716e;
 @gray-darker:            darken(@gray, 50%); 
 @gray-dark:              darken(@gray, 30%);  
 @gray-light:             #C3BCB4;
-@gray-lighter:           lighten(@gray-light, 20%); 
+@gray-lighter:           #EDECEC; 
 @gray-lightest:          lighten(@gray-light, 40%);
 
-@brand-primary:         #4F63B8;
-@brand-secondary:       #404965;
-@brand-success:         #60A144;
+@brand-primary:         #0F6CB6;
+@brand-secondary:       #002D62;
+@brand-success:         #56AC4A;
 @brand-info:            #404965;
-@brand-warning:         #FF9F3C;
-@brand-danger:          #DE5D5A;
+@brand-warning:         #F29E30;
+@brand-danger:          #D8502F;
 
 
 //== Scaffolding
@@ -45,7 +45,7 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Source Sans Pro", Calibri, Candara, Arial, sans-serif;
+@font-family-sans-serif:  "Helvetica Neue", Arial, Helvetica, sans, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -272,13 +272,13 @@
 //
 // Note: These variables are not generated into the Customizer.
 
-@zindex-navbar:            1000;
-@zindex-dropdown:          1000;
-@zindex-popover:           1060;
-@zindex-tooltip:           1070;
-@zindex-navbar-fixed:      1030;
-@zindex-modal-background:  1040;
-@zindex-modal:             1050;
+@zindex-navbar:            1;
+@zindex-dropdown:          1;
+@zindex-popover:           2;
+@zindex-tooltip:           3;
+@zindex-navbar-fixed:      3;
+@zindex-modal-background:  4;
+@zindex-modal:             5;
 
 //== Media queries breakpoints
 //
@@ -286,7 +286,7 @@
 
 // Extra small screen / phone
 //** Deprecated `@screen-xs` as of v3.0.1
-@screen-xs:                  480px;
+@screen-xs:                  420px;
 //** Deprecated `@screen-xs-min` as of v3.2.0
 @screen-xs-min:              @screen-xs;
 //** Deprecated `@screen-phone` as of v3.0.1
@@ -413,7 +413,7 @@
 // Inverted navbar toggle
 @navbar-inverse-toggle-hover-bg:            @navbar-inverse-link-hover-bg;
 @navbar-inverse-toggle-icon-bar-bg:         #fff;
-@navbar-inverse-toggle-border-color:        transparent;
+@navbar-inverse-toggle-border-color:        darken(@brand-primary, 10%);
 
 
 //== Navs
@@ -715,8 +715,8 @@
 @panel-footer-bg:             #f5f5f5;
 
 @panel-default-text:          @gray-dark;
-@panel-default-border:        #ddd;
-@panel-default-heading-bg:    #f5f5f5;
+@panel-default-border:        @gray-lighter;
+@panel-default-heading-bg:    #f7f7f7;
 
 @panel-primary-text:          #fff;
 @panel-primary-border:        @brand-primary;

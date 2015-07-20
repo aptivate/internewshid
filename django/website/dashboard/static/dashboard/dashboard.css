@@ -1,0 +1,39 @@
+.dashboard .panel-heading {
+	padding:10px 15px;
+}
+
+.dashboard .panel {
+    margin-bottom: 20px;
+}
+
+.dashboard .panel-body {
+    overflow: auto;
+}
+
+.dashboard .widget-height-small {
+    height: 120px;
+}
+.dashboard .widget-height-small .panel {
+    height: 100px;
+}
+.dashboard .widget-height-small .panel-body {
+    height: 60px;
+}
+.dashboard .widget-height-medium {
+    height: 300px;
+}
+.dashboard .widget-height-medium .panel {
+    height: 280px;
+}
+.dashboard .widget-height-medium .panel-body {
+    height: 210px;
+}
+.dashboard .widget-height-tall {
+    height: 420px;
+}
+.dashboard .widget-height-tall .panel {
+    height: 400px;
+}
+.dashboard .widget-height-tall .panel-body {
+    height: 360px;
+}

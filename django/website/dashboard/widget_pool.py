@@ -31,15 +31,24 @@ def get_widget(name):
 
 
 class BasicTextWidget(object):
-    """ A simple text widget that displays the text
-        configured as 'text'
+    """ A simple text widget.
+
+    Settings:
+        title: The widget title
+        text: The widget text
+        html: If true, the content contains html.
+              If false, the content should be escaped.
     """
     template_name = 'dashboard/basic-text-widget.html'
 
     def get_context_data(self, **kwargs):
+        title = kwargs.get('title', '(no title')
         text = kwargs.get('text', '(no text)')
+        html = kwargs.get('html', False)
         return {
-            'text': text
+            'title': title,
+            'text': text,
+            'html': html
         }
 
 register_widget('basic-text-widget', BasicTextWidget())

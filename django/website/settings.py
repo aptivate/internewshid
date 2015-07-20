@@ -63,7 +63,7 @@ USE_L10N = True
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-SHORT_DATETIME_FORMAT = 'D d/m/y H:i'
+SHORT_DATETIME_FORMAT = 'd M Y H:i'
 # TODO this is used in hid/tables.py
 # and should probably use FORMAT_MODULE_PATH instead.?
 
@@ -106,6 +106,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_assets.finders.AssetsFinder'
 )
 ########## END STATIC FILE CONFIGURATION
 
@@ -134,6 +135,8 @@ THIRD_PARTY_APPS = (
     'bootstrap3',
     'rest_framework',
     'django_tables2',
+    'djangojs',
+    'django_assets'
 )
 
 LOCAL_APPS = (

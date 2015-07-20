@@ -12,10 +12,11 @@ class WidgetInstanceModelTestCase(TestCase):
             row=0,
             column=0,
             width=12,
+            height='medium',
             settings={
                 'key1': 'value1',
                 'key2': 'value2'
-                }
+            }
         )
         self.instance = WidgetInstance.objects.get(pk=instance.id)
 

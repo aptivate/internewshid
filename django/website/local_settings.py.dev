@@ -7,6 +7,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
+DJANGOJS_DEBUG = DEBUG
 
 # used in admin template so we know which site we're looking at
 DEPLOY_ENV = "localdev"
@@ -22,7 +23,7 @@ DATABASES = {
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         'OPTIONS': {
-            "init_command": "SET storage_engine=INNODB",
+            "init_command": "SET storage_engine=INNODB;SET foreign_key_checks = 0;",
         }
     }
 }

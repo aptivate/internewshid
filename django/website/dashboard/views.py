@@ -1,6 +1,9 @@
 from django.views.generic import TemplateView
 
+from hid.assets import require_assets
+
 from dashboard.models import Dashboard
+from dashboard.widget_pool import get_widget
 
 
 class DashboardView(TemplateView):
@@ -21,7 +24,7 @@ class DashboardView(TemplateView):
         dashboard = Dashboard.objects.get(name=name)
         context['name'] = dashboard.name
 
-        # Get widgets
+        # Get widgets and sort them by row
         widgets = dashboard.widgetinstance_set.all().order_by('row', 'column')
         context['rows'] = []
         current_row = []
@@ -36,6 +39,15 @@ class DashboardView(TemplateView):
             current_row.append(widget)
         if len(current_row) > 0:
             context['rows'].append(current_row)
+
+        # Ensure we have all the javascript & css dependencies
+        require_assets('dashboard/dashboard.css')
+        for widget in widgets:
+            widget_type = get_widget(widget.widget_type)
+            if hasattr(widget_type, 'javascript'):
+                require_assets(*widget_type.javascript)
+            if hasattr(widget_type, 'css'):
+                require_assets(*widget_type.css)
 
         # Return the context
         return context
