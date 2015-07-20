@@ -36,7 +36,8 @@ _assets = [
     'flot/jquery.flot.resize.js',
     'hid/widgets/chart.js',
     'hid/js/spinner.js',
-    'hid/js/messages.js'
+    'hid/js/messages.js',
+    'hid/js/automatic_file_upload.js'
 ]
 
 
