@@ -108,7 +108,7 @@ def get_categories(params, deleted_ids=[]):
     categories = [(int(key[9:]), val)
                   for key, val in params.items()
                   if key.startswith("category-")]
-    return [cat for cat in categories if cat[0] not in removed]
+    return [cat for cat in categories if cat[1] and cat[0] not in removed]
 
 
 def delete_items(request, deleted):
