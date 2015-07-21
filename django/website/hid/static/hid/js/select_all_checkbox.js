@@ -12,7 +12,7 @@
 (function($) {
     $(document).ready(function() {
         var selectors = {
-            td_input : 'form td.select_action > input',
+            td_input : 'form td.select_action input[type="checkbox"]',
             th_select : 'form th.select_action'
         };
 

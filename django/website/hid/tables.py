@@ -15,7 +15,10 @@ class ItemTable(tables.Table):
         template = 'hid/table.html'
         order_by = ('-created',)
 
-    select_action = NamedCheckBoxColumn(accessor='id', verbose_name='Select')
+    select_action = tables.TemplateColumn(
+        template_name='hid/custom_checkbox.html',
+        verbose_name='Select'
+    )
     created = tables.columns.DateTimeColumn(
         verbose_name='Imported',
         format=settings.SHORT_DATETIME_FORMAT,
