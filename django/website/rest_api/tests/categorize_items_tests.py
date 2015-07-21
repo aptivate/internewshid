@@ -16,15 +16,21 @@ from ..views import ItemViewSet
 
 @pytest.fixture
 def category():
-    return create_category(name="Ebola Questions").data
+    response = create_category(name="Test Ebola Questions")
+    assert status.is_success(response.status_code), response.data
+
+    return response.data
 
 
 def term_for(taxonomy, name):
     """ Create, and return a Term in the given taxonomy """
-    return add_term(
+    response = add_term(
         taxonomy=taxonomy['slug'],
         name=name,
-    ).data
+    )
+    assert status.is_success(response.status_code), response.data
+
+    return response.data
 
 
 @pytest.fixture
