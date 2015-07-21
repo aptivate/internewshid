@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from django.conf import settings
-from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 
 
 class NamedCheckBoxColumn(tables.CheckBoxColumn):
@@ -28,22 +28,12 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
     )
     body = tables.Column(verbose_name='Message')
-    category = tables.TemplateColumn(
-        template_name='hid/categories_column.html',
+    category = tables.Column(
+        verbose_name=_('Category'),
         accessor='terms.0.name',
+        default=_('Uncategorized')
     )
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')
         super(ItemTable, self).__init__(*args, **kwargs)
-
-    def render_category(self, record, value):
-        # TODO: Test this
-        Template = loader.get_template('hid/categories_column.html')
-        ctx = {
-            'categories': self.categories,
-            'category': value,
-            'record': record
-        }
-
-        return Template.render(ctx)
