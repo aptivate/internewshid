@@ -19,7 +19,7 @@ from .tables import ItemTable
 
 QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
-DELETE_COMMAND = 'command'
+DELETE_COMMAND = 'delete'
 
 
 class ListSources(TemplateView):
