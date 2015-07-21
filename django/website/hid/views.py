@@ -226,7 +226,7 @@ def process_items(request):
         action = request.POST.get('action')
         if action == DELETE_COMMAND:
             delete_items(request, selected)
-        elif action.startswith(ADD_CATEGORY_PREFIX):
+        elif action and action.startswith(ADD_CATEGORY_PREFIX):
             category = action[len(ADD_CATEGORY_PREFIX):]
             add_items_categories(request, selected, category)
         else:
