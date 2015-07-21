@@ -11,6 +11,7 @@ from django_tables2 import SingleTableView
 from chn_spreadsheet.importer import Importer, SheetImportException
 from data_layer.models import Term
 import transport
+from .assets import require_assets
 from .forms import UploadForm, get_spreadsheet_choices
 from .tables import ItemTable
 
@@ -101,6 +102,8 @@ class ViewItems(SingleTableView):
         context = super(ViewItems, self).get_context_data(**kwargs)
         context['type_label'] = _('Questions')
         context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
+        require_assets('hid/js/automatic_file_upload.js')
+        require_assets('hid/js/select_all_checkbox.js')
         return context
 
 
