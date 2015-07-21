@@ -7,11 +7,11 @@ from django.http import HttpResponseRedirect
 from django.test import RequestFactory
 
 from ..views import (
-    get_deleted,
+    get_selected,
     process_items,
-    get_categories,
     delete_items,
     ViewItems,
+    DELETE_COMMAND
 )
 
 from taxonomies.tests.factories import (
@@ -45,62 +45,18 @@ def check_message(request, content):
     return False
 
 
-def test_get_deleted_returns_empty_list_on_empty_selection():
+def test_get_selected_returns_empty_list_on_empty_selection():
     params = mock.MagicMock()
     params.getlist.return_value = []
 
-    assert get_deleted(params) == []
+    assert get_selected(params) == []
 
 
-def test_get_deleted_returns_submitted_values_as_ints():
+def test_get_selected_returns_submitted_values_as_ints():
     params = mock.MagicMock()
     params.getlist.return_value = ["201", "199", "3"]
 
-    assert get_deleted(params) == [201, 199, 3]
-
-
-def test_get_categories_returns_id_category_pairs():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'category-56': "first",
-        'category-1': "second",
-    }
-    expected = [
-        (123, "second"),
-        (99, "third"),
-        (56, "first"),
-        (1, "second")
-    ]
-    assert sorted(get_categories(post_params)) == sorted(expected)  # Order is not important
-
-
-def test_get_categories_filters_out_non_categories():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'notcat-1': "second",
-    }
-    expected = [
-        (123, "second"),
-        (99, "third"),
-    ]
-    assert sorted(get_categories(post_params)) == sorted(expected)  # Order is not important
-
-
-def test_get_categories_filters_out_removed():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'category-56': "first",
-        'category-1': "second",
-    }
-    removed = [1, 56]
-    expected = [
-        (123, "second"),
-        (99, "third"),
-    ]
-    assert sorted(get_categories(post_params, removed)) == sorted(expected)  # Order is not important
+    assert get_selected(params) == [201, 199, 3]
 
 
 @pytest.fixture
@@ -113,7 +69,10 @@ def request_item():
     [item] = list(transport.items.list())
 
     url = reverse('data-view-process')
-    request = ReqFactory.post(url, {'delete': [item['id']]})
+    request = ReqFactory.post(url, {
+        'action': DELETE_COMMAND,
+        'select_action': [item['id']]}
+    )
     request = fix_messages(request)
 
     return [request, item]
@@ -151,7 +110,8 @@ def test_process_items_always_redirects_to_data_view():
     assert isinstance(response, HttpResponseRedirect) is True
 
     request.method = 'POST'
-    request = ReqFactory.post(url)
+    request = ReqFactory.post(url, {})
+    request = fix_messages(request)
     response = process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
@@ -189,6 +149,7 @@ def test_get_category_options_uses_terms():
     assert (type_2.name, type_2.long_name) in options
     assert (type_3.name, type_3.long_name) in options
     assert (other_term.name, other_term.long_name) not in options
+
 
 @pytest.mark.django_db
 def test_get_category_options_with_no_taxonomy_returns_all():
