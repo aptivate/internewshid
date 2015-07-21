@@ -17,17 +17,17 @@ class ItemTable(tables.Table):
 
     select_action = tables.TemplateColumn(
         template_name='hid/custom_checkbox.html',
-        verbose_name='Select'
+        verbose_name=_('Select')
     )
     created = tables.columns.DateTimeColumn(
-        verbose_name='Imported',
+        verbose_name=_('Imported'),
         format=settings.SHORT_DATETIME_FORMAT,
     )
     timestamp = tables.columns.DateTimeColumn(
-        verbose_name='Created',
+        verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
     )
-    body = tables.Column(verbose_name='Message')
+    body = tables.Column(verbose_name=_('Message'))
     category = tables.Column(
         verbose_name=_('Category'),
         accessor='terms.0.name',
