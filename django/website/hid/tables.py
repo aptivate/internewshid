@@ -15,6 +15,7 @@ class ItemTable(tables.Table):
         template = 'hid/table.html'
         order_by = ('-created',)
 
+    select_action = NamedCheckBoxColumn(accessor='id', verbose_name='Select')
     created = tables.columns.DateTimeColumn(
         verbose_name='Imported',
         format=settings.SHORT_DATETIME_FORMAT,
@@ -28,7 +29,6 @@ class ItemTable(tables.Table):
         template_name='hid/categories_column.html',
         accessor='terms.0.name',
     )
-    delete = NamedCheckBoxColumn(accessor='id', verbose_name='Delete')
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')
