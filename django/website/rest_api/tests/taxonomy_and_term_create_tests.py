@@ -12,7 +12,10 @@ from ..views import (
     TaxonomyViewSet,
     TermViewSet,
 )
-from taxonomies.tests.factories import TermFactory
+from taxonomies.tests.factories import (
+    TaxonomyFactory,
+    TermFactory,
+)
 
 
 def create_category(name):
@@ -24,18 +27,22 @@ def create_category(name):
 
 @pytest.mark.django_db
 def test_create_a_category():
+    category = "Test Ebola Questions"
 
-    response = create_category('Ebola Questions')
+    old_count = Taxonomy.objects.count()
+    assert not Taxonomy.objects.filter(name=category).exists()
 
+    response = create_category(category)
     assert status.is_success(response.status_code), response.data
-    assert Taxonomy.objects.count() == 1
-    [taxonomy] = Taxonomy.objects.all()
-    assert taxonomy.name == 'Ebola Questions'
+
+    new_count = Taxonomy.objects.count()
+    assert new_count - old_count == 1
+
+    assert Taxonomy.objects.filter(name=category).exists()
 
 
 # TODO: write test for getting taxonomies and terms, so we can re-write all
 # these tests using only the API (as Functional tests)
-
 
 def add_term(**kwargs):
     """
@@ -50,32 +57,36 @@ def add_term(**kwargs):
 
 @pytest.mark.django_db
 def test_add_term_to_taxonomy():
-    taxonomy = Taxonomy(name='Ebola Questions')
-    taxonomy.save()
+    taxonomy = TaxonomyFactory(name='Test Ebola Questions')
 
     response1 = add_term(taxonomy=taxonomy.slug, name='Vaccine')
     response2 = add_term(taxonomy=taxonomy.slug, name='Time')
 
     assert status.is_success(response1.status_code), response1.data
     assert status.is_success(response2.status_code), response2.data
-    terms = Term.objects.all()
+    terms = Term.objects.filter(taxonomy=taxonomy)
     assert len(terms) == 2
     assert all(term.taxonomy.name == taxonomy.name for term in terms)
 
 
 @pytest.mark.django_db
 def test_terms_have_long_name():
-    taxonomy = Taxonomy(name='Ebola Questions')
-    taxonomy.save()
+    taxonomy = TaxonomyFactory(name="Ebola Questions")
 
-    add_term(
+    vacc_long_name = "Is there a vaccine?"
+
+    assert not Term.objects.filter(long_name=vacc_long_name).exists()
+
+    response = add_term(
         taxonomy=taxonomy.slug,
-        name="Vaccine",
-        long_name="Is there a vaccine?"
+        name="Test Vaccine",
+        long_name=vacc_long_name
     )
 
-    [term] = Term.objects.all()
-    assert term.long_name == "Is there a vaccine?"
+    assert status.is_success(response.status_code), response.data
+
+    assert Term.objects.filter(long_name=vacc_long_name).exists()
+
 
 
 @pytest.mark.django_db
