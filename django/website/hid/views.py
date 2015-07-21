@@ -102,6 +102,12 @@ class ViewItems(SingleTableView):
         context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
         return context
 
+class ViewSingleItem(TemplateView):
+    template_name = "hid/item.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ViewSingleItem, self).get_context_data(**kwargs) or {}
+        return ctx
 
 def get_deleted(params):
     return [int(x) for x in params.getlist("delete", [])]
