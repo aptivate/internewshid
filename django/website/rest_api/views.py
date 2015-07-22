@@ -57,21 +57,18 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
 
     queryset = Taxonomy.objects.all()
 
+    @detail_route(methods=['get'])
+    def itemcount(self, request, pk):
+        # TODO: Fix to be name passed to method
+        taxonomy_slug = pk
+
+        terms = Term.objects.filter(taxonomy__slug=taxonomy_slug).annotate(count=Count('message'))
+        data = TermCountSerializer(terms, many=True).data
+
+        return Response(data, status=status.HTTP_200_OK)
+
 
 class TermViewSet(viewsets.ModelViewSet):
     serializer_class = TermSerializer
 
     queryset = Term.objects.all()  # Will need to filter by taxonomy eventually
-
-
-class TermCountViewSet(viewsets.ModelViewSet):
-    serializer_class = TermCountSerializer
-    lookup_field = 'taxonomy__slug'
-
-    def get_queryset(self):
-        import ipdb
-        ipdb.set_trace()
-
-        terms = Term.objects.filter(taxonomy__slug='ebola-questions').annotate(count=Count('message'))
-        # terms = Term.objects.all()
-        return terms

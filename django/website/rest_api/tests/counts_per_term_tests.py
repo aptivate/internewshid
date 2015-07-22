@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
-from ..views import TermCountViewSet
+from ..views import TaxonomyViewSet
 
 from .categorize_items_tests import categorize_item
 from .item_create_view_tests import create_item
@@ -16,11 +16,11 @@ from .taxonomy_and_term_create_tests import (
 
 
 def get_term_count(taxonomy):
-    url = reverse('term-list', kwargs={"taxonomy": taxonomy['slug']})
+    url = reverse('taxonomy-itemcount', kwargs={"pk": taxonomy['slug']})
     request = APIRequestFactory().get(url)
-    view = TermCountViewSet.as_view({'get': 'list'})
+    view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
 
-    response = view(request)
+    response = view(request, pk=taxonomy['slug'])
     assert status.is_success(response.status_code), response.data
 
     return response
@@ -59,24 +59,12 @@ def test_term_count_returns_dict_keyed_on_short_name():
     categorize_item(origin1, monrovia)
     categorize_item(updates1, monrovia)
 
-    term_count = get_term_count(questions).data
+    terms = get_term_count(questions).data
 
-    # {
-    #   'Vaccine' :
-    #     {
-    #       'long_name': 'What is the status of the Ebola vaccine',
-    #       'count': 27,
-    #     },
-    #    'Symptoms':
-    #     {
-    #       'long_name': 'What are the symptoms of Ebola?',
-    #       'count': 1
-    #     },
-    #     ...
-    # }
+    names = [term['name'] for term in terms]
 
-    assert origins['name'] in term_count
-    assert victims.name in term_count
-    assert updates.name in term_count
+    assert origins['name'] in names
+    assert victims['name'] in names
+    assert updates['name'] in names
 
-    assert monrovia.name not in term_count
+    assert monrovia['name'] not in names
