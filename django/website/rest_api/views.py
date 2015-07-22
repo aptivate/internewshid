@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from rest_framework import viewsets, status
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_framework.decorators import detail_route
@@ -16,6 +18,7 @@ from .serializers import (
     ItemSerializer,
     TaxonomySerializer,
     TermSerializer,
+    TermCountSerializer,
 )
 
 
@@ -59,3 +62,16 @@ class TermViewSet(viewsets.ModelViewSet):
     serializer_class = TermSerializer
 
     queryset = Term.objects.all()  # Will need to filter by taxonomy eventually
+
+
+class TermCountViewSet(viewsets.ModelViewSet):
+    serializer_class = TermCountSerializer
+    lookup_field = 'taxonomy__slug'
+
+    def get_queryset(self):
+        import ipdb
+        ipdb.set_trace()
+
+        terms = Term.objects.filter(taxonomy__slug='ebola-questions').annotate(count=Count('message'))
+        # terms = Term.objects.all()
+        return terms

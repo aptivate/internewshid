@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, include
 
 from rest_framework import routers
 
@@ -6,6 +6,7 @@ from rest_framework import routers
 from .views import (
     ItemViewSet,
     TaxonomyViewSet,
+    TermCountViewSet,
     TermViewSet,
 )
 
@@ -18,6 +19,11 @@ router.register(
 router.register(
     r'taxonomies',
     TaxonomyViewSet,
+)
+router.register(
+    r'terms/(?P<taxonomy>[\w-]+)/itemcount',
+    TermCountViewSet,
+    base_name='term',
 )
 router.register(
     r'terms',
