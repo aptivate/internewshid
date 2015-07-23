@@ -26,9 +26,8 @@ def get_term_count(taxonomy):
     return response
 
 
-
 @pytest.mark.django_db
-def test_term_count_returns_dict_keyed_on_short_name():
+def test_term_count_only_contains_terms_in_taxonomy():
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origin2 = create_item(body="Is Ebola a man made sickness").data
     origin3 = create_item(body="What brought about ebola in liberia").data
