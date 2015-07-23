@@ -7,6 +7,7 @@ from taxonomies.tests.factories import (
 )
 
 import transport
+from ..exceptions import TransportException
 
 
 @pytest.fixture
@@ -41,3 +42,15 @@ def test_term_itemcount_returns_terms_and_counts(item_data,
     counts = {term['name']: term['count'] for term in terms}
 
     assert counts[questions_term.name] == 1
+
+
+@pytest.mark.django_db
+def test_itemcount_fails_if_taxonomy_does_not_exist(item_data):
+    with pytest.raises(TransportException) as excinfo:
+        transport.taxonomies.term_itemcount(
+            slug='a-taxonomy-that-does-not-exist')
+
+    error = excinfo.value.message
+
+    assert error['status_code'] == 400
+    assert error['detail'] == "Taxonomy with slug 'a-taxonomy-that-does-not-exist' does not exist."

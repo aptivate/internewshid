@@ -2,6 +2,10 @@ from django.core.urlresolvers import reverse
 
 from rest_api.views import TaxonomyViewSet
 from rest_framework.test import APIRequestFactory
+from rest_framework import status
+
+from .exceptions import TransportException
+
 
 request_factory = APIRequestFactory()
 
@@ -33,4 +37,10 @@ def list(**kwargs):
 def term_itemcount(slug):
     view = get_view(actions={'get': 'itemcount'})
     request = request_factory.get(itemcount_url(slug))
-    return view(request, slug=slug).data
+    response = view(request, slug=slug)
+
+    if status.is_success(response.status_code):
+        return response.data
+
+    response.data['status_code'] = response.status_code
+    raise TransportException(response.data)
