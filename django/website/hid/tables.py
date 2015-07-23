@@ -15,8 +15,8 @@ class ItemTable(tables.Table):
         template = 'hid/table.html'
         order_by = ('-created',)
 
-    select_action = tables.TemplateColumn(
-        template_name='hid/custom_checkbox.html',
+    select_item = tables.TemplateColumn(
+        template_name='hid/select_item_id_checkbox_column.html',
         verbose_name=_('Select')
     )
     created = tables.columns.DateTimeColumn(
@@ -37,3 +37,15 @@ class ItemTable(tables.Table):
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')
         super(ItemTable, self).__init__(*args, **kwargs)
+
+    @staticmethod
+    def get_selected(params):
+        """ Given a request parameter list, return the items that were
+            selected using the select_item column.
+
+            Args:
+                - params: GET/POST parameter list
+            Returns:
+                List of selected record ids as integers
+        """
+        return [int(x) for x in params.getlist("select_item_id", [])]

@@ -142,19 +142,6 @@ class ViewItems(SingleTableView):
         }
 
 
-def get_selected(params):
-    """ Given a request POST/GET element, return the list
-        of items defined by 'select_action'.
-
-        Args:
-            - params: POST/GET object
-
-        Returns:
-            A list of item ids.
-    """
-    return [int(x) for x in params.getlist("select_action", [])]
-
-
 def delete_items(request, deleted):
     """ Delete the given items, and set a success/failure
         on the request
@@ -222,7 +209,7 @@ def process_items(request):
     redirect_url = reverse("data-view")
     # Just redirect back to items view on GET
     if request.method == "POST":
-        selected = get_selected(request.POST)
+        selected = ItemTable.get_selected(request.POST)
         action = request.POST.get('action')
         if action == DELETE_COMMAND:
             delete_items(request, selected)

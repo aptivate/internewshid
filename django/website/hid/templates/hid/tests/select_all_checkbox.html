@@ -2,12 +2,12 @@
 {% block js_content %}
     <script>
         QUnit.test('Select all checbox is added to header', function(assert) {
-            var $header_checkbox = jQuery('th.select_action input[type="checkbox"]');
+            var $header_checkbox = jQuery('th.select_item input[type="checkbox"]');
             assert.equal($header_checkbox.length, 1, 'Expected a checkbox in the header');
         });
         QUnit.test('Clicking the select all checkbox selects all', function(assert) {
-            var $header_checkbox = jQuery('th.select_action input[type="checkbox"]');
-            var $selected_checkboxes = jQuery('td.select_action input:checked');
+            var $header_checkbox = jQuery('th.select_item input[type="checkbox"]');
+            var $selected_checkboxes = jQuery('td.select_item input:checked');
 
             // Ensure none are checked
             $selected_checkboxes.prop('checked', false);
@@ -16,7 +16,7 @@
             $header_checkbox.click();
 
             // Ensure all are checked
-            $selected_checkboxes = jQuery('td.select_action input:checked');
+            $selected_checkboxes = jQuery('td.select_item input:checked');
             assert.equal($selected_checkboxes.length, 2, 'Expected all checkboxes to be checked');
         });
     </script>
@@ -26,7 +26,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="select_action">
+                    <th class="select_item">
                     </th>
                     <th>
                         A field
@@ -35,7 +35,7 @@
              </thead>
              <tbody>
                  <tr>
-                     <td class="select_action">
+                     <td class="select_item">
                          <input type="checkbox" />
                      </td>
                      <td>
@@ -43,7 +43,7 @@
                      </td>
                  </tr>
                  <tr>
-                     <td class="select_action">
+                     <td class="select_item">
                          <input type="checkbox" />
                      </td>
                      <td>

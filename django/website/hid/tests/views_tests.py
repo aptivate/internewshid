@@ -1,4 +1,3 @@
-import mock
 import pytest
 
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -7,7 +6,6 @@ from django.http import HttpResponseRedirect
 from django.test import RequestFactory
 
 from ..views import (
-    get_selected,
     process_items,
     delete_items,
     ViewItems,
@@ -45,20 +43,6 @@ def check_message(request, content):
     return False
 
 
-def test_get_selected_returns_empty_list_on_empty_selection():
-    params = mock.MagicMock()
-    params.getlist.return_value = []
-
-    assert get_selected(params) == []
-
-
-def test_get_selected_returns_submitted_values_as_ints():
-    params = mock.MagicMock()
-    params.getlist.return_value = ["201", "199", "3"]
-
-    assert get_selected(params) == [201, 199, 3]
-
-
 @pytest.fixture
 def request_item():
     '''Create item and request'''
@@ -71,7 +55,7 @@ def request_item():
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {
         'action': DELETE_COMMAND,
-        'select_action': [item['id']]}
+        'select_item_id': [item['id']]}
     )
     request = fix_messages(request)
 

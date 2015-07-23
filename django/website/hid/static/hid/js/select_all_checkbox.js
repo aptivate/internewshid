@@ -12,8 +12,8 @@
 (function($) {
     $(document).ready(function() {
         var selectors = {
-            td_input : 'form td.select_action input[type="checkbox"]',
-            th_select : 'form th.select_action'
+            td_input : 'form td.select_item input[type="checkbox"]',
+            th_select : 'form th.select_item'
         };
 
         function addCheckbox(selector, check_id_base) {
