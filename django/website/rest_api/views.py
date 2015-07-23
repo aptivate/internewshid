@@ -57,12 +57,11 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
 
     queryset = Taxonomy.objects.all()
 
-    @detail_route(methods=['get'])
-    def itemcount(self, request, pk):
-        # TODO: Fix to be name passed to method
-        taxonomy_slug = pk
+    lookup_field = 'slug'
 
-        terms = Term.objects.filter(taxonomy__slug=taxonomy_slug).annotate(count=Count('message'))
+    @detail_route(methods=['get'])
+    def itemcount(self, request, slug):
+        terms = Term.objects.filter(taxonomy__slug=slug).annotate(count=Count('message'))
         data = TermCountSerializer(terms, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)

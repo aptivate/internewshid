@@ -16,11 +16,11 @@ from .taxonomy_and_term_create_tests import (
 
 
 def get_term_count(taxonomy):
-    url = reverse('taxonomy-itemcount', kwargs={"pk": taxonomy['slug']})
+    url = reverse('taxonomy-itemcount', kwargs={'slug': taxonomy['slug']})
     request = APIRequestFactory().get(url)
     view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
 
-    response = view(request, pk=taxonomy['slug'])
+    response = view(request, slug=taxonomy['slug'])
     assert status.is_success(response.status_code), response.data
 
     return response
