@@ -31,8 +31,14 @@ def questions_category():
     return create_category("Test Ebola Questions").data
 
 
+@pytest.fixture
+def regions_category():
+    return create_category("Regions").data
+
+
 @pytest.mark.django_db
-def test_term_count_only_contains_terms_in_taxonomy(questions_category):
+def test_term_count_only_contains_terms_in_taxonomy(questions_category,
+                                                    regions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origin2 = create_item(body="Is Ebola a man made sickness").data
     origin3 = create_item(body="What brought about ebola in liberia").data
@@ -46,8 +52,7 @@ def test_term_count_only_contains_terms_in_taxonomy(questions_category):
     victims = add_term(taxonomy=questions_category['slug'], name="Test Victims").data
     updates = add_term(taxonomy=questions_category['slug'], name="Test Updates").data
 
-    regions = create_category("Regions").data
-    monrovia = add_term(taxonomy=regions['slug'], name="Monrovia").data
+    monrovia = add_term(taxonomy=regions_category['slug'], name="Monrovia").data
 
     categorize_item(origin1, origins)
     categorize_item(origin2, origins)
