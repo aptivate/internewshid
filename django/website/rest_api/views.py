@@ -18,7 +18,7 @@ from .serializers import (
     ItemSerializer,
     TaxonomySerializer,
     TermSerializer,
-    TermCountSerializer,
+    TermItemCountSerializer,
 )
 
 
@@ -62,7 +62,7 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['get'])
     def itemcount(self, request, slug):
         terms = Term.objects.filter(taxonomy__slug=slug).annotate(count=Count('message'))
-        data = TermCountSerializer(terms, many=True).data
+        data = TermItemCountSerializer(terms, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)
 

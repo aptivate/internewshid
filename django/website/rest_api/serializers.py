@@ -32,7 +32,7 @@ class TermSerializer(serializers.ModelSerializer):
     )
 
 
-class TermCountSerializer(serializers.ModelSerializer):
+class TermItemCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Term
         fields = ('name', 'long_name', 'count', )
