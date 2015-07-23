@@ -12,7 +12,7 @@ class DataLayerModel(models.Model):
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
-    terms = models.ManyToManyField(Term)
+    terms = models.ManyToManyField(Term, related_name="items")
 
     def apply_term(self, term):
         # TODO: test this
