@@ -90,6 +90,22 @@ def test_term_count_contains_taxonomy_term_name(questions_category):
 
 
 @pytest.mark.django_db
+def test_term_count_does_not_contain_term_for_other_taxonomy(
+        questions_category, regions_category):
+    origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
+    origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
+    monrovia = add_term(taxonomy=regions_category['slug'], name="Monrovia").data
+
+    categorize_item(origin1, origins)
+    categorize_item(origin1, monrovia)
+
+    terms = get_term_count(questions_category).data
+    names = [term['name'] for term in terms]
+
+    assert monrovia['name'] not in names
+
+
+@pytest.mark.django_db
 def test_term_count_contains_taxonomy_term_long_name(questions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
