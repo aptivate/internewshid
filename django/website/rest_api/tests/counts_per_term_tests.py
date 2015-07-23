@@ -26,8 +26,13 @@ def get_term_count(taxonomy):
     return response
 
 
+@pytest.fixture
+def questions_category():
+    return create_category("Test Ebola Questions").data
+
+
 @pytest.mark.django_db
-def test_term_count_only_contains_terms_in_taxonomy():
+def test_term_count_only_contains_terms_in_taxonomy(questions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origin2 = create_item(body="Is Ebola a man made sickness").data
     origin3 = create_item(body="What brought about ebola in liberia").data
@@ -37,11 +42,9 @@ def test_term_count_only_contains_terms_in_taxonomy():
     updates1 = create_item(body="When will Liberia be free from Ebola?").data
     updates2 = create_item(body="Is ebola still here or not?").data
 
-    questions = create_category("Test Ebola Questions").data
-
-    origins = add_term(taxonomy=questions['slug'], name="Test Origins").data
-    victims = add_term(taxonomy=questions['slug'], name="Test Victims").data
-    updates = add_term(taxonomy=questions['slug'], name="Test Updates").data
+    origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
+    victims = add_term(taxonomy=questions_category['slug'], name="Test Victims").data
+    updates = add_term(taxonomy=questions_category['slug'], name="Test Updates").data
 
     regions = create_category("Regions").data
     monrovia = add_term(taxonomy=regions['slug'], name="Monrovia").data
@@ -58,7 +61,7 @@ def test_term_count_only_contains_terms_in_taxonomy():
     categorize_item(origin1, monrovia)
     categorize_item(updates1, monrovia)
 
-    terms = get_term_count(questions).data
+    terms = get_term_count(questions_category).data
 
     names = [term['name'] for term in terms]
 
