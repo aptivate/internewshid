@@ -15,7 +15,7 @@ from .taxonomy_and_term_create_tests import (
 )
 
 
-def get_term_count(taxonomy):
+def get_term_itemcount(taxonomy):
     url = reverse('taxonomy-itemcount', kwargs={'slug': taxonomy['slug']})
     request = APIRequestFactory().get(url)
     view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
@@ -66,7 +66,7 @@ def test_term_count_returns_counts_for_terms_in_taxonomy(
     categorize_item(origin1, monrovia)
     categorize_item(updates1, monrovia)
 
-    terms = get_term_count(questions_category).data
+    terms = get_term_itemcount(questions_category).data
 
     counts = {term['name']: term['count'] for term in terms}
 
@@ -81,7 +81,7 @@ def test_term_count_contains_taxonomy_term_name(questions_category):
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
     categorize_item(origin1, origins)
 
-    terms = get_term_count(questions_category).data
+    terms = get_term_itemcount(questions_category).data
     [name] = [term['name'] for term in terms]
 
     assert origins['name'] == name
@@ -97,7 +97,7 @@ def test_term_count_does_not_contain_term_for_other_taxonomy(
     categorize_item(origin1, origins)
     categorize_item(origin1, monrovia)
 
-    terms = get_term_count(questions_category).data
+    terms = get_term_itemcount(questions_category).data
     names = [term['name'] for term in terms]
 
     assert monrovia['name'] not in names
@@ -109,7 +109,7 @@ def test_term_count_contains_taxonomy_term_long_name(questions_category):
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
     categorize_item(origin1, origins)
 
-    terms = get_term_count(questions_category).data
+    terms = get_term_itemcount(questions_category).data
     [long_name] = [term['long_name'] for term in terms]
 
     assert origins['long_name'] == long_name
