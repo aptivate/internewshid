@@ -16,14 +16,18 @@ from .taxonomy_and_term_create_tests import (
 
 
 def get_term_itemcount(taxonomy_slug):
+    response = get_term_itemcount_response(taxonomy_slug)
+    assert status.is_success(response.status_code), response.data
+
+    return response
+
+
+def get_term_itemcount_response(taxonomy_slug):
     url = reverse('taxonomy-itemcount', kwargs={'slug': taxonomy_slug})
     request = APIRequestFactory().get(url)
     view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
 
-    response = view(request, slug=taxonomy_slug)
-    assert status.is_success(response.status_code), response.data
-
-    return response
+    return view(request, slug=taxonomy_slug)
 
 
 @pytest.fixture
@@ -115,3 +119,11 @@ def test_term_itemcount_contains_taxonomy_term_long_name(
     [long_name] = [term['long_name'] for term in terms]
 
     assert origins['long_name'] == long_name
+
+
+@pytest.mark.django_db
+def test_error_for_non_existent_taxonomy():
+    response = get_term_itemcount_response('a-taxonomy-that-does-not-exist')
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['detail'] == "Taxonomy matching query does not exist."

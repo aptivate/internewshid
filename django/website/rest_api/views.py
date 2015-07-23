@@ -61,7 +61,13 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['get'])
     def itemcount(self, request, slug):
-        terms = Term.objects.filter(taxonomy__slug=slug).annotate(count=Count('message'))
+        try:
+            taxonomy = Taxonomy.objects.get(slug=slug)
+        except Taxonomy.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        terms = Term.objects.filter(taxonomy=taxonomy).annotate(count=Count('message'))
         data = TermItemCountSerializer(terms, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)
