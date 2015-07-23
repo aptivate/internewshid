@@ -37,8 +37,8 @@ def regions_category():
 
 
 @pytest.mark.django_db
-def test_term_count_only_contains_terms_in_taxonomy(questions_category,
-                                                    regions_category):
+def test_term_count_returns_counts_for_terms_in_taxonomy(
+        questions_category, regions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origin2 = create_item(body="Is Ebola a man made sickness").data
     origin3 = create_item(body="What brought about ebola in liberia").data
@@ -68,13 +68,11 @@ def test_term_count_only_contains_terms_in_taxonomy(questions_category,
 
     terms = get_term_count(questions_category).data
 
-    names = [term['name'] for term in terms]
+    counts = {term['name']: term['count'] for term in terms}
 
-    assert origins['name'] in names
-    assert victims['name'] in names
-    assert updates['name'] in names
-
-    assert monrovia['name'] not in names
+    assert counts[origins['name']] == 3
+    assert counts[victims['name']] == 1
+    assert counts[updates['name']] == 2
 
 
 @pytest.mark.django_db
