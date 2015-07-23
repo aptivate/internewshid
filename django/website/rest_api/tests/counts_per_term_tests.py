@@ -87,3 +87,27 @@ def test_term_count_contains_taxonomy_term_name(questions_category):
     [name] = [term['name'] for term in terms]
 
     assert origins['name'] == name
+
+
+@pytest.mark.django_db
+def test_term_count_contains_taxonomy_term_name(questions_category):
+    origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
+    origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
+    categorize_item(origin1, origins)
+
+    terms = get_term_count(questions_category).data
+    [name] = [term['name'] for term in terms]
+
+    assert origins['name'] == name
+
+
+@pytest.mark.django_db
+def test_term_count_contains_taxonomy_term_long_name(questions_category):
+    origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
+    origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
+    categorize_item(origin1, origins)
+
+    terms = get_term_count(questions_category).data
+    [long_name] = [term['long_name'] for term in terms]
+
+    assert origins['long_name'] == long_name
