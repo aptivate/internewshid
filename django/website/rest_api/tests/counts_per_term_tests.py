@@ -37,7 +37,7 @@ def regions_category():
 
 
 @pytest.mark.django_db
-def test_term_count_returns_counts_for_terms_in_taxonomy(
+def test_term_itemcount_returns_counts_for_terms_in_taxonomy(
         questions_category, regions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origin2 = create_item(body="Is Ebola a man made sickness").data
@@ -76,7 +76,7 @@ def test_term_count_returns_counts_for_terms_in_taxonomy(
 
 
 @pytest.mark.django_db
-def test_term_count_contains_taxonomy_term_name(questions_category):
+def test_term_itemcount_contains_taxonomy_term_name(questions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
     categorize_item(origin1, origins)
@@ -88,7 +88,7 @@ def test_term_count_contains_taxonomy_term_name(questions_category):
 
 
 @pytest.mark.django_db
-def test_term_count_does_not_contain_term_for_other_taxonomy(
+def test_term_itemcount_does_not_contain_term_for_other_taxonomy(
         questions_category, regions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
@@ -104,7 +104,7 @@ def test_term_count_does_not_contain_term_for_other_taxonomy(
 
 
 @pytest.mark.django_db
-def test_term_count_contains_taxonomy_term_long_name(questions_category):
+def test_term_itemcount_contains_taxonomy_term_long_name(questions_category):
     origin1 = create_item(body="What was the caused of ebola outbreak in liberia?").data
     origins = add_term(taxonomy=questions_category['slug'], name="Test Origins").data
     categorize_item(origin1, origins)
