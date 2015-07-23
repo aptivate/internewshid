@@ -126,4 +126,4 @@ def test_error_for_non_existent_taxonomy():
     response = get_term_itemcount_response('a-taxonomy-that-does-not-exist')
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.data['detail'] == "Taxonomy matching query does not exist."
+    assert response.data['detail'] == "Taxonomy with slug 'a-taxonomy-that-does-not-exist' does not exist."

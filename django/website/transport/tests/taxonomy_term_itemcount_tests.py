@@ -53,4 +53,4 @@ def test_itemcount_fails_if_taxonomy_does_not_exist(item_data):
     error = excinfo.value.message
 
     assert error['status_code'] == 400
-    assert error['detail'] == "Taxonomy matching query does not exist."
+    assert error['detail'] == "Taxonomy with slug 'a-taxonomy-that-does-not-exist' does not exist."

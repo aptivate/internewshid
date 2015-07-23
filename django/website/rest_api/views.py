@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.utils.translation import ugettext as _
 
 from rest_framework import viewsets, status
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
@@ -63,8 +64,10 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
     def itemcount(self, request, slug):
         try:
             taxonomy = Taxonomy.objects.get(slug=slug)
-        except Taxonomy.DoesNotExist as e:
-            data = {'detail': e.message}
+        except Taxonomy.DoesNotExist:
+            message = _("Taxonomy with slug '%s' does not exist.") % (slug)
+
+            data = {'detail': message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         terms = Term.objects.filter(taxonomy=taxonomy).annotate(count=Count('message'))
