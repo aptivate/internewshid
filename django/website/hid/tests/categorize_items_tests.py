@@ -30,3 +30,27 @@ def test_add_categories_adds_term_to_item(term, item):
     [term_data] = item_data['terms']
     assert term_data['name'] == term.name
     assert term_data['taxonomy'] == term.taxonomy.slug
+
+
+@pytest.fixture
+def item_list():
+    for i in range(10):
+        transport.items.create(
+            {'body': 'test message {}'.format(i)}
+        )
+    return transport.items.list()
+
+
+@pytest.mark.django_db
+def test_add_categories_works_with_multiple_items(term, item_list):
+    category_list = [
+        (item['id'], term.name)
+        for item in item_list
+    ]
+
+    add_categories(category_list)
+
+    assert all(
+        item_data['terms'][0]['name'] == term.name
+        for item_data in transport.items.list()
+    )
