@@ -9,9 +9,13 @@ from django.views.generic.base import TemplateView
 from django_tables2 import SingleTableView
 
 from chn_spreadsheet.importer import Importer, SheetImportException
+from data_layer.models import Term
 import transport
 from .forms import UploadForm, get_spreadsheet_choices
 from .tables import ItemTable
+
+
+QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 
 
 class ListSources(TemplateView):
@@ -77,22 +81,19 @@ class ViewItems(SingleTableView):
         return transport.items.list()
 
     def get_category_options(self, categories_id=None):
-        '''
-        TODO: Fetch categories based on their id
-        '''
-        return (
-            ('updates', 'Ebola updates'),
-            ('authenticity', 'Ebola authenticity'),
-            ('prevention', 'Ebola prevention'),
-            ('origins', 'Ebola origins'),
-            ('concerns', 'Non-Ebola concerns'),
-            ('symptons', 'Ebola symptons'),
-            ('vaccine', 'Ebola vaccine'),
-            ('liberia-free', 'Liberia Ebola-free'),
-            ('unknown', 'Unknown'),
-        )
+        # TODO: Use data layer
+        terms = self.get_matching_terms(categories_id)
+
+        return tuple((t.name, t.long_name) for t in terms)
+
+    def get_matching_terms(self, categories_id):
+        if categories_id is None:
+            return Term.objects.all()
+
+        return Term.objects.filter(taxonomy__id=categories_id)
 
     def get_table(self, **kwargs):
+        # TODO: Filter on taxonomy
         kwargs['categories'] = self.get_category_options()
         return super(ViewItems, self).get_table(**kwargs)
 
@@ -119,7 +120,7 @@ def get_categories(params, deleted_ids=[]):
     categories = [(int(key[9:]), val)
                   for key, val in params.items()
                   if key.startswith("category-")]
-    return [cat for cat in categories if cat[0] not in removed]
+    return [cat for cat in categories if cat[1] and cat[0] not in removed]
 
 
 def delete_items(request, deleted):
@@ -133,6 +134,24 @@ def delete_items(request, deleted):
     except:
         msg = _("There was an error while deleting.")
         messages.error(request, msg)
+
+
+def add_categories(categories):
+    """ Add specified category Terms to The items
+    as specified in categories list.
+
+    args:
+        categories: a list of item ids and term names:
+            [ (<item-id>, <term-name>), ... ]
+    """
+    for item_id, term_name in categories:
+        transport.items.add_term(
+            item_id,
+            QUESTION_TYPE_TAXONOMY,
+            term_name,
+        )
+    # Did we want to test for any failures or exceptions ?
+    # TODO: Add messages/success/error reporting here?
 
 
 def process_items(request):
@@ -149,7 +168,6 @@ def process_items(request):
         if len(deleted):
             delete_items(request, deleted)
         if len(categories):
-            # Update categories as well
-            pass
+            add_categories(categories)
 
     return HttpResponseRedirect(redirect_url)

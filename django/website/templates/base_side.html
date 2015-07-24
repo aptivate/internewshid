@@ -34,7 +34,7 @@
                     <span class="fa fa-user fa-fw"></span>  {{ request.user }}  <span class="fa fa-caret-down"> </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><span class="fa fa-gear fa-fw"></span> Settings</a></li>
+                    <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
                     <li><a href="{% url "logout" %}?next={% url 'login' %}" class=""><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
                 </ul>
                 <!-- /.dropdown-user -->

@@ -9,16 +9,15 @@ from rest_framework import status
 from rest_api.views import ItemViewSet
 
 
-def create(item):
-    request = APIRequestFactory().post('/items', item)
+def create_item(**kwargs):
+    request = APIRequestFactory().post('/items', kwargs)
     view = ItemViewSet.as_view(actions={'post': 'create'})
     return view(request)
 
 
 @pytest.mark.django_db
 def test_create_item():
-    item = {'body': "Text"}
-    response = create(item)
+    response = create_item(body="Text")
 
     assert status.is_success(response.status_code)
     assert response.data['body'] == "Text"
@@ -29,8 +28,7 @@ def test_create_item_with_timestamp():
     now = timezone.now().replace(
         microsecond=0  # MySQL discards microseconds
     )
-    item = {'body': "Text", 'timestamp': now}
 
-    response = create(item)
+    response = create_item(body="Text", timestamp=now)
 
     assert status.is_success(response.status_code)

@@ -67,12 +67,14 @@ test_cmd = ' manage.py test'
 host_list = {
     'production':   ['lin-' + project_name + '.aptivate.org:48001'],
     'staging':      ['fen-vz-' + project_name + '-stage.fen.aptivate.org'],
+    'dev_server':   ['fen-vz-' + project_name + '-dev.fen.aptivate.org']
 }
 
 # this is the default git branch to use on each server
 default_branch = {
     'production':   'master',
     'staging':      'staging',
+    'dev_server':   'develop'
 }
 
 # where on the server the django apps are deployed
