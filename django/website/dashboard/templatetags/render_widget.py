@@ -51,6 +51,8 @@ def render_widget(widget_instance):
         # Get context
         try:
             context = widget.get_context_data(**settings)
+        except AttributeError:
+            context = {}
         except Exception as e:
             logger.exception('Error while fetching widget context data: %s', e)
             template_name = 'dashboard/widget-error.html'

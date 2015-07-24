@@ -150,5 +150,5 @@ class WidgetPoolTestCase(TestCase):
                 mock, 'template_name'
             )
         self.assertEqual(
-            template_name, 'dashboard/widget-missing-template.html'
+            template_name, 'dashboard/widget-error.html'
         )
