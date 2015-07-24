@@ -5,13 +5,13 @@
 
 {% block maincontent %}
 <h1 class="page-header"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit: " %}<span class="item-type">{% trans "Question" %}</span></h1>
- <div class='row'>
-    <div class="col-lg-12">
-        <form id="single-item-form" role="form">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                        <div class="col-lg-12">
-                            <ul class="list-unstyled item-meta-dates clearfix col-lg-8">
+        <div class="col-lg-8 col-lg-offset-2">
+            <form id="single-item-form" role="form">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                        <div class="col-xs-12">
+                            <ul class="col-lg-12 list-unstyled item-meta-dates ">
                                 <li class="item-added-date"><span class="fa fa-calendar fa-fw"></span><span class="item-meta-label">{% trans "Added: " %}</span>
                                     15 jul 2015
                                 </li>
@@ -22,64 +22,65 @@
                                     10 jul 2015
                                 </li>
                             </ul>
-                            <div class="col-lg-4 pull-right">
-                                <div class="form-group btn-group pull-right">
-                                    {% bootstrap_button "Cancel" button_type="submit" value="Cancel" button_class="btn btn-sm" %}
-                                    {% bootstrap_button "Update" button_type="submit" value="update" button_class="btn btn-sm btn-success" %}
-                                </div>
-                            </div>
-                            <div class="col-lg-12"></div>
-                             <div class="col-lg-12 item-body">   
-                                <div class="form-group well">
-                                    <label><span class="fa fa-question-circle fa-fw"></span> {% trans "Question" %}</label>
-                                    <textarea class="form-control" placeholder="{% trans "Add the content of the question here" %}" rows="3">I have been told that very soon Liberia will be declar ebolo free, now i want to know if there is any ebola case.</textarea>
-                                </div>
-                                <div class="col-xs-12 form-group input-group ">
-                                  <span class="input-group-addon"><span class="fa fa-tags fa-fw"></span> {% trans "Tags" %}</span>
-                                  <input type="text" class="form-control" placeholder="add tags, seperated, by comma" aria-describedby="basic-addon1">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 item-dropdowns">
-                            <div class="col-xs-6 form-group input-group pull-left">
-                                <label class="col-xs-4 control-label"><span class="fa fa-sitemap fa-fw"></span> {% trans "Category" %}</label>
-                                <div class="col-xs-8 pull-right selectContainer">
-                                    <select name="language" class="form-control">
-                                        <option value="null">{% trans "Select Category" %}</option>
-                                        <option value="ebola-origins">{% trans "Ebola ~ Origins" %}</option>
-                                        <option value="ebola-measures">{% trans "Ebola ~ Measures" %}</option>
-                                        <option value="ebola-updates">{% trans "Ebola ~ Updates" %}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 form-group input-group ">
-                                <label class="col-xs-4 control-label"><span class="fa fa-globe fa-fw"></span> Region</label>
-                                <div class="col-xs-8 selectContainer">
-                                    <select name="language" class="form-control">
-                                        <option value="null">{% trans "Select region..." %}</option>
-                                        <option value="region1">{% trans "Region One" %}</option>
-                                        <option value="region2">{% trans "Region Two" %}</option>
-                                        <option value="region3">{% trans "Region Three" %}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="form-group btn-group">
-                                    {% bootstrap_button "Delete" button_type="submit" value="delete" button_class="btn btn-danger btn-sm" %}
-                                </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div class="form-group btn-group pull-right">
-                                    {% bootstrap_button "Cancel" button_type="submit" value="Cancel" button_class="btn btn-sm" %}
-                                    {% bootstrap_button "Update" button_type="submit" value="update" button_class="btn btn-sm btn-success" %}
-                                </div>
-                            </div>
                         </div>
                     </div>
-            </div>
-        </form>
-    </div>
-</div>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-12">
+                                    <div class="col-xs-12 input-group form-group item-text">
+                                        <label> {% trans "Question" %}: <span>Qt-xx-00124</span> </label>
+                                        <textarea class="form-control" placeholder="{% trans "Add the content of the question here" %}" rows="4">I have been told that very soon Liberia will be declar ebolo free, now i want to know if there is any ebola case.</textarea>
+                                    </div>
+                                    <div class="col-xs-12 form-group input-group item-tags">
+                                      <span class="input-group-addon"><span class="fa fa-tags fa-fw"></span> {% trans "Tags" %}</span>
+                                      <input type="text" class="form-control" placeholder="add tags" data-role="tagsinput">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="col-xs-12 form-group input-group">
+                                        <label>Reported on:</label>
+                                    <input type="text" class="form-control" placeholder="dd/mm/yy" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="col-xs-12 form-group input-group">
+                                    <label>{% trans "Category" %}</label>
+                                    <div class="selectContainer">
+                                        <select name="language" class="form-control">
+                                            <option value="null">{% trans "Select Category" %}</option>
+                                            <option value="ebola-origins">{% trans "Ebola ~ Origins" %}</option>
+                                            <option value="ebola-measures">{% trans "Ebola ~ Measures" %}</option>
+                                            <option value="ebola-updates">{% trans "Ebola ~ Updates" %}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 input-group ">
+                                    <label>{% trans "Region" %}</label>
+                                    <div class="selectContainer">
+                                        <select name="language" class="form-control">
+                                            <option value="null">{% trans "Select region..." %}</option>
+                                            <option value="region1">{% trans "Region One" %}</option>
+                                            <option value="region2">{% trans "Region Two" %}</option>
+                                            <option value="region3">{% trans "Region Three" %}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group btn-group pull-left">
+                            {% bootstrap_button "Delete" button_type="submit" value="delete" button_class="btn btn-danger btn-sm" %}
+                        </div>
+                        <div class="form-group btn-group pull-right">
+                            {% bootstrap_button "Cancel" button_type="submit" value="Cancel" button_class="btn btn-sm" %}
+                            {% bootstrap_button "Update" button_type="submit" value="update" button_class="btn btn-sm btn-success" %}
+                        </div>
+                    </div>  
+                 </div>
+                    </div>
+                    </form>
+                </div>
             
 
 {% endblock maincontent %}
+{% block lastjs %}
+{% endblock lastjs %}
