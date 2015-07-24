@@ -99,3 +99,40 @@ class TestTermCountChartWidget(TestCase):
             counts.items(),
             [('aaa-long-name', 1000), ('zzz-long-name', 0)]
         )
+
+    def test_fetch_counts_gets_n_larger_and_aggregates_others_items(self):
+        widget = TermCountChartWidget()
+
+        with patch('hid.widgets.term_count_chart.term_itemcount') as itemcount:
+            itemcount.return_value = [
+                {
+                    'name': 'name one',
+                    'long_name': 'long-name one',
+                    'count': 1
+                },
+                {
+                    'name': 'name two',
+                    'long_name': 'long-name two',
+                    'count': 10
+                },
+                {
+                    'name': 'name three',
+                    'long_name': 'long-name three',
+                    'count': 20
+                },
+                {
+                    'name': 'name four',
+                    'long_name': 'long-name four',
+                    'count': 30
+                },
+
+            ]
+            counts = widget._fetch_counts('tax', 3, 'Others')
+
+        self.assertEqual(
+            counts.items(),
+            [
+                ('long-name four', 30), ('long-name three', 20),
+                ('Others', 11)
+            ]
+        )
