@@ -390,5 +390,6 @@ else:
     )
 ########## END TEMPLATE CONFIGURATION
 
+CSRF_FAILURE_VIEW = 'hid.views.csrf_failure'
 
 ########## Your stuff: Below this line define 3rd party libary settings
