@@ -50,8 +50,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         item.apply_term(term)
-        data = {}  # TODO should be the item containing the new term
-        return Response(data, status=status.HTTP_200_OK)
+
+        serializer = ItemSerializer(item)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TaxonomyViewSet(viewsets.ModelViewSet):

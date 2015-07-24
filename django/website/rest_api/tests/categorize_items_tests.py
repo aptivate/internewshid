@@ -71,6 +71,15 @@ def test_item_can_haz_category(term, item):
 # TODO test for terms with the same name in different taxonomies
 
 @pytest.mark.django_db
+def test_categorize_item_returns_the_categorized_item(term, item):
+    result = categorize_item(item, term).data
+
+    assert result['id'] == item['id']
+    terms = result['terms']
+    assert term in terms
+
+
+@pytest.mark.django_db
 def test_categorize_item_fails_gracefully_if_term_not_found(item):
     response = categorize_item(
         item,
