@@ -32,6 +32,16 @@ class TermSerializer(serializers.ModelSerializer):
     )
 
 
+class TermItemCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Term
+        fields = ('name', 'long_name', 'count', )
+
+    count = serializers.IntegerField(
+        read_only=True
+    )
+
+
 class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
