@@ -70,7 +70,9 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
             data = {'detail': message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        terms = Term.objects.filter(taxonomy=taxonomy).annotate(count=Count('message'))
+        terms = Term.objects.filter(taxonomy=taxonomy).annotate(
+            count=Count('items')
+        )
         data = TermItemCountSerializer(terms, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)
