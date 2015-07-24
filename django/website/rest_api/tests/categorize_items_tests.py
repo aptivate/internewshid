@@ -82,6 +82,15 @@ def test_categorize_item_fails_gracefully_if_term_not_found(item):
 
 
 @pytest.mark.django_db
+def test_categorize_item_fails_gracefully_if_item_not_found(term, item):
+    unknown_item_id = 6  # I am not a prisoner
+    response = categorize_item({'id': unknown_item_id}, term)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.data['detail'] == "Message matching query does not exist."
+
+
+@pytest.mark.django_db
 def test_only_one_category_per_item_per_taxonomy(item, term, second_term):
     """
         At the time of writing, all taxonomies are categories

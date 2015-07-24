@@ -110,4 +110,6 @@ def add_term(item_id, taxonomy_slug, name):
         return response.data
     else:
         response.data['status_code'] = response.status_code
+        response.data['term'] = term
+        response.data['item_id'] = item_id
         raise TransportException(response.data)

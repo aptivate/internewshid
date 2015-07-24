@@ -33,7 +33,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
     @detail_route(methods=['post'])
     def add_term(self, request, item_pk):
-        item = Item.objects.get(pk=item_pk)
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         term_data = request.data
         try:
             term = Term.objects.by_taxonomy(

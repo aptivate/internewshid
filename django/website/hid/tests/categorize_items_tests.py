@@ -54,3 +54,19 @@ def test_add_categories_works_with_multiple_items(term, item_list):
         item_data['terms'][0]['name'] == term.name
         for item_data in transport.items.list()
     )
+
+
+@pytest.mark.django_db
+def test_add_categories_fails_gracefully_with_nonsense_term(item):
+    category_list = [(item['id'], "Non-existant term"), ]
+
+    with pytest.raises(transport.exceptions.TransportException):
+        add_categories(category_list)
+
+
+@pytest.mark.django_db
+def test_add_categories_fails_gracefully_with_nonsense_item(term):
+    category_list = [(6, "Non-existant term"), ]  # Who is number 1?
+
+    with pytest.raises(transport.exceptions.TransportException):
+        add_categories(category_list)
