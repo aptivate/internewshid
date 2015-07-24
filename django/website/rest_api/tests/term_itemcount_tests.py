@@ -1,7 +1,11 @@
 from __future__ import unicode_literals, absolute_import
+
+from datetime import timedelta
+
 import pytest
 
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
@@ -15,16 +19,16 @@ from .taxonomy_and_term_create_tests import (
 )
 
 
-def get_term_itemcount(taxonomy_slug):
-    response = get_term_itemcount_response(taxonomy_slug)
+def get_term_itemcount(taxonomy_slug, get_params=None):
+    response = get_term_itemcount_response(taxonomy_slug, get_params)
     assert status.is_success(response.status_code), response.data
 
     return response
 
 
-def get_term_itemcount_response(taxonomy_slug):
+def get_term_itemcount_response(taxonomy_slug, get_params=None):
     url = reverse('taxonomy-itemcount', kwargs={'slug': taxonomy_slug})
-    request = APIRequestFactory().get(url)
+    request = APIRequestFactory().get(url, data=get_params)
     view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
 
     return view(request, slug=taxonomy_slug)
@@ -119,6 +123,44 @@ def test_term_itemcount_contains_taxonomy_term_long_name(
     [long_name] = [term['long_name'] for term in terms]
 
     assert origins['long_name'] == long_name
+
+
+@pytest.mark.django_db
+def test_items_in_date_range_returned(questions_category_slug):
+    now = timezone.now().replace(
+        microsecond=0  # MySQL discards microseconds
+    )
+
+    one_day_ago = now - timedelta(days=1)
+    one_week_ago = now - timedelta(weeks=1)
+    eight_days_ago = now - timedelta(days=8)
+
+    origin1 = create_item(
+        body="What was the caused of ebola outbreak in liberia?",
+        timestamp=now
+    ).data
+    origin2 = create_item(
+        body="Is Ebola a man made sickness",
+        timestamp=one_day_ago
+    ).data
+    origin3 = create_item(
+        body="What brought about ebola in liberia",
+        timestamp=eight_days_ago
+    ).data
+
+    origins = add_term(taxonomy=questions_category_slug, name="Test Origins").data
+
+    categorize_item(origin1, origins)
+    categorize_item(origin2, origins)
+    categorize_item(origin3, origins)
+
+    get_params = {
+        'start_time': one_week_ago,
+        'end_time': now}
+
+    [term] = get_term_itemcount(questions_category_slug, get_params).data
+
+    assert term['count'] == 2
 
 
 @pytest.mark.django_db
