@@ -29,7 +29,7 @@ td.created, td.timestamp {
   font-size:@font-size-small;
 }
 
-.delete > label {
+.select_action > label {
   margin-bottom:0;
 }
 
@@ -82,10 +82,27 @@ td.created, td.timestamp {
   float:inherit;
 }
 
+// Form header actions
+.panel-body form .form-header-group {
+    margin-bottom: @padding-base-vertical;
+}
+
+.panel-body form .form-header-group .form-control {
+    float: left;
+    width: auto;
+    height: auto;
+    padding: @padding-xs-horizontal @padding-base-vertical;
+    margin-right: @padding-small-horizontal;
+}
+
+.panel-body .form-header-group select option[default] {
+    font-weight: bold;
+}
+
 // Checkboxes
 
-td.delete,
-th.delete {
+td.select_action,
+th.select_action {
   background-color:rgba(0,0,0,0.05);
   text-align:center;
 }
@@ -116,11 +133,4 @@ input[type="checkbox"]:checked {
  background-position:top right;
  outline:0;
  border:none;
-}
-
-// Place the upload button in the header.
-form.header-upload-form {
-    position: absolute;
-    top: 10px;
-    right: 150px;
 }
