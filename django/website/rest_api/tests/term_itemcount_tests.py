@@ -161,7 +161,7 @@ def test_items_in_date_range_returned(questions_category_slug):
 
     get_params = {
         'start_time': one_week_ago,
-        'end_time': now}
+        'end_time': one_day_ago}
 
     [term] = get_term_itemcount(questions_category_slug, get_params).data
 
