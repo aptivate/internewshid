@@ -52,7 +52,10 @@ def add_term(**kwargs):
     url = reverse('term-list')
     request = APIRequestFactory().post(url, kwargs)
     view = TermViewSet.as_view(actions={'post': 'create'})
-    return view(request)
+    response = view(request)
+    assert status.is_success(response.status_code), response.data
+
+    return response
 
 
 @pytest.mark.django_db

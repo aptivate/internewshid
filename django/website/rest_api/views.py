@@ -1,3 +1,6 @@
+from django.db.models import Count
+from django.utils.translation import ugettext as _
+
 from rest_framework import viewsets, status
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_framework.decorators import detail_route
@@ -16,6 +19,7 @@ from .serializers import (
     ItemSerializer,
     TaxonomySerializer,
     TermSerializer,
+    TermItemCountSerializer,
 )
 
 
@@ -53,6 +57,25 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
     serializer_class = TaxonomySerializer
 
     queryset = Taxonomy.objects.all()
+
+    lookup_field = 'slug'
+
+    @detail_route(methods=['get'])
+    def itemcount(self, request, slug):
+        try:
+            taxonomy = Taxonomy.objects.get(slug=slug)
+        except Taxonomy.DoesNotExist:
+            message = _("Taxonomy with slug '%s' does not exist.") % (slug)
+
+            data = {'detail': message}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        terms = Term.objects.filter(taxonomy=taxonomy).annotate(
+            count=Count('items')
+        )
+        data = TermItemCountSerializer(terms, many=True).data
+
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class TermViewSet(viewsets.ModelViewSet):
