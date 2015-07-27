@@ -2,7 +2,7 @@ import pytest
 
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, QueryDict
 from django.test import RequestFactory
 
 from ..views import (
@@ -156,3 +156,42 @@ def test_get_category_options_with_no_taxonomy_returns_all():
 
     assert (type_1.name, type_1.long_name) in options
     assert (other_term.name, other_term.long_name) in options
+
+
+def test_views_item_get_request_parameters_renames_items_of_active_location():
+    query = QueryDict(
+        'action=something-bottom&item-top=top-value&item-bottom=bottom-value'
+    )
+    expected = {
+        'action': 'something',
+        'item': 'bottom-value',
+        'item-top': 'top-value'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected
+
+
+def test_views_item_get_request_parameters_sets_default_location():
+    query = QueryDict(
+        'action=something&item-top=top-value&item-bottom=bottom-value'
+    )
+    expected = {
+        'action': 'something',
+        'item': 'top-value',
+        'item-bottom': 'bottom-value'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected
+
+
+def test_views_item_get_request_parameters_sets_default_action_and_location():
+    query = QueryDict(
+        'item-top=value&item-bottom=unchanged'
+    )
+    expected = {
+        'action': 'none',
+        'item': 'value',
+        'item-bottom': 'unchanged'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected
