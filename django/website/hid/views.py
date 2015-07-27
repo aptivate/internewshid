@@ -168,11 +168,15 @@ class ViewItems(SingleTableView):
             it is defaulted to 'none' and placement to 'top'.
         """
         new_params = QueryDict('', mutable=True)
-        placement = re.sub('^[^-]+-', '', params.get('action', 'none-top'))
+        action = params.get('action', 'none-top')
+        if '-' in action:
+            placement = re.sub('^[^-]+-', '', action)
+            action = action[0:len(action) - len(placement) - 1]
+        else:
+            placement = 'top'
         for name, value in params.iterlists():
             if name == 'action':
-                action_name = value[0]
-                value = [action_name[0:len(action_name)-len(placement)-1]]
+                value = [action]
             elif name.endswith(placement):
                 name = name[0:len(name)-len(placement)-1]
             new_params.setlist(name, value)
