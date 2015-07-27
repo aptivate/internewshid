@@ -2,7 +2,6 @@
 {% load bootstrap3 %}
 <div class="form-group table-button-group">
     <select name='batchaction-{{button_placement}}' class='form-control'>
-        <option value="" default selected">{% trans "Actions" %}</option>
         {% for group in actions %}
             <optgroup label="{{ group.label }}">
                 {% for action, action_label in group.items.items %}

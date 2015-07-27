@@ -24,6 +24,7 @@ from .tables import ItemTable
 QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
+NONE_COMMAND = 'none'
 
 
 class ListSources(TemplateView):
@@ -116,11 +117,17 @@ class ViewItems(SingleTableView):
         context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
         context['actions'] = [
             self._build_action_dropdown_group(
-                items=[(DELETE_COMMAND, _('Delete Selected'))]
+                label=_('Actions'),
+                items=[
+                    (NONE_COMMAND, '---------'),
+                    (DELETE_COMMAND, _('Delete Selected'))
+                ]
             ),
             self._build_action_dropdown_group(
                 label=_('Set question type'),
-                items=self.get_category_options(),
+                items=[(short_name, short_name)
+                       for short_name, long_name
+                       in self.get_category_options()],
                 prefix=ADD_CATEGORY_PREFIX
             )
         ]
@@ -146,8 +153,8 @@ class ViewItems(SingleTableView):
         return {
             'label': label,
             'items': OrderedDict(
-                [(prefix + short_name, short_name)
-                    for short_name, long_name in items]
+                [(prefix + entry_cmd, entry_label)
+                    for entry_cmd, entry_label in items]
             )
         }
 
@@ -287,6 +294,8 @@ def process_items(request):
             elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
                 category = batch_action[len(ADD_CATEGORY_PREFIX):]
                 add_items_categories(request, selected, category)
+            elif batch_action == NONE_COMMAND:
+                pass
             else:
                 messages.error(request, _('Unknown batch action'))
         elif params['action'] == 'save':
