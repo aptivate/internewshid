@@ -158,6 +158,32 @@ def test_get_category_options_with_no_taxonomy_returns_all():
     assert (other_term.name, other_term.long_name) in options
 
 
+@pytest.mark.django_db
+def test_get_category_options_orders_by_lowercase_name():
+    # TODO: Rewrite tests to use transport layer
+    ebola_questions = TaxonomyFactory(name="Ebola Questions")
+    test_term_values = [
+        ('test a1', '1'), ('test b1', '2'),
+        ('test A2', '3'), ('test B2', '4')
+    ]
+    for test_value in test_term_values:
+        TermFactory(
+            name=test_value[0],
+            long_name=test_value[1],
+            taxonomy=ebola_questions
+        )
+
+    view = ViewItems()
+    options = view.get_category_options(ebola_questions.id)
+    # Make sure we are only comparing with out test values!
+    options = [o for o in options if o in test_term_values]
+
+    # Expected is the list ordered by lowercase short name.
+    expected = sorted(test_term_values, key=lambda e: e[0].lower())
+
+    assert options == expected
+
+
 def test_views_item_get_request_parameters_renames_items_of_active_location():
     query = QueryDict(
         'action=something-bottom&item-top=top-value&item-bottom=bottom-value'
@@ -186,12 +212,12 @@ def test_views_item_get_request_parameters_sets_default_location():
 
 def test_views_item_get_request_parameters_sets_default_action_and_location():
     query = QueryDict(
-        'item-top=value&item-bottom=unchanged'
+        'item-top=top-value&item-bottom=bottom-value'
     )
     expected = {
         'action': 'none',
-        'item': 'value',
-        'item-bottom': 'unchanged'
+        'item': 'top-value',
+        'item-bottom': 'bottom-value'
     }
     actual = ViewItems.get_request_parameters(query)
     assert actual.dict() == expected

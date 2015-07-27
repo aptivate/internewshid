@@ -1,5 +1,7 @@
 import re
 
+from collections import OrderedDict
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, QueryDict
@@ -89,14 +91,19 @@ class ViewItems(SingleTableView):
     def get_category_options(self, categories_id=None):
         # TODO: Use data layer
         terms = self.get_matching_terms(categories_id)
-
         return tuple((t.name, t.long_name) for t in terms)
 
     def get_matching_terms(self, categories_id):
         if categories_id is None:
-            return Term.objects.all()
+            return (Term.objects
+                    .extra(select={'name_lower': 'lower(name)'})
+                    .order_by('name_lower')
+                    .all())
 
-        return Term.objects.filter(taxonomy__id=categories_id)
+        return (Term.objects
+                .extra(select={'name_lower': 'lower(name)'})
+                .order_by('name_lower')
+                .filter(taxonomy__id=categories_id))
 
     def get_table(self, **kwargs):
         # TODO: Filter on taxonomy
@@ -138,7 +145,7 @@ class ViewItems(SingleTableView):
         """
         return {
             'label': label,
-            'items': dict(
+            'items': OrderedDict(
                 [(prefix + short_name, short_name)
                     for short_name, long_name in items]
             )
