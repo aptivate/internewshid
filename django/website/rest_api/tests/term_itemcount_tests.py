@@ -135,24 +135,29 @@ def test_items_in_date_range_returned(questions_category_slug):
     one_week_ago = now - timedelta(weeks=1)
     eight_days_ago = now - timedelta(days=8)
 
-    origin1 = create_item(
-        body="What was the caused of ebola outbreak in liberia?",
+    item_too_recent = create_item(
+        body="Where did ebola came from?",
         timestamp=now
     ).data
-    origin2 = create_item(
-        body="Is Ebola a man made sickness",
+    item_in_range_1 = create_item(
+        body="What was the caused of ebola outbreak in liberia?",
         timestamp=one_day_ago
     ).data
-    origin3 = create_item(
+    item_in_range_2 = create_item(
+        body="Is Ebola a man made sickness",
+        timestamp=one_week_ago
+    ).data
+    item_too_old = create_item(
         body="What brought about ebola in liberia",
         timestamp=eight_days_ago
     ).data
 
     origins = add_term(taxonomy=questions_category_slug, name="Test Origins").data
 
-    categorize_item(origin1, origins)
-    categorize_item(origin2, origins)
-    categorize_item(origin3, origins)
+    categorize_item(item_in_range_1, origins)
+    categorize_item(item_in_range_2, origins)
+    categorize_item(item_too_old, origins)
+    categorize_item(item_too_recent, origins)
 
     get_params = {
         'start_time': one_week_ago,
