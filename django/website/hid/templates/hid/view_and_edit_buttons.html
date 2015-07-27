@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load bootstrap3 %}
+<div class="form-group table-button-group">
+    <select name='batchaction-{{button_placement}}' class='form-control'>
+        <option value="" default selected">{% trans "Actions" %}</option>
+        {% for group in actions %}
+            <optgroup label="{{ group.label }}">
+                {% for action, action_label in group.items.items %}
+                    <option value="{{ action }}">
+                        {{ action_label }}
+                    </option>
+                {% endfor %}
+            </optgroup>
+        {% endfor %}
+    </select>
+    {% bootstrap_button "Apply action" button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-info btn-sm table-submit" %}
+    <div class="pull-right">
+        {% bootstrap_button "Save changes" button_type="submit" name="action" value="save-"|add:button_placement button_class="btn btn-success btn-sm table-submit" %}
+    </div>
+</div>

@@ -1,6 +1,8 @@
+import re
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, QueryDict
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 from django.views.generic import FormView
@@ -141,6 +143,43 @@ class ViewItems(SingleTableView):
             )
         }
 
+    @staticmethod
+    def get_request_parameters(params):
+        """ Return the parameters of the given request.
+
+        The form has mirrored inputs as the top and the
+        bottom of the form. This detects which one was used
+        to submit the form, and returns the parameters
+        associated with that one.
+
+        It is expected that:
+            - All mirrored form elements are named as
+              <name>-<placement>
+            - The busmit button is called 'action',
+              and it's value is <action>-<placement>
+
+        Args:
+            - params: GET or POST request parameters
+
+        Returns:
+            The list of invoked parameters renamed such
+            that the active parameters match the submit
+            button that was invoked. If no 'action' exists
+            it is defaulted to 'none' and placement to 'top'.
+        """
+        new_params = QueryDict('', mutable=True)
+        placement = re.sub('^[^-]+-', '', params.get('action', 'none-top'))
+        for name, value in params.iterlists():
+            if name == 'action':
+                action_name = value[0]
+                value = [action_name[0:len(action_name)-len(placement)-1]]
+            elif name.endswith(placement):
+                name = name[0:len(name)-len(placement)-1]
+            new_params.setlist(name, value)
+        if 'action' not in new_params:
+            new_params['action'] = 'none'
+        return new_params
+
 
 def delete_items(request, deleted):
     """ Delete the given items, and set a success/failure
@@ -195,6 +234,24 @@ def add_items_categories(request, items, category):
         messages.success(request, msg)
 
 
+def add_categories(categories):
+    """ Add specified category Terms to The items
+    as specified in categories list.
+
+    args:
+        categories: a list of item ids and term names:
+            [ (<item-id>, <term-name>), ... ]
+     """
+    for item_id, term_name in categories:
+        transport.items.add_term(
+            item_id,
+            QUESTION_TYPE_TAXONOMY,
+            term_name,
+        )
+    # Did we want to test for any failures or exceptions ?
+    # TODO: Add messages/success/error reporting here?
+
+
 def process_items(request):
     """ Request to process a selection of items from the
         view & edit page.
@@ -209,14 +266,21 @@ def process_items(request):
     redirect_url = reverse("data-view")
     # Just redirect back to items view on GET
     if request.method == "POST":
-        selected = ItemTable.get_selected(request.POST)
-        action = request.POST.get('action')
-        if action == DELETE_COMMAND:
-            delete_items(request, selected)
-        elif action and action.startswith(ADD_CATEGORY_PREFIX):
-            category = action[len(ADD_CATEGORY_PREFIX):]
-            add_items_categories(request, selected, category)
-        else:
+        params = ViewItems.get_request_parameters(request.POST)
+        if params['action'] == 'batchupdate':
+            selected = ItemTable.get_selected(params)
+            batch_action = params['batchaction']
+            if batch_action == DELETE_COMMAND:
+                delete_items(request, selected)
+            elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
+                category = batch_action[len(ADD_CATEGORY_PREFIX):]
+                add_items_categories(request, selected, category)
+            else:
+                messages.error(request, _('Unknown batch action'))
+        elif params['action'] == 'save':
+            changes = ItemTable.get_row_select_values(params, 'category')
+            add_categories(changes)
+        elif params['action'] != 'none':
             messages.error(request, _('Unknown action'))
 
     return HttpResponseRedirect(redirect_url)

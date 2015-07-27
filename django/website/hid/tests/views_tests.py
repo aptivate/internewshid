@@ -54,7 +54,8 @@ def request_item():
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {
-        'action': DELETE_COMMAND,
+        'action': 'batchupdate-top',
+        'batchaction-top': DELETE_COMMAND,
         'select_item_id': [item['id']]}
     )
     request = fix_messages(request)
