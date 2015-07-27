@@ -139,7 +139,8 @@ class ViewItems(SingleTableView):
         return {
             'label': label,
             'items': dict(
-                [(prefix + k, v) for k, v in items]
+                [(prefix + short_name, short_name)
+                    for short_name, long_name in items]
             )
         }
 
