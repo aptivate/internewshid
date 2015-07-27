@@ -7,7 +7,7 @@ from taxonomies.tests.factories import TermFactory, TaxonomyFactory
 
 import transport
 from .views_tests import fix_messages
-from ..views import add_items_categories
+from ..views import add_items_categories, add_categories
 
 
 ReqFactory = RequestFactory()
@@ -33,6 +33,18 @@ def test_add_items_categories_adds_term_to_item(term, item):
     request = fix_messages(request)
 
     add_items_categories(request, [item['id']], term.name)
+
+    [item_data] = transport.items.list()
+    [term_data] = item_data['terms']
+    assert term_data['name'] == term.name
+    assert term_data['taxonomy'] == term.taxonomy.slug
+
+
+@pytest.mark.django_db
+def test_add_categories_adds_term_to_item(term, item):
+    category_list = [(item['id'], term.name), ]
+
+    add_categories(category_list)
 
     [item_data] = transport.items.list()
     [term_data] = item_data['terms']
