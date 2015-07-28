@@ -130,9 +130,9 @@ def test_get_category_options_uses_terms():
     view = ViewItems()
     options = view.get_category_options(ebola_questions.slug)
 
-    assert (type_1.name, type_1.long_name) in options
-    assert (type_2.name, type_2.long_name) in options
-    assert (type_3.name, type_3.long_name) in options
+    assert (type_1.name, type_1.name) in options
+    assert (type_2.name, type_2.name) in options
+    assert (type_3.name, type_3.name) in options
     assert (other_term.name, other_term.long_name) not in options
 
 
@@ -154,14 +154,14 @@ def test_get_category_options_with_no_taxonomy_returns_all():
     view = ViewItems()
     options = view.get_category_options()
 
-    assert (type_1.name, type_1.long_name) in options
-    assert (other_term.name, other_term.long_name) in options
+    assert (type_1.name, type_1.name) in options
+    assert (other_term.name, other_term.name) in options
 
 
 @pytest.mark.django_db
 def test_get_category_options_orders_by_lowercase_name():
     # TODO: Rewrite tests to use transport layer
-    ebola_questions = TaxonomyFactory(name="Ebola Questions")
+    taxonomy = TaxonomyFactory(name="order_by_lowercase_name_test")
     test_term_values = [
         ('test a1', '1'), ('test b1', '2'),
         ('test A2', '3'), ('test B2', '4')
@@ -170,16 +170,15 @@ def test_get_category_options_orders_by_lowercase_name():
         TermFactory(
             name=test_value[0],
             long_name=test_value[1],
-            taxonomy=ebola_questions
+            taxonomy=taxonomy
         )
 
     view = ViewItems()
-    options = view.get_category_options(ebola_questions.slug)
-    # Make sure we are only comparing with out test values!
-    options = [o for o in options if o in test_term_values]
+    options = view.get_category_options(taxonomy.slug)
 
     # Expected is the list ordered by lowercase short name.
-    expected = sorted(test_term_values, key=lambda e: e[0].lower())
+    expected = [(short, short) for short, long_name in test_term_values]
+    expected = tuple(sorted(expected, key=lambda e: e[0].lower()))
 
     assert options == expected
 

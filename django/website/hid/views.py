@@ -94,7 +94,7 @@ class ViewItems(SingleTableView):
         else:
             terms = transport.terms.list()
         terms.sort(key=lambda e: e['name'].lower())
-        return tuple((t['name'], t['long_name']) for t in terms)
+        return tuple((t['name'], t['name']) for t in terms)
 
     def get_table(self, **kwargs):
         kwargs['categories'] = self.get_category_options(
@@ -116,9 +116,7 @@ class ViewItems(SingleTableView):
             ),
             self._build_action_dropdown_group(
                 label=_('Set question type'),
-                items=[(short_name, short_name)
-                       for short_name, long_name
-                       in self.get_category_options(QUESTION_TYPE_TAXONOMY)],
+                items=self.get_category_options(QUESTION_TYPE_TAXONOMY),
                 prefix=ADD_CATEGORY_PREFIX
             )
         ]
