@@ -94,14 +94,15 @@ body {
   }
 }
 .navbar-top-links li a {
-    padding: @nav-link-padding;
+    padding: 15px;
     min-height: 50px;
 }
 
 @media(max-width:@screen-sm){
   .navbar-top-links li a {
-    padding:@panel-heading-padding;
+    padding:5px 10px;
     min-height:10px;
+    margin:5px 10px;
   }
 }
 
@@ -150,6 +151,7 @@ body {
 .navbar-top-links .dropdown-user {
     right: 0;
     left: auto;
+    margin:0;
 }
 
 .navbar-top-links > li > a:hover,
@@ -181,8 +183,13 @@ body {
 @media(min-width:@screen-xs-min) and (max-width:@screen-sm){
   .navbar-collapse {
     padding-top:@padding-large-vertical * 2; 
+    margin-bottom:-80px;
    }
 }
+
+.navbar-collapse.in {
+     overflow-y:inherit;
+   }
 
 .sidebar .sidebar-search {
     padding: 15px;
