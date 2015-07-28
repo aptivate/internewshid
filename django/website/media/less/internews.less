@@ -39,12 +39,14 @@ body {
 @media(min-width:@screen-xs-min) {
   #page-wrapper {
     margin-top:50px;
+    padding:0 @padding-large-horizontal;
   }
 }
 
 @media(min-width:@screen-xs)and (max-width:@screen-sm-min){
   #page-wrapper {
     margin-top:96px;
+    margin-bottom:60px;
   }
 }
 
@@ -284,7 +286,7 @@ body {
   .project-info{
     width: 100%;
     background-color: @gray-lightest;
-    height: 50px;
+    height: 30px;
     .box-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
     bottom: 0;
     padding-top: @padding-small-vertical;
@@ -318,6 +320,12 @@ body {
   }
   & a{
     color:@gray;
+  }
+}
+
+@media(max-width:@screen-sm){
+  .site-info {
+    text-align:center;
   }
 }
 
