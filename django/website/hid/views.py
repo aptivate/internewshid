@@ -220,23 +220,23 @@ def delete_items(request, deleted):
         messages.error(request, msg)
 
 
-def add_items_categories(request, items, category):
+def add_items_categories(request, items):
     """ Add the given category to the given items,
         and set a success/failure on the request
 
         Args:
             - request: Current request object
-            - items: List of item ids to add the category too
-            - category: Category name to add
+            - items: List of (item id, taxonomy_slug, term_name) tupples to
+                     update.
     """
     success = 0
     failed = 0
-    for item_id in items:
+    for item_id, taxonomy_slug, term_name in items:
         try:
             transport.items.add_term(
                 item_id,
-                QUESTION_TYPE_TAXONOMY,
-                category,
+                taxonomy_slug,
+                term_name
             )
             success += 1
         except TransportException:
@@ -251,24 +251,6 @@ def add_items_categories(request, items, category):
                         "Failed to update %d items.",
                         len(items)) % len(items)
         messages.success(request, msg)
-
-
-def add_categories(categories):
-    """ Add specified category Terms to The items
-    as specified in categories list.
-
-    args:
-        categories: a list of item ids and term names:
-            [ (<item-id>, <term-name>), ... ]
-     """
-    for item_id, term_name in categories:
-        transport.items.add_term(
-            item_id,
-            QUESTION_TYPE_TAXONOMY,
-            term_name,
-        )
-    # Did we want to test for any failures or exceptions ?
-    # TODO: Add messages/success/error reporting here?
 
 
 def process_items(request):
@@ -293,14 +275,22 @@ def process_items(request):
                 delete_items(request, selected)
             elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
                 category = batch_action[len(ADD_CATEGORY_PREFIX):]
-                add_items_categories(request, selected, category)
+                add_items_categories(
+                    request,
+                    [(item, QUESTION_TYPE_TAXONOMY, category)
+                     for item in selected]
+                )
             elif batch_action == NONE_COMMAND:
                 pass
             else:
                 messages.error(request, _('Unknown batch action'))
         elif params['action'] == 'save':
             changes = ItemTable.get_row_select_values(params, 'category')
-            add_categories(changes)
+            add_items_categories(
+                request,
+                [(item, QUESTION_TYPE_TAXONOMY, category)
+                 for item, category in changes]
+            )
         elif params['action'] != 'none':
             messages.error(request, _('Unknown action'))
 
