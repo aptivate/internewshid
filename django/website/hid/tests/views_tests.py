@@ -128,7 +128,7 @@ def test_get_category_options_uses_terms():
     )
 
     view = ViewItems()
-    options = view.get_category_options(ebola_questions.id)
+    options = view.get_category_options(ebola_questions.slug)
 
     assert (type_1.name, type_1.long_name) in options
     assert (type_2.name, type_2.long_name) in options
@@ -174,7 +174,7 @@ def test_get_category_options_orders_by_lowercase_name():
         )
 
     view = ViewItems()
-    options = view.get_category_options(ebola_questions.id)
+    options = view.get_category_options(ebola_questions.slug)
     # Make sure we are only comparing with out test values!
     options = [o for o in options if o in test_term_values]
 
