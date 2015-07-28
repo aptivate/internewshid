@@ -64,7 +64,7 @@ def request_item():
 
 
 def check_item_was_deleted(request):
-    assert check_message(request, u"Successfully deleted 1 item.") is True
+    assert check_message(request, u"1 item deleted.") is True
 
     items = list(transport.items.list())
     assert len(list(items)) == 0
