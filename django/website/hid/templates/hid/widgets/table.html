@@ -1,8 +1,8 @@
 {% load render_table from django_tables2 %}
 <div class='panel panel-default'>
     <div class='panel-heading'>
-        <span class='fa fa-table fa-w'></span>
-        {{ title }}
+        <span class='fa fa-table fa-fw'></span>
+        <h2>{{ title }}</h2>
     </div>
     <div class='panel-body'>
         {% render_table table %}
