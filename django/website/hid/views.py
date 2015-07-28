@@ -211,8 +211,8 @@ def delete_items(request, deleted):
     try:
         transport.items.bulk_delete(deleted)
         num_deleted = len(deleted)
-        msg = ungettext("Successfully deleted %d item.",
-                        "Successfully deleted %d items.",
+        msg = ungettext("%d item deleted.",
+                        "%d items deleted.",
                         num_deleted) % num_deleted
         messages.success(request, msg)
     except:
@@ -242,8 +242,8 @@ def add_items_categories(request, items):
         except TransportException:
             failed += 1
     if success > 0:
-        msg = ungettext("Successfully updated %d item.",
-                        "Successfully updated %d items.",
+        msg = ungettext("Updated %d item.",
+                        "Updated %d items.",
                         len(items)) % len(items)
         messages.success(request, msg)
     if failed > 0:
