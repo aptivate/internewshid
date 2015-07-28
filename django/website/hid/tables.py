@@ -1,5 +1,6 @@
 import django_tables2 as tables
 from django.conf import settings
+from django.template import loader
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -28,15 +29,24 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
     )
     body = tables.Column(verbose_name=_('Message'))
-    category = tables.Column(
-        verbose_name=_('Category'),
+    category = tables.TemplateColumn(
+        template_name='hid/categories_column.html',
         accessor='terms.0.name',
-        default=_('Uncategorized')
     )
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')
         super(ItemTable, self).__init__(*args, **kwargs)
+
+    def render_category(self, record, value):
+        Template = loader.get_template('hid/categories_column.html')
+        ctx = {
+            'categories': self.categories,
+            'category': value,
+            'record': record
+        }
+
+        return Template.render(ctx)
 
     @staticmethod
     def get_selected(params):
@@ -49,3 +59,24 @@ class ItemTable(tables.Table):
                 List of selected record ids as integers
         """
         return [int(x) for x in params.getlist("select_item_id", [])]
+
+    @staticmethod
+    def get_row_select_values(params, input_prefix):
+        """ Given a request parameter list, return the values that were
+            set on each of the given rows using the given drop down or
+            input field.
+
+            Args:
+                - params: GET/POST parameter list
+                - input_prefix: Prefix used for each rows' input field,
+                                such that the input field's name is
+                                <input_prefix>-<row id>
+            Returns:
+                List of tupples (row id, field value)
+        """
+        values = []
+        for name, value in params.items():
+            if value and name.startswith(input_prefix + '-'):
+                row_id = int(name[len(input_prefix)+1:])
+                values.append((row_id, value))
+        return values

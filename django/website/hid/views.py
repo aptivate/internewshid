@@ -1,6 +1,11 @@
+import re
+
+from collections import OrderedDict
+
 from django.contrib import messages
+from django.contrib.auth.views import login
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, QueryDict
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 from django.views.generic import FormView
@@ -20,6 +25,7 @@ from .tables import ItemTable
 QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
+NONE_COMMAND = 'none'
 
 
 class ListSources(TemplateView):
@@ -87,14 +93,19 @@ class ViewItems(SingleTableView):
     def get_category_options(self, categories_id=None):
         # TODO: Use data layer
         terms = self.get_matching_terms(categories_id)
-
         return tuple((t.name, t.long_name) for t in terms)
 
     def get_matching_terms(self, categories_id):
         if categories_id is None:
-            return Term.objects.all()
+            return (Term.objects
+                    .extra(select={'name_lower': 'lower(name)'})
+                    .order_by('name_lower')
+                    .all())
 
-        return Term.objects.filter(taxonomy__id=categories_id)
+        return (Term.objects
+                .extra(select={'name_lower': 'lower(name)'})
+                .order_by('name_lower')
+                .filter(taxonomy__id=categories_id))
 
     def get_table(self, **kwargs):
         # TODO: Filter on taxonomy
@@ -107,11 +118,17 @@ class ViewItems(SingleTableView):
         context['upload_form'] = UploadForm(initial={'source': 'geopoll'})
         context['actions'] = [
             self._build_action_dropdown_group(
-                items=[(DELETE_COMMAND, _('Delete Selected'))]
+                label=_('Actions'),
+                items=[
+                    (NONE_COMMAND, '---------'),
+                    (DELETE_COMMAND, _('Delete Selected'))
+                ]
             ),
             self._build_action_dropdown_group(
                 label=_('Set question type'),
-                items=self.get_category_options(),
+                items=[(short_name, short_name)
+                       for short_name, long_name
+                       in self.get_category_options()],
                 prefix=ADD_CATEGORY_PREFIX
             )
         ]
@@ -136,10 +153,52 @@ class ViewItems(SingleTableView):
         """
         return {
             'label': label,
-            'items': dict(
-                [(prefix + k, v) for k, v in items]
+            'items': OrderedDict(
+                [(prefix + entry_cmd, entry_label)
+                    for entry_cmd, entry_label in items]
             )
         }
+
+    @staticmethod
+    def get_request_parameters(params):
+        """ Return the parameters of the given request.
+
+        The form has mirrored inputs as the top and the
+        bottom of the form. This detects which one was used
+        to submit the form, and returns the parameters
+        associated with that one.
+
+        It is expected that:
+            - All mirrored form elements are named as
+              <name>-<placement>
+            - The busmit button is called 'action',
+              and it's value is <action>-<placement>
+
+        Args:
+            - params: GET or POST request parameters
+
+        Returns:
+            The list of invoked parameters renamed such
+            that the active parameters match the submit
+            button that was invoked. If no 'action' exists
+            it is defaulted to 'none' and placement to 'top'.
+        """
+        new_params = QueryDict('', mutable=True)
+        action = params.get('action', 'none-top')
+        if '-' in action:
+            placement = re.sub('^[^-]+-', '', action)
+            action = action[0:len(action) - len(placement) - 1]
+        else:
+            placement = 'top'
+        for name, value in params.iterlists():
+            if name == 'action':
+                value = [action]
+            elif name.endswith(placement):
+                name = name[0:len(name)-len(placement)-1]
+            new_params.setlist(name, value)
+        if 'action' not in new_params:
+            new_params['action'] = 'none'
+        return new_params
 
 
 class ViewSingleItem(TemplateView):
@@ -161,8 +220,8 @@ def delete_items(request, deleted):
     try:
         transport.items.bulk_delete(deleted)
         num_deleted = len(deleted)
-        msg = ungettext("Successfully deleted %d item.",
-                        "Successfully deleted %d items.",
+        msg = ungettext("%d item deleted.",
+                        "%d items deleted.",
                         num_deleted) % num_deleted
         messages.success(request, msg)
     except:
@@ -170,30 +229,30 @@ def delete_items(request, deleted):
         messages.error(request, msg)
 
 
-def add_items_categories(request, items, category):
+def add_items_categories(request, items):
     """ Add the given category to the given items,
         and set a success/failure on the request
 
         Args:
             - request: Current request object
-            - items: List of item ids to add the category too
-            - category: Category name to add
+            - items: List of (item id, taxonomy_slug, term_name) tupples to
+                     update.
     """
     success = 0
     failed = 0
-    for item_id in items:
+    for item_id, taxonomy_slug, term_name in items:
         try:
             transport.items.add_term(
                 item_id,
-                QUESTION_TYPE_TAXONOMY,
-                category,
+                taxonomy_slug,
+                term_name
             )
             success += 1
         except TransportException:
             failed += 1
     if success > 0:
-        msg = ungettext("Successfully updated %d item.",
-                        "Successfully updated %d items.",
+        msg = ungettext("Updated %d item.",
+                        "Updated %d items.",
                         len(items)) % len(items)
         messages.success(request, msg)
     if failed > 0:
@@ -217,14 +276,41 @@ def process_items(request):
     redirect_url = reverse("data-view")
     # Just redirect back to items view on GET
     if request.method == "POST":
-        selected = ItemTable.get_selected(request.POST)
-        action = request.POST.get('action')
-        if action == DELETE_COMMAND:
-            delete_items(request, selected)
-        elif action and action.startswith(ADD_CATEGORY_PREFIX):
-            category = action[len(ADD_CATEGORY_PREFIX):]
-            add_items_categories(request, selected, category)
-        else:
+        params = ViewItems.get_request_parameters(request.POST)
+        if params['action'] == 'batchupdate':
+            selected = ItemTable.get_selected(params)
+            batch_action = params['batchaction']
+            if batch_action == DELETE_COMMAND:
+                delete_items(request, selected)
+            elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
+                category = batch_action[len(ADD_CATEGORY_PREFIX):]
+                add_items_categories(
+                    request,
+                    [(item, QUESTION_TYPE_TAXONOMY, category)
+                     for item in selected]
+                )
+            elif batch_action == NONE_COMMAND:
+                pass
+            else:
+                messages.error(request, _('Unknown batch action'))
+        elif params['action'] == 'save':
+            changes = ItemTable.get_row_select_values(params, 'category')
+            add_items_categories(
+                request,
+                [(item, QUESTION_TYPE_TAXONOMY, category)
+                 for item, category in changes]
+            )
+        elif params['action'] != 'none':
             messages.error(request, _('Unknown action'))
 
     return HttpResponseRedirect(redirect_url)
+
+
+def csrf_failure(request, reason=''):
+    # If the user presses the back button in the browser to go back to the
+    # login page and logs in again, they will get a CSRF error page because
+    # the token will be wrong.
+    # We override this with a redirect to the dashboard, which if not already
+    # logged in, will redirect to the login page (with a fresh token).
+
+    return HttpResponseRedirect(reverse('dashboard'))

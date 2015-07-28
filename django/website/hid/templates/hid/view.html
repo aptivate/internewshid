@@ -26,23 +26,14 @@
                       method="post"
                       class="view-items-form">
                     {% csrf_token %}
-                    <div class="form-group form-header-group">
-                        <select name='action' class='form-control' required>
-                            <option value="" default selected">{% trans "Actions" %}</option>
-                            {% for group in actions %}
-                                <optgroup label="{{ group.label }}">
-                                    {% for action, action_label in group.items.items %}
-                                        <option value="{{ action }}">
-                                            {{ action_label }}
-                                        </option>
-                                    {% endfor %}
-                                </optgroup>
-                            {% endfor %}
-                        </select>
-                        {% bootstrap_button "Update" button_type="submit" value="Update" button_class="btn btn-success btn-sm table-submit" %}
-                    </div>
+                    {% with button_placement="top" %}
+                        {% include "hid/view_and_edit_buttons.html" %}
+                    {% endwith %}
                     {% with pagination_class="pagination-circle-nav" %}
                         {% render_table table %}
+                    {% endwith %}
+                    {% with button_placement="bottom" %}
+                        {% include "hid/view_and_edit_buttons.html" %}
                     {% endwith %}
                 </form>
             </div>
