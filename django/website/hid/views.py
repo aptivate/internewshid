@@ -199,10 +199,18 @@ class ViewItems(SingleTableView):
         if 'action' not in new_params:
             new_params['action'] = 'none'
         return new_params
+    
+
+class EditSingleItem(TemplateView):
+    template_name = "hid/edit-item.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(EditSingleItem, self).get_context_data(**kwargs) or {}
+        return ctx
 
 
 class ViewSingleItem(TemplateView):
-    template_name = "hid/item.html"
+    template_name = "hid/view-item.html"
 
     def get_context_data(self, **kwargs):
         ctx = super(ViewSingleItem, self).get_context_data(**kwargs) or {}
