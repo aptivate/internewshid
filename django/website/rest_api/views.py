@@ -70,12 +70,23 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
             data = {'detail': message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        terms = Term.objects.filter(taxonomy=taxonomy).annotate(
-            count=Count('items')
-        )
+        terms = self._get_terms(request, taxonomy)
+
         data = TermItemCountSerializer(terms, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)
+
+    def _get_terms(self, request, taxonomy):
+        start_time = request.query_params.get('start_time', None)
+        end_time = request.query_params.get('end_time', None)
+
+        filters = {'taxonomy': taxonomy}
+
+        if start_time is not None and end_time is not None:
+            filters['items__timestamp__range'] = [start_time, end_time]
+
+        return Term.objects.filter(**filters).annotate(
+            count=Count('items'))
 
 
 class TermViewSet(viewsets.ModelViewSet):
