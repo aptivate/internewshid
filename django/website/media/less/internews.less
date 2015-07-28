@@ -11,21 +11,41 @@ body {
     width: 100%;
 }
 
-
 .page-header {
-  margin-top:0;
   padding:@padding-base-vertical;
 }
 
+@media(max-width:@screen-sm) {
+  .page-header {
+    margin-left:@padding-base-horizontal;
+    margin-top:20px;
+  }
+}
+
 @media(min-width:@screen-sm-min) {
+    .page-header {
+      margin:0;
+    }
     #page-wrapper {
         position: inherit;
         margin: 0 0 0 250px;
-        padding:@padding-large-horizontal;
+        padding:0 @padding-large-horizontal;
         min-height: 1000px;
         background-color: @gray-lighter;
         .box-shadow-inset(inset, 0px, 0px); 
     }
+}
+
+@media(min-width:@screen-xs-min) {
+  #page-wrapper {
+    margin-top:50px;
+  }
+}
+
+@media(min-width:@screen-xs)and (max-width:@screen-sm-min){
+  #page-wrapper {
+    margin-top:96px;
+  }
 }
 
 // Branding
@@ -68,6 +88,7 @@ body {
 @media(min-width:@screen-sm-min) {
     .navbar-static-top {
         position:fixed;
+        top:0;
       }
 }
 
@@ -159,7 +180,6 @@ body {
         padding-left: 0;
         padding-right: 0;
     }
-    margin-top:50px;
     margin-bottom:20px;
 }
 
@@ -219,16 +239,25 @@ body {
     }
 }
 
-@media(max-width:@screen-sm) {
-    .featured-image > img {
-      width:100%;
-      display:block;
+.featured-image {
+  background-image:url(../images/rsz_west-african-girl.jpg);
+  background-repeat:no-repeat;
+  background-size:cover;
+  min-height:200px;
+}
+
+@media(max-width:@screen-xs) {
+    .sidebar {
+      margin-top:96px;
     }
  }
  
  @media(min-width:@screen-xs-min) and (max-width:@screen-sm) {
-    .featured-image > img {
+    .featured-image {
       display:none;
+    }
+    .sidebar {
+      margin-top:76px;
     }
  }
 
