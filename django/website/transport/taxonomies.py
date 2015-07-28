@@ -34,9 +34,10 @@ def list(**kwargs):
     return view(request).data
 
 
-def term_itemcount(slug):
+def term_itemcount(slug, **kwargs):
     view = get_view(actions={'get': 'itemcount'})
-    request = request_factory.get(itemcount_url(slug))
+    request = request_factory.get(itemcount_url(slug),
+                                  kwargs)
     response = view(request, slug=slug)
 
     if status.is_success(response.status_code):
