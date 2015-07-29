@@ -34,29 +34,32 @@ def num_updates(old_time, new_time):
     return elapsed_time.seconds / time_granularity().seconds
 
 
-@pytest.mark.django_db
-def test_last_modified_date_updates_on_body_change():
-    item = ItemFactory()
-    magic_mock = MagicMock(wraps=timezone.now,
-                           side_effect=now_iter(timezone.now()))
+@pytest.fixture
+def item():
+    return ItemFactory()
 
-    with patch('django.utils.timezone.now', new=magic_mock):
+
+@pytest.fixture
+def mock_time_now():
+    return MagicMock(wraps=timezone.now,
+                     side_effect=now_iter(timezone.now()))
+
+
+@pytest.mark.django_db
+def test_last_modified_date_updates_on_body_change(item, mock_time_now):
+    with patch('django.utils.timezone.now', new=mock_time_now):
         orig_last_modified = last_modified(item)
         item.body = 'replacement text'
         item.save()
 
-        assert num_updates(orig_last_modified,  last_modified(item)) == 1
+        assert num_updates(orig_last_modified, last_modified(item)) == 1
 
 
 @pytest.mark.django_db
-def test_last_modified_date_updates_on_category_change():
-    item = ItemFactory()
-    magic_mock = MagicMock(wraps=timezone.now,
-                           side_effect=now_iter(timezone.now()))
-
-    with patch('django.utils.timezone.now', new=magic_mock):
+def test_last_modified_date_updates_on_category_change(item, mock_time_now):
+    with patch('django.utils.timezone.now', new=mock_time_now):
         orig_last_modified = last_modified(item)
         term = TermFactory()
         item.terms.add(term)
 
-        assert num_updates(orig_last_modified,  last_modified(item)) == 1
+        assert num_updates(orig_last_modified, last_modified(item)) == 1
