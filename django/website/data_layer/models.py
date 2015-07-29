@@ -1,4 +1,5 @@
 from django.db import models
+from django.dispatch.dispatcher import receiver
 from django.utils import timezone
 
 from taxonomies.models import Term
@@ -10,6 +11,10 @@ class DataLayerModel(models.Model):
 
     class Meta:
         abstract = True
+
+    def note_external_modification(self):
+        self.last_modified = timezone.now()
+        self.save()
 
 
 class Message(DataLayerModel):
@@ -45,3 +50,10 @@ class Message(DataLayerModel):
 
 # TODO: rename this class
 Item = Message
+
+
+@receiver(models.signals.m2m_changed, sender=Item.terms.through,
+          dispatch_uid="data_layer.models.terms_signal_handler")
+def terms_signal_handler(sender, **kwargs):
+    instance = kwargs.get('instance')
+    instance.note_external_modification()
