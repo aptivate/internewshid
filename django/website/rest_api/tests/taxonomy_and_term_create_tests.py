@@ -25,17 +25,31 @@ def create_category(name):
     return view(request, pk=id)
 
 
+def count_taxonomies():
+    return len(get_taxonomies().data)
+
+
+def get_taxonomies():
+    url = reverse('taxonomy-list')
+    request = APIRequestFactory().get(url)
+    view = TaxonomyViewSet.as_view(actions={'get': 'list'})
+    response = view(request)
+    assert status.is_success(response.status_code), response.data
+
+    return response
+
+
 @pytest.mark.django_db
 def test_create_a_category():
     category = "Test Ebola Questions"
 
-    old_count = Taxonomy.objects.count()
+    old_count = count_taxonomies()
     assert not Taxonomy.objects.filter(name=category).exists()
 
     response = create_category(category)
     assert status.is_success(response.status_code), response.data
 
-    new_count = Taxonomy.objects.count()
+    new_count = count_taxonomies()
     assert new_count - old_count == 1
 
     assert Taxonomy.objects.filter(name=category).exists()
