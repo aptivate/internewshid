@@ -145,18 +145,45 @@ form.header-upload-form {
 
 .view-item-text {
   background-color:white;
-  padding:40px 60px 10px;
+  padding:40px 60px;
+  .item-text {
+    margin-top:20px;
+    padding:40px;
+    background-color:@gray-lightest;
+    font-size:@font-size-large;
+    border:none;
+    .fa {
+      color: lighten(@gray,40%);
+    }
+  }
 }
 
-.view-item-text > p > .fa {
-  color:@gray;
+@media(max-width:@screen-sm){
+  .view-item-text {
+    padding:0;
+    .item-text {
+      padding:20px;
+    }
+  }
 }
 
-.label-tag {
-  font-weight:normal;
-  background-color:@gray-lighter;
-  color:inherit;
+.dl-horizontal.item-meta-info {
+  dt {
+    width:70px;
+    text-align:left;
+    float: left;
+    clear: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  dd {
+    margin-left:80px;
+  }
 }
+
+
+
 
 //Item edit page
 
@@ -179,3 +206,5 @@ form.header-upload-form {
   color:white;
   padding:20px 20px;
 }
+
+
