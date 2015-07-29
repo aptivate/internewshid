@@ -56,7 +56,7 @@ def test_last_modified_date_updates_on_body_change(item, mock_time_now):
 
 
 @pytest.mark.django_db
-def test_last_modified_date_updates_on_item_category_change(
+def test_last_modified_date_updates_on_item_category_add(
         item, mock_time_now):
     with patch('django.utils.timezone.now', new=mock_time_now):
         orig_last_modified = last_modified(item)
@@ -67,7 +67,7 @@ def test_last_modified_date_updates_on_item_category_change(
 
 
 @pytest.mark.django_db
-def test_last_modified_date_updates_on_category_item_change(
+def test_last_modified_date_updates_on_category_item_add(
         item, mock_time_now):
     with patch('django.utils.timezone.now', new=mock_time_now):
         orig_last_modified = last_modified(item)
