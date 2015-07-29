@@ -17,11 +17,21 @@ def last_modified(item):
 # Ensure value of "now" always increases by amount sufficient
 # to show up as a change, even if db resolution for datetime
 # is one second.
+def time_granularity():
+    return datetime.timedelta(hours=1)
+
+
 def now_iter(start):
     t = start
     while True:
-        t += datetime.timedelta(hours=1)
+        t += time_granularity()
         yield t
+
+
+def num_updates(old_time, new_time):
+    elapsed_time = new_time - old_time
+
+    return elapsed_time.seconds / time_granularity().seconds
 
 
 @pytest.mark.django_db
@@ -35,7 +45,7 @@ def test_last_modified_date_updates_on_body_change():
         item.body = 'replacement text'
         item.save()
 
-        assert orig_last_modified < last_modified(item)
+        assert num_updates(orig_last_modified,  last_modified(item)) == 1
 
 
 @pytest.mark.django_db
@@ -49,4 +59,4 @@ def test_last_modified_date_updates_on_category_change():
         term = TermFactory()
         item.terms.add(term)
 
-        assert orig_last_modified < last_modified(item)
+        assert num_updates(orig_last_modified,  last_modified(item)) == 1

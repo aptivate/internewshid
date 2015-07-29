@@ -13,7 +13,7 @@ class DataLayerModel(models.Model):
         abstract = True
 
     def note_external_modification(self):
-        self.last_modified = timezone.now()
+        # This will set the last_modified field
         self.save()
 
 
@@ -55,5 +55,6 @@ Item = Message
 @receiver(models.signals.m2m_changed, sender=Item.terms.through,
           dispatch_uid="data_layer.models.terms_signal_handler")
 def terms_signal_handler(sender, **kwargs):
-    instance = kwargs.get('instance')
-    instance.note_external_modification()
+    if kwargs.get('action') == 'post_add':
+        instance = kwargs.get('instance')
+        instance.note_external_modification()
