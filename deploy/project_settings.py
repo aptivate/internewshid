@@ -17,7 +17,8 @@ project_name = "internewshid"
 # repository = 'https://svn.aptivate.org/svn/' + project_name + '/dev'
 
 repo_type = "git"
-repository = 'git@git.aptivate.org:' + project_name + '.git'
+repository = 'git@github.com:aptivate/internewshid.git'
+
 # repository = 'git@github.com:aptivate/' + project_name + '.git'
 
 ##################################################################
