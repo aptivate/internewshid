@@ -1,9 +1,12 @@
 from django.db import models
+from django.utils import timezone
+
 from taxonomies.models import Term
 
 
 class DataLayerModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
