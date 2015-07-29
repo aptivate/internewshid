@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
-from taxonomies.models import Taxonomy, Term
+from taxonomies.models import Term
 from ..serializers import TermSerializer
 from ..views import (
     TaxonomyViewSet,
@@ -23,6 +23,14 @@ def create_category(name):
     request = APIRequestFactory().put(url, {'name': name})
     view = TaxonomyViewSet.as_view(actions={'put': 'create'})
     return view(request, pk=id)
+
+
+def taxonomy_exists(name):
+    taxonomies = get_taxonomies().data
+
+    names = [t['name'] for t in taxonomies]
+
+    return name in names
 
 
 def count_taxonomies():
@@ -44,7 +52,7 @@ def test_create_a_category():
     category = "Test Ebola Questions"
 
     old_count = count_taxonomies()
-    assert not Taxonomy.objects.filter(name=category).exists()
+    assert not taxonomy_exists(category)
 
     response = create_category(category)
     assert status.is_success(response.status_code), response.data
@@ -52,7 +60,7 @@ def test_create_a_category():
     new_count = count_taxonomies()
     assert new_count - old_count == 1
 
-    assert Taxonomy.objects.filter(name=category).exists()
+    assert taxonomy_exists(category)
 
 
 # TODO: write test for getting taxonomies and terms, so we can re-write all
