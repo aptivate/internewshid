@@ -14,7 +14,6 @@ from django.views.generic.base import TemplateView
 from django_tables2 import SingleTableView
 
 from chn_spreadsheet.importer import Importer, SheetImportException
-from data_layer.models import Term
 import transport
 from transport.exceptions import TransportException
 from .assets import require_assets
@@ -90,26 +89,18 @@ class ViewItems(SingleTableView):
     def get_queryset(self):
         return transport.items.list()
 
-    def get_category_options(self, categories_id=None):
-        # TODO: Use data layer
-        terms = self.get_matching_terms(categories_id)
-        return tuple((t.name, t.long_name) for t in terms)
-
-    def get_matching_terms(self, categories_id):
-        if categories_id is None:
-            return (Term.objects
-                    .extra(select={'name_lower': 'lower(name)'})
-                    .order_by('name_lower')
-                    .all())
-
-        return (Term.objects
-                .extra(select={'name_lower': 'lower(name)'})
-                .order_by('name_lower')
-                .filter(taxonomy__id=categories_id))
+    def get_category_options(self, taxonomy_slug=None):
+        if taxonomy_slug is not None:
+            terms = transport.terms.list(taxonomy=taxonomy_slug)
+        else:
+            terms = transport.terms.list()
+        terms.sort(key=lambda e: e['name'].lower())
+        return tuple((t['name'], t['name']) for t in terms)
 
     def get_table(self, **kwargs):
-        # TODO: Filter on taxonomy
-        kwargs['categories'] = self.get_category_options()
+        kwargs['categories'] = self.get_category_options(
+            QUESTION_TYPE_TAXONOMY
+        )
         return super(ViewItems, self).get_table(**kwargs)
 
     def get_context_data(self, **kwargs):
@@ -126,9 +117,7 @@ class ViewItems(SingleTableView):
             ),
             self._build_action_dropdown_group(
                 label=_('Set question type'),
-                items=[(short_name, short_name)
-                       for short_name, long_name
-                       in self.get_category_options()],
+                items=self.get_category_options(QUESTION_TYPE_TAXONOMY),
                 prefix=ADD_CATEGORY_PREFIX
             )
         ]

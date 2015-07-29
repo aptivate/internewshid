@@ -92,4 +92,32 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
 class TermViewSet(viewsets.ModelViewSet):
     serializer_class = TermSerializer
 
-    queryset = Term.objects.all()  # Will need to filter by taxonomy eventually
+    queryset = Term.objects.all()
+
+    def get_queryset(self):
+        """ Return the query set to fetch terms.
+
+        The request may contain the following
+        exact match filters:
+            name: Name of the term
+            long_name: Long name of the term
+            taxonomy: Slug of the term's taxonomy
+
+        Returns:
+            QuerySet: A query set
+        """
+        items = Term.objects.all()
+
+        name = self.request.query_params.get('name', None)
+        if name is not None:
+            items = items.filter(name=name)
+
+        long_name = self.request.query_params.get('long_name', None)
+        if long_name is not None:
+            items = items.filter(long_name=long_name)
+
+        taxonomy_slug = self.request.query_params.get('taxonomy', None)
+        if taxonomy_slug is not None:
+            items = items.filter(taxonomy__slug=taxonomy_slug)
+
+        return items
