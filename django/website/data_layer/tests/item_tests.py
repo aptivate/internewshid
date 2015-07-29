@@ -67,6 +67,18 @@ def test_last_modified_date_updates_on_item_category_add(
 
 
 @pytest.mark.django_db
+def test_last_modified_date_updates_on_item_category_delete(
+        item, mock_time_now):
+    with patch('django.utils.timezone.now', new=mock_time_now):
+        term = TermFactory()
+        item.terms.add(term)
+        orig_last_modified = last_modified(item)
+        item.terms.remove(term)
+
+        assert num_updates(orig_last_modified, last_modified(item)) == 1
+
+
+@pytest.mark.django_db
 def test_last_modified_date_updates_on_category_item_add(
         item, mock_time_now):
     with patch('django.utils.timezone.now', new=mock_time_now):

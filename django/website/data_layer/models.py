@@ -55,7 +55,7 @@ Item = Message
 @receiver(models.signals.m2m_changed, sender=Item.terms.through,
           dispatch_uid="data_layer.models.terms_signal_handler")
 def terms_signal_handler(sender, **kwargs):
-    if kwargs.get('action') != 'post_add':
+    if kwargs.get('action') not in ('post_add', 'post_remove'):
         return
 
     if kwargs.get('reverse'):
