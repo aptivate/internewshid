@@ -55,6 +55,13 @@ Item = Message
 @receiver(models.signals.m2m_changed, sender=Item.terms.through,
           dispatch_uid="data_layer.models.terms_signal_handler")
 def terms_signal_handler(sender, **kwargs):
-    if kwargs.get('action') == 'post_add':
-        instance = kwargs.get('instance')
-        instance.note_external_modification()
+    if kwargs.get('action') != 'post_add':
+        return
+
+    if kwargs.get('reverse'):
+        items = Item.objects.filter(pk__in=kwargs.get('pk_set'))
+    else:
+        items = [kwargs.get('instance')]
+
+    for item in items:
+        item.note_external_modification()
