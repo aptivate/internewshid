@@ -39,11 +39,16 @@ FlotChart = {
 
         /* Render the chart */
         render: function() {
+            var options = this.chart.get('options');
+            var $legend_container = this.$el.siblings('.flot-legend');
+            if ($legend_container.length > 0 && options['legend']) {
+                options['legend']['container'] = $legend_container;
+            }
             this.resize();
             $.plot(
                 this.$el,
                 this.chart.get('data'), 
-                this.chart.get('options')
+                options
             );
 
             return this;
@@ -51,8 +56,14 @@ FlotChart = {
 
         /* Resize the chart */
         resize: function() {
-            this.$el.width(this.$container.width());
-            this.$el.height(this.$container.height());
+            if (this.$container.length == 0) {
+                return;
+            }
+            var new_width = this.$container.width();
+            var chart_parent_offset = this.$el.offset().top - this.$container.offset().top;
+            var new_height = this.$container.height() - chart_parent_offset;
+            this.$el.width(new_width);
+            this.$el.height(new_height);
         },
 
         /* Display tooltip */
