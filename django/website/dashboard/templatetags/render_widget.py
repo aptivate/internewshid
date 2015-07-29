@@ -4,7 +4,7 @@ from django import template
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from dashboard.widget_pool import get_widget, MissingWidgetType
+from dashboard.widget_pool import get_widget, MissingWidgetType, WidgetError
 
 
 logger = logging.getLogger(__name__)
@@ -53,6 +53,10 @@ def render_widget(widget_instance):
             context = widget.get_context_data(**settings)
         except AttributeError:
             context = {}
+        except WidgetError as e:
+            template_name = 'dashboard/widget-error.html'
+            context = {}
+            context['error'] = str(e)
         except Exception as e:
             logger.exception('Error while fetching widget context data: %s', e)
             template_name = 'dashboard/widget-error.html'
