@@ -92,3 +92,31 @@ def test_term_itemcount_returns_terms_and_counts_for_range(
         end_time=end_time)
 
     assert term['count'] == 7
+
+
+@pytest.mark.django_db
+def test_term_itemcount_returns_zero_term_counts_for_range(
+        questions_category,
+        questions_term):
+
+    now = time_now()
+    one_day_ago = now - timedelta(days=1)
+    one_week_ago = now - timedelta(weeks=1)
+    eight_days_ago = now - timedelta(days=8)
+
+    item_too_recent = item_data(timestamp=now)
+    item_too_old = item_data(timestamp=eight_days_ago)
+
+    transport.items.add_term(item_too_recent['id'],
+                             questions_category.slug,
+                             questions_term.name)
+    transport.items.add_term(item_too_old['id'],
+                             questions_category.slug,
+                             questions_term.name)
+
+    [term] = transport.taxonomies.term_itemcount(
+        slug=questions_category.slug,
+        start_time=one_week_ago,
+        end_time=one_day_ago)
+
+    assert term['count'] == 0
