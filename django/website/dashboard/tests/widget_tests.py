@@ -42,7 +42,7 @@ class TestWidgetRaisesException(object):
     """ A test widget which raises a generic exception in
         get_context_data
     """
-    template_name = 'something.hmtl'
+    template_name = 'something.html'
 
     def get_context_data(self, **kwargs):
         raise Exception('message raised from get_context_data')
