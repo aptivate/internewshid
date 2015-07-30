@@ -37,7 +37,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
     @detail_route(methods=['post'])
     def add_term(self, request, item_pk):
-        item = Item.objects.get(pk=item_pk)
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         term_data = request.data
         try:
             term = Term.objects.by_taxonomy(
@@ -49,8 +54,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         item.apply_term(term)
-        data = {}  # TODO should be the item containing the new term
-        return Response(data, status=status.HTTP_200_OK)
+
+        serializer = ItemSerializer(item)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TaxonomyViewSet(viewsets.ModelViewSet):
