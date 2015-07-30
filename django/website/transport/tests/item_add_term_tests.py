@@ -3,9 +3,7 @@ import pytest
 
 from data_layer.models import Item
 
-from taxonomies.tests.factories import (
-    TaxonomyFactory,
-    TermFactory)
+from taxonomies.tests.factories import TermFactory
 from transport import items
 from ..exceptions import TransportException
 
@@ -42,3 +40,19 @@ def test_add_term_fails_if_term_does_not_exist(item_data):
 
     assert error['status_code'] == 400
     assert error['detail'] == "Term matching query does not exist."
+    assert error['term']['name'] == "unknown term name"
+
+
+@pytest.mark.django_db
+def test_add_term_fails_if_item_does_not_exist():
+    with pytest.raises(TransportException) as excinfo:
+        term = TermFactory()
+        unknown_item_id = 6  # I am a Free Man
+        items.add_term(unknown_item_id, term.taxonomy.slug, term.name)
+
+    error = excinfo.value.message
+
+    assert error['status_code'] == 404
+    assert error['detail'] == "Message matching query does not exist."
+    # TODO: assert error['detail'] == "Item matching query does not exist."
+    assert error['item_id'] == unknown_item_id
