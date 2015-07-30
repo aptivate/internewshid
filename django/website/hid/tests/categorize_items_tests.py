@@ -1,30 +1,56 @@
 from __future__ import unicode_literals, absolute_import
 import pytest
 
+from django.core.urlresolvers import reverse
+from django.test import RequestFactory
 from taxonomies.tests.factories import TermFactory, TaxonomyFactory
 
 import transport
-from ..views import add_categories
+from .views_tests import fix_messages
+from ..views import add_items_categories
+
+
+ReqFactory = RequestFactory()
 
 
 @pytest.fixture
 def term():
     # TODO rewrite using transport.terms, etc.
-    taxonomy = TaxonomyFactory(name="Ebola Questions")
-    return TermFactory(taxonomy=taxonomy, name="Vacciene")
+    taxonomy = TaxonomyFactory(name="Test Ebola Questions")
+    return TermFactory(taxonomy=taxonomy, name="Vaccine")
+
+
+@pytest.fixture
+def terms():
+    # TODO rewrite using transport.terms, etc.
+    taxonomy = TaxonomyFactory(name="Test Ebola Questions")
+    return [
+        TermFactory(taxonomy=taxonomy, name="Vacciene"),
+        TermFactory(taxonomy=taxonomy, name="Origin")
+    ]
+
+
+@pytest.fixture
+def items():
+    return [
+        transport.items.create({'body': 'test message one'}),
+        transport.items.create({'body': 'test message two'})
+    ]
 
 
 @pytest.fixture
 def item():
-    data = {'body': 'test message'}
-    return transport.items.create(data)
+    return transport.items.create({'body': 'test message one'})
 
 
 @pytest.mark.django_db
 def test_add_categories_adds_term_to_item(term, item):
-    category_list = [(item['id'], term.name), ]
+    category_list = [(item['id'], term.taxonomy.slug, term.name), ]
 
-    add_categories(category_list)
+    url = reverse('data-view-process')
+    request = ReqFactory.post(url, {'a': 'b'})
+    request = fix_messages(request)
+    add_items_categories(request, category_list)
 
     [item_data] = transport.items.list()
     [term_data] = item_data['terms']
@@ -32,41 +58,31 @@ def test_add_categories_adds_term_to_item(term, item):
     assert term_data['taxonomy'] == term.taxonomy.slug
 
 
-@pytest.fixture
-def item_list():
-    for i in range(10):
-        transport.items.create(
-            {'body': 'test message {}'.format(i)}
-        )
-    return transport.items.list()
-
-
 @pytest.mark.django_db
-def test_add_categories_works_with_multiple_items(term, item_list):
-    category_list = [
-        (item['id'], term.name)
-        for item in item_list
+def test_add_items_categories_adds_term_to_items(terms, items):
+    url = reverse('data-view-process')
+    request = ReqFactory.post(url, {'a': 'b'})
+    request = fix_messages(request)
+
+    expected = {
+        items[0]['id']: terms[0],
+        items[1]['id']: terms[1]
+    }
+
+    category_map = [
+        (item_id, term.taxonomy.slug, term.name)
+        for item_id, term in expected.items()
     ]
+    add_items_categories(request, category_map)
 
-    add_categories(category_list)
+    fetched_items = transport.items.list()
+    found = 0
+    for item in fetched_items:
+        if item['id'] in expected:
+            found += 1
+            assert len(item['terms']) == 1
+            [term_data] = item['terms']
+            assert term_data['name'] == expected[item['id']].name
+            assert term_data['taxonomy'] == expected[item['id']].taxonomy.slug
 
-    assert all(
-        item_data['terms'][0]['name'] == term.name
-        for item_data in transport.items.list()
-    )
-
-
-@pytest.mark.django_db
-def test_add_categories_fails_gracefully_with_nonsense_term(item):
-    category_list = [(item['id'], "Non-existant term"), ]
-
-    with pytest.raises(transport.exceptions.TransportException):
-        add_categories(category_list)
-
-
-@pytest.mark.django_db
-def test_add_categories_fails_gracefully_with_nonsense_item(term):
-    category_list = [(6, "Non-existant term"), ]  # Who is number 1?
-
-    with pytest.raises(transport.exceptions.TransportException):
-        add_categories(category_list)
+    assert found == 2

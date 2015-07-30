@@ -19,7 +19,7 @@ class TermFactory(DjangoModelFactory):
 
     class Meta:
         model = Term
-        django_get_or_create = ('name',)
+        django_get_or_create = ('name', 'taxonomy')
 
     name = fuzzy.FuzzyText()
 

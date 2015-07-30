@@ -64,6 +64,7 @@ USE_L10N = True
 USE_TZ = True
 
 SHORT_DATETIME_FORMAT = 'd M Y H:i'
+SHORT_DATE_FORMAT = 'd M Y'
 # TODO this is used in hid/tables.py
 # and should probably use FORMAT_MODULE_PATH instead.?
 
@@ -390,5 +391,6 @@ else:
     )
 ########## END TEMPLATE CONFIGURATION
 
+CSRF_FAILURE_VIEW = 'hid.views.csrf_failure'
 
 ########## Your stuff: Below this line define 3rd party libary settings

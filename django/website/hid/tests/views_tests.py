@@ -1,17 +1,15 @@
-import mock
 import pytest
 
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, QueryDict
 from django.test import RequestFactory
 
 from ..views import (
-    get_deleted,
     process_items,
-    get_categories,
     delete_items,
     ViewItems,
+    DELETE_COMMAND
 )
 
 from taxonomies.tests.factories import (
@@ -45,64 +43,6 @@ def check_message(request, content):
     return False
 
 
-def test_get_deleted_returns_empty_list_on_empty_selection():
-    params = mock.MagicMock()
-    params.getlist.return_value = []
-
-    assert get_deleted(params) == []
-
-
-def test_get_deleted_returns_submitted_values_as_ints():
-    params = mock.MagicMock()
-    params.getlist.return_value = ["201", "199", "3"]
-
-    assert get_deleted(params) == [201, 199, 3]
-
-
-def test_get_categories_returns_id_category_pairs():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'category-56': "first",
-        'category-1': "second",
-    }
-    expected = [
-        (123, "second"),
-        (99, "third"),
-        (56, "first"),
-        (1, "second")
-    ]
-    assert sorted(get_categories(post_params)) == sorted(expected)  # Order is not important
-
-
-def test_get_categories_filters_out_non_categories():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'notcat-1': "second",
-    }
-    expected = [
-        (123, "second"),
-        (99, "third"),
-    ]
-    assert sorted(get_categories(post_params)) == sorted(expected)  # Order is not important
-
-
-def test_get_categories_filters_out_removed():
-    post_params = {
-        'category-123': "second",
-        'category-99': "third",
-        'category-56': "first",
-        'category-1': "second",
-    }
-    removed = [1, 56]
-    expected = [
-        (123, "second"),
-        (99, "third"),
-    ]
-    assert sorted(get_categories(post_params, removed)) == sorted(expected)  # Order is not important
-
-
 @pytest.fixture
 def request_item():
     '''Create item and request'''
@@ -113,14 +53,18 @@ def request_item():
     [item] = list(transport.items.list())
 
     url = reverse('data-view-process')
-    request = ReqFactory.post(url, {'delete': [item['id']]})
+    request = ReqFactory.post(url, {
+        'action': 'batchupdate-top',
+        'batchaction-top': DELETE_COMMAND,
+        'select_item_id': [item['id']]}
+    )
     request = fix_messages(request)
 
     return [request, item]
 
 
 def check_item_was_deleted(request):
-    assert check_message(request, u"Successfully deleted 1 item.") is True
+    assert check_message(request, u"1 item deleted.") is True
 
     items = list(transport.items.list())
     assert len(list(items)) == 0
@@ -151,7 +95,8 @@ def test_process_items_always_redirects_to_data_view():
     assert isinstance(response, HttpResponseRedirect) is True
 
     request.method = 'POST'
-    request = ReqFactory.post(url)
+    request = ReqFactory.post(url, {})
+    request = fix_messages(request)
     response = process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
@@ -183,12 +128,13 @@ def test_get_category_options_uses_terms():
     )
 
     view = ViewItems()
-    options = view.get_category_options(ebola_questions.id)
+    options = view.get_category_options(ebola_questions.slug)
 
-    assert (type_1.name, type_1.long_name) in options
-    assert (type_2.name, type_2.long_name) in options
-    assert (type_3.name, type_3.long_name) in options
+    assert (type_1.name, type_1.name) in options
+    assert (type_2.name, type_2.name) in options
+    assert (type_3.name, type_3.name) in options
     assert (other_term.name, other_term.long_name) not in options
+
 
 @pytest.mark.django_db
 def test_get_category_options_with_no_taxonomy_returns_all():
@@ -208,5 +154,69 @@ def test_get_category_options_with_no_taxonomy_returns_all():
     view = ViewItems()
     options = view.get_category_options()
 
-    assert (type_1.name, type_1.long_name) in options
-    assert (other_term.name, other_term.long_name) in options
+    assert (type_1.name, type_1.name) in options
+    assert (other_term.name, other_term.name) in options
+
+
+@pytest.mark.django_db
+def test_get_category_options_orders_by_lowercase_name():
+    # TODO: Rewrite tests to use transport layer
+    taxonomy = TaxonomyFactory(name="order_by_lowercase_name_test")
+    test_term_values = [
+        ('test a1', '1'), ('test b1', '2'),
+        ('test A2', '3'), ('test B2', '4')
+    ]
+    for test_value in test_term_values:
+        TermFactory(
+            name=test_value[0],
+            long_name=test_value[1],
+            taxonomy=taxonomy
+        )
+
+    view = ViewItems()
+    options = view.get_category_options(taxonomy.slug)
+
+    # Expected is the list ordered by lowercase short name.
+    expected = [(short, short) for short, long_name in test_term_values]
+    expected = tuple(sorted(expected, key=lambda e: e[0].lower()))
+
+    assert options == expected
+
+
+def test_views_item_get_request_parameters_renames_items_of_active_location():
+    query = QueryDict(
+        'action=something-bottom&item-top=top-value&item-bottom=bottom-value'
+    )
+    expected = {
+        'action': 'something',
+        'item': 'bottom-value',
+        'item-top': 'top-value'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected
+
+
+def test_views_item_get_request_parameters_sets_default_location():
+    query = QueryDict(
+        'action=something&item-top=top-value&item-bottom=bottom-value'
+    )
+    expected = {
+        'action': 'something',
+        'item': 'top-value',
+        'item-bottom': 'bottom-value'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected
+
+
+def test_views_item_get_request_parameters_sets_default_action_and_location():
+    query = QueryDict(
+        'item-top=top-value&item-bottom=bottom-value'
+    )
+    expected = {
+        'action': 'none',
+        'item': 'top-value',
+        'item-bottom': 'bottom-value'
+    }
+    actual = ViewItems.get_request_parameters(query)
+    assert actual.dict() == expected

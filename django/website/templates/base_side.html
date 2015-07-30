@@ -3,13 +3,11 @@
 {% block content %}
 <!-- Navigation -->
     <div class="navbar-default sidebar" role="navigation">
-        <div class="featured-image">
-               <img class="img-responsive" src="{{ STATIC_URL }}images/rsz_west-african-girl.jpg" alt="West African girl" />
-            </div>
+        <div class="col-xs-12 featured-image"></div>
         <nav class="sidebar-nav navbar-collapse collapse">
             <ul class="nav" id="side-menu">
                 <li><a class="active" href="{% url "dashboard" %}"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a></li>
-                <li><a href="{% url "sources" %}"><span class="fa fa-download fa-fw"></span> Sources</a></li>
+                {# <li><a href="{% url "sources" %}"><span class="fa fa-download fa-fw"></span> Sources</a></li> #}
                 <li><a href="{% url "data-view" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit</a></li>
             </ul>
         </nav>
@@ -65,8 +63,10 @@
                     </ul>
                    {% endif %}
                 </div>
-                {% block maincontent %}
-                {% endblock maincontent %}
+                <div class="row main-content">
+                    {% block maincontent %}
+                    {% endblock maincontent %}
+                </div>
                 <div class="row site-info">
                     <p>developed by<a href="http://www.aptivate.org" title="Aptivate website"> Aptivate</a></p>
                 </div>

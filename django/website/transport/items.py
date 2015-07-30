@@ -98,6 +98,9 @@ def add_term(item_id, taxonomy_slug, name):
     returns:
         response from the server
 
+    raises:
+       TransportException on failure
+
     For the moment both the taxonomy and term must already exist.
     """
     view = ItemViewSet.as_view(actions={'post': 'add_term'})

@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from hid.assets import require_assets
 
 from dashboard.models import Dashboard
-from dashboard.widget_pool import get_widget
+from dashboard.widget_pool import get_widget, MissingWidgetType
 
 
 class DashboardView(TemplateView):
@@ -43,7 +43,10 @@ class DashboardView(TemplateView):
         # Ensure we have all the javascript & css dependencies
         require_assets('dashboard/dashboard.css')
         for widget in widgets:
-            widget_type = get_widget(widget.widget_type)
+            try:
+                widget_type = get_widget(widget.widget_type)
+            except MissingWidgetType:
+                continue
             if hasattr(widget_type, 'javascript'):
                 require_assets(*widget_type.javascript)
             if hasattr(widget_type, 'css'):

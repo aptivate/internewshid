@@ -1,6 +1,22 @@
 _pool = {}
 
 
+class MissingWidgetType(Exception):
+    """ Exception raised when a widget type is missing """
+    pass
+
+
+class WidgetError(Exception):
+    """ Exception that can be raised from widget types
+        in get_context_data.
+
+        The error message will be displayed to the end
+        user, so should not contain debug or sensisitve
+        information
+    """
+    pass
+
+
 def register_widget(name, widget):
     """ Register a new widget type
 
@@ -24,10 +40,13 @@ def get_widget(name):
     Returns:
         The widget object as registered with register_widget
     Raises:
-        KeyError: If the widget type does not exist
+        MissingWidgetType: If the widget type does not exist
     """
     global _pool
-    return _pool[name]
+    try:
+        return _pool[name]
+    except KeyError:
+        raise MissingWidgetType()
 
 
 class BasicTextWidget(object):

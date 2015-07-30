@@ -12,20 +12,28 @@ body {
 }
 
 
-.page-header {
-  margin-top:0;
-  padding:@padding-base-vertical;
-}
-
 @media(min-width:@screen-sm-min) {
+    .page-header {
+      margin:@padding-large-vertical;
+    }
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 250px;
-        padding:@padding-large-horizontal;
+        margin: 50px 0 0 250px;
         min-height: 1000px;
         background-color: @gray-lighter;
         .box-shadow-inset(inset, 0px, 0px); 
     }
+}
+
+@media(min-width:@screen-xs)and (max-width:@screen-sm-min){
+  #page-wrapper {
+    margin-top:96px;
+    margin-bottom:60px;
+  }
+}
+
+#page-wrapper {
+  padding:0 @padding-large-horizontal;
 }
 
 // Branding
@@ -62,12 +70,13 @@ body {
   .box-shadow(0 1px 4px rgba(0, 0, 0, 0.3));
   border:none;
   top:0;
-  z-index:@zindex-navbar;
+  z-index:@zindex-navbar-fixed;
 }
 
 @media(min-width:@screen-sm-min) {
     .navbar-static-top {
         position:fixed;
+        top:0;
       }
 }
 
@@ -85,14 +94,15 @@ body {
   }
 }
 .navbar-top-links li a {
-    padding: @nav-link-padding;
+    padding: 15px;
     min-height: 50px;
 }
 
 @media(max-width:@screen-sm){
   .navbar-top-links li a {
-    padding:@panel-heading-padding;
+    padding:5px 10px;
     min-height:10px;
+    margin:5px 10px;
   }
 }
 
@@ -141,6 +151,7 @@ body {
 .navbar-top-links .dropdown-user {
     right: 0;
     left: auto;
+    margin:0;
 }
 
 .navbar-top-links > li > a:hover,
@@ -159,7 +170,6 @@ body {
         padding-left: 0;
         padding-right: 0;
     }
-    margin-top:50px;
     margin-bottom:20px;
 }
 
@@ -173,8 +183,13 @@ body {
 @media(min-width:@screen-xs-min) and (max-width:@screen-sm){
   .navbar-collapse {
     padding-top:@padding-large-vertical * 2; 
+    margin-bottom:-80px;
    }
 }
+
+.navbar-collapse.in {
+     overflow-y:inherit;
+   }
 
 .sidebar .sidebar-search {
     padding: 15px;
@@ -219,16 +234,25 @@ body {
     }
 }
 
-@media(max-width:@screen-sm) {
-    .featured-image > img {
-      width:100%;
-      display:block;
+.featured-image {
+  background-image:url(../images/rsz_west-african-girl.jpg);
+  background-repeat:no-repeat;
+  background-size:cover;
+  min-height:200px;
+}
+
+@media(max-width:@screen-xs) {
+    .sidebar {
+      margin-top:96px;
     }
  }
  
  @media(min-width:@screen-xs-min) and (max-width:@screen-sm) {
-    .featured-image > img {
+    .featured-image {
       display:none;
+    }
+    .sidebar {
+      margin-top:76px;
     }
  }
 
@@ -248,13 +272,14 @@ body {
   width: 250px;
   font-size:12.5px;
   margin:0;
+  z-index:@zindex-navbar-fixed;
 }
 
 @media(max-width:@screen-sm){
   .project-info{
     width: 100%;
     background-color: @gray-lightest;
-    height: 50px;
+    height: 30px;
     .box-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
     bottom: 0;
     padding-top: @padding-small-vertical;
@@ -288,6 +313,12 @@ body {
   }
   & a{
     color:@gray;
+  }
+}
+
+@media(max-width:@screen-sm){
+  .site-info {
+    text-align:center;
   }
 }
 
@@ -372,6 +403,11 @@ body {
     height: 100%;
 }
 
+.flot-legend {
+    padding-bottom: @padding-small-vertical;
+    border-bottom: solid 1px @gray-lighter;
+}
+
 // Circle Buttons 
 
 .btn-circle {
@@ -400,6 +436,12 @@ body {
     border-radius: 35px;
     font-size: 24px;
     line-height: 1.33;
+}
+
+// Auto-upload button. Progressive enhencement, this
+// will be displayed if the associated js executes.
+.auto-upload-file .upload-button {
+    display: none;
 }
 
 // Grid Demo Elements
