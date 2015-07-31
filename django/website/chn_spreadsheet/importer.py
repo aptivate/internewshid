@@ -65,7 +65,8 @@ class Importer(object):
         columns = []
         if first_row:
             col_map = self.get_columns_map(profile_columns)
-            for label in first_row:
+
+            for label in first_row[:len(col_map)]:
                 try:
                     columns.append(col_map[label])
                 except:

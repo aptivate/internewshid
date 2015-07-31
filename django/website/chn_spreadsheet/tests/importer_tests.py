@@ -115,6 +115,15 @@ def test_order_columns_with_first_row_return_first_row_order(importer):
     assert ordered == [cleaned[1], cleaned[0]]
 
 
+def test_order_columns_ignores_extra_columns_in_first_row(importer):
+    cleaned = _make_columns_row(COLUMN_LIST)
+    first_row = ['Message', 'Province', 'None', 'None', 'None']
+
+    ordered = importer.order_columns(COLUMN_LIST, first_row)
+
+    assert ordered == [cleaned[1], cleaned[0]]
+
+
 def test_get_fields_and_types(importer):
     fields, types = importer.get_fields_and_types(COLUMN_LIST)
     expected_types = ['location', 'text']
