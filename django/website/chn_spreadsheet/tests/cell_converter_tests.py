@@ -73,3 +73,15 @@ def test_convert_value_raises_on_date_without_format():
 
     messages = excinfo.value.message.split('\n')
     assert _(u"Date format not specified for 'created' ") in messages
+
+
+def test_date_can_be_empty():
+    value = None
+
+    converter = CellConverter(value, {
+        'type': 'date',
+        'field': 'created'})
+
+    date = converter.convert_value()
+
+    assert date is None

@@ -161,6 +161,9 @@ class CellConverter(object):
             raise SheetImportException(message), None, sys.exc_info()[2]
 
     def convert_date(self):
+        if self.value is None:
+            return None
+
         if isinstance(self.value, basestring):
             date_time = self.parse_date()
         else:
