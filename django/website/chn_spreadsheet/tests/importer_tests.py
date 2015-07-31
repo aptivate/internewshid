@@ -6,7 +6,7 @@ import pytz
 
 from django.utils.translation import ugettext as _
 
-from .importer import (
+from ..importer import (
     CellConverter, Importer,
     SheetProfile, SheetImportException
 )
