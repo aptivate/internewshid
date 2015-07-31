@@ -247,3 +247,56 @@ def test_process_rows_displays_line_number_on_error(importer):
 
     assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
+
+
+def test_process_rows_ignores_empty_lines(importer):
+    class Cell(object):
+        def __init__(self, value):
+            self.value = value
+
+    def _rows_generator():
+        rows = [
+            ('Province', 'Message'),
+            ('London', 'Short message'),
+            ('', ''),
+            (None, None),
+            (Cell(''), Cell('')),
+            (Cell(None), Cell(None)),
+            ('Cambridge', 'What?'),
+        ]
+
+        for row in rows:
+            yield row
+
+    column_list = [
+        {
+            'name': 'Province',
+            'type': 'text',
+            'field': 'location',
+        },
+        {
+            'name': 'Message',
+            'type': 'text',
+            'field': 'body',
+        },
+    ]
+
+    columns = [d.copy() for d in column_list]
+    rows = _rows_generator()
+
+    with_header = True
+
+    objects = importer.process_rows(rows, columns, with_header)
+
+    expected_objects = [
+        {
+            'location': 'London',
+            'body': 'Short message'
+        },
+        {
+            'location': 'Cambridge',
+            'body': 'What?'
+        },
+    ]
+
+    assert objects == expected_objects

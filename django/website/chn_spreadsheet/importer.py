@@ -99,15 +99,18 @@ class Importer(object):
         objects = []
         for i, row in enumerate(rows, 2 if first_row else 1):
             try:
-                objects.append(self.process_row(row, columns))
+                values = self.normalize_row(row)
+
+                if any(values):
+                    objects.append(self.process_row(values, columns))
+
             except SheetImportException as e:
                 raise type(e), type(e)(e.message +
                                        'in row %d ' % i), sys.exc_info()[2]
 
         return objects
 
-    def process_row(self, row, columns):
-        values = self.normalize_row(row)
+    def process_row(self, values, columns):
         return reduce(
             lambda object_dict, converter: converter.add_to(object_dict),
             [CellConverter(val, col) for val, col in zip(values, columns)],
