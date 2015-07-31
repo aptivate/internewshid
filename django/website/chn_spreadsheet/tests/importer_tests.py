@@ -7,7 +7,7 @@ import pytz
 from django.utils.translation import ugettext as _
 
 from ..importer import (
-    CellConverter, Importer,
+    Importer,
     SheetProfile, SheetImportException
 )
 
@@ -133,34 +133,6 @@ def test_get_fields_and_types(importer):
     assert types == expected_types
 
 
-def test_successful_runs_of_parse_date(importer):
-    dates = (
-        ('05/01/2015', '%d/%m/%Y'),
-        ('5.1.2015', '%d.%m.%Y'),
-        ('5/1/15', '%d/%m/%y'),
-        ('05-01-2015', '%d-%m-%Y'),
-        (datetime.datetime(2015, 1, 5, 0, 0), None)
-    )
-    expected = pytz.utc.localize(datetime.datetime(2015, 1, 5))
-    for date, date_format in dates:
-        converter = CellConverter(date,
-                                  {'type': 'date',
-                                   'field': '',
-                                   'date_format': date_format})
-
-        assert converter.convert_value() == expected
-
-
-def test_exception_raised_on_faulty_dates(importer):
-    bad_date = '05x01-2015'
-    with pytest.raises(SheetImportException):
-        converter = CellConverter(bad_date,
-                                  {'type': 'date',
-                                   'field': '',
-                                   'date_format': '%m-%d-%Y'})
-        converter.convert_value()
-
-
 def test_process_row(importer):
     row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
 
@@ -203,43 +175,6 @@ def test_process_row(importer):
         'price': number,
         'created': date
     }
-
-
-def test_convert_value_raises_on_unknown_type(importer):
-    value = 'Short message'
-    type = 'location'
-
-    converter = CellConverter(value, {'type': type, 'field': ''})
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-    assert excinfo.value.message == _(u"Unknown data type 'location' ")
-
-
-def test_convert_value_raises_on_malformed_value(importer):
-    value = 'not_integer'
-    type = 'integer'
-
-    converter = CellConverter(value, {'type': type, 'field': ''})
-
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Can not process value 'not_integer' of type 'integer' ") in messages
-
-
-def test_convert_value_raises_on_date_without_format(importer):
-    value = '1.5.2015'
-
-    converter = CellConverter(value, {
-        'type': 'date',
-        'field': 'created'})
-
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Date format not specified for 'created' ") in messages
 
 
 def test_normalize_row_differences(importer):
