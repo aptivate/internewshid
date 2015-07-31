@@ -11,6 +11,6 @@ def test_list_taxonomies_returns_taxonomies():
 
     taxonomies = transport.taxonomies.list()
 
-    assert len(taxonomies) == 1
-    [taxonomy] = taxonomies
-    assert taxonomy['name'] == 'Ebola Questions'
+    names = [t['name'] for t in taxonomies]
+
+    assert taxonomy.name in names
