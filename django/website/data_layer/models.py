@@ -1,12 +1,20 @@
 from django.db import models
+from django.dispatch.dispatcher import receiver
+from django.utils import timezone
+
 from taxonomies.models import Term
 
 
 class DataLayerModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
+
+    def note_external_modification(self):
+        # This will set the last_modified field
+        self.save()
 
 
 class Message(DataLayerModel):
@@ -42,3 +50,18 @@ class Message(DataLayerModel):
 
 # TODO: rename this class
 Item = Message
+
+
+@receiver(models.signals.m2m_changed, sender=Item.terms.through,
+          dispatch_uid="data_layer.models.terms_signal_handler")
+def terms_signal_handler(sender, **kwargs):
+    if kwargs.get('action') not in ('post_add', 'post_remove'):
+        return
+
+    if kwargs.get('reverse'):
+        items = Item.objects.filter(pk__in=kwargs.get('pk_set'))
+    else:
+        items = [kwargs.get('instance')]
+
+    for item in items:
+        item.note_external_modification()

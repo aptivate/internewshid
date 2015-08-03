@@ -5,7 +5,9 @@
         <h2>{{title}}</h2>
     </div>
     <div class='panel-body'>
-        <div class='flot-chart' 
+        <div class='flot-legend'>
+        </div>
+        <div class='flot-chart'
              data-options='{{ options|json_data }}'
              data-data='{{ data|json_data }}'
         >

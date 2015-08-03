@@ -14,6 +14,13 @@ ReqFactory = RequestFactory()
 
 
 @pytest.fixture
+def term():
+    # TODO rewrite using transport.terms, etc.
+    taxonomy = TaxonomyFactory(name="Test Ebola Questions")
+    return TermFactory(taxonomy=taxonomy, name="Vaccine")
+
+
+@pytest.fixture
 def terms():
     # TODO rewrite using transport.terms, etc.
     taxonomy = TaxonomyFactory(name="Test Ebola Questions")
@@ -29,6 +36,26 @@ def items():
         transport.items.create({'body': 'test message one'}),
         transport.items.create({'body': 'test message two'})
     ]
+
+
+@pytest.fixture
+def item():
+    return transport.items.create({'body': 'test message one'})
+
+
+@pytest.mark.django_db
+def test_add_categories_adds_term_to_item(term, item):
+    category_list = [(item['id'], term.taxonomy.slug, term.name), ]
+
+    url = reverse('data-view-process')
+    request = ReqFactory.post(url, {'a': 'b'})
+    request = fix_messages(request)
+    add_items_categories(request, category_list)
+
+    [item_data] = transport.items.list()
+    [term_data] = item_data['terms']
+    assert term_data['name'] == term.name
+    assert term_data['taxonomy'] == term.taxonomy.slug
 
 
 @pytest.mark.django_db
