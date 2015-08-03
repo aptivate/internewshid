@@ -6,6 +6,8 @@ from taxonomies.tests.factories import TermFactory
 
 from ..views import ItemViewSet
 
+from .item_create_view_tests import create_item
+
 
 def get(data=None):
     view = ItemViewSet.as_view(actions={'get': 'list'})
@@ -22,7 +24,7 @@ def test_get_items_returns_empty_if_no_items():
 
 @pytest.mark.django_db
 def test_get_items_returns_all_items():
-    item = ItemFactory(body='test')
+    create_item(body='test')
 
     items = get().data
 
@@ -33,8 +35,8 @@ def test_get_items_returns_all_items():
 
 @pytest.mark.django_db
 def test_filter_by_body():
-    ItemFactory(body="one")
-    ItemFactory(body="two")
+    create_item(body="one")
+    create_item(body="two")
 
     payload = get(data={'body': 'one'}).data
 
@@ -44,8 +46,12 @@ def test_filter_by_body():
 
 @pytest.mark.django_db
 def test_filter_by_id_list():
-    ItemFactory()
-    item_ids = [ItemFactory().id for i in range(10)]
+    create_item(body='initial item')
+
+    item_ids = []
+    for i in range(10):
+        item = create_item(body='item %d' % i).data
+        item_ids.append(item['id'])
 
     payload = get(data={'ids': item_ids}).data
 
@@ -54,6 +60,8 @@ def test_filter_by_id_list():
 
 @pytest.mark.django_db
 def test_item_listed_with_associated_terms():
+    # TODO: Refactor to use the REST API when we can add
+    # multiple terms to an item
     item = ItemFactory()
     terms = [TermFactory() for i in range(3)]
     for term in terms:
