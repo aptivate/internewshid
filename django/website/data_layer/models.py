@@ -21,6 +21,7 @@ class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
+    network_provider = models.CharField(max_length=200, blank=True)
 
     def apply_term(self, term):
         # TODO: test this
