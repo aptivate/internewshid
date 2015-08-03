@@ -117,9 +117,10 @@ class Importer(object):
             {}
         )
 
-    def save_rows(self, objects, data_type):
+    def save_rows(self, objects, item_type):
         for obj in objects:
-            transport.items.create(obj)
+            item = transport.items.create(obj)
+            transport.items.add_term(item['id'], 'item-types', item_type)
 
         return len(objects)
 
@@ -128,11 +129,12 @@ class Importer(object):
 
         file_format = profile.get('format')
         skip_header = profile.get('skip_header', False)
+        item_type = profile.get('type')
 
         rows = self.get_rows_iterator(fobject, file_format)
         items = self.process_rows(rows, profile['columns'], skip_header)
 
-        return self.save_rows(items, 'message')
+        return self.save_rows(items, item_type)
 
 
 class CellConverter(object):

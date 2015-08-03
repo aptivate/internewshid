@@ -27,3 +27,10 @@ def test_items_imported(importer):
     assert items[0]['body'] == "That there is a special budget to give money to the family of each dead in Liberia since the Ebola outbreak."
     assert items[0]['timestamp'] == pytz.utc.localize(
         datetime.datetime(2015, 4, 19, 21, 35, 20))
+
+    item_types = transport.taxonomies.term_itemcount(
+        slug='item-types')
+
+    counts_per_item = {t['name']: t['count'] for t in item_types}
+
+    assert counts_per_item['rumor'] == num_saved

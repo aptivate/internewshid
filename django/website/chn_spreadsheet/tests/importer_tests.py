@@ -6,6 +6,8 @@ import pytz
 
 from django.utils.translation import ugettext as _
 
+import transport
+
 from ..importer import (
     Importer,
     SheetProfile, SheetImportException
@@ -300,3 +302,17 @@ def test_process_rows_ignores_empty_lines(importer):
     ]
 
     assert objects == expected_objects
+
+
+@pytest.mark.django_db
+def test_save_rows_creates_item_with_term(importer):
+    objects = [{'body': "Text", 'timestamp': datetime.datetime(2014, 7, 21)}]
+    assert importer.save_rows(objects, 'question') == 1
+
+    item_types = transport.taxonomies.term_itemcount(
+        slug='item-types')
+
+    counts_per_item = {t['name']: t['count'] for t in item_types}
+
+    assert counts_per_item['question'] == 1
+    assert counts_per_item['rumor'] == 0

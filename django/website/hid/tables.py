@@ -31,7 +31,7 @@ class ItemTable(tables.Table):
     body = tables.Column(verbose_name=_('Message'))
     category = tables.TemplateColumn(
         template_name='hid/categories_column.html',
-        accessor='terms.0.name',
+        accessor='terms'
     )
 
     def __init__(self, *args, **kwargs):
@@ -40,9 +40,13 @@ class ItemTable(tables.Table):
 
     def render_category(self, record, value):
         Template = loader.get_template('hid/categories_column.html')
+        selected = []
+        for term in value:
+            if term['taxonomy'] == 'ebola-questions':
+                selected.append(term['name'])
         ctx = {
             'categories': self.categories,
-            'category': value,
+            'selected': selected,
             'record': record
         }
 
