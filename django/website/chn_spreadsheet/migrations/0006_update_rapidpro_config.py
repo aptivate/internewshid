@@ -35,7 +35,6 @@ RAPIDPRO_CONFIG = {
             "name": "Rumors (Text) - DEY Say sample flow",
             "type": "text",
             "field": "body"
-
         },
         {
             "name": "Channel",
