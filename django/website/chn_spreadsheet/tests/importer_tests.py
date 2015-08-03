@@ -6,13 +6,10 @@ import pytz
 
 from django.utils.translation import ugettext as _
 
-from .importer import (
-    CellConverter, Importer,
+from ..importer import (
+    Importer,
     SheetProfile, SheetImportException
 )
-
-from data_layer.models import Message
-
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
@@ -118,6 +115,15 @@ def test_order_columns_with_first_row_return_first_row_order(importer):
     assert ordered == [cleaned[1], cleaned[0]]
 
 
+def test_order_columns_ignores_extra_columns_in_first_row(importer):
+    cleaned = _make_columns_row(COLUMN_LIST)
+    first_row = ['Message', 'Province', 'None', 'None', 'None']
+
+    ordered = importer.order_columns(COLUMN_LIST, first_row)
+
+    assert ordered == [cleaned[1], cleaned[0]]
+
+
 def test_get_fields_and_types(importer):
     fields, types = importer.get_fields_and_types(COLUMN_LIST)
     expected_types = ['location', 'text']
@@ -125,34 +131,6 @@ def test_get_fields_and_types(importer):
 
     assert fields == expected_fields
     assert types == expected_types
-
-
-def test_successful_runs_of_parse_date(importer):
-    dates = (
-        ('05/01/2015', '%d/%m/%Y'),
-        ('5.1.2015', '%d.%m.%Y'),
-        ('5/1/15', '%d/%m/%y'),
-        ('05-01-2015', '%d-%m-%Y'),
-        (datetime.datetime(2015, 1, 5, 0, 0), None)
-    )
-    expected = pytz.utc.localize(datetime.datetime(2015, 1, 5))
-    for date, date_format in dates:
-        converter = CellConverter(date,
-                                  {'type': 'date',
-                                   'field': '',
-                                   'date_format': date_format})
-
-        assert converter.convert_value() == expected
-
-
-def test_exception_raised_on_faulty_dates(importer):
-    bad_date = '05x01-2015'
-    with pytest.raises(SheetImportException):
-        converter = CellConverter(bad_date,
-                                  {'type': 'date',
-                                   'field': '',
-                                   'date_format': '%m-%d-%Y'})
-        converter.convert_value()
 
 
 def test_process_row(importer):
@@ -197,43 +175,6 @@ def test_process_row(importer):
         'price': number,
         'created': date
     }
-
-
-def test_convert_value_raises_on_unknown_type(importer):
-    value = 'Short message'
-    type = 'location'
-
-    converter = CellConverter(value, {'type': type, 'field': ''})
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-    assert excinfo.value.message == _(u"Unknown data type 'location' ")
-
-
-def test_convert_value_raises_on_malformed_value(importer):
-    value = 'not_integer'
-    type = 'integer'
-
-    converter = CellConverter(value, {'type': type, 'field': ''})
-
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Can not process value 'not_integer' of type 'integer' ") in messages
-
-
-def test_convert_value_raises_on_date_without_format(importer):
-    value = '1.5.2015'
-
-    converter = CellConverter(value, {
-        'type': 'date',
-        'field': 'created'})
-
-    with pytest.raises(SheetImportException) as excinfo:
-        converter.convert_value()
-
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Date format not specified for 'created' ") in messages
 
 
 def test_normalize_row_differences(importer):
@@ -308,19 +249,54 @@ def test_process_rows_displays_line_number_on_error(importer):
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
 
-@pytest.mark.django_db
-def test_items_imported(importer):
-    assert Message.objects.count() == 0
+def test_process_rows_ignores_empty_lines(importer):
+    class Cell(object):
+        def __init__(self, value):
+            self.value = value
 
-    file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
-    f = open(file_path, 'rb')
+    def _rows_generator():
+        rows = [
+            ('Province', 'Message'),
+            ('London', 'Short message'),
+            ('', ''),
+            (None, None),
+            (Cell(''), Cell('')),
+            (Cell(None), Cell(None)),
+            ('Cambridge', 'What?'),
+        ]
 
-    num_saved = importer.store_spreadsheet('geopoll', f)
-    assert num_saved > 0
+        for row in rows:
+            yield row
 
-    items = Message.objects.all()
-    assert len(items) > 0
+    column_list = [
+        {
+            'name': 'Province',
+            'type': 'text',
+            'field': 'location',
+        },
+        {
+            'name': 'Message',
+            'type': 'text',
+            'field': 'body',
+        },
+    ]
 
-    assert items[0].body == "What  is  the  cuse  of  ebola?"
-    assert items[0].timestamp == pytz.utc.localize(
-        datetime.datetime(2015, 5, 1))
+    columns = [d.copy() for d in column_list]
+    rows = _rows_generator()
+
+    with_header = True
+
+    objects = importer.process_rows(rows, columns, with_header)
+
+    expected_objects = [
+        {
+            'location': 'London',
+            'body': 'Short message'
+        },
+        {
+            'location': 'Cambridge',
+            'body': 'What?'
+        },
+    ]
+
+    assert objects == expected_objects
