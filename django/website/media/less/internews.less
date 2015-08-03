@@ -335,6 +335,18 @@ h2.navbar-brand {
     color: @brand-primary;
 }
 
+.btn-secondary {
+  background-color:@brand-secondary;
+  color:@body-bg;
+  &:hover{
+    background-color:lighten(@brand-secondary, 5%);
+  }
+}
+
+.btn-secondary.btn-outline {
+    color: @brand-secondary;
+}
+
 .btn-success.btn-outline {
     color: @brand-success;
 }
@@ -352,6 +364,7 @@ h2.navbar-brand {
 }
 
 .btn-primary.btn-outline:hover,
+.btn-secondary.btn-outline:hover,
 .btn-success.btn-outline:hover,
 .btn-info.btn-outline:hover,
 .btn-warning.btn-outline:hover,
@@ -359,7 +372,7 @@ h2.navbar-brand {
     color: white;
 }
 
-.btn-primary > .fa {
+.btn > .fa {
   color:@body-bg;
 }
 
@@ -502,6 +515,24 @@ h2.navbar-brand {
     }
 }
 
+.panel-navy, .panel-secondary {
+    border-color: @brand-secondary;
+    .panel-heading {
+        border-color: @brand-secondary;
+        color: white;
+        background-color: @brand-secondary;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-success;
+        &:hover {
+            color: darken(@brand-success, 15%);
+        }
+    }
+}
+
 .panel-green {
     border-color: @brand-success;
     .panel-heading {
@@ -561,3 +592,5 @@ h2.navbar-brand {
   color:@gray-base;
   margin-right:5px;
 }
+
+

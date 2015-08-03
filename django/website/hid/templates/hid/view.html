@@ -19,19 +19,22 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
                 <div class="panel-heading container-fluid">
-                    <div class="col-sm-5 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
                         <span class="fa fa-table fa-fw"></span>
                     <h2>{% trans "All Questions" %}</h2>
                     </div>
-                    <div class="col-sm-7 col-xs-12 text-right">
+                    <div class="col-sm-6 col-xs-12 text-right"> 
                         <form action="{% url "sources-upload" %}"
-                          method="post"
-                          enctype="multipart/form-data"
-                          class="auto-upload-file">
-                        {% csrf_token %}
-                            {% bootstrap_form upload_form show_label=False %}
-                            <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
-                    </form>
+                            method="post"
+                            enctype="multipart/form-data"
+                            class="auto-upload-file">
+                            {% csrf_token %}
+                                {% bootstrap_form upload_form show_label=False %}
+                                <div class="btn-group">
+                                    <a class="btn pull-left item-add btn-primary" type="button" value="Add" href="/view/1/edit"><span class="fa fa-pencil fa-fw"></span>{% blocktrans %}Add {{ type_label }}{% endblocktrans %}</a>
+                                    <a class="btn item-source-upload btn-secondary upload-button" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
+                                </div>
+                        </form>
                     </div>
                     
                 </div>
@@ -51,7 +54,7 @@
                     {% endwith %}
                 </form>
             </div>
+        </div>
     </div>
-</div>
 </div>
 {% endblock maincontent %}
