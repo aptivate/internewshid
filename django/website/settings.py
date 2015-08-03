@@ -64,6 +64,7 @@ USE_L10N = True
 USE_TZ = True
 
 SHORT_DATETIME_FORMAT = 'd M Y H:i'
+SHORT_DATE_FORMAT = 'd M Y'
 # TODO this is used in hid/tables.py
 # and should probably use FORMAT_MODULE_PATH instead.?
 

@@ -51,9 +51,11 @@
     </script>
 {% endblock %}
 {% block body_content %}
-    <div class='flot-chart' 
-         data-data='[[[23, 0], [10, 1], [150, 2], [50, 3]]]'
-         data-options='{"series": {"bars": {"show": true}}, "bars": {"horizontal": true}, "yaxis": {"ticks": [[0, "q1"], [1, "q2"], [2, "q3"], [3, "q4"]]}}'
-         style='width:300px; height:300px'
-    ></div>
+    <div class='panel-body'>
+        <div class='flot-chart'
+             data-data='[[[23, 0], [10, 1], [150, 2], [50, 3]]]'
+             data-options='{"series": {"bars": {"show": true}}, "bars": {"horizontal": true}, "yaxis": {"ticks": [[0, "q1"], [1, "q2"], [2, "q3"], [3, "q4"]]}}'
+             style='width:300px; height:300px'
+        ></div>
+    </div>
 {% endblock %}

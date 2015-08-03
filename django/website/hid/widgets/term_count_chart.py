@@ -1,4 +1,9 @@
 from collections import OrderedDict
+from dashboard.widget_pool import WidgetError
+from datetime import timedelta
+from dateutil import parser
+from django.conf import settings
+from django.utils import dateformat
 from django.utils.translation import ugettext_lazy as _
 from transport.taxonomies import term_itemcount
 
@@ -23,17 +28,27 @@ class TermCountChartWidget(object):
         'hid/widgets/chart.js'
     ]
 
-    def _fetch_counts(self, taxonomy, count, other_label):
+    def _fetch_counts(self, taxonomy, count, start, end, other_label):
         """ Given a taxonomy, fetch the count per term.
 
         Args:
-            - taxonomy: Taxonomy slug
-            - count: If >0, maximum number of rows to returns. If the data
-                     has more terms, all other terms are aggregated under
-                     an 'others' section
-            - other_label: Label for the 'Others' section
+            taxonomy (str): Taxonomy slug
+            count (int): If >0, maximum number of rows to returns. If the data
+                has more terms, all other terms are aggregated under
+                an 'others' section
+            start (datetime or None): If not None, the start of the time period
+                to get the count for
+            end (datetime or None): If not None, the start of the time period
+                to get the count for
+            other_label (str): Label for the 'Others' section
         """
-        itemcount = term_itemcount(taxonomy)
+        itemcount = None
+        if start is not None and end is not None:
+            itemcount = term_itemcount(
+                taxonomy, start_time=start, end_time=end
+            )
+        else:
+            itemcount = term_itemcount(taxonomy)
         itemcount.sort(key=lambda k: int(k['count']), reverse=True)
         if count > 0:
             head = itemcount[0:count-1]
@@ -72,13 +87,74 @@ class TermCountChartWidget(object):
 
         return values, yticks
 
+    def _create_date_range_label(self, start, end):
+        """ Create a label to display a date range.
+
+        The dates are formatter such that:
+        - If either start or end include hours/minutes/seconds
+          that are not 00:00:00 then the full date time is
+          displayed;
+        - If both start and end have zero hours/minutes/seconds
+          then only the day is displayed, and the end day
+          is set to the previous day (to show an inclusive
+          range);
+
+        Args:
+            start (datetime): Start date time
+            end (datetime): End date time
+        Returns:
+            str: Label to use for the date range.
+        """
+        if not start.time() and not end.time():
+            start_str = dateformat.format(start,
+                                          settings.SHORT_DATE_FORMAT)
+            end_str = dateformat.format(end - timedelta(days=1),
+                                        settings.SHORT_DATE_FORMAT)
+        else:
+            start_str = dateformat.format(start,
+                                          settings.SHORT_DATETIME_FORMAT),
+            end_str = dateformat.format(end,
+                                        settings.SHORT_DATETIME_FORMAT)
+        if start_str == end_str:
+            return _('%(date)s') % {'date': start_str}
+        else:
+            return _('%(start)s - %(end)s') % {
+                'start': start_str,
+                'end': end_str
+            }
+
     def get_context_data(self, **kwargs):
         title = kwargs.get('title', _('(missing title)'))
         taxonomy = kwargs.get('taxonomy')
         count = kwargs.get('count', 0)
         other_label = kwargs.get('other_label', 'Others')
+        periods = kwargs.get('periods', [])
 
-        counts = self._fetch_counts(taxonomy, count, other_label)
+        if len(periods) > 1:
+            raise WidgetError('Only one time period is currently supported')
+        if len(periods) == 1:
+            try:
+                start_time = parser.parse(periods[0]['start_time'])
+                end_time = parser.parse(periods[0]['end_time'])
+            except ValueError:
+                raise WidgetError('Error parsing start/end time')
+            legend = {
+                'show': True,
+                'noColumns': 1,
+                'position': 'ne',
+                'labelBoxBorderColor': 'white',
+                'backgroundColor': 'white'
+            }
+            label = self._create_date_range_label(start_time, end_time)
+        else:
+            start_time = None
+            end_time = None
+            legend = {'show': False}
+            label = ''
+
+        counts = self._fetch_counts(
+            taxonomy, count, start_time, end_time, other_label
+        )
         (values, yticks) = self._create_axis_values(counts)
         return {
             'title': title,
@@ -117,7 +193,12 @@ class TermCountChartWidget(object):
                     'margin': 10,
                     'labelMargin': 20,
                     'backgroundColor': '#fafafa'
-                }
+                },
+                'legend': legend
             },
-            'data': [values]
+            'data': [{
+                'label': label,
+                'color': '#f29e30',
+                'data': values
+            }]
         }

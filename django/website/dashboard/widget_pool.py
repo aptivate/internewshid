@@ -6,6 +6,17 @@ class MissingWidgetType(Exception):
     pass
 
 
+class WidgetError(Exception):
+    """ Exception that can be raised from widget types
+        in get_context_data.
+
+        The error message will be displayed to the end
+        user, so should not contain debug or sensisitve
+        information
+    """
+    pass
+
+
 def register_widget(name, widget):
     """ Register a new widget type
 
