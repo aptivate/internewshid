@@ -4,14 +4,27 @@
 {% load render_table from django_tables2 %}
 
 {% block maincontent %}
-<h1 class="page-header"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
+<div class="row">
+    <div class="col-xs-12">
+    <h1 class="page-header header-tabs"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
+    <ul class="nav nav-tabs pull-right" role="tablist">
+        <li role="presentation" ><a href="#" aria-controls="all" role="tab" data-toggle="tab">{% trans "All Items" %}</a></li>
+        <li role="presentation" class="active"><a href="#" aria-controls="questions" role="tab" data-toggle="tab">{% trans "Questions" %}</a></li>
+        <li role="presentation"><a href="#" aria-controls="rumors" role="tab" data-toggle="tab">{% trans "Rumors" %}</a></li>
+      </ul>
+  </div>
+</div>
+
  <div class='row'>
     <div class="col-lg-12">
         <div class="panel panel-default">
-            <div class="panel-heading clearfix">
-                <span class="fa fa-table fa-fw"></span>{{ type_label }}
-                <div class="pull-right">
-                    <form action="{% url "sources-upload" %}"
+                <div class="panel-heading container-fluid">
+                    <div class="col-sm-5 col-xs-12">
+                        <span class="fa fa-table fa-fw"></span>
+                    <h2>{% trans "All Questions" %}</h2>
+                    </div>
+                    <div class="col-sm-7 col-xs-12 text-right">
+                        <form action="{% url "sources-upload" %}"
                           method="post"
                           enctype="multipart/form-data"
                           class="auto-upload-file">
@@ -19,8 +32,9 @@
                             {% bootstrap_form upload_form show_label=False %}
                             <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
                     </form>
+                    </div>
+                    
                 </div>
-            </div>
             <div class="panel-body">
                 <form action="{% url "data-view-process" %}"
                       method="post"
@@ -37,8 +51,7 @@
                     {% endwith %}
                 </form>
             </div>
-        </div>
     </div>
 </div>
+</div>
 {% endblock maincontent %}
-
