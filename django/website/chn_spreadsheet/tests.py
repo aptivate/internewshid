@@ -38,7 +38,6 @@ def importer():
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail
 def test_get_profile_returns_profile(importer):
     label = "unknownpoll"
     profile = {'name': 'Empty profile'}

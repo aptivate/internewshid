@@ -26,39 +26,7 @@ class Importer(object):
             error_msg = _('Misconfigured service. Source "%s" does not exist') % label
             raise SheetImportException(error_msg)
 
-        # TODO: Revert to using database
-        # return sheet_profile.profile
-
-        return {
-            "label": "geopoll",
-            "name": "Geopoll",
-            "format": "excel",
-            "type": "message",
-            "columns": [
-                {
-                    "name": "Province",
-                    "type": "ignore",
-                    "field": "ignore"
-                },
-                {
-                    "name": "CreatedDate",
-                    "type": "date",
-                    "field": "timestamp",
-                    "date_format": "%m/%d/%y"
-                },
-                {
-                    "name": "AgeGroup",
-                    "type": "ignore",
-                    "field": "ignore"
-                },
-                {
-                    "name": "QuestIO",
-                    "type": "text",
-                    "field": "body"
-                }
-            ],
-            "skip_header": 1
-        }
+        return sheet_profile.profile
 
     def get_columns_map(self, col_list):
         '''This function assumes that column names are unique for spreadsheet.
