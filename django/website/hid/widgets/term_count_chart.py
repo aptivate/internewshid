@@ -28,7 +28,8 @@ class TermCountChartWidget(object):
         'hid/widgets/chart.js'
     ]
 
-    def _fetch_counts(self, taxonomy, count, start, end, other_label):
+    def _fetch_counts(self, taxonomy, count, start, end, other_label,
+                      exclude_categories=None):
         """ Given a taxonomy, fetch the count per term.
 
         Args:
@@ -49,6 +50,11 @@ class TermCountChartWidget(object):
             )
         else:
             itemcount = term_itemcount(taxonomy)
+
+        if exclude_categories is not None:
+            itemcount = [t for t in itemcount
+                         if t['name'] not in exclude_categories]
+
         itemcount.sort(key=lambda k: int(k['count']), reverse=True)
         if count > 0:
             head = itemcount[0:count-1]
@@ -129,6 +135,7 @@ class TermCountChartWidget(object):
         count = kwargs.get('count', 0)
         other_label = kwargs.get('other_label', 'Others')
         periods = kwargs.get('periods', [])
+        exclude_categories = kwargs.get('exclude_categories')
 
         if len(periods) > 1:
             raise WidgetError('Only one time period is currently supported')
@@ -153,7 +160,8 @@ class TermCountChartWidget(object):
             label = ''
 
         counts = self._fetch_counts(
-            taxonomy, count, start_time, end_time, other_label
+            taxonomy, count, start_time, end_time, other_label,
+            exclude_categories
         )
         (values, yticks) = self._create_axis_values(counts)
         return {

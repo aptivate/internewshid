@@ -230,3 +230,41 @@ class TestTermCountChartWidget(TestCase):
 
         self.assertEqual(t1, itemcount_kwargs['start_time'])
         self.assertEqual(t2, itemcount_kwargs['end_time'])
+
+    def test_categories_can_be_excluded(self):
+        widget = TermCountChartWidget()
+
+        with patch('hid.widgets.term_count_chart.term_itemcount') as itemcount:
+            itemcount.return_value = [
+                {
+                    'name': 'Ebola updates',
+                    'long_name': 'What are the current updates on Ebola.',
+                    'count': 0,
+                },
+                {
+                    'name': 'Ebola prevention',
+                    'long_name': 'What measures could be put in place to end Ebola.',
+                    'count': 4,
+                },
+                {
+                    'name': 'Liberia Ebola-free',
+                    'long_name': 'Can Liberia be Ebola free.',
+                    'count': 3,
+                },
+                {
+                    'name': 'Unknown',
+                    'long_name': 'Unknown.',
+                    'count': 2,
+                },
+            ]
+            context_data = widget.get_context_data(
+                title='test-name', taxonomy='tax',
+                exclude_categories=['Unknown', 'Liberia Ebola-free']
+            )
+        ticks = context_data['options']['yaxis']['ticks']
+        labels = [t[1] for t in ticks]
+        self.assertIn('What are the current updates on Ebola.', labels)
+        self.assertIn('What measures could be put in place to end Ebola.',
+                      labels)
+        self.assertNotIn('Can Liberia be Ebola free.', labels)
+        self.assertNotIn('Unknown.', labels)
