@@ -1,15 +1,32 @@
 // View/edit 
 
-//link navigation
-
-.nav-hanging-tabs {
-  margin:0;
+.header-tabs {
+  margin-bottom:-30px;
 }
 
-.nav-hanging-tabs > li > a {
-  background-color:rgba(0,0,0,0.05);
-  padding:14px 18px;
+@media(max-width:@screen-xs){
+  .header-tabs {
+    margin-bottom:10px;
+  }
+  .nav-tabs {
+    float:none;
+    width:100%;
+    & li {
+      width:33.3333%;
+      text-align:center;
+    }
+  }
 }
+
+.panel-heading {
+  padding:25px inherit;
+}
+
+.page-header {
+  border:none;
+}
+
+
 
 //table
 .table-no-border > thead > tr > th, .table > tbody > tr > th,
@@ -143,6 +160,53 @@ form.header-upload-form {
 
 //Item view page
 
+.view-item-text {
+  background-color:white;.nav-hanging-tabs {
+  margin:0;
+}
+
+  padding:40px 60px;
+  .item-text {
+    margin-top:20px;
+    padding:40px;
+    background-color:@gray-lightest;
+    font-size:@font-size-large;
+    border:none;
+    .fa {
+      color: lighten(@gray,40%);
+    }
+  }
+}
+
+@media(max-width:@screen-sm){
+  .view-item-text {
+    padding:0;
+    .item-text {
+      padding:20px;
+    }
+  }
+}
+
+.dl-horizontal.item-meta-info {
+  dt {
+    width:70px;
+    text-align:left;
+    float: left;
+    clear: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  dd {
+    margin-left:80px;
+  }
+}
+
+
+
+
+//Item edit page
+
 .item-type {
   color: @brand-primary
 }
@@ -162,3 +226,5 @@ form.header-upload-form {
   color:white;
   padding:20px 20px;
 }
+
+

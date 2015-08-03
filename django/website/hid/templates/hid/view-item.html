@@ -1,0 +1,56 @@
+{% extends "base_side.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load render_widget %}
+
+{% block maincontent %}
+<h1 class="page-header"><span class="fa fa-dashboard fa-fw"></span>{% trans "Dashboard" %}</h1>
+<div class="col-lg-8 col-lg-offset-2">
+    <div class="panel col-xs-12 view-item-text">
+        <div class="row">
+            <h2 class="col-xs-10 small item-type panel-title"><strong>Question</strong>
+                <small class="item-meta-info">{% trans "reported by " %}
+                <span class="item-reported-user" >Alpha Gede</span> {% trans "on " %} 
+                <span class="item-meta item-date-reported">10 Jul 2015 at 15:00</span> {% trans "in " %}
+                <span class="item-meta item-region">Montserrado</span></small>       
+            </h2>
+            <div class="col-xs-2 form-group btn-group">
+                {% bootstrap_button "Edit" button_type="submit" value="update" button_class="btn label pull-right" %}
+            </div> 
+        </div>
+        <blockquote class="item-text">
+            <span class="fa fa-quote-left fa-fw"></span>
+            I have been told that very soon Liberia will be declar ebolo free, now i want to know if there is any ebola case.
+            <span class="fa fa-quote-right fa-fw"></span>
+        </blockquote>
+        <div class="row">
+            <div class="col-lg-6 col-xs-12 item-meta">
+                <dl class="item-meta-info list dl-horizontal pull-left">
+                    <dt>{% trans "Type" %}</dt>
+                    <dd>Question</dd>
+                    <dt>{% trans "Region " %}</dt>
+                    <dd>Montserrado</dd>
+                    <dt>{% trans "Category " %}</dt>
+                    <dd>When will Liberia be Ebola Free</dd>
+                </dl>
+            </div>
+            <div class="col-lg-6 col-xs-12 item-meta">
+                <dl class="item-meta-info list dl-horizontal pull-left">
+                    <dt>{% trans "Reported " %}</dt>
+                    <dd>10 Jul 2015 - 15:00 | Alpha</dd>
+                    <dt>{% trans "Added " %}</dt>
+                    <dd>15 Jul 2015 - 12:00 | William</dd>
+                    <dt>{% trans "Updated " %}</dt>
+                    <dd>17 Jul 2015 - 14:00 | Ben</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 form-group btn-group">
+            <hr />
+                {% bootstrap_button "Done" button_type="submit" value="done" button_class="btn btn-sm btn-success pull-right" %}
+            </div>
+        </div>  
+    </div>
+</div>
+{% endblock maincontent %}
