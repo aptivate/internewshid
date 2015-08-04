@@ -145,6 +145,7 @@ LOCAL_APPS = (
     'dashboard',
     'users',
     'chn_spreadsheet',
+    'tabbed_page',
 )
 
 DATA_LAYER_APPS = (

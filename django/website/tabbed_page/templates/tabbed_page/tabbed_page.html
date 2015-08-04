@@ -1,0 +1,10 @@
+{% extends "base_side.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load render_widget %}
+
+{% block maincontent %}
+    <h1 class="page-header"><span class="fa fa-tabbed-page fa-fw"></span>{% trans "Tabbed Page" %}</h1>
+    <h2>{{ view }}</h2>
+    <h3>{{ view.name }}</h3>
+{% endblock maincontent %}
