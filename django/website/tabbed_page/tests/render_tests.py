@@ -55,3 +55,21 @@ def test_uses_template_name(render_to_string_method):
             mock, 'template_name'
         )
     assert template_name == 'test-tab-template'
+
+
+@pytest.mark.django_db
+def test_uses_context(render_to_string_method):
+    test_context = {'is_test_tab': True}
+
+    tab = TestTab(context=test_context)
+    register_tab('test-tab', tab)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page, name='test-tab')
+
+    with patch(render_to_string_method) as mock:
+        render_tab(tab_instance)
+        actual_context = get_mock_render_to_string_parameter(
+            mock, 'context'
+        )
+    assert actual_context == test_context

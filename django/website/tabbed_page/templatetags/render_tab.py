@@ -8,4 +8,6 @@ def render_tab(tab_instance):
 
     template_name = tab.template_name
 
-    return render_to_string(template_name, {})
+    context = tab.get_context_data()
+
+    return render_to_string(template_name, context)
