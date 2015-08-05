@@ -13,8 +13,6 @@ class TestTab(object):
     def get_context_data(self, **kwargs):
         context = getattr(self, 'context', {})
 
-        context['kwargs'] = kwargs
-
         return context
 
 

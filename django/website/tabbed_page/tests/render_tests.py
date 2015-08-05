@@ -15,61 +15,53 @@ class MockTabInstance(object):
     pass
 
 
-@pytest.fixture
-def render_to_string_method():
-    return 'tabbed_page.templatetags.render_tab.render_to_string'
-
-
-def get_mock_render_to_string_parameter(mock, parameter):
-    """ Helper function to return arguments a mock instance
-        of render_to_string has been invoked with.
-
-        Args:
-            mock: A Mock object
-            parameter: either 'template_name' or 'context'
-        Returns:
-            The value of the given parameter for the last invocation
-            of the given mock with the render_to_string signature.
-        Raises:
-            ValueError: If parameter is not 'template_name' or 'context'
-    """
-    if parameter == 'template_name':
-        return mock.call_args[0][0]
-    elif parameter == 'context':
-        return mock.call_args[0][1]
-    else:
-        raise ValueError()
+render_to_string_method = 'tabbed_page.templatetags.render_tab.render_to_string'
 
 
 @pytest.mark.django_db
-def test_uses_template_name(render_to_string_method):
+@patch(render_to_string_method)
+def test_uses_template_name(mock_render):
     tab = TestTab(template_name='test-tab-template')
     register_tab('test-tab', tab)
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page, name='test-tab')
 
-    with patch(render_to_string_method) as mock:
-        render_tab(tab_instance)
-        template_name = get_mock_render_to_string_parameter(
-            mock, 'template_name'
-        )
-    assert template_name == 'test-tab-template'
+    render_tab(tab_instance)
+
+    mock_render.assert_called_once_with('test-tab-template', {})
 
 
 @pytest.mark.django_db
-def test_uses_context(render_to_string_method):
+@patch(render_to_string_method)
+def test_uses_context(mock_render):
     test_context = {'is_test_tab': True}
 
     tab = TestTab(context=test_context)
     register_tab('test-tab', tab)
 
     page = TabbedPageFactory()
+
     tab_instance = TabInstanceFactory(page=page, name='test-tab')
 
-    with patch(render_to_string_method) as mock:
+    render_tab(tab_instance)
+
+    mock_render.assert_called_once_with(None, test_context)
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_settings_passed_to_widget_get_context_data(render_to_string_method):
+    with patch.object(TestTab, 'get_context_data') as mock_get_context:
+        tab = TestTab()
+        register_tab('test-tab', tab)
+
+        page = TabbedPageFactory()
+        columns = ['body', 'timestamp', 'network_provider']
+        settings = {'columns': columns}
+        tab_instance = TabInstanceFactory(page=page,
+                                          name='test-tab',
+                                          settings=settings)
         render_tab(tab_instance)
-        actual_context = get_mock_render_to_string_parameter(
-            mock, 'context'
-        )
-    assert actual_context == test_context
+
+    mock_get_context.assert_called_once_with(columns=columns)

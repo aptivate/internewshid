@@ -17,3 +17,4 @@ class TabInstanceFactory(DjangoModelFactory):
 
     name = fuzzy.FuzzyText()
     label = fuzzy.FuzzyText()
+    settings = {}
