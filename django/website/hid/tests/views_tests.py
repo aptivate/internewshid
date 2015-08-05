@@ -5,10 +5,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, QueryDict
 from django.test import RequestFactory
 
-from ..views import (
-    process_items,
-    delete_items,
-    ViewItems,
+from hid.tabs.view_and_edit_table import (
+    ViewAndEditTableTab,
+    view_and_edit_table_form_process_items,
+    _delete_items,
+    _get_view_and_edit_form_request_parameters,
     DELETE_COMMAND
 )
 
@@ -73,14 +74,14 @@ def check_item_was_deleted(request):
 @pytest.mark.django_db
 def test_delete_items_deletes_items(request_item):
     req, item = request_item
-    delete_items(req, [item['id']])
+    _delete_items(req, [item['id']])
     check_item_was_deleted(req)
 
 
 @pytest.mark.django_db
 def test_process_items_deletes_items(request_item):
     req, item = request_item
-    process_items(req)
+    view_and_edit_table_form_process_items(req)
     check_item_was_deleted(req)
 
 
@@ -90,14 +91,14 @@ def test_process_items_always_redirects_to_data_view():
 
     request = ReqFactory.get(url)
 
-    response = process_items(request)
+    response = view_and_edit_table_form_process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
 
     request.method = 'POST'
     request = ReqFactory.post(url, {})
     request = fix_messages(request)
-    response = process_items(request)
+    response = view_and_edit_table_form_process_items(request)
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
 
@@ -127,35 +128,13 @@ def test_get_category_options_uses_terms():
         taxonomy=other_taxonomy,
     )
 
-    view = ViewItems()
-    options = view.get_category_options(ebola_questions.slug)
+    table = ViewAndEditTableTab()
+    options = table._get_category_options(categories=[ebola_questions.slug])
 
     assert (type_1.name, type_1.name) in options
     assert (type_2.name, type_2.name) in options
     assert (type_3.name, type_3.name) in options
     assert (other_term.name, other_term.long_name) not in options
-
-
-@pytest.mark.django_db
-def test_get_category_options_with_no_taxonomy_returns_all():
-    # TODO: Rewrite tests to use transport layer
-    ebola_questions = TaxonomyFactory(name="Ebola Questions")
-    other_taxonomy = TaxonomyFactory(name="Should be ignored")
-    type_1 = TermFactory(
-        name="Measures",
-        taxonomy=ebola_questions,
-        long_name="What measures could end Ebola?",
-    )
-    other_term = TermFactory(
-        name="Some other thing",
-        taxonomy=other_taxonomy,
-    )
-
-    view = ViewItems()
-    options = view.get_category_options()
-
-    assert (type_1.name, type_1.name) in options
-    assert (other_term.name, other_term.name) in options
 
 
 @pytest.mark.django_db
@@ -173,8 +152,8 @@ def test_get_category_options_orders_by_lowercase_name():
             taxonomy=taxonomy
         )
 
-    view = ViewItems()
-    options = view.get_category_options(taxonomy.slug)
+    table = ViewAndEditTableTab()
+    options = table._get_category_options(categories=[taxonomy.slug])
 
     # Expected is the list ordered by lowercase short name.
     expected = [(short, short) for short, long_name in test_term_values]
@@ -192,7 +171,7 @@ def test_views_item_get_request_parameters_renames_items_of_active_location():
         'item': 'bottom-value',
         'item-top': 'top-value'
     }
-    actual = ViewItems.get_request_parameters(query)
+    actual = _get_view_and_edit_form_request_parameters(query)
     assert actual.dict() == expected
 
 
@@ -205,7 +184,7 @@ def test_views_item_get_request_parameters_sets_default_location():
         'item': 'top-value',
         'item-bottom': 'bottom-value'
     }
-    actual = ViewItems.get_request_parameters(query)
+    actual = _get_view_and_edit_form_request_parameters(query)
     assert actual.dict() == expected
 
 
@@ -218,5 +197,5 @@ def test_views_item_get_request_parameters_sets_default_action_and_location():
         'item': 'top-value',
         'item-bottom': 'bottom-value'
     }
-    actual = ViewItems.get_request_parameters(query)
+    actual = _get_view_and_edit_form_request_parameters(query)
     assert actual.dict() == expected
