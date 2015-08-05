@@ -7,18 +7,11 @@ from ..tab_pool import (
     MissingTabError,
 )
 
+from .test_tab import TestTab, tab
+
 
 def setup_function(function):
     clear_tabs()
-
-
-class TestTab(object):
-    pass
-
-
-@pytest.fixture
-def tab():
-    return TestTab()
 
 
 def test_tab_is_registered(tab):
