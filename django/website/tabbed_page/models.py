@@ -12,10 +12,10 @@ class TabbedPage(models.Model):
         return self.name
 
 
-class Tab(models.Model):
+class TabInstance(models.Model):
     settings = JSONField(blank=True)
     view_name = models.CharField(max_length=128)
-    page = models.ForeignKey(TabbedPage)
+    page = models.ForeignKey(TabbedPage, related_name='tabs')
     name = models.CharField(max_length=128)
     default = models.BooleanField(default=False)
     position = models.PositiveIntegerField(default=0)

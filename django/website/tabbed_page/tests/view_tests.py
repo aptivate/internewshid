@@ -3,7 +3,7 @@ import pytest
 
 from ..views import TabbedPageView
 
-from .factories import TabbedPageFactory, TabFactory
+from .factories import TabbedPageFactory, TabInstanceFactory
 
 
 @pytest.mark.django_db
@@ -42,9 +42,9 @@ def test_name_defaults_to_main_when_empty():
 @pytest.mark.django_db
 def test_widgets_stored_on_view_in_position_order():
     page = TabbedPageFactory()
-    tab3 = TabFactory(page=page, position=3)
-    tab1 = TabFactory(page=page, position=1)
-    tab2 = TabFactory(page=page, position=2)
+    tab3 = TabInstanceFactory(page=page, position=3)
+    tab1 = TabInstanceFactory(page=page, position=1)
+    tab2 = TabInstanceFactory(page=page, position=2)
 
     view = TabbedPageView()
     view.kwargs = {'name': page.name}

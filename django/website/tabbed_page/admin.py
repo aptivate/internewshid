@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import TabbedPage, Tab
+from .models import TabbedPage, TabInstance
 
 
 class TabInline(admin.StackedInline):
-    model = Tab
+    model = TabInstance
     extra = 0
 
 

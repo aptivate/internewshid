@@ -1,7 +1,7 @@
 from factory.django import DjangoModelFactory
 from factory import fuzzy
 
-from ..models import TabbedPage, Tab
+from ..models import TabbedPage, TabInstance
 
 
 class TabbedPageFactory(DjangoModelFactory):
@@ -11,9 +11,9 @@ class TabbedPageFactory(DjangoModelFactory):
     name = fuzzy.FuzzyText()
 
 
-class TabFactory(DjangoModelFactory):
+class TabInstanceFactory(DjangoModelFactory):
     class Meta:
-        model = Tab
+        model = TabInstance
 
     name = fuzzy.FuzzyText()
     label = fuzzy.FuzzyText()

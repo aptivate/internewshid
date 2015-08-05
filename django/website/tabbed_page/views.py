@@ -9,7 +9,7 @@ class TabbedPageView(TemplateView):
 
     @property
     def tabs(self):
-        return self.page.tab_set.all().order_by('position')
+        return self.page.tabs.all().order_by('position')
 
     @property
     def page(self):
