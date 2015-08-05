@@ -28,10 +28,44 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     filter_fields = ('created', 'body', 'timestamp', )
 
     def get_queryset(self):
+        """ Return the queryset for this view.
+
+        This accepts two get parameters for filtering:
+            ids: A list of ids
+            terms: A list of strings formatted as
+                <taxonomy slug>:<term name>.
+
+                Notes:
+
+                - This performs and AND search, so only
+                  items that have all the given
+                  terms are returned;
+                - taxonomy slugs do not allow ':'
+                  characters, so no escaping is
+                  needed.
+
+        Returns:
+            QuerySet: The filtered list of items
+        """
         items = Item.objects.all()
+
+        # Filter on ids
         ids = self.request.query_params.getlist('ids')
         if ids:
             items = items.filter(id__in=ids)
+
+        # Filter on terms
+        terms = self.request.query_params.getlist('terms', [])
+        for taxonomy_and_term in terms:
+            (taxonomy, term) = taxonomy_and_term.split(':', 1)
+            matches = Term.objects.filter(
+                name=term, taxonomy__slug=taxonomy
+            )
+            if len(matches) == 0:
+                # If the term doesn't exist, there can be no matches
+                return Item.objects.none()
+
+            items = items.filter(terms__id=matches[0].id)
 
         return items
 
