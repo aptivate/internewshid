@@ -37,8 +37,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
                 Notes:
 
-                - This performs and AND search, so only
-                  items that have all the given
+                - Only items that have all the given
                   terms are returned;
                 - taxonomy slugs do not allow ':'
                   characters, so no escaping is
