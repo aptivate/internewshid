@@ -5,13 +5,22 @@ from .models import TabbedPage
 
 class TabbedPageView(TemplateView):
     template_name = "tabbed_page/tabbed_page.html"
+    _page = None
 
     @property
-    def page_name(self):
-        name = self.kwargs.get('name')
+    def tabs(self):
+        return self.page.tab_set.all().order_by('position')
 
-        if name:
-            page = TabbedPage.objects.get(name=name)
-            return page.name
+    @property
+    def page(self):
+        if self._page is None:
+            name = self.kwargs.get('name')
 
-        return 'main'
+            # TODO: check if name can ever be empty string
+            # if not, can just put default in get() above
+            if not name:
+                name = 'main'
+
+            self._page = TabbedPage.objects.get(name=name)
+
+        return self._page

@@ -5,6 +5,11 @@
 
 {% block maincontent %}
     <h1 class="page-header"><span class="fa fa-tabbed-page fa-fw"></span>{% trans "Tabbed Page" %}</h1>
-    <h2>{{ view }}</h2>
-    <h3>{{ view.name }}</h3>
+    <h2>Page = {{ view.page }}</h2>
+
+    <ul>
+    {% for tab in view.tabs %}
+    <li>{{ tab }}</li>
+    {% endfor %}
+    </ul>
 {% endblock maincontent %}
