@@ -138,7 +138,8 @@ class ViewAndEditTableTab(object):
         )
 
         # Build the upload form
-        upload_form = UploadForm(initial={'source': 'geopoll'})
+        source = kwargs.get('source')
+        upload_form = UploadForm(initial={'source': source})
 
         # Build the actions drop down
         actions = [

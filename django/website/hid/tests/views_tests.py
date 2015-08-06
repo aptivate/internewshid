@@ -1,3 +1,4 @@
+from mock import Mock
 import pytest
 
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -160,6 +161,17 @@ def test_get_category_options_orders_by_lowercase_name():
     expected = tuple(sorted(expected, key=lambda e: e[0].lower()))
 
     assert options == expected
+
+
+@pytest.mark.django_db
+def test_upload_form_source_read_from_settings():
+    tab = ViewAndEditTableTab()
+
+    request = Mock(GET={})
+    context_data = tab.get_context_data(request, source='rapidpro')
+
+    form = context_data['upload_form']
+    assert form.initial == {'source': 'rapidpro'}
 
 
 def test_views_item_get_request_parameters_renames_items_of_active_location():
