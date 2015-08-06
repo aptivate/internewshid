@@ -76,7 +76,7 @@ def test_uses_request(mock_render):
         page=page,
         view_name='basic-html-tab')
 
-    request = 'a request'
+    request = Mock()
     context = {'request': request}
     render_tab(context, tab_instance)
 
