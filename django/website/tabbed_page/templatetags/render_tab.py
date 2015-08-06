@@ -46,10 +46,7 @@ def _get_rendering_details(context, tab_instance):
 
     tab_details = tab.get_context_data(**settings)
 
-    request = None
-
-    if context:  # TODO: Only used for testing?
-        request = context.get('request')
+    request = context.get('request')
 
     return template_name, tab_details, request
 

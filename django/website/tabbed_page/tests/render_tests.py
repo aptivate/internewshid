@@ -38,7 +38,7 @@ def test_uses_template_name(mock_render):
     tab_instance = TabInstanceFactory(
         page=page, view_name='basic-html-tab')
 
-    render_tab(None, tab_instance)
+    render_tab({}, tab_instance)
 
     args, _ = mock_render.call_args
     assert args[0] == tab.template_name
@@ -58,7 +58,7 @@ def test_uses_context(mock_render):
         page = TabbedPageFactory()
         tab_instance = TabInstanceFactory(page=page, view_name='basic-html-tab')
 
-        render_tab(None, tab_instance)
+        render_tab({}, tab_instance)
 
     _, kwargs = mock_render.call_args
     assert kwargs['context'] == test_context
@@ -137,7 +137,8 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
             view_name='basic-html-tab',
             settings=settings)
 
-        render_tab(None, tab_instance)
+        context = {}
+        render_tab(context, tab_instance)
 
     _, kwargs = mock_get_context.call_args
     assert kwargs['columns'] == columns
