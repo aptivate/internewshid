@@ -18,12 +18,12 @@ def render_tab(context, tab_instance):
     else:
         settings = {}  # TODO: json field doesn't default to this?
 
-    tab_details = tab.get_context_data(**settings)
-
     if context:  # TODO: Only used for testing?
         request = context.get('request')
     else:
         request = None
+
+    tab_details = tab.get_context_data(request, **settings)
 
     return render_to_string(template_name,
                             context=tab_details,
