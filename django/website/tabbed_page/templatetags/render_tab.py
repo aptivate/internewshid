@@ -38,9 +38,9 @@ def _get_rendering_details(context, tab_instance):
     else:
         settings = {}  # TODO: json field doesn't default to this?
 
-    tab_details = tab.get_context_data(**settings)
-
     request = context.get('request')
+
+    tab_details = tab.get_context_data(request, **settings)
 
     return template_name, tab_details, request
 
