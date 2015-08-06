@@ -1,15 +1,27 @@
 {% extends "base_side.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
-{% load render_widget %}
+{% load render_tab %}
 
 {% block maincontent %}
-    <h1 class="page-header"><span class="fa fa-tabbed-page fa-fw"></span>{% trans "Tabbed Page" %}</h1>
-    <h2>Page = {{ view.page }}</h2>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-header header-tabs"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            {% for tab in view.tabs %}
+                <li role="presentation"
+                    {% if tab == view.active_tab %}class="active"{% endif %}>
+                    <a href="#" aria-controls="..." role="tab" data-toggle="tab">
+                        {% trans tab.label %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
-    <ul>
-    {% for tab in view.tabs %}
-    <li>{{ tab }}</li>
-    {% endfor %}
-    </ul>
+<div class='row'>
+    <div class="col-lg-12">
+        {{ view.active_tab|render_tab }}
+    </div>
+</div>
 {% endblock maincontent %}
