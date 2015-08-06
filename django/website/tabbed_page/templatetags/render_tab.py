@@ -14,12 +14,6 @@ register = template.Library()
 def render_tab(context, tab_instance):
     request = None
 
-    try:
-        tab = get_tab(tab_instance.view_name)
-    except MissingTabError as e:
-        template_name = 'tabbed_page/tab-error.html'
-        tab_details = {'error': e.message}
-
     template_name, tab_details, request = _get_rendering_details(
         context, tab_instance)
 
