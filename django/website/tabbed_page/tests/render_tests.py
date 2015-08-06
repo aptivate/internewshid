@@ -34,6 +34,7 @@ def test_uses_template_name(mock_render):
     register_tab('basic-html-tab', tab)
 
     page = TabbedPageFactory()
+
     tab_instance = TabInstanceFactory(
         page=page, view_name='basic-html-tab')
 
@@ -70,6 +71,7 @@ def test_uses_request(mock_render):
     register_tab('basic-html-tab', tab)
 
     page = TabbedPageFactory()
+
     tab_instance = TabInstanceFactory(
         page=page,
         view_name='basic-html-tab')
@@ -134,6 +136,7 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
             page=page,
             view_name='basic-html-tab',
             settings=settings)
+
         render_tab(None, tab_instance)
 
     _, kwargs = mock_get_context.call_args
