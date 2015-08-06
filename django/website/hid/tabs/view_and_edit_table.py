@@ -89,14 +89,11 @@ class ViewAndEditTableTab(object):
             Returns:
                 list of str: List of columns to exclude
         """
-        all_columns = []
-        for attr, value in vars(ItemTable).items():
-            if not attr.startswith('_') and not callable(value):
-                all_columns.append(attr)
-        included_columns = kwargs.get('fields', None)
+        included_columns = kwargs.get('columns', None)
         if included_columns is None:
             excluded_columns = ()
         else:
+            all_columns = [k for k, v in ItemTable.base_columns.items()]
             excluded_columns = set(all_columns) - set(included_columns)
 
         return excluded_columns
