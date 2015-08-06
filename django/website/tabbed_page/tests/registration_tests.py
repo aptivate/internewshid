@@ -24,8 +24,10 @@ def test_tab_is_registered(tab):
 
 
 def test_exception_when_tab_not_registered(tab):
-    with pytest.raises(MissingTabError):
+    with pytest.raises(MissingTabError) as excinfo:
         get_tab('test-tab')
+
+    assert "Tab named 'test-tab' has not been registered" in str(excinfo.value)
 
 
 def test_registering_twice_overrides_existing_tab(tab):
