@@ -50,3 +50,48 @@ def test_widgets_stored_on_view_in_position_order():
     view.kwargs = {'name': page.name}
 
     assert list(view.tabs) == [tab1, tab2, tab3]
+
+
+@pytest.mark.django_db
+def test_active_tab_is_the_default_when_none_is_specified():
+    page = TabbedPageFactory()
+    tabs = [
+        TabInstanceFactory(page=page),
+        TabInstanceFactory(page=page, default=True),
+        TabInstanceFactory(page=page)
+    ]
+
+    view = TabbedPageView()
+    view.kwargs = {'name': page.name, 'tab_name': None}
+
+    assert view.active_tab == tabs[1]
+
+
+@pytest.mark.django_db
+def test_active_tab_is_the_specified_one():
+    page = TabbedPageFactory()
+    tabs = [
+        TabInstanceFactory(page=page),
+        TabInstanceFactory(page=page, default=True),
+        TabInstanceFactory(page=page)
+    ]
+
+    view = TabbedPageView()
+    view.kwargs = {'name': page.name, 'tab_name': tabs[2].name}
+
+    assert view.active_tab == tabs[2]
+
+
+@pytest.mark.django_db
+def test_there_is_an_active_tab_even_without_a_default():
+    page = TabbedPageFactory()
+    tabs = [
+        TabInstanceFactory(page=page),
+        TabInstanceFactory(page=page),
+        TabInstanceFactory(page=page)
+    ]
+
+    view = TabbedPageView()
+    view.kwargs = {'name': page.name, 'tab_name': None}
+
+    assert view.active_tab in tabs

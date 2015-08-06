@@ -5,20 +5,17 @@ from ..tab_pool import (
     get_tab,
     clear_tabs,
     MissingTabError,
+    BasicHtmlTab,
 )
-
-
-def setup_function(function):
-    clear_tabs()
-
-
-class TestTab(object):
-    pass
 
 
 @pytest.fixture
 def tab():
-    return TestTab()
+    return BasicHtmlTab()
+
+
+def setup_function(function):
+    clear_tabs()
 
 
 def test_tab_is_registered(tab):
@@ -34,7 +31,7 @@ def test_exception_when_tab_not_registered(tab):
 def test_registering_twice_overrides_existing_tab(tab):
     register_tab('test-tab', tab)
 
-    tab2 = TestTab()
+    tab2 = BasicHtmlTab()
     register_tab('test-tab', tab2)
 
     assert get_tab('test-tab') == tab2
