@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 _pool = {}
 
 
@@ -16,7 +18,7 @@ def get_tab(name):
     try:
         return _pool[name]
     except KeyError:
-        raise MissingTabError("Tab named '%s' has not been registered" % name)
+        raise MissingTabError(_("Tab named '%s' has not been registered") % name)
 
 
 def clear_tabs():

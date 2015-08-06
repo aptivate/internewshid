@@ -6,7 +6,12 @@ from .factories import (
     TabInstanceFactory,
 )
 
-from ..tab_pool import register_tab, BasicHtmlTab
+from ..tab_pool import (
+    register_tab,
+    clear_tabs,
+    BasicHtmlTab,
+)
+
 from ..templatetags.render_tab import render_tab
 
 
@@ -15,6 +20,11 @@ class MockTabInstance(object):
 
 
 render_to_string_method = 'tabbed_page.templatetags.render_tab.render_to_string'
+
+
+def setup_function(function):
+    clear_tabs()
+
 
 
 @pytest.mark.django_db
@@ -70,6 +80,22 @@ def test_uses_request(mock_render):
 
     _, kwargs = mock_render.call_args
     assert kwargs['request'] == request
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_missing_widget_handled(mock_render):
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(
+        page=page,
+        view_name='basic-html-tab')
+
+    context = {}
+    render_tab(context, tab_instance)
+
+    args, kwargs = mock_render.call_args
+    assert args[0] == 'tabbed_page/tab-error.html'
+    assert kwargs['context']['error'] == "Tab named 'basic-html-tab' has not been registered"
 
 
 @pytest.mark.django_db
