@@ -57,8 +57,9 @@ def request_item():
     request = ReqFactory.post(url, {
         'action': 'batchupdate-top',
         'batchaction-top': DELETE_COMMAND,
-        'select_item_id': [item['id']]}
-    )
+        'select_item_id': [item['id']],
+        'next': 'http://localhost/testurl'
+    })
     request = fix_messages(request)
 
     return [request, item]
@@ -85,7 +86,7 @@ def test_process_items_deletes_items(request_item):
     check_item_was_deleted(req)
 
 
-def test_process_items_always_redirects_to_data_view():
+def test_empty_process_items_redirects_to_data_view():
     url = reverse('data-view-process')
     redirect_url = reverse('data-view')
 
@@ -95,11 +96,12 @@ def test_process_items_always_redirects_to_data_view():
     assert response.url == redirect_url
     assert isinstance(response, HttpResponseRedirect) is True
 
-    request.method = 'POST'
-    request = ReqFactory.post(url, {})
-    request = fix_messages(request)
-    response = view_and_edit_table_form_process_items(request)
-    assert response.url == redirect_url
+
+@pytest.mark.django_db
+def test_process_items_redirects_to_provided_url(request_item):
+    req, item = request_item
+    response = view_and_edit_table_form_process_items(req)
+    assert response.url == 'http://localhost/testurl'
     assert isinstance(response, HttpResponseRedirect) is True
 
 
