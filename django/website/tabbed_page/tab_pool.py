@@ -16,7 +16,7 @@ def get_tab(name):
     try:
         return _pool[name]
     except KeyError:
-        raise MissingTabError()
+        raise MissingTabError("Tab named '%s' has not been registered" % name)
 
 
 def clear_tabs():

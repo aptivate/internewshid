@@ -7,8 +7,8 @@ from ..tab_pool import get_tab
 register = template.Library()
 
 
-@register.filter(name='render_tab')
-def render_tab(tab_instance):
+@register.simple_tag(takes_context=True)
+def render_tab(context, tab_instance):
     tab = get_tab(tab_instance.view_name)
 
     template_name = tab.template_name
@@ -18,6 +18,13 @@ def render_tab(tab_instance):
     else:
         settings = {}  # TODO: json field doesn't default to this?
 
-    context = tab.get_context_data(**settings)
+    tab_details = tab.get_context_data(**settings)
 
-    return render_to_string(template_name, context)
+    if context:  # TODO: Only used for testing?
+        request = context.get('request')
+    else:
+        request = None
+
+    return render_to_string(template_name,
+                            context=tab_details,
+                            request=request)
