@@ -8,7 +8,11 @@ def render_tab(tab_instance):
 
     template_name = tab.template_name
 
-    settings = tab_instance.settings
+    if tab_instance.settings:
+        settings = tab_instance.settings
+    else:
+        settings = {}  # TODO: json field doesn't default to this?
+
     context = tab.get_context_data(**settings)
 
     return render_to_string(template_name, context)
