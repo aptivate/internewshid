@@ -25,7 +25,9 @@ def test_uses_template_name(mock_render):
     register_tab('test-tab', tab)
 
     page = TabbedPageFactory()
-    tab_instance = TabInstanceFactory(page=page, name='test-tab')
+    tab_instance = TabInstanceFactory(
+        page=page, view_name='test-tab'
+    )
 
     render_tab(tab_instance)
 
@@ -42,7 +44,9 @@ def test_uses_context(mock_render):
 
     page = TabbedPageFactory()
 
-    tab_instance = TabInstanceFactory(page=page, name='test-tab')
+    tab_instance = TabInstanceFactory(
+        page=page, view_name='test-tab'
+    )
 
     render_tab(tab_instance)
 
@@ -59,9 +63,11 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
         page = TabbedPageFactory()
         columns = ['body', 'timestamp', 'network_provider']
         settings = {'columns': columns}
-        tab_instance = TabInstanceFactory(page=page,
-                                          name='test-tab',
-                                          settings=settings)
+        tab_instance = TabInstanceFactory(
+            page=page,
+            view_name='test-tab',
+            settings=settings
+        )
         render_tab(tab_instance)
 
     mock_get_context.assert_called_once_with(columns=columns)
