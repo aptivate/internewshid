@@ -1,10 +1,15 @@
+from django import template
 from django.template.loader import render_to_string
 
 from ..tab_pool import get_tab
 
 
+register = template.Library()
+
+
+@register.filter(name='render_tab')
 def render_tab(tab_instance):
-    tab = get_tab(tab_instance.name)
+    tab = get_tab(tab_instance.view_name)
 
     template_name = tab.template_name
 
