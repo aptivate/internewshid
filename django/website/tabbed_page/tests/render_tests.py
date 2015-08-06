@@ -27,9 +27,10 @@ def test_uses_template_name(mock_render):
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page, name='test-tab')
 
-    render_tab(tab_instance)
+    render_tab(None, tab_instance)
 
-    mock_render.assert_called_once_with('test-tab-template', {})
+    args, _ = mock_render.call_args
+    assert args[0] == 'test-tab-template'
 
 
 @pytest.mark.django_db
@@ -44,9 +45,27 @@ def test_uses_context(mock_render):
 
     tab_instance = TabInstanceFactory(page=page, name='test-tab')
 
-    render_tab(tab_instance)
+    render_tab(None, tab_instance)
 
-    mock_render.assert_called_once_with(None, test_context)
+    _, kwargs = mock_render.call_args
+    assert kwargs['context'] == test_context
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_uses_request(mock_render):
+    tab = TestTab()
+    register_tab('test-tab', tab)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page, name='test-tab')
+
+    request = 'a request'
+    context = {'request': request}
+    render_tab(context, tab_instance)
+
+    _, kwargs = mock_render.call_args
+    assert kwargs['request'] == request
 
 
 @pytest.mark.django_db
@@ -62,6 +81,7 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
         tab_instance = TabInstanceFactory(page=page,
                                           name='test-tab',
                                           settings=settings)
-        render_tab(tab_instance)
+        render_tab(None, tab_instance)
 
-    mock_get_context.assert_called_once_with(columns=columns)
+    _, kwargs = mock_get_context.call_args
+    assert kwargs['columns'] == columns
