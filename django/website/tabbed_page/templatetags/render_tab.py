@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def render_tab(context, tab_instance):
-    tab = get_tab(tab_instance.name)
+    tab = get_tab(tab_instance.view_name)
 
     template_name = tab.template_name
 
