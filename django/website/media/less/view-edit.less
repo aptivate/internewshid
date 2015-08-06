@@ -143,6 +143,50 @@ form.header-upload-form {
 
 //Item view page
 
+.view-item-text {
+  background-color:white;
+  padding:40px 60px;
+  .item-text {
+    margin-top:20px;
+    padding:40px;
+    background-color:@gray-lightest;
+    font-size:@font-size-large;
+    border:none;
+    .fa {
+      color: lighten(@gray,40%);
+    }
+  }
+}
+
+@media(max-width:@screen-sm){
+  .view-item-text {
+    padding:0;
+    .item-text {
+      padding:20px;
+    }
+  }
+}
+
+.dl-horizontal.item-meta-info {
+  dt {
+    width:70px;
+    text-align:left;
+    float: left;
+    clear: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  dd {
+    margin-left:80px;
+  }
+}
+
+
+
+
+//Item edit page
+
 .item-type {
   color: @brand-primary
 }
@@ -162,3 +206,5 @@ form.header-upload-form {
   color:white;
   padding:20px 20px;
 }
+
+
