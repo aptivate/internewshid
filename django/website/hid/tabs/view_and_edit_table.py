@@ -26,6 +26,7 @@ class ViewAndEditTableTab(object):
         and delete them.
 
         Settings:
+            label (str): Label for the table data type
             filters (dict): Filters to pass to the term
                 list API
             categories (list of str): List of taxonomy slugs
