@@ -123,7 +123,7 @@ class ViewAndEditTableTab(object):
         terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in terms)
 
-    def get_context_data(self, request, **kwargs):
+    def get_context_data(self, tab_instance, request, **kwargs):
         # Build the table
         table = ItemTable(
             self._get_items(**kwargs),
@@ -165,7 +165,11 @@ class ViewAndEditTableTab(object):
             'type_label': kwargs.get('label', '?'),
             'table': table,
             'upload_form': upload_form,
-            'actions': actions
+            'actions': actions,
+            'next': reverse('tabbed-page', kwargs={
+                'name': tab_instance.page.name,
+                'tab_name': tab_instance.name
+            })
         }
 
 
@@ -221,12 +225,9 @@ def view_and_edit_table_form_process_items(request):
                     - select_action: List of items to apply
                       the action too.
     """
-    redirect_url_parameters = {'name': 'main'}
-    # Just redirect back to items view on GET
+    # Process the form
     if request.method == "POST":
         params = _get_view_and_edit_form_request_parameters(request.POST)
-        form_type = params.get('table-form-type', 'questions')
-        redirect_url_parameters['tab_name'] = form_type
         if params['action'] == 'batchupdate':
             selected = ItemTable.get_selected(params)
             batch_action = params['batchaction']
@@ -255,8 +256,10 @@ def view_and_edit_table_form_process_items(request):
         elif params['action'] != 'none':
             messages.error(request, _('Unknown action'))
 
-    redirect_url = reverse('tabbed-page', kwargs=redirect_url_parameters)
-    print redirect_url
+    # Find the tab to redirect to
+    redirect_url = request.POST.get('next')
+    if not redirect_url:
+        redirect_url = reverse('tabbed-page', kwargs={'name': 'main'})
     return HttpResponseRedirect(redirect_url)
 
 
