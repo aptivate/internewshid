@@ -10,7 +10,7 @@
             {% for tab in view.tabs %}
                 <li role="presentation"
                     {% if tab == view.active_tab %}class="active"{% endif %}>
-                    <a href="#" aria-controls="..." role="tab" data-toggle="tab">
+                    <a href="{% url 'tabbed-page' name=view.page.name tab_name=tab.name %}">
                         {% trans tab.label %}
                     </a>
                 </li>
