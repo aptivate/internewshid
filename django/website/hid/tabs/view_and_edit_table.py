@@ -170,6 +170,7 @@ class ViewAndEditTableTab(object):
             'table': table,
             'upload_form': upload_form,
             'actions': actions,
+            'has_categories': len(question_types) > 0,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
