@@ -20,6 +20,7 @@
               method="post"
               class="view-items-form">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
             {% with button_placement="top" %}
                 {% include "hid/tabs/view_and_edit_buttons.html" %}
             {% endwith %}

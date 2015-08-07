@@ -162,4 +162,25 @@ def test_request_passed_to_widget_get_context_data(render_to_string_method):
         render_tab(context, tab_instance)
 
     args, kwargs = mock_get_context.call_args
-    assert args[0] == request
+    assert args[1] == request
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_tab_instance_passed_to_widget_get_context_data(render_to_string_method):
+    with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
+        tab = BasicHtmlTab()
+        register_tab('basic-html-tab', tab)
+
+        page = TabbedPageFactory()
+
+        tab_instance = TabInstanceFactory(
+            page=page,
+            view_name='basic-html-tab')
+
+        request = Mock()
+        context = {'request': request}
+        render_tab(context, tab_instance)
+
+    args, kwargs = mock_get_context.call_args
+    assert args[0] == tab_instance
