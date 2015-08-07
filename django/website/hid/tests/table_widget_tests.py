@@ -56,7 +56,7 @@ class TestTableWidget(TestCase):
                     {'a': 4}, {'a': 2}, {'a': 1}
                 ])
 
-    def test_get_context_data_table_excludes_category_and_delete(self):
+    def test_get_context_data_table_excludes_fields(self):
         widget = TableWidget()
         with patch('hid.widgets.table.transport.items.list') as mock:
             mock.return_value = []
@@ -64,5 +64,5 @@ class TestTableWidget(TestCase):
                 widget.get_context_data()
                 excludes = mock_table.call_args[1]['exclude']
                 self.assertEqual(set(excludes), set([
-                    'category', 'delete'
+                    'category', 'select_item', 'network_provider'
                 ]))
