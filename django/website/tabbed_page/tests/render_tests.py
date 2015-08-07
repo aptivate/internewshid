@@ -35,7 +35,7 @@ def test_uses_template_name(mock_render):
     page = TabbedPageFactory()
 
     tab_instance = TabInstanceFactory(
-        page=page, view_name='basic-html-tab')
+        page=page, tab_type='basic-html-tab')
 
     render_tab({}, tab_instance)
 
@@ -55,7 +55,7 @@ def test_uses_context(mock_render):
         register_tab('basic-html-tab', tab)
 
         page = TabbedPageFactory()
-        tab_instance = TabInstanceFactory(page=page, view_name='basic-html-tab')
+        tab_instance = TabInstanceFactory(page=page, tab_type='basic-html-tab')
 
         render_tab({}, tab_instance)
 
@@ -73,7 +73,7 @@ def test_uses_request(mock_render):
 
     tab_instance = TabInstanceFactory(
         page=page,
-        view_name='basic-html-tab')
+        tab_type='basic-html-tab')
 
     request = Mock()
     context = {'request': request}
@@ -89,7 +89,7 @@ def test_missing_widget_handled(mock_render):
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(
         page=page,
-        view_name='basic-html-tab')
+        tab_type='basic-html-tab')
 
     context = {}
     render_tab(context, tab_instance)
@@ -109,7 +109,7 @@ def test_missing_template_handled(mock_render):
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(
         page=page,
-        view_name='basic-html-tab')
+        tab_type='basic-html-tab')
 
     context = {}
 
@@ -122,7 +122,7 @@ def test_missing_template_handled(mock_render):
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_settings_passed_to_widget_get_context_data(render_to_string_method):
+def test_settings_passed_to_tab_get_context_data(render_to_string_method):
     with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
         tab = BasicHtmlTab()
         register_tab('basic-html-tab', tab)
@@ -133,7 +133,7 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
 
         tab_instance = TabInstanceFactory(
             page=page,
-            view_name='basic-html-tab',
+            tab_type='basic-html-tab',
             settings=settings)
 
         context = {}
@@ -141,3 +141,45 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
 
     _, kwargs = mock_get_context.call_args
     assert kwargs['columns'] == columns
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_request_passed_to_tab_get_context_data(render_to_string_method):
+    with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
+        tab = BasicHtmlTab()
+        register_tab('basic-html-tab', tab)
+
+        page = TabbedPageFactory()
+
+        tab_instance = TabInstanceFactory(
+            page=page,
+            tab_type='basic-html-tab')
+
+        request = Mock()
+        context = {'request': request}
+        render_tab(context, tab_instance)
+
+    args, kwargs = mock_get_context.call_args
+    assert args[1] == request
+
+
+@pytest.mark.django_db
+@patch(render_to_string_method)
+def test_tab_instance_passed_to_tab_get_context_data(render_to_string_method):
+    with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
+        tab = BasicHtmlTab()
+        register_tab('basic-html-tab', tab)
+
+        page = TabbedPageFactory()
+
+        tab_instance = TabInstanceFactory(
+            page=page,
+            tab_type='basic-html-tab')
+
+        request = Mock()
+        context = {'request': request}
+        render_tab(context, tab_instance)
+
+    args, kwargs = mock_get_context.call_args
+    assert args[0] == tab_instance

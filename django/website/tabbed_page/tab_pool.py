@@ -39,7 +39,7 @@ class BasicHtmlTab(object):
     """
     template_name = 'tabbed_page/basic_html_tab.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, tab_instance, request, **kwargs):
         title = kwargs.get('title', '(no title)')
         body = kwargs.get('body', '(no body)')
         return {

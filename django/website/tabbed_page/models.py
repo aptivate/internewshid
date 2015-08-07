@@ -3,7 +3,7 @@ from jsonfield import JSONField
 
 
 class TabbedPage(models.Model):
-    name = models.CharField(
+    name = models.SlugField(
         max_length=128,
         unique=True
     )
@@ -14,9 +14,9 @@ class TabbedPage(models.Model):
 
 class TabInstance(models.Model):
     settings = JSONField(blank=True)
-    view_name = models.CharField(max_length=128)
+    tab_type = models.CharField(max_length=128)
     page = models.ForeignKey(TabbedPage, related_name='tabs')
-    name = models.CharField(max_length=128)
+    name = models.SlugField(max_length=128, unique=False)
     default = models.BooleanField(default=False)
     position = models.PositiveIntegerField(default=0)
     label = models.CharField(max_length=128)

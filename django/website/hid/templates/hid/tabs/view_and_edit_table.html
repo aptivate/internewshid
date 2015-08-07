@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% load render_table from django_tables2 %}
+<div class="panel panel-default">
+    <div class="panel-heading panel-heading-large clearfix">
+        <span class="fa fa-table fa-fw"></span>
+        <h2>{{ type_label }}</h2>
+        <div class="pull-right">
+            <form action="{% url "sources-upload" %}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="auto-upload-file">
+                {% csrf_token %}
+                    {% bootstrap_form upload_form show_label=False %}
+                    <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
+            </form>
+        </div>
+    </div>
+    <div class="panel-body">
+        <form action="{% url "data-view-process" %}"
+              method="post"
+              class="view-items-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            {% with button_placement="top" %}
+                {% include "hid/tabs/view_and_edit_buttons.html" %}
+            {% endwith %}
+            {% with pagination_class="pagination-circle-nav" %}
+                {% render_table table %}
+            {% endwith %}
+            {% with button_placement="bottom" %}
+                {% include "hid/tabs/view_and_edit_buttons.html" %}
+            {% endwith %}
+        </form>
+    </div>
+</div>
