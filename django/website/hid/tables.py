@@ -29,6 +29,9 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
     )
     body = tables.Column(verbose_name=_('Message'))
+    network_provider = tables.Column(
+        verbose_name=_('Network Provider')
+    )
     category = tables.TemplateColumn(
         template_name='hid/categories_column.html',
         accessor='terms'
