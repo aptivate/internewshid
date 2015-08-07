@@ -11,21 +11,32 @@ body {
     width: 100%;
 }
 
-
 @media(min-width:@screen-sm-min) {
-    .page-header {
-      margin:@padding-large-vertical;
+  .page-header {
+    margin:@padding-large-vertical;
+    &.header-tabs {
+      margin-bottom:-25px;
+      border:none;
     }
-    #page-wrapper {
-        position: inherit;
-        margin: 50px 0 0 250px;
-        min-height: 1000px;
-        background-color: @gray-lighter;
-        .box-shadow-inset(inset, 0px, 0px); 
-    }
+  }
+  #page-wrapper {
+      position: inherit;
+      margin: 50px 0 0 250px;
+      min-height: 1000px;
+      background-color: @gray-lighter;
+      .box-shadow-inset(inset, 0px, 0px); 
+  }
 }
 
 @media(min-width:@screen-xs)and (max-width:@screen-sm-min){
+  .page-header {
+    margin-top:20px;
+    &.header-tabs {
+      margin-bottom:-10px;
+      border:none;
+    }
+  }
+  
   #page-wrapper {
     margin-top:96px;
     margin-bottom:60px;
@@ -485,6 +496,10 @@ h2.navbar-brand {
    position:relative;
    top:3px;
  }
+}
+
+.panel-heading-large {
+  padding:25px 15px;
 }
 
 .panel-blue, .panel-primary {
