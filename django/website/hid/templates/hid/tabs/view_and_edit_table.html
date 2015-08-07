@@ -12,7 +12,7 @@
                   class="auto-upload-file">
                 {% csrf_token %}
                     {% bootstrap_form upload_form show_label=False %}
-                    <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "data-view" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
+                    <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
             </form>
         </div>
     </div>

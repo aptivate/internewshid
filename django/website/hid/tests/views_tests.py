@@ -94,7 +94,10 @@ def test_process_items_deletes_items(request_item):
 
 def test_empty_process_items_redirects_to_data_view():
     url = reverse('data-view-process')
-    redirect_url = reverse('data-view')
+    redirect_url = reverse('tabbed-page', kwargs={
+        'name': 'main',
+        'tab_name': 'all'
+    })
 
     request = ReqFactory.get(url)
 

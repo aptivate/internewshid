@@ -181,6 +181,7 @@ class ViewAndEditTableTab(object):
             'table': table,
             'upload_form': upload_form,
             'actions': actions,
+            'has_categories': len(question_types) > 0,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
@@ -274,7 +275,10 @@ def view_and_edit_table_form_process_items(request):
     # Find the tab to redirect to
     redirect_url = request.POST.get('next')
     if not redirect_url:
-        redirect_url = reverse('data-view')
+        redirect_url = reverse('tabbed-page', kwargs={
+            'name': 'main',
+            'tab_name': 'all'
+        })
     return HttpResponseRedirect(redirect_url)
 
 

@@ -1,40 +1,12 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
-from django.template.loader import render_to_string
+from django.http import HttpResponseRedirect
 from django.utils.translation import ungettext
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView
 
 from chn_spreadsheet.importer import Importer, SheetImportException
-from hid.tabs.view_and_edit_table import ViewAndEditTableTab
 from .forms import UploadForm, get_spreadsheet_choices
-
-
-def view_and_edit_table(request):
-    """ Placeholder view that renders the view&edit tab as a single
-        page.
-
-        Args:
-            request (Request): Current request
-        Returns:
-            HttpResponse: The rendered HTML
-    """
-    table = ViewAndEditTableTab()
-    context = table.get_context_data(
-        request,
-        label='Questions',
-        per_page=25,
-        categories=['ebola-questions'],
-        columns=['select_item', 'created', 'timestamp',
-                 'body', 'category']
-    )
-    html = render_to_string(
-        table.template_name, context, RequestContext(request)
-    )
-    page_html = render_to_string('hid/outer_page.html', {'body': html})
-    return HttpResponse(page_html)
 
 
 class ListSources(TemplateView):

@@ -13,7 +13,9 @@
         {% endfor %}
     </select>
     {% bootstrap_button "Apply action" button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-default btn-sm table-submit" %}
-    <div class="pull-right">
-        {% bootstrap_button "Save changes" button_type="submit" name="action" value="save-"|add:button_placement button_class="btn btn-success btn-sm table-submit" %}
-    </div>
+    {% if has_categories %}
+        <div class="pull-right">
+            {% bootstrap_button "Save changes" button_type="submit" name="action" value="save-"|add:button_placement button_class="btn btn-success btn-sm table-submit" %}
+        </div>
+    {% endif %}
 </div>
