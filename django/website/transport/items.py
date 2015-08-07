@@ -116,3 +116,15 @@ def add_term(item_id, taxonomy_slug, name):
         response.data['term'] = term
         response.data['item_id'] = item_id
         raise TransportException(response.data)
+
+
+def delete_all_terms_url(item_id):
+    return reverse('item-delete-all-terms', kwargs={'pk': item_id})
+
+
+def delete_all_terms(item_id, taxonomy_slug):
+    view = ItemViewSet.as_view(actions={'post': 'delete_all_terms'})
+
+    taxonomy = {'taxonomy': taxonomy_slug}
+    request = request_factory.post(delete_all_terms_url(item_id), taxonomy)
+    response = view(request, item_pk=item_id)
