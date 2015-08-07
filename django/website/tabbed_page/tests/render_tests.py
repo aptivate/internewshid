@@ -26,7 +26,6 @@ def setup_function(function):
     clear_tabs()
 
 
-
 @pytest.mark.django_db
 @patch(render_to_string_method)
 def test_uses_template_name(mock_render):

@@ -36,7 +36,7 @@ def _get_rendering_details(context, tab_instance):
     if tab_instance.settings:
         settings = tab_instance.settings
     else:
-        settings = {}  # TODO: json field doesn't default to this?
+        settings = {}
 
     request = context.get('request')
 

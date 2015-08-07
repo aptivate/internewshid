@@ -15,6 +15,7 @@ class TabbedPageFactory(DjangoModelFactory):
 class TabInstanceFactory(DjangoModelFactory):
     class Meta:
         model = TabInstance
+        django_get_or_create = ('name',)
 
     name = fuzzy.FuzzyText()
     label = fuzzy.FuzzyText()

@@ -32,9 +32,9 @@ class TabbedPageView(TemplateView):
             candidates = []
             tab_name = self.kwargs.get('tab_name')
             if tab_name:
-                candidates = self.page.tabs.all().filter(name=tab_name)
+                candidates = self.page.tabs.filter(name=tab_name)
             if len(candidates) == 0:
-                candidates = self.page.tabs.all().filter(default=True)
+                candidates = self.page.tabs.filter(default=True)
             if len(candidates) == 0:
                 candidates = self.page.tabs.all()
             if len(candidates) > 0:

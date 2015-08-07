@@ -33,7 +33,7 @@ class UploadSpreadsheetView(FormView):
     template_name = "hid/upload.html"
 
     def get_success_url(self):
-        return reverse("tabbed-page", name="main", tab_name="all")
+        return self.request.POST.get('next')
 
     def form_valid(self, form):
         data = form.cleaned_data
