@@ -2,8 +2,9 @@
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 <div class="panel panel-default">
-    <div class="panel-heading clearfix">
-        <span class="fa fa-table fa-fw"></span>{{ type_label }}
+    <div class="panel-heading panel-heading-large clearfix">
+        <span class="fa fa-table fa-fw"></span>
+        <h2>{{ type_label }}</h2>
         <div class="pull-right">
             <form action="{% url "sources-upload" %}"
                   method="post"
