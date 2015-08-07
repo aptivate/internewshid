@@ -7,6 +7,7 @@ from ..models import TabbedPage, TabInstance
 class TabbedPageFactory(DjangoModelFactory):
     class Meta:
         model = TabbedPage
+        django_get_or_create = ('name',)
 
     name = fuzzy.FuzzyText()
 
