@@ -1,0 +1,27 @@
+{% extends "base_side.html" %}
+{% load i18n %}
+{% load render_tab %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-header header-tabs"><span class="fa fa-pencil fa-fw"></span>{% trans "View &amp; Edit" %}</h1>
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            {% for tab in view.tabs %}
+                <li role="presentation"
+                    {% if tab == view.active_tab %}class="active"{% endif %}>
+                    <a href="{% url 'tabbed-page' name=view.page.name tab_name=tab.name %}">
+                        {% trans tab.label %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class='row'>
+    <div class="col-lg-12">
+        {% render_tab view.active_tab %}
+    </div>
+</div>
+{% endblock maincontent %}

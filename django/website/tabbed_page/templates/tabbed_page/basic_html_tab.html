@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="panel panel-default">
+    <div class="panel-heading container-fluid">
+        <span class="fa fa-align-justify fa-fw"></span>
+        {% trans title %}
+        </div>
+    <div class="panel-body">
+        {{ body|safe }}
+    </div>
+</div>
