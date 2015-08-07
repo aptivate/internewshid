@@ -55,6 +55,13 @@ def categorize_item(item, term):
     return view(request, item_pk=item['id'])
 
 
+def remove_categories_from_item(item, taxonomy):
+    url = reverse('item-delete-all-terms', kwargs={"pk": item['id']})
+    request = APIRequestFactory().post(url, {'taxonomy': taxonomy})
+    view = ItemViewSet.as_view(actions={'post': 'delete_all_terms'})
+    return view(request, item_pk=item['id'])
+
+
 @pytest.mark.django_db
 def test_item_can_haz_category(term, item):
     # Associate category with the item
@@ -117,3 +124,18 @@ def test_only_one_category_per_item_per_taxonomy(item, term, second_term):
     terms = item_orm.terms.all()
     assert len(terms) == 1
     assert terms[0].name == second_term['name']
+
+
+@pytest.mark.django_db
+def test_all_item_categories_can_be_deleted(item, term):
+    categorize_item(item, term)
+
+    # TODO: use the API for this
+    [item_orm] = Item.objects.all()
+    terms = item_orm.terms.all()
+    assert len(terms) == 1
+
+    remove_categories_from_item(item, term['taxonomy'])
+
+    terms = item_orm.terms.all()
+    assert len(terms) == 0

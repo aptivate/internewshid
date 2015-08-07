@@ -91,6 +91,19 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @detail_route(methods=['post'])
+    def delete_all_terms(self, request, item_pk):
+        taxonomy_slug = request.data['taxonomy']
+
+        item = Item.objects.get(pk=item_pk)
+        taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
+        item.delete_all_terms(taxonomy)
+
+        serializer = ItemSerializer(item)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 class TaxonomyViewSet(viewsets.ModelViewSet):
     serializer_class = TaxonomySerializer
