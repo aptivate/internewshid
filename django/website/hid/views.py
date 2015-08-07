@@ -61,7 +61,7 @@ class UploadSpreadsheetView(FormView):
     template_name = "hid/upload.html"
 
     def get_success_url(self):
-        return reverse("data-view")
+        return self.request.POST.get('next')
 
     def form_valid(self, form):
         data = form.cleaned_data

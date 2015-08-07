@@ -138,7 +138,18 @@ class ViewAndEditTableTab(object):
         )
 
         # Build the upload form
-        upload_form = UploadForm(initial={'source': 'geopoll'})
+        source = kwargs.get('source')
+        next_url = reverse(
+            'tabbed-page',
+            kwargs={
+                'name': tab_instance.page.name,
+                'tab_name': tab_instance.name,
+            })
+
+        upload_form = UploadForm(initial={
+            'source': source,
+            'next': next_url,
+        })
 
         # Build the actions drop down
         actions = [
