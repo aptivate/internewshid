@@ -148,13 +148,17 @@ class ViewAndEditTableTab(object):
                     (NONE_COMMAND, '---------'),
                     (DELETE_COMMAND, _('Delete Selected'))
                 ]
-            ),
-            self._build_action_dropdown_group(
-                label=_('Set question type'),
-                items=self._get_category_options(**kwargs),
-                prefix=ADD_CATEGORY_PREFIX
             )
         ]
+        question_types = self._get_category_options(**kwargs)
+        if len(question_types) > 0:
+            actions.append(
+                self._build_action_dropdown_group(
+                    label=_('Set question type'),
+                    items=self._get_category_options(**kwargs),
+                    prefix=ADD_CATEGORY_PREFIX
+                )
+            )
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
