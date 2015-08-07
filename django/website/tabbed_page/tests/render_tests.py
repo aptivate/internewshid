@@ -122,7 +122,7 @@ def test_missing_template_handled(mock_render):
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_settings_passed_to_widget_get_context_data(render_to_string_method):
+def test_settings_passed_to_tab_get_context_data(render_to_string_method):
     with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
         tab = BasicHtmlTab()
         register_tab('basic-html-tab', tab)
@@ -145,7 +145,7 @@ def test_settings_passed_to_widget_get_context_data(render_to_string_method):
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_request_passed_to_widget_get_context_data(render_to_string_method):
+def test_request_passed_to_tab_get_context_data(render_to_string_method):
     with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
         tab = BasicHtmlTab()
         register_tab('basic-html-tab', tab)
@@ -166,7 +166,7 @@ def test_request_passed_to_widget_get_context_data(render_to_string_method):
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_tab_instance_passed_to_widget_get_context_data(render_to_string_method):
+def test_tab_instance_passed_to_tab_get_context_data(render_to_string_method):
     with patch.object(BasicHtmlTab, 'get_context_data') as mock_get_context:
         tab = BasicHtmlTab()
         register_tab('basic-html-tab', tab)
