@@ -50,7 +50,7 @@ def create_initial_view_and_edit_page(apps, schema_editor):
             'tab_type': 'view-and-edit-table',
             'default': False,
             'position': 1,
-            'label': 'rumors',
+            'label': 'Rumors',
             'settings': {
                 'columns': ['select_item', 'created', 'timestamp', 'body',
                             'network_provider'],
