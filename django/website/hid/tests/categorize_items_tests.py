@@ -86,3 +86,18 @@ def test_add_items_categories_adds_term_to_items(terms, items):
             assert term_data['taxonomy'] == expected[item['id']].taxonomy.slug
 
     assert found == 2
+
+
+@pytest.mark.django_db
+def test_add_items_categories_removes_term_from_item(term, item):
+    transport.items.add_term(item['id'], term.taxonomy.slug, term.name)
+
+    category_list = [(item['id'], term.taxonomy.slug, ''), ]
+
+    url = reverse('data-view-process')
+    request = ReqFactory.post(url, {'a': 'b'})
+    request = fix_messages(request)
+    _add_items_categories(request, category_list)
+
+    [item_data] = transport.items.list()
+    assert len(item_data['terms']) == 0

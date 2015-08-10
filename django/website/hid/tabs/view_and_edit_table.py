@@ -315,11 +315,17 @@ def _add_items_categories(request, items):
     failed = 0
     for item_id, taxonomy_slug, term_name in items:
         try:
-            transport.items.add_term(
-                item_id,
-                taxonomy_slug,
-                term_name
-            )
+            if term_name:
+                transport.items.add_term(
+                    item_id,
+                    taxonomy_slug,
+                    term_name
+                )
+            else:
+                transport.items.delete_all_terms(
+                    item_id,
+                    taxonomy_slug
+                )
             success += 1
         except TransportException:
             failed += 1

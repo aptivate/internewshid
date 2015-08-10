@@ -49,7 +49,7 @@ def test_get_row_select_values_reads_params_from_prefix():
     assert sorted(expected) == sorted(actual)  # Order is not important
 
 
-def test_get_row_select_values_removes_empty():
+def test_get_row_select_values_does_not_remove_empty():
     post_params = {
         'category-123': "second",
         'category-99': "third",
@@ -58,6 +58,7 @@ def test_get_row_select_values_removes_empty():
     expected = [
         (123, "second"),
         (99, "third"),
+        (56, ""),
     ]
     actual = ItemTable.get_row_select_values(post_params, 'category')
     assert sorted(expected) == sorted(actual)  # Order is not important
