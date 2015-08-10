@@ -6,6 +6,7 @@
         <span class="fa fa-table fa-fw"></span>
         <h2>{{ type_label }}</h2>
         <div class="pull-right">
+          {% if upload_form %}
             <form action="{% url "sources-upload" %}"
                   method="post"
                   enctype="multipart/form-data"
@@ -14,6 +15,7 @@
                     {% bootstrap_form upload_form show_label=False %}
                     <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
             </form>
+          {% endif %}
         </div>
     </div>
     <div class="panel-body">
