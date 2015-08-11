@@ -207,6 +207,21 @@ def test_upload_form_next_url_read_from_tab_instance():
     assert form.initial.get('next') == expected_url
 
 
+@pytest.mark.django_db
+def test_no_upload_form_when_source_not_set():
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page, name='all')
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request)
+
+    form = context_data['upload_form']
+
+    assert form is None
+
+
 def test_views_item_get_request_parameters_renames_items_of_active_location():
     query = QueryDict(
         'action=something-bottom&item-top=top-value&item-bottom=bottom-value'

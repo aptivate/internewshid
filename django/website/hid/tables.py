@@ -28,11 +28,12 @@ class ItemTable(tables.Table):
         verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
     )
-    body = tables.Column(verbose_name=_('Message'))
+    body = tables.Column(verbose_name=_('Item'))
     network_provider = tables.Column(
         verbose_name=_('Network Provider')
     )
     category = tables.TemplateColumn(
+        verbose_name=_('Question Type'),
         template_name='hid/categories_column.html',
         accessor='terms'
     )

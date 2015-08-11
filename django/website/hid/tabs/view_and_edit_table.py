@@ -138,18 +138,21 @@ class ViewAndEditTableTab(object):
         )
 
         # Build the upload form
-        source = kwargs.get('source')
-        next_url = reverse(
-            'tabbed-page',
-            kwargs={
-                'name': tab_instance.page.name,
-                'tab_name': tab_instance.name,
-            })
+        source = kwargs.get('source', None)
 
-        upload_form = UploadForm(initial={
-            'source': source,
-            'next': next_url,
-        })
+        upload_form = None
+        if source is not None:
+            next_url = reverse(
+                'tabbed-page',
+                kwargs={
+                    'name': tab_instance.page.name,
+                    'tab_name': tab_instance.name,
+                })
+
+            upload_form = UploadForm(initial={
+                'source': source,
+                'next': next_url,
+            })
 
         # Build the actions drop down
         actions = [
