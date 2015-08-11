@@ -157,14 +157,18 @@ class ViewAndEditTableTab(object):
             })
 
         # Build the actions drop down
+        items = [
+            (NONE_COMMAND, '---------'),
+            (DELETE_COMMAND, _('Delete Selected')),
+        ]
+
+        if len(question_types) > 0:
+            items.append((REMOVE_QTYPE_COMMAND, _('Remove Question Type')),)
+
         actions = [
             self._build_action_dropdown_group(
                 label=_('Actions'),
-                items=[
-                    (NONE_COMMAND, '---------'),
-                    (DELETE_COMMAND, _('Delete Selected')),
-                    (REMOVE_QTYPE_COMMAND, _('Remove Question Type'))
-                ]
+                items=items
             )
         ]
 

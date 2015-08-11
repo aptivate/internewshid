@@ -231,6 +231,21 @@ def test_actions_includes_remove_question_type_option():
 
 
 @pytest.mark.django_db
+def test_actions_excludes_remove_question_type_option_for_no_categories():
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request)
+
+    actions = context_data['actions'][0]
+    assert actions['label'] == 'Actions'
+    assert 'remove-question-type' not in actions['items']
+
+
+@pytest.mark.django_db
 def test_upload_form_source_read_from_settings():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
