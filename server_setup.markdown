@@ -1,4 +1,4 @@
-# How to set up the Internews Humanitation Information Dashboard on a Ubuntu 14.04 environment
+# How to set up the Internews Humanitarian Information Dashboard on a Ubuntu 14.04 environment
 
 This document provides instructions on deploying the [Internews Humanitation Information Dashboard](https://github.com/aptivate/internewshid) on a [Ubuntu 14.04 LTS](http://releases.ubuntu.com/14.04/) environment.
 
