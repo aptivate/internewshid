@@ -125,10 +125,11 @@ class ViewAndEditTableTab(object):
         return tuple((t['name'], t['name']) for t in terms)
 
     def get_context_data(self, tab_instance, request, **kwargs):
+        question_types = self._get_category_options(**kwargs)
         # Build the table
         table = ItemTable(
             self._get_items(**kwargs),
-            categories=self._get_category_options(**kwargs),
+            categories=question_types,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
             order_by=request.GET.get('sort', None),
@@ -166,12 +167,12 @@ class ViewAndEditTableTab(object):
                 ]
             )
         ]
-        question_types = self._get_category_options(**kwargs)
+
         if len(question_types) > 0:
             actions.append(
                 self._build_action_dropdown_group(
                     label=_('Set question type'),
-                    items=self._get_category_options(**kwargs),
+                    items=question_types,
                     prefix=ADD_CATEGORY_PREFIX
                 )
             )
