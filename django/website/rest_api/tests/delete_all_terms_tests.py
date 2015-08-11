@@ -36,7 +36,8 @@ def test_all_item_categories_can_be_deleted(item, term):
     terms = item_orm.terms.all()
     assert len(terms) == 1
 
-    remove_categories_from_item(item, term['taxonomy'])
+    response = remove_categories_from_item(item, term['taxonomy'])
+    assert status.is_success(response.status_code), response.data
 
     terms = item_orm.terms.all()
     assert len(terms) == 0
