@@ -257,7 +257,7 @@ def _handle_batch_action(request, batch_action, selected):
     if batch_action == REMOVE_QTYPE_COMMAND:
         _categorize_items(request,
                           selected,
-                          None)
+                          '')
         return
 
     messages.error(request, _("Unknown batch action '%s'" % batch_action))
@@ -343,7 +343,7 @@ def _add_items_categories(request, items):
     failed = 0
     for item_id, taxonomy_slug, term_name in items:
         try:
-            if term_name:  # TODO not None
+            if term_name:
                 transport.items.add_term(
                     item_id,
                     taxonomy_slug,
