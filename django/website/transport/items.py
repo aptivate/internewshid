@@ -128,3 +128,9 @@ def delete_all_terms(item_id, taxonomy_slug):
     taxonomy = {'taxonomy': taxonomy_slug}
     request = request_factory.post(delete_all_terms_url(item_id), taxonomy)
     response = view(request, item_pk=item_id)
+
+    if not status.is_success(response.status_code):
+        response.data['status_code'] = response.status_code
+        raise TransportException(response.data)
+
+    return response

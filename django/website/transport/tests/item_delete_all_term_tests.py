@@ -34,3 +34,16 @@ def test_terms_can_be_removed_from_item(item_data):
     [remaining_term] = item.terms.all()
 
     assert remaining_term == term2
+
+
+@pytest.mark.django_db
+def test_fails_if_taxonomy_does_not_exist(item_data):
+    item_id = item_data['id']
+
+    with pytest.raises(TransportException) as excinfo:
+        items.delete_all_terms(item_id, 'a-taxonomy-that-does-not-exist')
+
+    error = excinfo.value.message
+
+    assert error['status_code'] == 400
+    assert error['detail'] == "Taxonomy with slug 'a-taxonomy-that-does-not-exist' does not exist."
