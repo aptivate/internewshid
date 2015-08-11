@@ -95,7 +95,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     def delete_all_terms(self, request, item_pk):
         taxonomy_slug = request.data['taxonomy']
 
-        item = Item.objects.get(pk=item_pk)
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
         item.delete_all_terms(taxonomy)
 
