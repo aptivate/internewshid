@@ -29,7 +29,8 @@ def test_terms_can_be_removed_from_item(item_data):
 
     assert item.terms.count() == 2
 
-    items.delete_all_terms(item_id, term.taxonomy.slug)
+    response = items.delete_all_terms(item_id, term.taxonomy.slug)
+    assert 'id' in response
 
     [remaining_term] = item.terms.all()
 

@@ -133,4 +133,4 @@ def delete_all_terms(item_id, taxonomy_slug):
         response.data['status_code'] = response.status_code
         raise TransportException(response.data)
 
-    return response
+    return response.data
