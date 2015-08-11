@@ -69,10 +69,10 @@ You can start Django's internal web server by running the following command:
 
 ```sh
     cd ~/projects/internhewshid/django/website
-    ./manager.py runserver
+    ./manage.py runserver
 ```
 
-Once this is started, you can point your web browser to `http://localhost:8000` to see the Inteernews HID.
+Once this is started, you can point your web browser to `http://localhost:8000` to see the Internews HID.
 
 ### Notes on the development version
 
@@ -128,7 +128,7 @@ The production version is stricter in terms of security, and you must explicitly
 
 ```python
     ALLOWED_HOSTS = [
-        '.internewshist.aptivate.org',
+        '.internewshid.aptivate.org',
         'www.internewshid.aptivate.org'
     ]
 ```
