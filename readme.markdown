@@ -79,6 +79,17 @@ should be an exception.
         ...
     ]
 
+#### Filter items by taxonomy
+
+'/items?terms=&lt;taxonomy-slug&gt;:&lt;term-name&gt;' GET
+
+- returns a list of Items tagged (or categorized) with the term &lt;term-name&gt; from the taxonomy &lt;taxonomy-slug&gt;
+
+'terms' can be specified multiple times, to return items that are associated with *all* specified terms. eg:
+
+'/items?terms=taxo1:term1&terms=taxo1:term2&terms=taxo2:term3
+
+- returns a list of Items tagged (or categorized) with terms term1 of taxo1 *and* term2 of taxo2 *and* term3 of taxo2.
 
 ## Categories and Tags (Taxonomies)
 
