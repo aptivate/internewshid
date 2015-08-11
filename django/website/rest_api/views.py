@@ -101,7 +101,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             data = {'detail': e.message}
             return Response(data, status=status.HTTP_404_NOT_FOUND)
 
-        taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
+        try:
+            taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
+        except Taxonomy.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         item.delete_all_terms(taxonomy)
 
         serializer = ItemSerializer(item)

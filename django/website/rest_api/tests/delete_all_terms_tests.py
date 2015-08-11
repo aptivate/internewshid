@@ -53,3 +53,12 @@ def test_error_when_deleting_terms_from_non_existent_item(item, term):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.data['detail'] == "Message matching query does not exist."
+
+
+@pytest.mark.django_db
+def test_error_when_taxonomy_does_not_exist(item, term):
+    categorize_item(item, term)
+    response = remove_categories_from_item(item, 'provinces-of-liberia')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.data['detail'] == "Taxonomy matching query does not exist."
