@@ -60,5 +60,5 @@ def test_error_when_taxonomy_does_not_exist(item, term):
     categorize_item(item, term)
     response = remove_categories_from_item(item, 'provinces-of-liberia')
 
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.data['detail'] == "Taxonomy matching query does not exist."
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['detail'] == "Taxonomy with slug 'provinces-of-liberia' does not exist."

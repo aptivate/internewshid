@@ -104,8 +104,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         try:
             taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
         except Taxonomy.DoesNotExist as e:
-            data = {'detail': e.message}
-            return Response(data, status=status.HTTP_404_NOT_FOUND)
+            message = _("Taxonomy with slug '%s' does not exist.") % (
+                taxonomy_slug,
+            )
+
+            data = {'detail': message}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         item.delete_all_terms(taxonomy)
 
