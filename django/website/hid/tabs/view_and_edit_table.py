@@ -124,6 +124,33 @@ class ViewAndEditTableTab(object):
         terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in terms)
 
+    def _build_actions_dropdown(self, question_types):
+        items = [
+            (NONE_COMMAND, '---------'),
+            (DELETE_COMMAND, _('Delete Selected')),
+        ]
+
+        if len(question_types) > 0:
+            items.append((REMOVE_QTYPE_COMMAND, _('Remove Question Type')),)
+
+        actions = [
+            self._build_action_dropdown_group(
+                label=_('Actions'),
+                items=items
+            )
+        ]
+
+        if len(question_types) > 0:
+            actions.append(
+                self._build_action_dropdown_group(
+                    label=_('Set question type'),
+                    items=question_types,
+                    prefix=ADD_CATEGORY_PREFIX
+                )
+            )
+
+        return actions
+
     def get_context_data(self, tab_instance, request, **kwargs):
         question_types = self._get_category_options(**kwargs)
         # Build the table
@@ -156,30 +183,7 @@ class ViewAndEditTableTab(object):
                 'next': next_url,
             })
 
-        # Build the actions drop down
-        items = [
-            (NONE_COMMAND, '---------'),
-            (DELETE_COMMAND, _('Delete Selected')),
-        ]
-
-        if len(question_types) > 0:
-            items.append((REMOVE_QTYPE_COMMAND, _('Remove Question Type')),)
-
-        actions = [
-            self._build_action_dropdown_group(
-                label=_('Actions'),
-                items=items
-            )
-        ]
-
-        if len(question_types) > 0:
-            actions.append(
-                self._build_action_dropdown_group(
-                    label=_('Set question type'),
-                    items=question_types,
-                    prefix=ADD_CATEGORY_PREFIX
-                )
-            )
+        actions = self._build_actions_dropdown(question_types)
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
