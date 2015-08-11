@@ -6,12 +6,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from data_layer.models import Item
-from .item_create_view_tests import create_item
 from .item_delete_tests import delete_item
-from .taxonomy_and_term_create_tests import (
-    create_category,
-    add_term,
-)
 from .categorize_items_tests import (
     categorize_item,
     category,

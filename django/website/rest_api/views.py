@@ -118,7 +118,6 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
 class TaxonomyViewSet(viewsets.ModelViewSet):
     serializer_class = TaxonomySerializer
 
