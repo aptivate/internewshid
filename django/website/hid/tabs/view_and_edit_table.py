@@ -18,6 +18,7 @@ QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
 NONE_COMMAND = 'none'
+REMOVE_QTYPE_COMMAND = 'remove-question-type'
 
 
 class ViewAndEditTableTab(object):
@@ -160,7 +161,8 @@ class ViewAndEditTableTab(object):
                 label=_('Actions'),
                 items=[
                     (NONE_COMMAND, '---------'),
-                    (DELETE_COMMAND, _('Delete Selected'))
+                    (DELETE_COMMAND, _('Delete Selected')),
+                    (REMOVE_QTYPE_COMMAND, _('Remove Question Type'))
                 ]
             )
         ]
@@ -233,6 +235,42 @@ def _get_view_and_edit_form_request_parameters(params):
     return new_params
 
 
+def _handle_batch_action(request, batch_action, selected):
+    if not batch_action:
+        # TODO: is this ever called?
+        messages.error(request, _('Missing batch action'))
+        return
+
+    if batch_action == NONE_COMMAND:
+        return
+
+    if batch_action == DELETE_COMMAND:
+        _delete_items(request, selected)
+        return
+
+    if batch_action.startswith(ADD_CATEGORY_PREFIX):
+        _categorize_items(request,
+                          selected,
+                          batch_action[len(ADD_CATEGORY_PREFIX):])
+        return
+
+    if batch_action == REMOVE_QTYPE_COMMAND:
+        _categorize_items(request,
+                          selected,
+                          None)
+        return
+
+    messages.error(request, _("Unknown batch action '%s'" % batch_action))
+
+
+def _categorize_items(request, items, category):
+    # TODO: add the taxonomy to the form.
+    _add_items_categories(
+        request,
+        [(item, QUESTION_TYPE_TAXONOMY, category)
+         for item in items])
+
+
 def view_and_edit_table_form_process_items(request):
     """ Request to process a selection of items from the
         view & edit table page.
@@ -249,21 +287,8 @@ def view_and_edit_table_form_process_items(request):
         params = _get_view_and_edit_form_request_parameters(request.POST)
         if params['action'] == 'batchupdate':
             selected = ItemTable.get_selected(params)
-            batch_action = params['batchaction']
-            if batch_action == DELETE_COMMAND:
-                _delete_items(request, selected)
-            elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
-                category = batch_action[len(ADD_CATEGORY_PREFIX):]
-                # TODO: add the taxonomy to the form.
-                _add_items_categories(
-                    request,
-                    [(item, QUESTION_TYPE_TAXONOMY, category)
-                     for item in selected]
-                )
-            elif batch_action == NONE_COMMAND:
-                pass
-            else:
-                messages.error(request, _('Unknown batch action'))
+            _handle_batch_action(request, params['batchaction'], selected)
+
         elif params['action'] == 'save':
             changes = ItemTable.get_row_select_values(params, 'category')
             # TODO: Add the taxonomy to the form
@@ -318,7 +343,7 @@ def _add_items_categories(request, items):
     failed = 0
     for item_id, taxonomy_slug, term_name in items:
         try:
-            if term_name:
+            if term_name:  # TODO not None
                 transport.items.add_term(
                     item_id,
                     taxonomy_slug,

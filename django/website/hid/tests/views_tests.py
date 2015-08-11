@@ -11,7 +11,9 @@ from hid.tabs.view_and_edit_table import (
     view_and_edit_table_form_process_items,
     _delete_items,
     _get_view_and_edit_form_request_parameters,
-    DELETE_COMMAND
+    DELETE_COMMAND,
+    QUESTION_TYPE_TAXONOMY,
+    REMOVE_QTYPE_COMMAND
 )
 
 from tabbed_page.tests.factories import (
@@ -90,6 +92,42 @@ def test_process_items_deletes_items(request_item):
     req, item = request_item
     view_and_edit_table_form_process_items(req)
     check_item_was_deleted(req)
+
+
+@pytest.mark.django_db
+def test_process_items_removes_question_type():
+    msg = {'body': "Message text"}
+    transport.items.create(msg)
+
+    [item] = list(transport.items.list())
+
+    taxonomy = TaxonomyFactory(name="Ebola Questions")
+    term_to_delete = TermFactory(name='term to be deleted',
+                                 taxonomy=taxonomy)
+    transport.items.add_term(
+        item['id'], term_to_delete.taxonomy.slug, term_to_delete.name)
+
+    term_to_keep = TermFactory(name='term not to be deleted')
+    transport.items.add_term(
+        item['id'], term_to_keep.taxonomy.slug, term_to_keep.name)
+
+    url = reverse('data-view-process')
+    request = ReqFactory.post(url, {
+        'action': 'batchupdate-top',
+        'batchaction-top': REMOVE_QTYPE_COMMAND,
+        'select_item_id': [item['id']],
+        'next': 'http://localhost/testurl'
+    })
+
+    request = fix_messages(request)
+    view_and_edit_table_form_process_items(request)
+
+    [item] = list(transport.items.list())
+
+    term_names = [t['name'] for t in item['terms']]
+
+    assert term_to_keep.name in term_names
+    assert term_to_delete.name not in term_names
 
 
 def test_empty_process_items_redirects_to_data_view():
@@ -171,6 +209,44 @@ def test_get_category_options_orders_by_lowercase_name():
     expected = tuple(sorted(expected, key=lambda e: e[0].lower()))
 
     assert options == expected
+
+
+@pytest.mark.django_db
+def test_actions_includes_remove_question_type_option():
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    term = TermFactory()
+    categories = [term.taxonomy.slug]
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=categories)
+
+    actions = context_data['actions'][0]
+    assert actions['label'] == 'Actions'
+    assert 'remove-question-type' in actions['items']
+
+
+@pytest.mark.django_db
+def test_actions_includes_remove_question_type_option():
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    term = TermFactory()
+    categories = [term.taxonomy.slug]
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=categories)
+
+    actions = context_data['actions'][0]
+    assert actions['label'] == 'Actions'
+    assert 'remove-question-type' in actions['items']
 
 
 @pytest.mark.django_db
