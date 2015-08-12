@@ -38,9 +38,13 @@ class Message(DataLayerModel):
         # in taxonomies, with a generic foreign ken to the content type
         # being classified, then this logic could live there.
         if term.taxonomy.is_optional:
-            for old_term in self.terms.filter(taxonomy=term.taxonomy):
-                self.terms.remove(old_term)
+            self.delete_all_terms(term.taxonomy)
+
         self.terms.add(term)
+
+    def delete_all_terms(self, taxonomy):
+        for term in self.terms.filter(taxonomy=taxonomy):
+            self.terms.remove(term)
 
     def __unicode__(self):
         return "{}: '{}' @{}".format(

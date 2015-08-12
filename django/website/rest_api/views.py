@@ -91,6 +91,32 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @detail_route(methods=['post'])
+    def delete_all_terms(self, request, item_pk):
+        taxonomy_slug = request.data['taxonomy']
+
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            taxonomy = Taxonomy.objects.get(slug=taxonomy_slug)
+        except Taxonomy.DoesNotExist as e:
+            message = _("Taxonomy with slug '%s' does not exist.") % (
+                taxonomy_slug,
+            )
+
+            data = {'detail': message}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        item.delete_all_terms(taxonomy)
+
+        serializer = ItemSerializer(item)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class TaxonomyViewSet(viewsets.ModelViewSet):
     serializer_class = TaxonomySerializer

@@ -18,6 +18,7 @@ QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
 NONE_COMMAND = 'none'
+REMOVE_QTYPE_COMMAND = 'remove-question-type'
 
 
 class ViewAndEditTableTab(object):
@@ -123,11 +124,55 @@ class ViewAndEditTableTab(object):
         terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in terms)
 
+    def _build_actions_dropdown(self, question_types):
+        items = [
+            (NONE_COMMAND, '---------'),
+            (DELETE_COMMAND, _('Delete Selected')),
+        ]
+
+        if len(question_types) > 0:
+            items.append((REMOVE_QTYPE_COMMAND, _('Remove Question Type')),)
+
+        actions = [
+            self._build_action_dropdown_group(
+                label=_('Actions'),
+                items=items
+            )
+        ]
+
+        if len(question_types) > 0:
+            actions.append(
+                self._build_action_dropdown_group(
+                    label=_('Set question type'),
+                    items=question_types,
+                    prefix=ADD_CATEGORY_PREFIX
+                )
+            )
+
+        return actions
+
+    def _build_upload_form(self, tab_instance, source):
+        if source is None:
+            return None
+
+        next_url = reverse(
+            'tabbed-page',
+            kwargs={
+                'name': tab_instance.page.name,
+                'tab_name': tab_instance.name,
+            })
+
+        return UploadForm(initial={
+            'source': source,
+            'next': next_url,
+        })
+
     def get_context_data(self, tab_instance, request, **kwargs):
+        question_types = self._get_category_options(**kwargs)
         # Build the table
         table = ItemTable(
             self._get_items(**kwargs),
-            categories=self._get_category_options(**kwargs),
+            categories=question_types,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
             order_by=request.GET.get('sort', None),
@@ -137,42 +182,11 @@ class ViewAndEditTableTab(object):
             page=request.GET.get('page', 1)
         )
 
-        # Build the upload form
-        source = kwargs.get('source', None)
-
-        upload_form = None
-        if source is not None:
-            next_url = reverse(
-                'tabbed-page',
-                kwargs={
-                    'name': tab_instance.page.name,
-                    'tab_name': tab_instance.name,
-                })
-
-            upload_form = UploadForm(initial={
-                'source': source,
-                'next': next_url,
-            })
-
-        # Build the actions drop down
-        actions = [
-            self._build_action_dropdown_group(
-                label=_('Actions'),
-                items=[
-                    (NONE_COMMAND, '---------'),
-                    (DELETE_COMMAND, _('Delete Selected'))
-                ]
-            )
-        ]
-        question_types = self._get_category_options(**kwargs)
-        if len(question_types) > 0:
-            actions.append(
-                self._build_action_dropdown_group(
-                    label=_('Set question type'),
-                    items=self._get_category_options(**kwargs),
-                    prefix=ADD_CATEGORY_PREFIX
-                )
-            )
+        upload_form = self._build_upload_form(
+            tab_instance,
+            kwargs.get('source', None)
+        )
+        actions = self._build_actions_dropdown(question_types)
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
@@ -233,6 +247,42 @@ def _get_view_and_edit_form_request_parameters(params):
     return new_params
 
 
+def _handle_batch_action(request, batch_action, selected):
+    if not batch_action:
+        # TODO: is this ever called?
+        messages.error(request, _('Missing batch action'))
+        return
+
+    if batch_action == NONE_COMMAND:
+        return
+
+    if batch_action == DELETE_COMMAND:
+        _delete_items(request, selected)
+        return
+
+    if batch_action.startswith(ADD_CATEGORY_PREFIX):
+        _categorize_items(request,
+                          selected,
+                          batch_action[len(ADD_CATEGORY_PREFIX):])
+        return
+
+    if batch_action == REMOVE_QTYPE_COMMAND:
+        _categorize_items(request,
+                          selected,
+                          '')
+        return
+
+    messages.error(request, _("Unknown batch action '%s'" % batch_action))
+
+
+def _categorize_items(request, items, category):
+    # TODO: add the taxonomy to the form.
+    _add_items_categories(
+        request,
+        [(item, QUESTION_TYPE_TAXONOMY, category)
+         for item in items])
+
+
 def view_and_edit_table_form_process_items(request):
     """ Request to process a selection of items from the
         view & edit table page.
@@ -249,21 +299,8 @@ def view_and_edit_table_form_process_items(request):
         params = _get_view_and_edit_form_request_parameters(request.POST)
         if params['action'] == 'batchupdate':
             selected = ItemTable.get_selected(params)
-            batch_action = params['batchaction']
-            if batch_action == DELETE_COMMAND:
-                _delete_items(request, selected)
-            elif batch_action and batch_action.startswith(ADD_CATEGORY_PREFIX):
-                category = batch_action[len(ADD_CATEGORY_PREFIX):]
-                # TODO: add the taxonomy to the form.
-                _add_items_categories(
-                    request,
-                    [(item, QUESTION_TYPE_TAXONOMY, category)
-                     for item in selected]
-                )
-            elif batch_action == NONE_COMMAND:
-                pass
-            else:
-                messages.error(request, _('Unknown batch action'))
+            _handle_batch_action(request, params['batchaction'], selected)
+
         elif params['action'] == 'save':
             changes = ItemTable.get_row_select_values(params, 'category')
             # TODO: Add the taxonomy to the form
@@ -318,11 +355,17 @@ def _add_items_categories(request, items):
     failed = 0
     for item_id, taxonomy_slug, term_name in items:
         try:
-            transport.items.add_term(
-                item_id,
-                taxonomy_slug,
-                term_name
-            )
+            if term_name:
+                transport.items.add_term(
+                    item_id,
+                    taxonomy_slug,
+                    term_name
+                )
+            else:
+                transport.items.delete_all_terms(
+                    item_id,
+                    taxonomy_slug
+                )
             success += 1
         except TransportException:
             failed += 1

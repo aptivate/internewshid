@@ -80,11 +80,11 @@ class ItemTable(tables.Table):
                                 such that the input field's name is
                                 <input_prefix>-<row id>
             Returns:
-                List of tupples (row id, field value)
+                List of tuples (row id, field value)
         """
         values = []
         for name, value in params.items():
-            if value and name.startswith(input_prefix + '-'):
+            if name.startswith(input_prefix + '-'):
                 row_id = int(name[len(input_prefix)+1:])
                 values.append((row_id, value))
         return values
