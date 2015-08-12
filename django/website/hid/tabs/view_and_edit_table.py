@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
 from hid.assets import require_assets
-from hid.forms import UploadForm
+from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
 import transport
 from transport.exceptions import TransportException

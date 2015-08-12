@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
 
-from ..forms import UploadForm, get_spreadsheet_choices
+from ..forms.upload import UploadForm, get_spreadsheet_choices
 
 
 class ListSources(TemplateView):

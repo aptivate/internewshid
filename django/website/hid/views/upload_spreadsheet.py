@@ -4,7 +4,7 @@ from django.utils.translation import ungettext
 from django.views.generic import FormView
 
 from chn_spreadsheet.importer import Importer, SheetImportException
-from ..forms import UploadForm
+from ..forms.upload import UploadForm
 
 
 class UploadSpreadsheetView(FormView):
