@@ -74,12 +74,12 @@ class ItemSerializer(serializers.ModelSerializer):
             item.terms.add(term)
         return item
 
-    def update(self, instance, validated_data):
+    def update(self, item, validated_data):
         # TODO: Currently we don't do anything with terms
         validated_data.pop('terms', [])
 
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
+            setattr(item, attr, value)
+        item.save()
 
-        return instance
+        return item
