@@ -18,7 +18,7 @@ from .taxonomy_and_term_create_tests import (
 
 
 def update_item(id, **kwargs):
-    url = '/items/%d' % id  # Not used as we call the view directly
+    url = '/items/%d' % id  # This doesn't seem to matter if id is absent?
     request = APIRequestFactory().put(url, kwargs)
     view = ItemViewSet.as_view(actions={'put': 'update'})
 
