@@ -59,8 +59,12 @@ def get(id):
     """ Return a single item specified by its id """
     view = ItemViewSet.as_view(actions={'get': 'retrieve'})
     request = request_factory.get(detail_url(id))
-
-    return view(request, pk=id).data
+    response = view(request, pk=id)
+    if status.is_success(response.status_code):
+        return response.data
+    else:
+        response.data['status_code'] = response.status_code
+        raise TransportException(response.data)
 
 
 def create(item):
