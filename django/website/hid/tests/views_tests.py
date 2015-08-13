@@ -12,7 +12,6 @@ from hid.tabs.view_and_edit_table import (
     _delete_items,
     _get_view_and_edit_form_request_parameters,
     DELETE_COMMAND,
-    QUESTION_TYPE_TAXONOMY,
     REMOVE_QTYPE_COMMAND
 )
 

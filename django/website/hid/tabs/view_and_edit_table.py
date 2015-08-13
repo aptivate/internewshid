@@ -8,13 +8,13 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
 from hid.assets import require_assets
+from hid.constants import ITEM_TYPE_CATEGORY
 from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
 import transport
 from transport.exceptions import TransportException
 
 
-QUESTION_TYPE_TAXONOMY = 'ebola-questions'
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
 NONE_COMMAND = 'none'
@@ -276,10 +276,10 @@ def _handle_batch_action(request, batch_action, selected):
 
 
 def _categorize_items(request, items, category):
-    # TODO: add the taxonomy to the form.
+    # TODO: Work out the item type.
     _add_items_categories(
         request,
-        [(item, QUESTION_TYPE_TAXONOMY, category)
+        [(item, ITEM_TYPE_CATEGORY['question'], category)
          for item in items])
 
 
@@ -303,10 +303,10 @@ def view_and_edit_table_form_process_items(request):
 
         elif params['action'] == 'save':
             changes = ItemTable.get_row_select_values(params, 'category')
-            # TODO: Add the taxonomy to the form
+            # TODO: Work out the item type.
             _add_items_categories(
                 request,
-                [(item, QUESTION_TYPE_TAXONOMY, category)
+                [(item, ITEM_TYPE_CATEGORY['question'], category)
                  for item, category in changes]
             )
         elif params['action'] != 'none':
