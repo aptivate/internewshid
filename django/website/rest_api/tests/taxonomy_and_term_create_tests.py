@@ -21,7 +21,11 @@ def create_category(name):
     url = reverse('taxonomy-list')
     request = APIRequestFactory().put(url, {'name': name})
     view = TaxonomyViewSet.as_view(actions={'put': 'create'})
-    return view(request)
+
+    response = view(request)
+    assert status.is_success(response.status_code), response.data
+
+    return response
 
 
 def taxonomy_exists(name):
