@@ -135,25 +135,20 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
-        # if self.item_type:
-        #     item_type = self.item_type['long_name']
-        # else:
-        #     item_type = 'Item'
-        # msg = _("%s %d successfully updated.") % (
-        #     item_type,
-        #     int(form.cleaned_data['id'])
-        # )
+        if self.item_type:
+            item_type = self.item_type['long_name']
+        else:
+            item_type = 'Item'
 
-        # return self._response(
-        #    form.cleaned_data['next'],
-        #    messages.SUCCESS,
-        #    msg
-        # )
+        msg = _("%s %d successfully updated.") % (
+            item_type,
+            int(form.cleaned_data['id'])
+        )
+
         return self._response(
             form.cleaned_data['next'],
-            messages.ERROR,
-            _('Update item not implemented')
-        )
+            messages.SUCCESS,
+            msg)
 
     def _response(self, url, message_type, message):
         """ Log a message and return an HTTP Response
