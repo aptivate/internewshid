@@ -137,7 +137,8 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'django_tables2',
     'djangojs',
-    'django_assets'
+    'django_assets',
+    'widget_tweaks'
 )
 
 LOCAL_APPS = (

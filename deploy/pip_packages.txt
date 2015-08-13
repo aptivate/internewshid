@@ -43,6 +43,7 @@ python-dateutil==2.4.2
 #django-recaptcha
 #django-registration
 django-tables2==1.0.4
+django-widget-tweaks==1.4.1
 
 ## ---------Development
 #django-extensions
