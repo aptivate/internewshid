@@ -14,6 +14,6 @@ urlpatterns = patterns('',
     url(r'^sources/(?P<label>\w+)/$', login_required(ListSources.as_view()), name='sources-edit'),
     url(r'^sources/$', login_required(ListSources.as_view()), name='sources'),
     url(r'^process-items/$', login_required(view_and_edit_table_form_process_items), name="data-view-process"),
-    url(r'^item/(?P<item_id>\d+)/edit/$', login_required(AddEditItemView.as_view())),
+    url(r'^item/(?P<item_id>\d+)/edit/$', login_required(AddEditItemView.as_view()), name='edit-item'),
     url(r'^$', login_required(DashboardView.as_view()), name='dashboard'),
 )
