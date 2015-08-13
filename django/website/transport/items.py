@@ -55,6 +55,14 @@ def list(**kwargs):
     return items
 
 
+def get(id):
+    """ Return a single item specified by its id """
+    view = ItemViewSet.as_view(actions={'get': 'retrieve'})
+    request = request_factory.get(detail_url(id))
+
+    return view(request, pk=id).data
+
+
 def create(item):
     """ Create an Item from the given dict """
     view = get_view()
