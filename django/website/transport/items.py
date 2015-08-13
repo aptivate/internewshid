@@ -76,7 +76,7 @@ def create(item):
 
 
 def delete(id):
-    """ Delete the Item wit the given ID """
+    """ Delete the Item with the given ID """
     view = get_view()
     request = request_factory.delete(detail_url(id))
     return view(request, pk=id)
