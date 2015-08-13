@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.utils.dateparse import parse_datetime
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
+from rest_api.serializers import ItemSerializer
 from rest_api.views import ItemViewSet
 
 from .exceptions import TransportException
@@ -49,10 +50,12 @@ def list(**kwargs):
 
     items = view(request).data
 
-    for item in items:
-        item.update(_parse_date_fields(item))
+    serializer = ItemSerializer(data=items, many=True)
 
-    return items
+    if serializer.is_valid():
+        return serializer.validated_data
+
+    raise TransportException(serializer.errors)
 
 
 def create(item):
