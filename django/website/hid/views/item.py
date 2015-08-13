@@ -88,10 +88,12 @@ class AddEditItemView(FormView):
             'timestamp': self.item['timestamp'],
             'next': self.request.GET.get('next', self.request.path)
         }
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
-        if (taxonomy and taxonomy in self.item_terms
-                and len(self.item_terms[taxonomy]) > 0):
-            initial['category'] = self.item_terms[taxonomy][0]['name']
+
+        item_type = getattr(self, 'item_type', None)
+        if item_type is not None:
+            taxonomy = ITEM_TYPE_CATEGORY.get(item_type['name'])
+            if (taxonomy and taxonomy in self.item_terms and len(self.item_terms[taxonomy]) > 0):
+                initial['category'] = self.item_terms[taxonomy][0]['name']
 
         return initial
 
