@@ -43,7 +43,7 @@ def test_date_fields_are_converted_to_datetimes():
 
     [retrieved_item] = retrieved_items
 
-    date_fields = ('timestamp', 'created')
+    date_fields = ('timestamp', 'created', 'last_modified')
 
     for date_field in date_fields:
         stored_date = getattr(stored_item, date_field).replace(
