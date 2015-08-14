@@ -82,11 +82,7 @@ class AddEditItemView(FormView):
                 _('No action performed')
             )
         if 'delete' in self.request.POST['action']:
-            return self._response(
-                self.request.POST['next'],
-                messages.ERROR,
-                _('Delete item not implemented')
-            )
+            return self._delete_item()
 
         return super(AddEditItemView, self).post(request, *args, **kwargs)
 
@@ -153,11 +149,11 @@ class AddEditItemView(FormView):
         """ Form submit handler """
         id = int(form.cleaned_data['id'])
 
+        item_description = self._get_item_description()
+
         if self.item_type:
-            item_description = self.item_type['long_name']
             taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
         else:
-            item_description = 'Item'
             taxonomy = None
 
         # TODO: Combine terms into single transaction
@@ -211,3 +207,24 @@ class AddEditItemView(FormView):
         """
         messages.add_message(self.request, message_type, message)
         return HttpResponseRedirect(url)
+
+    def _delete_item(self):
+        id = self.item['id']
+        transport.items.delete(id)
+
+        item_description = self._get_item_description()
+
+        return self._response(
+            self.request.POST['next'],
+            messages.SUCCESS,
+            _("%s %d successfully deleted.") % (
+                item_description,
+                id,
+            )
+        )
+
+    def _get_item_description(self):
+        if self.item_type:
+            return self.item_type['long_name']
+
+        return _('Item')

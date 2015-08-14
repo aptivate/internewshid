@@ -482,3 +482,20 @@ def test_item_term_delete_transport_exception_logs_message(view, form):
     assert_message(view.request,
                    messages.ERROR,
                    "Taxonomy with slug 'unknown-slug' does not exist.")
+
+
+@pytest.mark.django_db
+def test_item_can_be_deleted(view, form):
+    view.request.POST['next'] = '/'
+
+    response = view._delete_item()
+    assert response.url == '/'
+
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Question %s successfully deleted." % view.item['id'])
+
+    with pytest.raises(TransportException) as excinfo:
+        transport.items.get(view.item['id'])
+
+    assert excinfo.value.message['status_code'] == 404
