@@ -240,3 +240,29 @@ def test_form_next_url_value_set_to_provided_url(generic_item):
 
     initial = view.get_initial()
     assert initial['next'] == 'http://example.com'
+
+
+def test_context_data_includes_the_item(generic_item):
+    with patch('hid.views.item.list') as list_item:
+        list_item.return_value = [generic_item]
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103},
+        )
+
+    assert 'item' in response.context_data
+    assert response.context_data['item']['id'] == 1001
+
+
+def test_context_data_includes_item_type_label(generic_item):
+    with patch('hid.views.item.list') as list_item:
+        list_item.return_value = [generic_item]
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103},
+        )
+
+    assert 'item_type_label' in response.context_data
+    assert response.context_data['item_type_label'] == 'Generic'
