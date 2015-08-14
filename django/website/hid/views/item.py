@@ -162,23 +162,32 @@ class AddEditItemView(FormView):
 
         # TODO: Combine terms into single transaction
         category = form.cleaned_data.pop('category', None)
-        transport.items.update(id, form.cleaned_data)
 
-        if taxonomy:
-            if category:
-                transport.items.add_term(id, taxonomy, category)
-            else:
-                transport.items.delete_all_terms(id, taxonomy)
+        try:
+            transport.items.update(id, form.cleaned_data)
+            if taxonomy:
+                if category:
+                    transport.items.add_term(id, taxonomy, category)
+                else:
+                    transport.items.delete_all_terms(id, taxonomy)
 
-        msg = _("%s %d successfully updated.") % (
-            item_description,
-            id,
-        )
+            message = _("%s %d successfully updated.") % (
+                item_description,
+                id,
+            )
+            message_code = messages.SUCCESS
+
+        except transport.exceptions.TransportException as e:
+            message = e.message.get('detail')
+            if message is None:
+                message = e.message
+
+            message_code = messages.ERROR
 
         return self._response(
             form.cleaned_data['next'],
-            messages.SUCCESS,
-            msg)
+            message_code,
+            message)
 
     def form_invalid(self, form):
         """ Form invalid handler """
