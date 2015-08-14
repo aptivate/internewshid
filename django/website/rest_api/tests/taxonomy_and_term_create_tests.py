@@ -2,7 +2,6 @@ from __future__ import unicode_literals, absolute_import
 
 import pytest
 
-from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
@@ -18,8 +17,7 @@ from taxonomies.tests.factories import (
 
 
 def create_category(name):
-    url = reverse('taxonomy-list')
-    request = APIRequestFactory().put(url, {'name': name})
+    request = APIRequestFactory().put("", {'name': name})
     view = TaxonomyViewSet.as_view(actions={'put': 'create'})
 
     response = view(request)
@@ -48,8 +46,7 @@ def count_taxonomies():
 
 
 def get_taxonomies():
-    url = reverse('taxonomy-list')
-    request = APIRequestFactory().get(url)
+    request = APIRequestFactory().get("")
     view = TaxonomyViewSet.as_view(actions={'get': 'list'})
     response = view(request)
     assert status.is_success(response.status_code), response.data
@@ -58,15 +55,12 @@ def get_taxonomies():
 
 
 def get_terms(taxonomy_slug):
-    url = reverse('term-list')
-    request = APIRequestFactory().get(url,
-                                      data={'taxonomy': taxonomy_slug})
+    request = APIRequestFactory().get("", data={'taxonomy': taxonomy_slug})
     view = TermViewSet.as_view(actions={'get': 'list'})
     response = view(request)
     assert status.is_success(response.status_code), response.data
 
     return response
-
 
 
 @pytest.mark.django_db
@@ -93,8 +87,7 @@ def add_term(**kwargs):
         taxonomy: string with taxonomy name
         term: name of term
     """
-    url = reverse('term-list')
-    request = APIRequestFactory().post(url, kwargs)
+    request = APIRequestFactory().post("", kwargs)
     view = TermViewSet.as_view(actions={'post': 'create'})
     response = view(request)
     assert status.is_success(response.status_code), response.data

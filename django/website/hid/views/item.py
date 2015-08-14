@@ -62,7 +62,7 @@ class AddEditItemView(FormView):
         If the URL defines an item_id, we load the corresponding item
         to make it available for forms.
 
-        We handle cancel and delete here, as the form doesn't it to be
+        We handle cancel and delete here, as the form doesn't need to be
         valid for those.
         """
         try:
