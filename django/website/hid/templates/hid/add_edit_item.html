@@ -11,6 +11,20 @@
     </h1>
     <div class="col-lg-8 col-lg-offset-2">
         <form id="single-item-form" role="form" method="POST">
+          {% if form.errors %}
+          {% for field in form %}
+          {% for error in field.errors %}
+          <div class="alert alert-error">
+            <strong>{{ error|escape }}</strong>
+          </div>
+          {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+          <div class="alert alert-error">
+            <strong>{{ error|escape }}</strong>
+          </div>
+          {% endfor %}
+          {% endif %}
             {% csrf_token %}
             {{ form.id }}
             {{ form.next }}
@@ -20,15 +34,15 @@
                         <p class="item-meta-info">
                             {% trans "Added on " %}
                             <span class="item-meta item-date-added">{{ item.created }}</span>
-                            {% trans "Updated on " %} 
+                            {% trans "Updated on " %}
                             <span class="item-meta item-date-updated">{{ item.last_modified }}</span>
                         </p>
                     </div>
                     <div class="col-xs-12">
                         <div class="col-xs-12 input-group form-group item-text">
-                            <label> 
+                            <label>
                                 {{ item_type_label }}
-                                <span class="item-id">{{ item.id }}</span> 
+                                <span class="item-id">{{ item.id }}</span>
                             </label>
                             {{ form.body|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your question text here" }}
                         </div>
@@ -70,7 +84,7 @@
                         {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-sm" %}
                         {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-sm btn-success" %}
                     </div>
-                </div>  
+                </div>
             </div></div>
         </form>
     </div>
