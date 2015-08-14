@@ -5,17 +5,11 @@ from rest_api.views import ItemViewSet
 
 from .exceptions import TransportException
 
-
-actions = {
-    'get': 'list',
-    'post': 'create',
-    'delete': 'destroy',
-}
 request_factory = APIRequestFactory()
 
 
-def get_view():
-    return ItemViewSet.as_view(actions)
+def get_view(actions):
+    return ItemViewSet.as_view(actions=actions)
 
 
 def _parse_date_fields(item):
@@ -35,7 +29,7 @@ def list(**kwargs):
     to filter the Items.
     """
     # FIXME: currently only body exact filtering is supported
-    view = get_view()
+    view = get_view({'get': 'list'})
     request = request_factory.get("", kwargs)
 
     items = view(request).data
@@ -49,7 +43,7 @@ def list(**kwargs):
 def get(id):
     """ Return a single item specified by its id """
     view = ItemViewSet.as_view(actions={'get': 'retrieve'})
-    request = request_factory.get(detail_url(id))
+    request = request_factory.get("")
     response = view(request, pk=id)
     if status.is_success(response.status_code):
         item = response.data
@@ -63,7 +57,7 @@ def get(id):
 
 def create(item):
     """ Create an Item from the given dict """
-    view = get_view()
+    view = get_view({'post': 'create'})
     request = request_factory.post("", item)
     response = view(request)
     if status.is_success(response.status_code):
@@ -73,9 +67,21 @@ def create(item):
         raise TransportException(response.data)
 
 
+def update(id, item):
+    """ Update an Item from the given dict """
+    view = get_view({'put': 'update'})
+    request = request_factory.put("", item)
+    response = view(request, pk=id)
+    if status.is_success(response.status_code):
+        return response.data
+    else:
+        response.data['status_code'] = response.status_code
+        raise TransportException(response.data)
+
+
 def delete(id):
     """ Delete the Item with the given ID """
-    view = get_view()
+    view = get_view({'delete': 'destroy'})
     request = request_factory.delete("")
     return view(request, pk=id)
 
@@ -105,7 +111,7 @@ def add_term(item_id, taxonomy_slug, name):
 
     For the moment both the taxonomy and term must already exist.
     """
-    view = ItemViewSet.as_view(actions={'post': 'add_term'})
+    view = get_view({'post': 'add_term'})
 
     term = {'taxonomy': taxonomy_slug, 'name': name}
     request = request_factory.post("", term)
@@ -121,7 +127,7 @@ def add_term(item_id, taxonomy_slug, name):
 
 
 def delete_all_terms(item_id, taxonomy_slug):
-    view = ItemViewSet.as_view(actions={'post': 'delete_all_terms'})
+    view = get_view({'post': 'delete_all_terms'})
 
     taxonomy = {'taxonomy': taxonomy_slug}
     request = request_factory.post("", taxonomy)

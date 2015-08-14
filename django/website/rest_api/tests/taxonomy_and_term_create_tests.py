@@ -19,7 +19,11 @@ from taxonomies.tests.factories import (
 def create_category(name):
     request = APIRequestFactory().put("", {'name': name})
     view = TaxonomyViewSet.as_view(actions={'put': 'create'})
-    return view(request, pk=id)
+
+    response = view(request)
+    assert status.is_success(response.status_code), response.data
+
+    return response
 
 
 def taxonomy_exists(name):

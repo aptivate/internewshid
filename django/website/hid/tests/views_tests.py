@@ -44,6 +44,13 @@ def fix_messages(request):
     return request
 
 
+def assert_message(request, level, content):
+    messages = [(m.message, m.level)
+                for m in request._messages._queued_messages]
+
+    assert (content, level) in messages
+
+
 def check_message(request, content):
     for msg in request._messages._queued_messages:
         if msg.message == content:

@@ -1,15 +1,63 @@
 from datetime import datetime
+from mock import patch
+import pytest
+
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.test import RequestFactory
-from mock import patch
-import pytest
+
+import transport
+from ..views.item import AddEditItemView
+
+from .views_tests import (
+    assert_message,
+    fix_messages,
+)
 
 from transport.exceptions import TransportException
 
-from .views_tests import fix_messages
-from ..views.item import AddEditItemView
+
+@pytest.fixture
+def item():
+    msg = {
+        'body': "What is the cuse of Ebola?",
+        'timestamp': "2015-02-23 00:00:00",
+    }
+    response = transport.items.create(msg)
+
+    return response
+
+
+@pytest.fixture
+def item_type():
+    return {'name': 'question', 'long_name': 'Question'}
+
+
+@pytest.fixture
+def view(item, item_type):
+    view = AddEditItemView()
+    view.item = item
+    view.item_type = item_type
+
+    url = reverse('edit-item',
+                  kwargs={'item_id': item['id']})
+
+    factory = RequestFactory()
+    view.request = factory.post(url)
+    view.request = fix_messages(view.request)
+
+    return view
+
+
+@pytest.fixture
+def form(view, item):
+    form = view.form_class('question')
+    form.cleaned_data = item
+    form.cleaned_data['next'] = '/'
+
+    return form
 
 
 ReqFactory = RequestFactory()
@@ -17,7 +65,7 @@ ReqFactory = RequestFactory()
 
 def get_view_for_request(view_class, url_name, args=None, kwargs=None,
                          request_type='get', post=None, get=None):
-    """ Instanciate a class based view for the given request, and
+    """ Instantiate a class based view for the given request, and
         return the view object
 
         Args:
@@ -60,7 +108,7 @@ def make_request(view_class, url_name, args=None, kwargs=None,
         Args:
             See get_view_for_request
         Returns:
-            (view, response) tupple
+            (view, response) tuple
     """
     view = get_view_for_request(view_class, url_name, args, kwargs,
                                 request_type, post, get)
@@ -309,3 +357,84 @@ def test_displaying_unknown_item_returns_redirect_response(generic_item):
         )
 
     assert type(response) is HttpResponseRedirect
+
+
+@pytest.mark.django_db
+def test_item_can_be_updated(view, form):
+    new_text = "What is the cause of Ebola?"
+    form.cleaned_data['body'] = new_text,
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    assert item['body'] == new_text
+
+
+@pytest.mark.django_db
+def test_item_category_can_be_updated(view, form):
+    form.cleaned_data['category'] = 'Ebola updates',
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert terms['ebola-questions'] == 'Ebola updates'
+
+
+@pytest.mark.django_db
+def test_item_category_can_be_unset(view, form):
+    transport.items.add_term(view.item['id'], 'ebola-questions',
+                             'Ebola origins')
+
+    form.cleaned_data['category'] = ''
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'ebola-questions' not in terms
+
+
+@pytest.mark.django_db
+def test_item_category_not_required(view, form):
+    form.cleaned_data['category'] = ''
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'ebola-questions' not in terms
+
+
+@pytest.mark.django_db
+def test_item_update_logs_message_and_redirects(view, form):
+    view.item_type['long_name'] = 'Question'
+
+    response = view.form_valid(form)
+    assert response.url == form.cleaned_data['next']
+
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Question %s successfully updated." % view.item['id'])
+
+
+@pytest.mark.django_db
+def test_item_update_without_type_logs_message(view, form):
+    view.item_type = None
+
+    view.form_valid(form)
+
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Item %s successfully updated." % view.item['id'])
+
+
+@pytest.mark.django_db
+def test_no_category_when_item_type_not_set(view):
+    view.item_type = None
+    initial = view.get_initial()
+
+    assert 'category' not in initial

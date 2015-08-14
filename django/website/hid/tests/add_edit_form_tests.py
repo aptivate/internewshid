@@ -49,3 +49,15 @@ def test_form_category_has_expected_choices():
             form = AddEditItemForm('some-item-type')
             assert 'category' in form.fields
             assert form.fields['category'].choices == expected_choices
+
+
+def test_category_field_is_not_required():
+    item_type_category = {
+        'some-item-type': 'some-taxonomy'
+    }
+    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
+        with patch('hid.forms.item.transport.terms.list') as term_list:
+            term_list.return_value = []
+            form = AddEditItemForm('some-item-type')
+
+    assert not form.fields['category'].required
