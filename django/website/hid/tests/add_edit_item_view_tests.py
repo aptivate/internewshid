@@ -95,6 +95,15 @@ def generic_item():
     }
 
 
+@pytest.fixture
+def an_item_type():
+    return {
+        'taxonomy': 'item-types',
+        'name': 'an-item-type',
+        'long_name': 'An Item Type'
+    }
+
+
 def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -305,6 +314,59 @@ def test_displaying_unknown_item_returns_redirect_response(generic_item):
             AddEditItemView,
             'edit-item',
             kwargs={'item_id': 103},
+        )
+
+    assert type(response) is HttpResponseRedirect
+
+
+def test_add_new_item_get_request_populates_item_type(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+        )
+
+    assert view.item_type == an_item_type
+
+
+def test_add_new_item_post_request_populates_item_type(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+            request_type='post',
+            post={
+                'action': 'save',
+                'next': ''
+            }
+        )
+
+    assert view.item_type == an_item_type
+
+
+def test_add_new_item_returns_template_response(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+        )
+
+    assert type(response) is TemplateResponse
+
+
+def test_add_new_item_with_unknown_item_type_redirects():
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = []
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
         )
 
     assert type(response) is HttpResponseRedirect
