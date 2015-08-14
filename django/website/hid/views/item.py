@@ -168,6 +168,16 @@ class AddEditItemView(FormView):
             _('Update item not implemented')
         )
 
+    def form_invalid(self, form):
+        """ Form invalid handler """
+        messages.add_message(
+            self.request,
+            messages.ERROR,
+            _("The form could not be submitted."
+              "Please correct the errors and submit it again.")
+        )
+        return super(AddEditItemView, self).form_invalid(form)
+
     def _response(self, url, message_type, message):
         """ Log a message and return an HTTP Response
 
