@@ -3,7 +3,10 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
 
-from transport.items import list
+from transport.items import (
+    list,
+    update,
+)
 from ..forms.item import AddEditItemForm
 from ..constants import ITEM_TYPE_CATEGORY
 
@@ -137,14 +140,18 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
+        id = int(form.cleaned_data['id'])
+
         if self.item_type:
             item_type = self.item_type['long_name']
         else:
             item_type = 'Item'
 
+        update(id, form.cleaned_data)
+
         msg = _("%s %d successfully updated.") % (
             item_type,
-            int(form.cleaned_data['id'])
+            id,
         )
 
         return self._response(

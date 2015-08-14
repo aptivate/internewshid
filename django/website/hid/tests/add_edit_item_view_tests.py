@@ -1,3 +1,4 @@
+from datetime import datetime
 import pytest
 
 from django.contrib import messages
@@ -14,7 +15,10 @@ from .views_tests import (
 
 @pytest.fixture
 def item():
-    msg = {'body': "What is the cuse of Ebola?"}
+    msg = {
+        'body': "What is the cuse of Ebola?",
+        'timestamp': "2015-02-23 00:00:00",
+    }
     response = transport.items.create(msg)
 
     return response
@@ -36,23 +40,33 @@ def view(item):
 
 
 @pytest.fixture
-def form(view):
+def form(view, item):
     form = view.form_class('question')
+    form.cleaned_data = item
+    form.cleaned_data['next'] = '/'
 
     return form
+
+
+@pytest.mark.django_db
+def test_item_can_be_updated(view, form):
+    view.item_type = {'long_name': 'Question'}
+
+    new_text = "What is the cause of Ebola?"
+    form.cleaned_data['body'] = new_text,
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    assert item['body'] == new_text
 
 
 @pytest.mark.django_db
 def test_item_update_logs_message_and_redirects(view, form):
     view.item_type = {'long_name': 'Question'}
 
-    form.cleaned_data = {
-        'next': '/',
-        'id': view.item['id'],
-    }
-
     response = view.form_valid(form)
-    assert response.url == '/'
+    assert response.url == form.cleaned_data['next']
 
     assert_message(view.request,
                    messages.SUCCESS,
@@ -62,11 +76,6 @@ def test_item_update_logs_message_and_redirects(view, form):
 @pytest.mark.django_db
 def test_item_update_without_type_logs_message(view, form):
     view.item_type = None
-
-    form.cleaned_data = {
-        'next': '/',
-        'id': view.item['id'],
-    }
 
     view.form_valid(form)
 

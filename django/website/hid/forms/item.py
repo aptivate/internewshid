@@ -14,7 +14,7 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=True
     )
-    timestamp = forms.DateField(required=True)
+    timestamp = forms.DateTimeField(required=True)
     next = forms.CharField(
         widget=forms.HiddenInput,
         required=True
