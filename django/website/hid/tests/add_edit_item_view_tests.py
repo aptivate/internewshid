@@ -1,8 +1,12 @@
 from datetime import datetime
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.test import RequestFactory
 from mock import patch
 import pytest
+
+from transport.exceptions import TransportException
 
 from .views_tests import fix_messages
 from ..views.item import AddEditItemView
@@ -92,8 +96,8 @@ def generic_item():
 
 
 def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -104,8 +108,8 @@ def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
 
 
 def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -116,8 +120,8 @@ def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
 
 
 def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -139,8 +143,8 @@ def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
 
 
 def test_the_item_is_added_to_the_view_on_post_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -156,8 +160,8 @@ def test_the_item_is_added_to_the_view_on_post_requests(generic_item):
 
 
 def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -173,8 +177,8 @@ def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
 
 
 def test_the_item_terms_are_added_to_the_view_on_post_requests(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -201,8 +205,8 @@ def test_the_item_terms_are_added_to_the_view_on_post_requests(generic_item):
 
 
 def test_form_initial_values_set_that_of_item(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -216,8 +220,8 @@ def test_form_initial_values_set_that_of_item(generic_item):
 
 
 def test_form_next_url_value_set_to_current_url_by_default(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -229,8 +233,8 @@ def test_form_next_url_value_set_to_current_url_by_default(generic_item):
 
 
 def test_form_next_url_value_set_to_provided_url(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -243,8 +247,8 @@ def test_form_next_url_value_set_to_provided_url(generic_item):
 
 
 def test_context_data_includes_the_item(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -256,8 +260,8 @@ def test_context_data_includes_the_item(generic_item):
 
 
 def test_context_data_includes_item_type_label(generic_item):
-    with patch('hid.views.item.list') as list_item:
-        list_item.return_value = [generic_item]
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
             'edit-item',
@@ -266,3 +270,41 @@ def test_context_data_includes_item_type_label(generic_item):
 
     assert 'item_type_label' in response.context_data
     assert response.context_data['item_type_label'] == 'Generic'
+
+
+def test_correct_item_is_fetched_during_request(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+        make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103},
+        )
+
+    assert get_item.called
+    assert get_item.call_args[0][0] == 103
+
+
+def test_displaying_existing_item_returns_template_response(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103},
+        )
+
+    assert type(response) is TemplateResponse
+
+
+def test_displaying_unknown_item_returns_redirect_response(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.side_effect = TransportException()
+        get_item.return_value = generic_item
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103},
+        )
+
+    assert type(response) is HttpResponseRedirect

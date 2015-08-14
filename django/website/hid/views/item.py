@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
 
-from transport.items import list
+import transport
 from ..forms.item import AddEditItemForm
 from ..constants import ITEM_TYPE_CATEGORY
 
@@ -28,11 +28,7 @@ class AddEditItemView(FormView):
         self.item_terms = None
         if not item_id:
             return
-        # TODO: Use the single item get API when implemented
-        items = list(id=item_id)
-        if len(items) == 0:
-            return
-        self.item = items[0]
+        self.item = transport.items.get(item_id)
         self.item_terms = {}
         for term in self.item['terms']:
             taxonomy = term['taxonomy']
@@ -48,7 +44,15 @@ class AddEditItemView(FormView):
         If the URL defines an item_id, we load the corresponding item
         to make it available for forms.
         """
-        self._initialize_item(kwargs.get('item_id'))
+        try:
+            self._initialize_item(kwargs.get('item_id'))
+        except transport.exceptions.TransportException:
+            return self._response(
+                self.request.GET.get('next', '/'),
+                messages.ERROR,
+                (_('Item with id %s could not be found') %
+                 str(kwargs.get('item_id')))
+            )
         return super(AddEditItemView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -60,7 +64,16 @@ class AddEditItemView(FormView):
         We handle cancel and delete here, as the form doesn't it to be
         valid for those.
         """
-        self._initialize_item(kwargs.get('item_id'))
+        try:
+            self._initialize_item(kwargs.get('item_id'))
+        except transport.exceptions.TransportException:
+            return self._response(
+                self.request.GET.get('next', '/'),
+                messages.ERROR,
+                (_('Item with id %s could not be found') %
+                 str(kwargs.get('item_id')))
+            )
+
         if 'cancel' in self.request.POST['action']:
             return self._response(
                 self.request.POST['next'],
