@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
 
 import transport
+
 from ..forms.item import AddEditItemForm
 from ..constants import ITEM_TYPE_CATEGORY
 
@@ -101,7 +102,7 @@ class AddEditItemView(FormView):
         If the URL defines an item_id, we load the corresponding item
         to make it available for forms.
 
-        We handle cancel and delete here, as the form doesn't it to be
+        We handle cancel and delete here, as the form doesn't need to be
         valid for those.
         """
         try:
@@ -153,10 +154,13 @@ class AddEditItemView(FormView):
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get('next', self.request.path)
             }
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
-        if (taxonomy and taxonomy in self.item_terms
-                and len(self.item_terms[taxonomy]) > 0):
-            initial['category'] = self.item_terms[taxonomy][0]['name']
+
+        item_type = getattr(self, 'item_type', None)
+        if item_type is not None:
+            taxonomy = ITEM_TYPE_CATEGORY.get(item_type['name'])
+            if (taxonomy and taxonomy in self.item_terms
+                    and len(self.item_terms[taxonomy]) > 0):
+                initial['category'] = self.item_terms[taxonomy][0]['name']
 
         return initial
 
@@ -191,25 +195,34 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
-        # if self.item_type:
-        #     item_type = self.item_type['long_name']
-        # else:
-        #     item_type = 'Item'
-        # msg = _("%s %d successfully updated.") % (
-        #     item_type,
-        #     int(form.cleaned_data['id'])
-        # )
+        id = int(form.cleaned_data['id'])
 
-        # return self._response(
-        #    form.cleaned_data['next'],
-        #    messages.SUCCESS,
-        #    msg
-        # )
+        if self.item_type:
+            item_description = self.item_type['long_name']
+            taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        else:
+            item_description = 'Item'
+            taxonomy = None
+
+        # TODO: Combine terms into single transaction
+        category = form.cleaned_data.pop('category', None)
+        transport.items.update(id, form.cleaned_data)
+
+        if taxonomy:
+            if category:
+                transport.items.add_term(id, taxonomy, category)
+            else:
+                transport.items.delete_all_terms(id, taxonomy)
+
+        msg = _("%s %d successfully updated.") % (
+            item_description,
+            id,
+        )
+
         return self._response(
             form.cleaned_data['next'],
-            messages.ERROR,
-            _('Update item not implemented')
-        )
+            messages.SUCCESS,
+            msg)
 
     def form_invalid(self, form):
         """ Form invalid handler """

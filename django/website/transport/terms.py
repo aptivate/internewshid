@@ -1,5 +1,3 @@
-from django.core.urlresolvers import reverse
-
 from rest_api.views import TermViewSet
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
@@ -8,15 +6,6 @@ from .exceptions import TransportException
 
 
 request_factory = APIRequestFactory()
-
-
-def list_url():
-    """ Returns the url to obtain the list of terms
-
-    Returns:
-        str: List of term URL
-    """
-    return reverse('term-list')
 
 
 def get_view(actions):
@@ -48,7 +37,7 @@ def list(**kwargs):
             status code.
     """
     view = get_view(actions={'get': 'list'})
-    request = request_factory.get(list_url(), kwargs)
+    request = request_factory.get("", kwargs)
     response = view(request)
 
     if not status.is_success(response.status_code):

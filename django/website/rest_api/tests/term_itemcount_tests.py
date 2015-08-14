@@ -4,7 +4,6 @@ from datetime import timedelta
 
 import pytest
 
-from django.core.urlresolvers import reverse
 from django.utils import timezone
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
@@ -27,8 +26,7 @@ def get_term_itemcount(taxonomy_slug, get_params=None):
 
 
 def get_term_itemcount_response(taxonomy_slug, get_params=None):
-    url = reverse('taxonomy-itemcount', kwargs={'slug': taxonomy_slug})
-    request = APIRequestFactory().get(url, data=get_params)
+    request = APIRequestFactory().get("", data=get_params)
     view = TaxonomyViewSet.as_view(actions={'get': 'itemcount'})
 
     return view(request, slug=taxonomy_slug)

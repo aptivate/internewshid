@@ -14,7 +14,7 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=True
     )
-    timestamp = forms.DateField(required=True)
+    timestamp = forms.DateTimeField(required=True)
     next = forms.CharField(
         widget=forms.HiddenInput,
         required=True
@@ -30,7 +30,7 @@ class AddEditItemForm(forms.Form):
             choices = (('', '-----'),)
             choices += tuple((t['name'], t['name']) for t in terms)
             self.fields['category'] = forms.ChoiceField(
-                choices=choices
+                choices=choices, required=False
             )
         # The template already has support for optional fields:
         # 'region' (select)
