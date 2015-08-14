@@ -31,9 +31,15 @@ def item():
 
 
 @pytest.fixture
-def view(item):
+def item_type():
+    return {'name': 'question', 'long_name': 'Question'}
+
+
+@pytest.fixture
+def view(item, item_type):
     view = AddEditItemView()
     view.item = item
+    view.item_type = item_type
 
     url = reverse('edit-item',
                   kwargs={'item_id': item['id']})
@@ -52,6 +58,7 @@ def form(view, item):
     form.cleaned_data['next'] = '/'
 
     return form
+
 
 ReqFactory = RequestFactory()
 
@@ -353,8 +360,6 @@ def test_displaying_unknown_item_returns_redirect_response(generic_item):
 
 @pytest.mark.django_db
 def test_item_can_be_updated(view, form):
-    view.item_type = {'long_name': 'Question'}
-
     new_text = "What is the cause of Ebola?"
     form.cleaned_data['body'] = new_text,
 
@@ -365,8 +370,47 @@ def test_item_can_be_updated(view, form):
 
 
 @pytest.mark.django_db
+def test_item_category_can_be_updated(view, form):
+    form.cleaned_data['category'] = 'Ebola updates',
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert terms['ebola-questions'] == 'Ebola updates'
+
+
+@pytest.mark.django_db
+def test_item_category_can_be_unset(view, form):
+    transport.items.add_term(view.item['id'], 'ebola-questions',
+                             'Ebola origins')
+
+    form.cleaned_data['category'] = ''
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'ebola-questions' not in terms
+
+
+@pytest.mark.django_db
+def test_item_category_not_required(view, form):
+    form.cleaned_data['category'] = ''
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'ebola-questions' not in terms
+
+
+@pytest.mark.django_db
 def test_item_update_logs_message_and_redirects(view, form):
-    view.item_type = {'long_name': 'Question'}
+    view.item_type['long_name'] = 'Question'
 
     response = view.form_valid(form)
     assert response.url == form.cleaned_data['next']

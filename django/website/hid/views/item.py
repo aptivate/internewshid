@@ -154,14 +154,24 @@ class AddEditItemView(FormView):
         id = int(form.cleaned_data['id'])
 
         if self.item_type:
-            item_type = self.item_type['long_name']
+            item_description = self.item_type['long_name']
+            taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
         else:
-            item_type = 'Item'
+            item_description = 'Item'
+            taxonomy = None
 
+        # TODO: Combine terms into single transaction
+        category = form.cleaned_data.pop('category', None)
         transport.items.update(id, form.cleaned_data)
 
+        if taxonomy:
+            if category:
+                transport.items.add_term(id, taxonomy, category)
+            else:
+                transport.items.delete_all_terms(id, taxonomy)
+
         msg = _("%s %d successfully updated.") % (
-            item_type,
+            item_description,
             id,
         )
 
