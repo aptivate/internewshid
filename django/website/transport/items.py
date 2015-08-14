@@ -55,7 +55,10 @@ def get(id):
     request = request_factory.get(detail_url(id))
     response = view(request, pk=id)
     if status.is_success(response.status_code):
-        return response.data
+        item = response.data
+        item.update(_parse_date_fields(item))
+
+        return item
     else:
         response.data['status_code'] = response.status_code
         raise TransportException(response.data)
