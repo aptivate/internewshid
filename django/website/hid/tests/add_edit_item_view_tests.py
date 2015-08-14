@@ -437,3 +437,47 @@ def test_no_category_when_item_type_not_set(view):
     initial = view.get_initial()
 
     assert 'category' not in initial
+
+
+@pytest.mark.django_db
+def test_item_update_transport_exception_logs_message(view, form):
+    # This could happen if someone else deletes the item when the
+    # form is open
+    transport.items.delete(view.item['id'])
+
+    view.form_valid(form)
+
+    assert_message(view.request,
+                   messages.ERROR,
+                   "Not found.")
+
+
+@pytest.mark.django_db
+def test_item_term_update_transport_exception_logs_message(view, form):
+    # This shouldn't be possible from the form but we may get other
+    # TransportException errors
+    form.cleaned_data['category'] = "A category that doesn't exist"
+    view.form_valid(form)
+
+    assert_message(view.request,
+                   messages.ERROR,
+                   "Term matching query does not exist.")
+
+
+@pytest.mark.django_db
+def test_item_term_delete_transport_exception_logs_message(view, form):
+    # This shouldn't be possible from the form but we may get other
+    # TransportException errors
+    form.cleaned_data['category'] = ''
+
+    # Not sure if this is good practice
+    from ..constants import ITEM_TYPE_CATEGORY
+    ITEM_TYPE_CATEGORY['question'] = 'unknown-slug'
+
+    view.form_valid(form)
+
+    ITEM_TYPE_CATEGORY['question'] = 'ebola-questions'
+
+    assert_message(view.request,
+                   messages.ERROR,
+                   "Taxonomy with slug 'unknown-slug' does not exist.")
