@@ -28,7 +28,10 @@ class ItemTable(tables.Table):
         verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
     )
-    body = tables.Column(verbose_name=_('Item'))
+    body = tables.TemplateColumn(
+        template_name='hid/body_column.html',
+        verbose_name=_('Item')
+    )
     network_provider = tables.Column(
         verbose_name=_('Network Provider')
     )

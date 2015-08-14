@@ -1,0 +1,5 @@
+{% if request %}
+    <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.body }}</a>
+{% else %}
+    {{ record.body }}
+{% endif %}
