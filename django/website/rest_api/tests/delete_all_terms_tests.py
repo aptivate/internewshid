@@ -2,7 +2,6 @@ from __future__ import unicode_literals, absolute_import
 
 import pytest
 
-from django.core.urlresolvers import reverse
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from data_layer.models import Item
@@ -17,8 +16,7 @@ from ..views import ItemViewSet
 
 
 def remove_categories_from_item(item, taxonomy):
-    url = reverse('item-delete-all-terms', kwargs={"pk": item['id']})
-    request = APIRequestFactory().post(url, {'taxonomy': taxonomy})
+    request = APIRequestFactory().post("", {'taxonomy': taxonomy})
     view = ItemViewSet.as_view(actions={'post': 'delete_all_terms'})
     return view(request, item_pk=item['id'])
 

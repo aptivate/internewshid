@@ -1,5 +1,3 @@
-from django.core.urlresolvers import reverse
-
 from rest_api.views import TaxonomyViewSet
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
@@ -8,14 +6,6 @@ from .exceptions import TransportException
 from .terms import list as terms_list
 
 request_factory = APIRequestFactory()
-
-
-def list_url():
-    return reverse('taxonomy-list')
-
-
-def itemcount_url(slug):
-    return reverse('taxonomy-itemcount', kwargs={'slug': slug})
 
 
 def get_view(actions):
@@ -30,7 +20,7 @@ def list(**kwargs):
     """
 
     view = get_view(actions={'get': 'list'})
-    request = request_factory.get(list_url(), kwargs)
+    request = request_factory.get("", kwargs)
     return view(request).data
 
 
@@ -57,8 +47,7 @@ def _add_zero_counts_for_missing_terms(slug, itemcounts):
 
 def term_itemcount(slug, **kwargs):
     view = get_view(actions={'get': 'itemcount'})
-    request = request_factory.get(itemcount_url(slug),
-                                  kwargs)
+    request = request_factory.get("", kwargs)
     response = view(request, slug=slug)
 
     if not status.is_success(response.status_code):

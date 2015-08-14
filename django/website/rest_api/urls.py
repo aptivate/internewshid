@@ -1,5 +1,4 @@
-from django.conf.urls import patterns, include
-
+from django.conf import settings
 from rest_framework import routers
 
 
@@ -24,4 +23,5 @@ router.register(
     TermViewSet,
 )
 
-urlpatterns = router.urls
+
+urlpatterns = router.urls if settings.DEBUG else []
