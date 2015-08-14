@@ -2,7 +2,7 @@ from mock import Mock
 
 from django.core.urlresolvers import reverse
 
-from ..views import UploadSpreadsheetView
+from ..views.upload_spreadsheet import UploadSpreadsheetView
 
 
 def test_redirects_to_next_url_after_upload():
