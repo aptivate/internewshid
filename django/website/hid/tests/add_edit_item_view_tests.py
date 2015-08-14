@@ -281,8 +281,9 @@ def test_correct_item_is_fetched_during_request(generic_item):
             kwargs={'item_id': 103},
         )
 
+    (args, _) = get_item.call_args
     assert get_item.called
-    assert get_item.call_args[0][0] == 103
+    assert args[0] == 103
 
 
 def test_displaying_existing_item_returns_template_response(generic_item):
