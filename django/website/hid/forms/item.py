@@ -30,7 +30,7 @@ class AddEditItemForm(forms.Form):
             choices = (('', '-----'),)
             choices += tuple((t['name'], t['name']) for t in terms)
             self.fields['category'] = forms.ChoiceField(
-                choices=choices
+                choices=choices, required=False
             )
         # The template already has support for optional fields:
         # 'region' (select)
