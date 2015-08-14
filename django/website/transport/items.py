@@ -22,7 +22,7 @@ def get_view(actions):
 
 
 def _parse_date_fields(item):
-    date_fields = ('created', 'timestamp')
+    date_fields = ('created', 'timestamp', 'last_modified', )
     item_dict = dict(item)
     for date_field in date_fields:
         value = item_dict[date_field]
