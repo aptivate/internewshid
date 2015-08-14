@@ -137,7 +137,8 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'django_tables2',
     'djangojs',
-    'django_assets'
+    'django_assets',
+    'widget_tweaks'
 )
 
 LOCAL_APPS = (
@@ -392,6 +393,6 @@ else:
     )
 ########## END TEMPLATE CONFIGURATION
 
-CSRF_FAILURE_VIEW = 'hid.views.csrf_failure'
+CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
 
 ########## Your stuff: Below this line define 3rd party libary settings
