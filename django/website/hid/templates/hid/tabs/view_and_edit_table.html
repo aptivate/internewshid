@@ -5,15 +5,24 @@
     <div class="panel-heading panel-heading-large clearfix">
         <span class="fa fa-table fa-fw"></span>
         <h2>{{ type_label }}</h2>
-        <div class="pull-right">
+        <div class="pull-right btn-group">
+          {% if add_button_for %}
+              <a class="btn btn-primary" type="button"
+                  href="{% url "add-item" item_type=add_button_for.name %}?next={{ request.path }}">
+                  <span class="fa fa-fw fa-plus-square"></span>
+                  {% blocktrans with add_button_for.long_name as label %}
+                      Add {{ label }}
+                  {% endblocktrans %}
+              </a>
+          {% endif %}
           {% if upload_form %}
             <form action="{% url "sources-upload" %}"
                   method="post"
                   enctype="multipart/form-data"
-                  class="auto-upload-file">
+                  class="auto-upload-file pull-left">
                 {% csrf_token %}
                     {% bootstrap_form upload_form show_label=False %}
-                    <a class="btn item-source-upload btn-block btn-primary upload-button" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
+                    <a class="btn item-source-upload btn-primary upload-button pull-left" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
             </form>
           {% endif %}
         </div>

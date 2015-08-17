@@ -194,6 +194,7 @@ class ViewAndEditTableTab(object):
 
         # And return the context
         return {
+            'add_button_for': self._get_item_type_filter(kwargs),
             'type_label': kwargs.get('label', '?'),
             'table': table,
             'upload_form': upload_form,
@@ -204,6 +205,38 @@ class ViewAndEditTableTab(object):
                 'tab_name': tab_instance.name
             })
         }
+
+    def _get_item_type_filter(self, kwargs):
+        """ If this tab displays a single item-type, return the associated
+            term
+
+            This parses the filters to see if there is any item-types
+            filter. Items can only have one item type.
+
+            Args:
+                kwargs: Tab settings
+
+            Returns:
+               dict or None: The term object
+        """
+        if 'filters' not in kwargs or 'terms' not in kwargs['filters']:
+            return None
+
+        for filter_expr in kwargs['filters']['terms']:
+            try:
+                (tax, name) = filter_expr.split(':', 1)
+            except ValueError:
+                # Not our place to validate this.
+                pass
+            if tax == 'item-types':
+                matches = transport.terms.list(
+                    taxonomy=tax,
+                    name=name
+                )
+                if len(matches) > 0:
+                    return matches[0]
+
+        return None
 
 
 def _get_view_and_edit_form_request_parameters(params):
