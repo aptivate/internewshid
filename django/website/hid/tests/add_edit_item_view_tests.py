@@ -478,7 +478,7 @@ def test_add_new_item_with_unknown_item_type_redirects():
 
 
 @pytest.mark.django_db
-def test_submiting_form_with_id_equal_0_creates_an_item(item_type):
+def test_submitting_form_with_id_equal_0_creates_an_item(item_type):
     body = 'Hello, here is a new item'
     the_time = datetime(2015, 06, 27, 0, 0)
     (view, response) = make_request(
@@ -501,7 +501,7 @@ def test_submiting_form_with_id_equal_0_creates_an_item(item_type):
 
 
 @pytest.mark.django_db
-def test_submiting_form_creates_an_item_with_correct_fields(item_type):
+def test_submitting_form_creates_an_item_with_correct_fields(item_type):
     body = 'Hello, here is a new item'
     the_time = datetime(2015, 06, 27, 0, 0)
     (view, response) = make_request(
@@ -525,7 +525,7 @@ def test_submiting_form_creates_an_item_with_correct_fields(item_type):
 
 
 @pytest.mark.django_db
-def test_submiting_form_creates_an_item_with_a_category(item_type):
+def test_submitting_form_creates_an_item_with_a_category(item_type):
     body = 'Hello, here is a new item'
     (view, response) = make_request(
         AddEditItemView,
