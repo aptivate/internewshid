@@ -7,9 +7,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.test import RequestFactory
+from django.utils import timezone
 
 import transport
-from ..views.item import AddEditItemView
+from ..views.item import AddEditItemView, DEFAULT_ITEM_TYPE
 
 from .views_tests import (
     assert_message,
@@ -143,6 +144,27 @@ def generic_item():
     }
 
 
+@pytest.fixture
+def item_without_item_type():
+    return {
+        'id': 1001,
+        'body': 'hello',
+        'created': datetime(2015, 5, 5),
+        'timestamp': datetime(2016, 6, 6),
+        'last_updated': datetime(2017, 7, 7),
+        'terms': []
+    }
+
+
+@pytest.fixture
+def an_item_type():
+    return {
+        'taxonomy': 'item-types',
+        'name': 'an-item-type',
+        'long_name': 'An Item Type'
+    }
+
+
 def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -165,6 +187,25 @@ def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
         )
 
     assert view.item_type['name'] == 'generic'
+
+
+def test_there_is_a_default_item_type_on_get_requests(item_without_item_type):
+    default_item_type = {
+        'name': 'a-default-type',
+        'long_name': 'A Default Type',
+        'taxonomy': 'item-types'
+    }
+
+    with patch.dict(DEFAULT_ITEM_TYPE, default_item_type):
+        with patch('hid.views.item.transport.items.get') as get_item:
+            get_item.return_value = item_without_item_type
+            (view, response) = make_request(
+                AddEditItemView,
+                'edit-item',
+                kwargs={'item_id': 103}
+            )
+
+        assert view.item_type == default_item_type
 
 
 def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
@@ -222,6 +263,30 @@ def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
         )
 
     assert view.item_type['name'] == 'generic'
+
+
+def test_there_is_a_default_item_type_on_post_requests(item_without_item_type):
+    default_item_type = {
+        'name': 'a-default-type',
+        'long_name': 'A Default Type',
+        'taxonomy': 'item-types'
+    }
+
+    with patch.dict(DEFAULT_ITEM_TYPE, default_item_type):
+        with patch('hid.views.item.transport.items.get') as get_item:
+            get_item.return_value = item_without_item_type
+            (view, response) = make_request(
+                AddEditItemView,
+                'edit-item',
+                kwargs={'item_id': 103},
+                request_type='post',
+                post={
+                    'action': 'cancel',
+                    'next': ''
+                }
+            )
+
+        assert view.item_type == default_item_type
 
 
 def test_the_item_terms_are_added_to_the_view_on_post_requests(generic_item):
@@ -359,6 +424,134 @@ def test_displaying_unknown_item_returns_redirect_response(generic_item):
     assert type(response) is HttpResponseRedirect
 
 
+def test_add_new_item_get_request_populates_item_type(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+        )
+
+    assert view.item_type == an_item_type
+
+
+def test_add_new_item_post_request_populates_item_type(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+            request_type='post',
+            post={
+                'action': 'save',
+                'next': ''
+            }
+        )
+
+    assert view.item_type == an_item_type
+
+
+def test_add_new_item_returns_template_response(an_item_type):
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = [an_item_type]
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+        )
+
+    assert type(response) is TemplateResponse
+
+
+def test_add_new_item_with_unknown_item_type_redirects():
+    with patch('hid.views.item.transport.terms.list') as list_term:
+        list_term.return_value = []
+        (view, response) = make_request(
+            AddEditItemView,
+            'add-item',
+            kwargs={'item_type': 'an-item-type'},
+        )
+
+    assert type(response) is HttpResponseRedirect
+
+
+@pytest.mark.django_db
+def test_submitting_form_with_id_equal_0_creates_an_item(item_type):
+    body = 'Hello, here is a new item'
+    the_time = datetime(2015, 06, 27, 0, 0)
+    (view, response) = make_request(
+        AddEditItemView,
+        'add-item',
+        kwargs={'item_type': item_type['name']},
+        request_type='post',
+        post={
+            'action': 'save',
+            'timestamp': the_time,
+            'next': '/',
+            'id': 0,
+            'body': body
+        }
+    )
+
+    assert view.item['id'] > 0
+    item = transport.items.get(view.item['id'])
+    assert item is not None
+
+
+@pytest.mark.django_db
+def test_submitting_form_creates_an_item_with_correct_fields(item_type):
+    body = 'Hello, here is a new item'
+    the_time = datetime(2015, 06, 27, 0, 0)
+    (view, response) = make_request(
+        AddEditItemView,
+        'add-item',
+        kwargs={'item_type': item_type['name']},
+        request_type='post',
+        post={
+            'action': 'save',
+            'timestamp': the_time,
+            'next': '/',
+            'id': 0,
+            'body': body
+        }
+    )
+
+    assert view.item['id'] > 0
+    item = transport.items.get(view.item['id'])
+    assert item['body'] == body
+    assert timezone.make_naive(item['timestamp']) == the_time
+
+
+@pytest.mark.django_db
+def test_submitting_form_creates_an_item_with_a_category(item_type):
+    body = 'Hello, here is a new item'
+    (view, response) = make_request(
+        AddEditItemView,
+        'add-item',
+        kwargs={'item_type': item_type['name']},
+        request_type='post',
+        post={
+            'action': 'save',
+            'timestamp': datetime.now(),
+            'next': '/',
+            'id': 0,
+            'category': 'Ebola updates',
+            'body': body
+        }
+    )
+
+    assert view.item['id'] > 0
+    item = transport.items.get(view.item['id'])
+    expected_term = {
+        'taxonomy': 'ebola-questions',
+        'name': 'Ebola updates',
+        'long_name': 'What are the current updates on Ebola.'
+    }
+    assert expected_term in item['terms']
+
+
 @pytest.mark.django_db
 def test_item_can_be_updated(view, form):
     new_text = "What is the cause of Ebola?"
@@ -419,25 +612,6 @@ def test_item_update_logs_message_and_redirects(view, form):
     assert_message(view.request,
                    messages.SUCCESS,
                    "Question %s successfully updated." % view.item['id'])
-
-
-@pytest.mark.django_db
-def test_item_update_without_type_logs_message(view, form):
-    view.item_type = None
-
-    view.form_valid(form)
-
-    assert_message(view.request,
-                   messages.SUCCESS,
-                   "Item %s successfully updated." % view.item['id'])
-
-
-@pytest.mark.django_db
-def test_no_category_when_item_type_not_set(view):
-    view.item_type = None
-    initial = view.get_initial()
-
-    assert 'category' not in initial
 
 
 @pytest.mark.django_db
