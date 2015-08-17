@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
@@ -136,11 +137,7 @@ class AddEditItemView(FormView):
                 _('No action performed')
             )
         if 'delete' in self.request.POST['action']:
-            return self._response(
-                self.request.POST['next'],
-                messages.ERROR,
-                _('Delete item not implemented')
-            )
+            return self._delete_item()
 
         return super(AddEditItemView, self).post(request, *args, **kwargs)
 
@@ -157,7 +154,10 @@ class AddEditItemView(FormView):
                 'id': self.item['id'],
                 'body': self.item['body'],
                 'timestamp': self.item['timestamp'],
-                'next': self.request.GET.get('next', self.request.path)
+                'next': self.request.GET.get(
+                    'next',
+                    self.request.META.get('HTTP_REFERER', reverse('dashboard'))),
+
             }
 
         taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
@@ -198,9 +198,10 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
-        item_description = self.item_type['long_name']
+        item_description = self._get_item_description()
         taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
         item_id = int(form.cleaned_data['id'])
+
         try:
             if item_id == 0:
                 self.item = self._create_item(form, taxonomy)
@@ -306,3 +307,26 @@ class AddEditItemView(FormView):
         """
         messages.add_message(self.request, message_type, message)
         return HttpResponseRedirect(url)
+
+    def _delete_item(self):
+        id = self.item['id']
+        transport.items.delete(id)
+
+        item_description = self._get_item_description()
+
+        return self._response(
+            self._get_next_url_for_delete(),
+            messages.SUCCESS,
+            _("%s %d successfully deleted.") % (
+                item_description,
+                id,
+            )
+        )
+
+    def _get_next_url_for_delete(self):
+        next_url = self.request.POST.get('next', reverse('dashboard'))
+
+        return next_url
+
+    def _get_item_description(self):
+        return self.item_type['long_name']
