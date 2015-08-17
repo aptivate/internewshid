@@ -267,20 +267,7 @@ def test_form_initial_values_set_that_of_item(generic_item):
     assert initial['timestamp'] == datetime(2016, 6, 6)
 
 
-def test_form_next_url_value_set_to_current_url_by_default(generic_item):
-    with patch('hid.views.item.transport.items.get') as get_item:
-        get_item.return_value = generic_item
-        (view, response) = make_request(
-            AddEditItemView,
-            'edit-item',
-            kwargs={'item_id': 103}
-        )
-
-    initial = view.get_initial()
-    assert initial['next'] == reverse('edit-item', kwargs={'item_id': 103})
-
-
-def test_form_next_url_value_set_to_provided_url(generic_item):
+def test_form_next_url_is_next_query_parameter(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
         (view, response) = make_request(
@@ -292,6 +279,34 @@ def test_form_next_url_value_set_to_provided_url(generic_item):
 
     initial = view.get_initial()
     assert initial['next'] == 'http://example.com'
+
+
+def test_form_next_url_is_referer_if_no_next_query_parameter(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103}
+        )
+
+    view.request.META['HTTP_REFERER'] = '/view-edit/main/rumors'
+
+    initial = view.get_initial()
+    assert initial['next'] == '/view-edit/main/rumors'
+
+
+def test_form_next_url_is_dashboard_if_nothing_else_set(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103}
+        )
+
+    initial = view.get_initial()
+    assert initial['next'] == reverse('dashboard')
 
 
 def test_context_data_includes_the_item(generic_item):
@@ -486,10 +501,7 @@ def test_item_term_delete_transport_exception_logs_message(view, form):
 
 @pytest.mark.django_db
 def test_item_can_be_deleted(view, form):
-    view.request.POST['next'] = '/'
-
-    response = view._delete_item()
-    assert response.url == '/'
+    view._delete_item()
 
     assert_message(view.request,
                    messages.SUCCESS,
@@ -499,3 +511,24 @@ def test_item_can_be_deleted(view, form):
         transport.items.get(view.item['id'])
 
     assert excinfo.value.message['status_code'] == 404
+
+
+@pytest.mark.django_db
+def test_redirected_to_next_if_present_after_delete(view, form):
+    view.request.POST['next'] = '/view-edit/main/questions/'
+
+    response = view._delete_item()
+
+    assert response.url == '/view-edit/main/questions/'
+
+
+@pytest.mark.django_db
+def test_redirected_to_home_if_next_absent_after_delete(
+        view, form):
+
+    # Do we need this ?
+    # 'next' should always be present in the form so this
+    # should never happen
+    response = view._delete_item()
+
+    assert response.url == '/'

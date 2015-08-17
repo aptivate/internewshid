@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
@@ -96,7 +97,9 @@ class AddEditItemView(FormView):
             'id': self.item['id'],
             'body': self.item['body'],
             'timestamp': self.item['timestamp'],
-            'next': self.request.GET.get('next', self.request.path)
+            'next': self.request.GET.get(
+                'next',
+                self.request.META.get('HTTP_REFERER', reverse('dashboard'))),
         }
 
         item_type = getattr(self, 'item_type', None)
@@ -215,13 +218,18 @@ class AddEditItemView(FormView):
         item_description = self._get_item_description()
 
         return self._response(
-            self.request.POST['next'],
+            self._get_next_url_for_delete(),
             messages.SUCCESS,
             _("%s %d successfully deleted.") % (
                 item_description,
                 id,
             )
         )
+
+    def _get_next_url_for_delete(self):
+        next_url = self.request.POST.get('next', reverse('dashboard'))
+
+        return next_url
 
     def _get_item_description(self):
         if self.item_type:
