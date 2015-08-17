@@ -337,3 +337,28 @@ def test_views_item_get_request_parameters_sets_default_action_and_location():
     }
     actual = _get_view_and_edit_form_request_parameters(query)
     assert actual.dict() == expected
+
+
+@pytest.mark.django_db
+def test_view_and_edit_table_tab_sets_add_button_context():
+    item_types = TaxonomyFactory(slug="item-types", name="Item Types")
+    test_item_type = TermFactory(
+        name='test-item-type',
+        taxonomy=item_types,
+        long_name="Test Item Type"
+    )
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    filters = {'terms': ['item-types:test-item-type']}
+    context_data = tab.get_context_data(
+        tab_instance, request, filters=filters
+    )
+
+    assert context_data['add_button_for'] == {
+        'taxonomy': 'item-types',
+        'name': test_item_type.name,
+        'long_name': test_item_type.long_name
+    }
