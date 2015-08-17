@@ -46,7 +46,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         Returns:
             QuerySet: The filtered list of items
         """
-        items = Item.objects.all()
+        items = Item.objects.prefetch_related('terms', 'terms__taxonomy').all()
 
         # Filter on ids
         ids = self.request.query_params.getlist('ids')
