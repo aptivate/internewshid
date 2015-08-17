@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -7,38 +9,72 @@ from django.views.generic.edit import FormView
 import transport
 
 from ..forms.item import AddEditItemForm
-from ..constants import ITEM_TYPE_CATEGORY
+from ..constants import ITEM_TYPE_CATEGORY, DEFAULT_ITEM_TYPE
+
+
+class ItemTypeNotFound(Exception):
+    """ Exception raised internally when an item type is not found """
+    pass
+
+
+class ItemNotFound(Exception):
+    """ Exception raised internally when an item is not found """
+    pass
 
 
 class AddEditItemView(FormView):
     template_name = "hid/add_edit_item.html"
     form_class = AddEditItemForm
 
-    def _initialize_item(self, item_id):
-        """ Initialize the view's item from the given item id.
+    def _initialize_item(self, item_id, item_type):
+        """ Initialize the view's item from the given item id or item_type
 
         This has a side effect of initializing:
+            self.item_type to the item type (either from the given type
+                of from the given item). If the given item has no item
+                type, DEFAULT_ITEM_TYPE is assumed
             self.item to the item object (or None)
-            self.item_type to the item type, if defined (None otherwise)
             self.item_terms to a dictionary of taxonomy to list of terms
+                (or {})
 
         Args:
-            item_id (int): Item id
+            item_id (int): Item id to initialize from
+            item_type (str): Item type to initialize item_type from.
+                This is used only if item_id is None.
+
+        Raises:
+            ItemNotFound: If the item was not found
+            ItemTypeNotFound: If the item type was not found
         """
         self.item = None
         self.item_type = None
-        self.item_terms = None
-        if not item_id:
-            return
-        self.item = transport.items.get(item_id)
         self.item_terms = {}
-        for term in self.item['terms']:
-            taxonomy = term['taxonomy']
-            if taxonomy == 'item-types':
-                self.item_type = term
-            if taxonomy not in self.item_terms:
-                self.item_terms[taxonomy] = []
-            self.item_terms[taxonomy].append(term)
+        if item_id:
+            try:
+                self.item = transport.items.get(item_id)
+            except transport.exceptions.TransportException:
+                raise ItemNotFound()
+            self.item_terms = {}
+            for term in self.item['terms']:
+                taxonomy = term['taxonomy']
+                if taxonomy == 'item-types':
+                    self.item_type = term
+                if taxonomy not in self.item_terms:
+                    self.item_terms[taxonomy] = []
+                self.item_terms[taxonomy].append(term)
+        elif item_type:
+            matches = transport.terms.list(
+                taxonomy='item-types',
+                name=item_type
+            )
+            if len(matches) == 0:
+                raise ItemTypeNotFound()
+            else:
+                self.item_type = matches[0]
+
+        # We guarantee there is always an item type
+        if self.item_type is None:
+            self.item_type = DEFAULT_ITEM_TYPE
 
     def get(self, request, *args, **kwargs):
         """ get request handler
@@ -47,13 +83,22 @@ class AddEditItemView(FormView):
         to make it available for forms.
         """
         try:
-            self._initialize_item(kwargs.get('item_id'))
-        except transport.exceptions.TransportException:
+            self._initialize_item(
+                kwargs.get('item_id'), kwargs.get('item_type')
+            )
+        except ItemNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
                 (_('Item with id %s could not be found') %
                  str(kwargs.get('item_id')))
+            )
+        except ItemTypeNotFound:
+            return self._response(
+                self.request.GET.get('next', '/'),
+                messages.ERROR,
+                (_('Item type %s could not be found') %
+                 str(kwargs.get('item_type')))
             )
         return super(AddEditItemView, self).get(request, *args, **kwargs)
 
@@ -67,13 +112,22 @@ class AddEditItemView(FormView):
         valid for those.
         """
         try:
-            self._initialize_item(kwargs.get('item_id'))
-        except transport.exceptions.TransportException:
+            self._initialize_item(
+                kwargs.get('item_id'), kwargs.get('item_type')
+            )
+        except ItemNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
                 (_('Item with id %s could not be found') %
                  str(kwargs.get('item_id')))
+            )
+        except ItemTypeNotFound:
+            return self._response(
+                self.request.GET.get('next', '/'),
+                messages.ERROR,
+                (_('Item type %s could not be found') %
+                 str(kwargs.get('item_type')))
             )
 
         if 'cancel' in self.request.POST['action']:
@@ -90,35 +144,32 @@ class AddEditItemView(FormView):
     def get_initial(self):
         """ Return the form object's initial values for the current item """
         if self.item is None:
-            return {
-                'id': 0
+            initial = {
+                'id': 0,
+                'timestamp': datetime.now(),
+                'next': self.request.GET.get('next', self.request.path)
             }
-        initial = {
-            'id': self.item['id'],
-            'body': self.item['body'],
-            'timestamp': self.item['timestamp'],
-            'next': self.request.GET.get(
-                'next',
-                self.request.META.get('HTTP_REFERER', reverse('dashboard'))),
-        }
+        else:
+            initial = {
+                'id': self.item['id'],
+                'body': self.item['body'],
+                'timestamp': self.item['timestamp'],
+                'next': self.request.GET.get(
+                    'next',
+                    self.request.META.get('HTTP_REFERER', reverse('dashboard'))),
 
-        item_type = getattr(self, 'item_type', None)
-        if item_type is not None:
-            taxonomy = ITEM_TYPE_CATEGORY.get(item_type['name'])
-            if (taxonomy and taxonomy in self.item_terms and len(self.item_terms[taxonomy]) > 0):
-                initial['category'] = self.item_terms[taxonomy][0]['name']
+            }
+
+        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        if (taxonomy and taxonomy in self.item_terms
+                and len(self.item_terms[taxonomy]) > 0):
+            initial['category'] = self.item_terms[taxonomy][0]['name']
 
         return initial
 
     def get_form(self, form_class):
         """ Return the form object to be used """
-        if self.item_type:
-            item_type = self.item_type['name']
-        else:
-            # TODO: When implementing ADD mode, we'll need to use the URL to
-            # get the default
-            item_type = None
-        return form_class(item_type, **self.get_form_kwargs())
+        return form_class(self.item_type['name'], **self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
         """ Get the form's context data
@@ -128,15 +179,12 @@ class AddEditItemView(FormView):
         """
         context = super(AddEditItemView, self).get_context_data(**kwargs)
 
-        # Add item to the context
+        # Add item and form mode to the context
         context['item'] = self.item
+        context['update'] = self.item is not None
 
         # Add the type label to the context
-        # TODO: When implementing ADD mode, we'll need to use the URL to
-        # get the default.
-        context['item_type_label'] = '?'
-        if self.item_type:
-            context['item_type_label'] = self.item_type['long_name']
+        context['item_type_label'] = self.item_type['long_name']
 
         # Add the width of the option row to the context
         option_row_widget_count = 1  # We always have 'created'
@@ -150,32 +198,27 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
-        id = int(form.cleaned_data['id'])
-
         item_description = self._get_item_description()
-
-        if self.item_type:
-            taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
-        else:
-            taxonomy = None
-
-        # TODO: Combine terms into single transaction
-        category = form.cleaned_data.pop('category', None)
+        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        item_id = int(form.cleaned_data['id'])
 
         try:
-            transport.items.update(id, form.cleaned_data)
-            if taxonomy:
-                if category:
-                    transport.items.add_term(id, taxonomy, category)
-                else:
-                    transport.items.delete_all_terms(id, taxonomy)
-
-            message = _("%s %d successfully updated.") % (
-                item_description,
-                id,
-            )
-            message_code = messages.SUCCESS
-
+            if item_id == 0:
+                self.item = self._create_item(form, taxonomy)
+                message = _("%s %d successfully created.") % (
+                    item_description,
+                    self.item['id']
+                )
+                message_code = messages.SUCCESS
+            else:
+                self._update_item(
+                    item_id, form, taxonomy
+                )
+                message = _("%s %d successfully updated.") % (
+                    item_description,
+                    item_id,
+                )
+                message_code = messages.SUCCESS
         except transport.exceptions.TransportException as e:
             message = e.message.get('detail')
             if message is None:
@@ -187,6 +230,60 @@ class AddEditItemView(FormView):
             form.cleaned_data['next'],
             message_code,
             message)
+
+    def _update_item(self, item_id, form, taxonomy):
+        """ Update the given item
+
+            Args:
+                item_id (int): Item id to update
+                form (Form): Valid form object containing fields
+                taxonomy (str or None): Taxonomy of the item's
+                    category field, if any
+
+            Raises:
+                TransportException: On API errors
+        """
+        data = dict(form.cleaned_data)
+        category = data.pop('category', None)
+
+        transport.items.update(item_id, data)
+
+        # TODO: Combine terms into single transaction
+        if taxonomy:
+            if category:
+                transport.items.add_term(item_id, taxonomy, category)
+            else:
+                transport.items.delete_all_terms(item_id, taxonomy)
+
+    def _create_item(self, form, taxonomy):
+        """ Create the given item
+
+            Args:
+                item_id (int): Item id to update
+                form (Form): Valid form object containing fields
+                taxonomy (str or None): Taxonomy of the item's
+                    category field, if any
+
+            Returns:
+                dict: The created item
+
+            Raises:
+                TransportException: On API errors
+        """
+        data = dict(form.cleaned_data)
+        data.pop('id', None)
+        category = data.pop('category', None)
+
+        created_item = transport.items.create(data)
+
+        # TODO: Combine terms into single transaction
+        transport.items.add_term(
+            created_item['id'], 'item-types', self.item_type['name']
+        )
+        if taxonomy and category:
+            transport.items.add_term(created_item['id'], taxonomy, category)
+
+        return created_item
 
     def form_invalid(self, form):
         """ Form invalid handler """
@@ -232,7 +329,4 @@ class AddEditItemView(FormView):
         return next_url
 
     def _get_item_description(self):
-        if self.item_type:
-            return self.item_type['long_name']
-
-        return _('Item')
+        return self.item_type['long_name']
