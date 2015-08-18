@@ -252,6 +252,7 @@ class AddEditItemView(FormView):
 
     def _add_free_terms(self, item_id, free_terms):
         for (taxonomy, value) in free_terms.iteritems():
+            transport.items.delete_all_terms(item_id, taxonomy)
             terms = value.split('|')
             transport.items.add_free_terms(item_id, taxonomy, terms)
 

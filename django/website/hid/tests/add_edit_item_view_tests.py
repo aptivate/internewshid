@@ -742,6 +742,22 @@ def test_free_tags_created_on_item_update(view, form):
 
 
 @pytest.mark.django_db
+def test_existing_tag_deleted_on_item_update(view, form):
+    transport.items.add_free_terms(view.item['id'], 'free-tags', ['age 35-40'])
+
+    form.cleaned_data['terms[free-tags]'] = 'Monrovia'
+
+    view.form_valid(form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'age 35-40' not in terms
+
+
+@pytest.mark.django_db
 def test_free_tags_created_for_new_item(add_view, form):
     form.cleaned_data['terms[free-tags]'] = 'Monrovia|Important|age 35-40'
     form.cleaned_data['id'] = 0
