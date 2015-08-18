@@ -26,21 +26,22 @@ class Taxonomy(models.Model):
 
     @property
     def is_optional(self):
-        #  return self.multiplicity == self.OPTIONAL
-        return True
+        return self.multiplicity == 'optional'
 
     def __unicode__(self):
         return self.name
 
+    multiplicity = models.CharField(
+        choices=(
+            ('optional', _('Zero or One')),
+            ('multiple', _('Zero or More')),
+        ),
+        default='optional',
+        max_length=30,
+    )
+
     # My thoughts on how this grows...
     #
-    # multiplicity = models.CharField(
-    #   ...
-    #   choices=(
-    #     ('optional', _('Zero or One')),
-    #     ('multiple', _('Zero or More')),
-    #   )
-    # )
     #
     # vocabulary = models.CharField(
     #   ...
