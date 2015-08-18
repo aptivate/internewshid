@@ -38,6 +38,20 @@ def item_type():
 
 
 @pytest.fixture
+def add_view(item_type):
+    view = AddEditItemView()
+    view.item_type = item_type
+
+    url = reverse('add-item', kwargs={'item_type': item_type['name']})
+
+    factory = RequestFactory()
+    view.request = factory.post(url)
+    view.request = fix_messages(view.request)
+
+    return view
+
+
+@pytest.fixture
 def view(item, item_type):
     view = AddEditItemView()
     view.item = item
@@ -717,6 +731,25 @@ def test_free_tags_created_on_item_update(view, form):
     assert_no_messages(view.request, messages.ERROR)
 
     item = transport.items.get(view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'Important' in terms
+    assert 'age 35-40' in terms
+
+    taxonomies = [t['taxonomy'] for t in item['terms']]
+    assert 'free-tags' in taxonomies
+
+
+@pytest.mark.django_db
+def test_free_tags_created_for_new_item(add_view, form):
+    form.cleaned_data['terms[free-tags]'] = 'Monrovia|Important|age 35-40'
+    form.cleaned_data['id'] = 0
+
+    add_view.form_valid(form)
+    assert_no_messages(add_view.request, messages.ERROR)
+
+    item = transport.items.get(add_view.item['id'])
 
     terms = [t['name'] for t in item['terms']]
     assert 'Monrovia' in terms

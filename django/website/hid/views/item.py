@@ -232,6 +232,29 @@ class AddEditItemView(FormView):
             message_code,
             message)
 
+    def _separate_form_data(self, form):
+        data = dict(form.cleaned_data)
+        category = data.pop('category', None)
+        data.pop('id', None)
+
+        free_terms = {}
+        regular_fields = {}
+
+        for (name, value) in data.iteritems():
+            pattern = re.compile('terms\[([-_\w]+)\]')
+            matches = re.match(pattern, name)
+            if matches is not None:
+                free_terms[matches.groups()[0]] = value
+            else:
+                regular_fields[name] = value
+
+        return category, free_terms, regular_fields
+
+    def _add_free_terms(self, item_id, free_terms):
+        for (taxonomy, value) in free_terms.iteritems():
+            terms = value.split('|')
+            transport.items.add_free_terms(item_id, taxonomy, terms)
+
     def _update_item(self, item_id, form, taxonomy):
         """ Update the given item
 
@@ -244,19 +267,9 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        data = dict(form.cleaned_data)
-        category = data.pop('category', None)
 
-        taxonomy_terms = {}
-        regular_fields = {}
-
-        for (name, value) in data.iteritems():
-            pattern = re.compile('terms\[([-_\w]+)\]')
-            matches = re.match(pattern, name)
-            if matches is not None:
-                taxonomy_terms[matches.groups()[0]] = value
-            else:
-                regular_fields[name] = value
+        category, free_terms, regular_fields = self._separate_form_data(
+            form)
 
         transport.items.update(item_id, regular_fields)
 
@@ -267,9 +280,7 @@ class AddEditItemView(FormView):
             else:
                 transport.items.delete_all_terms(item_id, taxonomy)
 
-        for (taxonomy, value) in taxonomy_terms.iteritems():
-            terms = value.split('|')
-            transport.items.add_free_terms(item_id, taxonomy, terms)
+        self._add_free_terms(item_id, free_terms)
 
     def _create_item(self, form, taxonomy):
         """ Create the given item
@@ -286,11 +297,10 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        data = dict(form.cleaned_data)
-        data.pop('id', None)
-        category = data.pop('category', None)
+        category, free_terms, regular_fields = self._separate_form_data(
+            form)
 
-        created_item = transport.items.create(data)
+        created_item = transport.items.create(regular_fields)
 
         # TODO: Combine terms into single transaction
         transport.items.add_term(
@@ -298,6 +308,8 @@ class AddEditItemView(FormView):
         )
         if taxonomy and category:
             transport.items.add_term(created_item['id'], taxonomy, category)
+
+        self._add_free_terms(created_item['id'], free_terms)
 
         return created_item
 
