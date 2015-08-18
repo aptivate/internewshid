@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -246,7 +247,18 @@ class AddEditItemView(FormView):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
 
-        transport.items.update(item_id, data)
+        taxonomy_terms = {}
+        regular_fields = {}
+
+        for (name, value) in data.iteritems():
+            pattern = re.compile('terms\[([-_\w]+)\]')
+            matches = re.match(pattern, name)
+            if matches is not None:
+                taxonomy_terms[matches.groups()[0]] = value
+            else:
+                regular_fields[name] = value
+
+        transport.items.update(item_id, regular_fields)
 
         # TODO: Combine terms into single transaction
         if taxonomy:
@@ -254,6 +266,10 @@ class AddEditItemView(FormView):
                 transport.items.add_term(item_id, taxonomy, category)
             else:
                 transport.items.delete_all_terms(item_id, taxonomy)
+
+        for (taxonomy, value) in taxonomy_terms.iteritems():
+            terms = value.split('|')
+            transport.items.add_free_terms(item_id, taxonomy, terms)
 
     def _create_item(self, form, taxonomy):
         """ Create the given item

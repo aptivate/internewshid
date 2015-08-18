@@ -14,6 +14,7 @@ from ..views.item import AddEditItemView, DEFAULT_ITEM_TYPE
 
 from .views_tests import (
     assert_message,
+    assert_no_messages,
     fix_messages,
 )
 
@@ -706,3 +707,21 @@ def test_redirected_to_home_if_next_absent_after_delete(
     response = view._delete_item()
 
     assert response.url == '/'
+
+
+@pytest.mark.django_db
+def test_free_tags_created_on_item_update(view, form):
+    form.cleaned_data['terms[free-tags]'] = 'Monrovia|Important|age 35-40'
+
+    view.form_valid(form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'Important' in terms
+    assert 'age 35-40' in terms
+
+    taxonomies = [t['taxonomy'] for t in item['terms']]
+    assert 'free-tags' in taxonomies

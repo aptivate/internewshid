@@ -51,6 +51,13 @@ def assert_message(request, level, content):
     assert (content, level) in messages
 
 
+def assert_no_messages(request, level):
+    messages = [m.message
+                for m in request._messages._queued_messages if m.level == level]
+
+    assert messages == []
+
+
 def check_message(request, content):
     for msg in request._messages._queued_messages:
         if msg.message == content:
