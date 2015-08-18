@@ -126,6 +126,41 @@ def add_term(item_id, taxonomy_slug, name):
         raise TransportException(response.data)
 
 
+def add_free_terms(item_id, taxonomy_slug, names):
+    """ Add term named `name` within the Taxonomy with `taxonomy_slug` to the
+    Item with id `item_id`
+
+    args:
+        item_id: e.g. 67
+        taxonomy_slug: e.g. 'ebola-questions'
+        names: names of terms in the Taxonomy with given slug
+
+    returns:
+        response from the server
+
+    raises:
+       TransportException on failure
+
+    The taxonomy must already exist. Any terms that do not exist will
+    be created
+    """
+    view = get_view({'post': 'add_free_terms'})
+
+    terms = {'taxonomy': taxonomy_slug, 'name': names}
+    request = request_factory.post('', terms)
+    response = view(request, item_pk=item_id)
+
+    if status.is_success(response.status_code):
+        return response.data
+    else:
+        response.data['status_code'] = response.status_code
+        response.data['terms'] = terms
+        response.data['item_id'] = item_id
+        raise TransportException(response.data)
+
+    return response.data
+
+
 def delete_all_terms(item_id, taxonomy_slug):
     view = get_view({'post': 'delete_all_terms'})
 
