@@ -92,6 +92,35 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @detail_route(methods=['post'])
+    def add_free_terms(self, request, item_pk):
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        term_data = request.data
+
+        try:
+            taxonomy = Taxonomy.objects.get(slug=term_data['taxonomy'])
+        except Taxonomy.DoesNotExist as e:
+            data = {'detail': e.message}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        for term_name in term_data.getlist('name'):
+            term, _ = Term.objects.get_or_create(
+                taxonomy=taxonomy,
+                name=term_name,
+            )
+
+            item.apply_term(term)
+
+        serializer = ItemSerializer(item)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    @detail_route(methods=['post'])
     def delete_all_terms(self, request, item_pk):
         taxonomy_slug = request.data['taxonomy']
 
