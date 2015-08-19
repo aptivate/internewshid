@@ -7,8 +7,8 @@ from django.db import migrations
 def create_taxonomy(apps, schema_editor):
     Taxonomy = apps.get_model('taxonomies', 'Taxonomy')
     taxonomy = Taxonomy(
-        name='Free Tags',
-        slug='free-tags',
+        name='Tags',
+        slug='tags',
         multiplicity='multiple')
     taxonomy.save()
 

@@ -739,12 +739,12 @@ def test_free_tags_created_on_item_update(view, form):
     assert 'age 35-40' in terms
 
     taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'free-tags' in taxonomies
+    assert 'tags' in taxonomies
 
 
 @pytest.mark.django_db
 def test_existing_tag_deleted_on_item_update(view, form):
-    transport.items.add_free_terms(view.item['id'], 'free-tags', ['age 35-40'])
+    transport.items.add_free_terms(view.item['id'], 'tags', ['age 35-40'])
 
     form.cleaned_data['tags'] = 'Monrovia'
 
@@ -774,7 +774,7 @@ def test_free_tags_created_for_new_item(add_view, form):
     assert 'age 35-40' in terms
 
     taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'free-tags' in taxonomies
+    assert 'tags' in taxonomies
 
 
 @pytest.mark.django_db
@@ -782,17 +782,17 @@ def test_form_initial_values_include_tags(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         generic_item['terms'] = [
             {
-                'taxonomy': 'free-tags',
+                'taxonomy': 'tags',
                 'name': 'Monrovia',
                 'long_name': 'Monrovia',
             },
             {
-                'taxonomy': 'free-tags',
+                'taxonomy': 'tags',
                 'name': 'age 35-40',
                 'long_name': 'Age 35-40',
             },
             {
-                'taxonomy': 'free-tags',
+                'taxonomy': 'tags',
                 'name': 'interesting',
                 'long_name': 'Interesting',
             },

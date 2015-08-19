@@ -25,7 +25,7 @@ class ItemNotFound(Exception):
 class AddEditItemView(FormView):
     template_name = "hid/add_edit_item.html"
     form_class = AddEditItemForm
-    field_taxonomies = {'tags': 'free-tags'}
+    taxonomy_fields = ('tags',)
     tag_delimiter = ','
 
     def _initialize_item(self, item_id, item_type):
@@ -167,14 +167,10 @@ class AddEditItemView(FormView):
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
 
-        taxonomy_fields = dict(zip(self.field_taxonomies.values(),
-                                   self.field_taxonomies.keys()))
-
         for taxonomy, terms in self.item_terms.iteritems():
-            field_name = taxonomy_fields.get(taxonomy)
-            if field_name:
+            if taxonomy in self.taxonomy_fields:
                 term_names = [t['name'] for t in terms]
-                initial[field_name] = self.tag_delimiter.join(term_names)
+                initial[taxonomy] = self.tag_delimiter.join(term_names)
 
         return initial
 
@@ -251,9 +247,8 @@ class AddEditItemView(FormView):
         regular_fields = {}
 
         for (field_name, field_value) in data.iteritems():
-            taxonomy = self.field_taxonomies.get(field_name)
-            if taxonomy is not None:
-                free_terms[taxonomy] = field_value
+            if field_name in self.taxonomy_fields:
+                free_terms[field_name] = field_value
             else:
                 regular_fields[field_name] = field_value
 
