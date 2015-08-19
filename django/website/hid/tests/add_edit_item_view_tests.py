@@ -725,7 +725,7 @@ def test_redirected_to_home_if_next_absent_after_delete(
 
 @pytest.mark.django_db
 def test_free_tags_created_on_item_update(view, form):
-    form.cleaned_data['terms[free-tags]'] = 'Monrovia|Important|age 35-40'
+    form.cleaned_data['tags'] = 'Monrovia|Important|age 35-40'
 
     view.form_valid(form)
     assert_no_messages(view.request, messages.ERROR)
@@ -745,7 +745,7 @@ def test_free_tags_created_on_item_update(view, form):
 def test_existing_tag_deleted_on_item_update(view, form):
     transport.items.add_free_terms(view.item['id'], 'free-tags', ['age 35-40'])
 
-    form.cleaned_data['terms[free-tags]'] = 'Monrovia'
+    form.cleaned_data['tags'] = 'Monrovia'
 
     view.form_valid(form)
     assert_no_messages(view.request, messages.ERROR)
@@ -759,7 +759,7 @@ def test_existing_tag_deleted_on_item_update(view, form):
 
 @pytest.mark.django_db
 def test_free_tags_created_for_new_item(add_view, form):
-    form.cleaned_data['terms[free-tags]'] = 'Monrovia|Important|age 35-40'
+    form.cleaned_data['tags'] = 'Monrovia|Important|age 35-40'
     form.cleaned_data['id'] = 0
 
     add_view.form_valid(form)
@@ -774,3 +774,36 @@ def test_free_tags_created_for_new_item(add_view, form):
 
     taxonomies = [t['taxonomy'] for t in item['terms']]
     assert 'free-tags' in taxonomies
+
+
+@pytest.mark.django_db
+def test_form_initial_values_include_tags(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        generic_item['terms'] = [
+            {
+                'taxonomy': 'free-tags',
+                'name': 'Monrovia',
+                'long_name': 'Monrovia',
+            },
+            {
+                'taxonomy': 'free-tags',
+                'name': 'age 35-40',
+                'long_name': 'Age 35-40',
+            },
+            {
+                'taxonomy': 'free-tags',
+                'name': 'interesting',
+                'long_name': 'Interesting',
+            },
+        ]
+
+        get_item.return_value = generic_item
+
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103}
+        )
+
+    initial = view.get_initial()
+    assert initial['tags'] == 'Monrovia|age 35-40|interesting'

@@ -19,6 +19,10 @@ class AddEditItemForm(forms.Form):
         widget=forms.HiddenInput,
         required=True
     )
+    tags = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
 
     def __init__(self, item_type, *args, **kwargs):
         """ Add extra fields depending on item_type """

@@ -1,5 +1,4 @@
 from datetime import datetime
-import re
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -26,6 +25,7 @@ class ItemNotFound(Exception):
 class AddEditItemView(FormView):
     template_name = "hid/add_edit_item.html"
     form_class = AddEditItemForm
+    field_taxonomies = {'tags': 'free-tags'}
 
     def _initialize_item(self, item_id, item_type):
         """ Initialize the view's item from the given item id or item_type
@@ -166,6 +166,15 @@ class AddEditItemView(FormView):
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
 
+        taxonomy_fields = dict(zip(self.field_taxonomies.values(),
+                                   self.field_taxonomies.keys()))
+
+        for taxonomy, terms in self.item_terms.iteritems():
+            field_name = taxonomy_fields.get(taxonomy)
+            if field_name:
+                term_names = [t['name'] for t in terms]
+                initial[field_name] = '|'.join(term_names)
+
         return initial
 
     def get_form(self, form_class):
@@ -240,13 +249,12 @@ class AddEditItemView(FormView):
         free_terms = {}
         regular_fields = {}
 
-        for (name, value) in data.iteritems():
-            pattern = re.compile('terms\[([-_\w]+)\]')
-            matches = re.match(pattern, name)
-            if matches is not None:
-                free_terms[matches.groups()[0]] = value
+        for (field_name, field_value) in data.iteritems():
+            taxonomy = self.field_taxonomies.get(field_name)
+            if taxonomy is not None:
+                free_terms[taxonomy] = field_value
             else:
-                regular_fields[name] = value
+                regular_fields[field_name] = field_value
 
         return category, free_terms, regular_fields
 
