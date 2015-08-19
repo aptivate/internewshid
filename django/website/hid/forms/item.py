@@ -20,7 +20,7 @@ class AddEditItemForm(forms.Form):
         required=True
     )
     tags = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
 
