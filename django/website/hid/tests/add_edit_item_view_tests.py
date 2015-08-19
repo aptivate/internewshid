@@ -725,7 +725,8 @@ def test_redirected_to_home_if_next_absent_after_delete(
 
 @pytest.mark.django_db
 def test_free_tags_created_on_item_update(view, form):
-    form.cleaned_data['tags'] = 'Monrovia|Important|age 35-40'
+    # Deliberate spaces to be stripped
+    form.cleaned_data['tags'] = 'Monrovia | Important |age 35-40'
 
     view.form_valid(form)
     assert_no_messages(view.request, messages.ERROR)
