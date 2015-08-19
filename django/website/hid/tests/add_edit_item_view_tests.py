@@ -726,7 +726,7 @@ def test_redirected_to_home_if_next_absent_after_delete(
 @pytest.mark.django_db
 def test_free_tags_created_on_item_update(view, form):
     # Deliberate spaces to be stripped
-    form.cleaned_data['tags'] = 'Monrovia | Important |age 35-40'
+    form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
     view.form_valid(form)
     assert_no_messages(view.request, messages.ERROR)
@@ -760,7 +760,7 @@ def test_existing_tag_deleted_on_item_update(view, form):
 
 @pytest.mark.django_db
 def test_free_tags_created_for_new_item(add_view, form):
-    form.cleaned_data['tags'] = 'Monrovia|Important|age 35-40'
+    form.cleaned_data['tags'] = 'Monrovia,Important,age 35-40'
     form.cleaned_data['id'] = 0
 
     add_view.form_valid(form)
@@ -807,4 +807,4 @@ def test_form_initial_values_include_tags(generic_item):
         )
 
     initial = view.get_initial()
-    assert initial['tags'] == 'Monrovia|age 35-40|interesting'
+    assert initial['tags'] == 'Monrovia,age 35-40,interesting'

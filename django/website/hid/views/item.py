@@ -26,6 +26,7 @@ class AddEditItemView(FormView):
     template_name = "hid/add_edit_item.html"
     form_class = AddEditItemForm
     field_taxonomies = {'tags': 'free-tags'}
+    tag_delimiter = ','
 
     def _initialize_item(self, item_id, item_type):
         """ Initialize the view's item from the given item id or item_type
@@ -173,7 +174,7 @@ class AddEditItemView(FormView):
             field_name = taxonomy_fields.get(taxonomy)
             if field_name:
                 term_names = [t['name'] for t in terms]
-                initial[field_name] = '|'.join(term_names)
+                initial[field_name] = self.tag_delimiter.join(term_names)
 
         return initial
 
@@ -261,7 +262,7 @@ class AddEditItemView(FormView):
     def _add_free_terms(self, item_id, free_terms):
         for (taxonomy, value) in free_terms.iteritems():
             transport.items.delete_all_terms(item_id, taxonomy)
-            term_names = [t.strip() for t in value.split('|')]
+            term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 
             transport.items.add_free_terms(item_id, taxonomy, term_names)
 
