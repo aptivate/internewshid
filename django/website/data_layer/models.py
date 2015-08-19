@@ -23,7 +23,7 @@ class Message(DataLayerModel):
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=200, blank=True)
 
-    def apply_terms(self, term):
+    def apply_terms(self, terms):
         # TODO: test this
         """ Add or replace value of term.taxonomy for current Item
 
@@ -37,10 +37,16 @@ class Message(DataLayerModel):
         # This should really be built out with an explicity through model
         # in taxonomies, with a generic foreign ken to the content type
         # being classified, then this logic could live there.
-        if term.taxonomy.is_optional:
-            self.delete_all_terms(term.taxonomy)
+        if isinstance(terms, Term):
+            terms = [terms]
 
-        self.terms.add(term)
+        if len(terms) == 1:
+            [term] = terms
+
+            if term.taxonomy.is_optional:
+                self.delete_all_terms(term.taxonomy)
+
+        self.terms.add(*terms)
 
     def delete_all_terms(self, taxonomy):
         for term in self.terms.filter(taxonomy=taxonomy):

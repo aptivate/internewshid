@@ -143,4 +143,17 @@ def test_apply_terms_adds_term_for_tags():
     assert list(item.terms.all()) == [term1]
 
     item.apply_terms(term2)
-    assert set(item.terms.all()) == set([term1, term2])
+    assert term1 in item.terms.all()
+    assert term2 in item.terms.all()
+
+
+@pytest.mark.django_db
+def test_apply_terms_adds_multiple_terms():
+    item = ItemFactory()
+    taxonomy = TaxonomyFactory(multiplicity='multiple')
+    term1 = TermFactory(taxonomy=taxonomy)
+    term2 = TermFactory(taxonomy=taxonomy)
+
+    item.apply_terms((term1, term2))
+    assert term1 in item.terms.all()
+    assert term2 in item.terms.all()
