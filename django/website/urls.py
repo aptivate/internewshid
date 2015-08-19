@@ -24,6 +24,7 @@ urlpatterns = patterns(
     url(r'^accounts/', include('users.urls')),
     url(r'^api/', include('rest_api.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^view-edit/', include('tabbed_page.urls')),
     url(r'^', include('hid.urls'))
 )
 

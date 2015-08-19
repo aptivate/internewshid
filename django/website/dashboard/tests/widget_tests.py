@@ -3,7 +3,7 @@ from mock import patch
 from django.test import TestCase
 
 from dashboard.templatetags.render_widget import render_widget
-from dashboard.widget_pool import register_widget, get_widget
+from dashboard.widget_pool import register_widget, get_widget, WidgetError
 
 
 class TestWidget(object):
@@ -36,6 +36,26 @@ class TestWidgetNoTemplateName(object):
     """
     def get_context_data(self, **kwargs):
         return {}
+
+
+class TestWidgetRaisesException(object):
+    """ A test widget which raises a generic exception in
+        get_context_data
+    """
+    template_name = 'something.html'
+
+    def get_context_data(self, **kwargs):
+        raise Exception('message raised from get_context_data')
+
+
+class TestWidgetRaisesWidgetError(object):
+    """ A test widget which raises a WidgetError in
+        get_context_data
+    """
+    template_name = 'something.html'
+
+    def get_context_data(self, **kwargs):
+        raise WidgetError('message raised from get_context_data')
 
 
 class MockWidgetInstance(object):
@@ -151,4 +171,49 @@ class WidgetPoolTestCase(TestCase):
             )
         self.assertEqual(
             template_name, 'dashboard/widget-error.html'
+        )
+
+    def test_render_widget_exception_includes_generic_message(self):
+        """ Test that a widget which raises a generic exception will
+            display a generic error message, not the content of the
+            exception
+        """
+        test_widget = TestWidgetRaisesException()
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            template_name = self.get_mock_render_to_string_parameter(
+                mock, 'template_name'
+            )
+            context = self.get_mock_render_to_string_parameter(
+                mock, 'context'
+            )
+        self.assertEqual(
+            template_name, 'dashboard/widget-error.html'
+        )
+        self.assertEqual(
+            context['error'], 'Widget error. See error logs.'
+        )
+
+    def test_render_widget_widgeterror_exception_includes_error_message(self):
+        """ Test that a widget which raises a WidgetError exception will
+            display the error message provided in the exception.
+        """
+        test_widget = TestWidgetRaisesWidgetError()
+        register_widget('test-widget', test_widget)
+        widget_instance = MockWidgetInstance('test-widget')
+        with patch(self.render_to_string_method) as mock:
+            render_widget(widget_instance)
+            template_name = self.get_mock_render_to_string_parameter(
+                mock, 'template_name'
+            )
+            context = self.get_mock_render_to_string_parameter(
+                mock, 'context'
+            )
+        self.assertEqual(
+            template_name, 'dashboard/widget-error.html'
+        )
+        self.assertEqual(
+            str(context['error']), 'message raised from get_context_data'
         )

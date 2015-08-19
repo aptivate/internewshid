@@ -14,7 +14,7 @@
 @gray-dark:              darken(@gray, 30%);  
 @gray-light:             #C3BCB4;
 @gray-lighter:           #EDECEC; 
-@gray-lightest:          lighten(@gray-light, 40%);
+@gray-lightest:          #FAFAFA;
 
 @brand-primary:         #0F6CB6;
 @brand-secondary:       #002D62;
@@ -286,7 +286,7 @@
 
 // Extra small screen / phone
 //** Deprecated `@screen-xs` as of v3.0.1
-@screen-xs:                  420px;
+@screen-xs:                  480px;
 //** Deprecated `@screen-xs-min` as of v3.2.0
 @screen-xs-min:              @screen-xs;
 //** Deprecated `@screen-phone` as of v3.0.1
@@ -371,8 +371,8 @@
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
-@navbar-default-link-color:                #fff;
-@navbar-default-link-hover-color:          #fff;
+@navbar-default-link-color:                @gray-dark;
+@navbar-default-link-hover-color:          @brand-primary;
 @navbar-default-link-hover-bg:             darken(@navbar-default-bg, 10%);
 @navbar-default-link-active-color:         @navbar-default-link-hover-color;
 @navbar-default-link-active-bg:            @navbar-default-link-hover-bg;
@@ -422,19 +422,19 @@
 
 //=== Shared nav styles
 @nav-link-padding:                          10px 15px;
-@nav-link-hover-bg:                         @gray-lighter;
+@nav-link-hover-bg:                         @gray-light;
 
 @nav-disabled-link-color:                   @gray-light;
 @nav-disabled-link-hover-color:             @gray-light;
 
 //== Tabs
-@nav-tabs-border-color:                     #ddd;
+@nav-tabs-border-color:                     transparent;
 
-@nav-tabs-link-hover-border-color:          @gray-lighter;
+@nav-tabs-link-hover-border-color:          @gray-light;
 
-@nav-tabs-active-link-hover-bg:             @body-bg;
-@nav-tabs-active-link-hover-color:          @gray;
-@nav-tabs-active-link-hover-border-color:   #ddd;
+@nav-tabs-active-link-hover-bg:             @panel-default-heading-bg;
+@nav-tabs-active-link-hover-color:          @brand-primary;
+@nav-tabs-active-link-hover-border-color:   transparent;
 
 @nav-tabs-justified-link-border-color:            #ddd;
 @nav-tabs-justified-active-link-border-color:     @body-bg;

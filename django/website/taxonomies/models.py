@@ -82,7 +82,10 @@ class TermManager(models.Manager):
             raise ValueError(
                 "taxonomy must be a Taxonomy instance "
                 "or a valid taxonomy slug")
-        return self.get(taxonomy__slug=taxonomy_slug, name=name)
+        return self.select_related('taxonomy').get(
+            taxonomy__slug=taxonomy_slug,
+            name=name
+        )
 
 
 class Term(models.Model):

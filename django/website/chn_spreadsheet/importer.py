@@ -26,39 +26,7 @@ class Importer(object):
             error_msg = _('Misconfigured service. Source "%s" does not exist') % label
             raise SheetImportException(error_msg)
 
-        # TODO: Revert to using database
-        # return sheet_profile.profile
-
-        return {
-            "label": "geopoll",
-            "name": "Geopoll",
-            "format": "excel",
-            "type": "message",
-            "columns": [
-                {
-                    "name": "Province",
-                    "type": "ignore",
-                    "field": "ignore"
-                },
-                {
-                    "name": "CreatedDate",
-                    "type": "date",
-                    "field": "timestamp",
-                    "date_format": "%m/%d/%y"
-                },
-                {
-                    "name": "AgeGroup",
-                    "type": "ignore",
-                    "field": "ignore"
-                },
-                {
-                    "name": "QuestIO",
-                    "type": "text",
-                    "field": "body"
-                }
-            ],
-            "skip_header": 1
-        }
+        return sheet_profile.profile
 
     def get_columns_map(self, col_list):
         '''This function assumes that column names are unique for spreadsheet.
@@ -97,7 +65,8 @@ class Importer(object):
         columns = []
         if first_row:
             col_map = self.get_columns_map(profile_columns)
-            for label in first_row:
+
+            for label in first_row[:len(col_map)]:
                 try:
                     columns.append(col_map[label])
                 except:
@@ -130,24 +99,28 @@ class Importer(object):
         objects = []
         for i, row in enumerate(rows, 2 if first_row else 1):
             try:
-                objects.append(self.process_row(row, columns))
+                values = self.normalize_row(row)
+
+                if any(values):
+                    objects.append(self.process_row(values, columns))
+
             except SheetImportException as e:
                 raise type(e), type(e)(e.message +
                                        'in row %d ' % i), sys.exc_info()[2]
 
         return objects
 
-    def process_row(self, row, columns):
-        values = self.normalize_row(row)
+    def process_row(self, values, columns):
         return reduce(
             lambda object_dict, converter: converter.add_to(object_dict),
             [CellConverter(val, col) for val, col in zip(values, columns)],
             {}
         )
 
-    def save_rows(self, objects, data_type):
+    def save_rows(self, objects, item_type):
         for obj in objects:
-            transport.items.create(obj)
+            item = transport.items.create(obj)
+            transport.items.add_term(item['id'], 'item-types', item_type)
 
         return len(objects)
 
@@ -156,11 +129,12 @@ class Importer(object):
 
         file_format = profile.get('format')
         skip_header = profile.get('skip_header', False)
+        item_type = profile.get('type')
 
         rows = self.get_rows_iterator(fobject, file_format)
         items = self.process_rows(rows, profile['columns'], skip_header)
 
-        return self.save_rows(items, 'message')
+        return self.save_rows(items, item_type)
 
 
 class CellConverter(object):
@@ -192,6 +166,9 @@ class CellConverter(object):
             raise SheetImportException(message), None, sys.exc_info()[2]
 
     def convert_date(self):
+        if self.value is None:
+            return None
+
         if isinstance(self.value, basestring):
             date_time = self.parse_date()
         else:

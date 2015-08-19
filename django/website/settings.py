@@ -64,6 +64,7 @@ USE_L10N = True
 USE_TZ = True
 
 SHORT_DATETIME_FORMAT = 'd M Y H:i'
+SHORT_DATE_FORMAT = 'd M Y'
 # TODO this is used in hid/tables.py
 # and should probably use FORMAT_MODULE_PATH instead.?
 
@@ -136,7 +137,8 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'django_tables2',
     'djangojs',
-    'django_assets'
+    'django_assets',
+    'widget_tweaks'
 )
 
 LOCAL_APPS = (
@@ -144,6 +146,7 @@ LOCAL_APPS = (
     'dashboard',
     'users',
     'chn_spreadsheet',
+    'tabbed_page',
 )
 
 DATA_LAYER_APPS = (
@@ -390,5 +393,6 @@ else:
     )
 ########## END TEMPLATE CONFIGURATION
 
+CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
 
 ########## Your stuff: Below this line define 3rd party libary settings

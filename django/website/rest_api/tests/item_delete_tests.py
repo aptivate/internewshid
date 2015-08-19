@@ -2,11 +2,12 @@ from __future__ import unicode_literals, absolute_import
 
 import pytest
 
-from data_layer.tests.factories import ItemFactory
-from data_layer.models import Item
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from ..views import ItemViewSet
+
+from .item_create_view_tests import create_item
+from .item_list_view_tests import get as list_items
 
 
 def delete_item(id):
@@ -15,14 +16,20 @@ def delete_item(id):
     return view(request, pk=id)
 
 
+def count_items():
+    items = list_items().data
+    return len(items)
+
+
 @pytest.mark.django_db
 def test_delete_item():
-    ItemFactory(body="test1")
-    item = ItemFactory()
-    assert Item.objects.count() == 2
+    create_item(body="test1")
+    item = create_item(body="test2")
+    assert count_items() == 2
 
-    response = delete_item(item.id)
-
+    response = delete_item(item.data['id'])
     assert status.is_success(response.status_code)
-    assert Item.objects.count() == 1
-    assert Item.objects.get().body == "test1"
+    assert count_items() == 1
+
+    [item] = list_items().data
+    assert item['body'] == "test1"

@@ -1,18 +1,27 @@
 from django.db import models
+from django.dispatch.dispatcher import receiver
+from django.utils import timezone
+
 from taxonomies.models import Term
 
 
 class DataLayerModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
+
+    def note_external_modification(self):
+        # This will set the last_modified field
+        self.save()
 
 
 class Message(DataLayerModel):
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
+    network_provider = models.CharField(max_length=200, blank=True)
 
     def apply_term(self, term):
         # TODO: test this
@@ -29,9 +38,13 @@ class Message(DataLayerModel):
         # in taxonomies, with a generic foreign ken to the content type
         # being classified, then this logic could live there.
         if term.taxonomy.is_optional:
-            for old_term in self.terms.filter(taxonomy=term.taxonomy):
-                self.terms.remove(old_term)
+            self.delete_all_terms(term.taxonomy)
+
         self.terms.add(term)
+
+    def delete_all_terms(self, taxonomy):
+        for term in self.terms.filter(taxonomy=taxonomy):
+            self.terms.remove(term)
 
     def __unicode__(self):
         return "{}: '{}' @{}".format(
@@ -42,3 +55,18 @@ class Message(DataLayerModel):
 
 # TODO: rename this class
 Item = Message
+
+
+@receiver(models.signals.m2m_changed, sender=Item.terms.through,
+          dispatch_uid="data_layer.models.terms_signal_handler")
+def terms_signal_handler(sender, **kwargs):
+    if kwargs.get('action') not in ('post_add', 'post_remove'):
+        return
+
+    if kwargs.get('reverse'):
+        items = Item.objects.filter(pk__in=kwargs.get('pk_set'))
+    else:
+        items = [kwargs.get('instance')]
+
+    for item in items:
+        item.note_external_modification()

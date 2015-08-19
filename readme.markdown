@@ -12,12 +12,12 @@ Base URL '/items/'
 
 #### Create Items
 
-'/items/' POST 
+'/items/' POST
 
-    { 
-        "body": "blah", 
-        "timestamp": "..." 
-    }  
+    {
+        "body": "blah",
+        "timestamp": "..."
+    }
 
 - create an item. Should return the object, including its unique ID  and the
   system allocated  creation time.
@@ -26,7 +26,7 @@ Base URL '/items/'
 #### Create item with tags and categories
 
     {
-        "body": "blah", 
+        "body": "blah",
         "timestamp": "...",
         "metadata": [
             { "slug": "<taxonomy-slug>",  // slug OR: name
@@ -54,7 +54,7 @@ should be an exception.
 
 - returns a list of Items
 
-    [ { "id": nn, 
+    [ { "id": nn,
         "body": "...",
         "created": ...
         "timestamp": ...
@@ -65,9 +65,9 @@ should be an exception.
 
 - When we do categories it should return those the same way as post above,
   e.g.:
-          
-    [ { 
-        "id": nn, 
+
+    [ {
+        "id": nn,
         "body": "...",
         "created": ...
         "timestamp": ...
@@ -79,6 +79,17 @@ should be an exception.
         ...
     ]
 
+#### Filter items by taxonomy
+
+'/items?terms=&lt;taxonomy-slug&gt;:&lt;term-name&gt;' GET
+
+- returns a list of Items tagged (or categorized) with the term &lt;term-name&gt; from the taxonomy &lt;taxonomy-slug&gt;
+
+'terms' can be specified multiple times, to return items that are associated with *all* specified terms. eg:
+
+'/items?terms=taxo1:term1&terms=taxo1:term2&terms=taxo2:term3
+
+- returns a list of Items tagged (or categorized) with terms term1 of taxo1 *and* term2 of taxo2 *and* term3 of taxo2.
 
 ## Categories and Tags (Taxonomies)
 
@@ -94,17 +105,17 @@ the expanded `Item` JSON somehow too.
     [
       { "name": "Ebola Question Type",
         "slug": "ebola-question-type",
-        "long_name": "Question Type",  
+        "long_name": "Question Type",
         "cardinality": "optional",
         "vocabulary": "closed",
         "terms": [
-            {"name": "Is Ebola Real", 
+            {"name": "Is Ebola Real",
              "long name": ...
             },
             ...
         ]
       },
-      { "name": "Reliability", 
+      { "name": "Reliability",
         ...
       },
       ...
@@ -126,11 +137,11 @@ the unique field is derived from the given one?
 
       { "name": "Ebola Question Type",
         "slug": "ebola-question-type", // do we supply this or is it calculated?
-        "long_name": "Question Type",  
+        "long_name": "Question Type",
         "cardinality": "optional",
         "vocabulary": "closed",
         "terms": [
-            {"name": "Is Ebola Real", 
+            {"name": "Is Ebola Real",
              "long name": ...
             },
             ...
@@ -146,27 +157,27 @@ be returned by the call.
 
       { "name": "Ebola Question Type",
         "slug": "ebola-question-type", // calculated from name
-        "long_name": "Question Type",  
+        "long_name": "Question Type",
         "cardinality": "optional",
         "vocabulary": "closed",
         "terms": [
-            {"name": "Is Ebola Real", 
+            {"name": "Is Ebola Real",
              "long name": ...
             },
             ...
         ]
       },
 
-e.g. `/taxonomies/ebola-questions/`  
+e.g. `/taxonomies/ebola-questions/`
 
 - Taxonomy details URL should use the taxonomy's sluggified name
 
-### Update Taxonomy Details 
+### Update Taxonomy Details
 
 `/taxonomies/ebola-questions/`  POST
 
-      { 
-        "long_name": "Question Type",  
+      {
+        "long_name": "Question Type",
         "cardinality": "optional",
         "vocabulary": "closed",
       },
@@ -181,13 +192,35 @@ e.g. `/taxonomies/ebola-questions/`
 
 ### Add a term to a taxonomy
 
-We could do 
+We could do
 `/taxonomies/ebola-questions/terms/`  POST { 'name': 'vaccine' }
 
 But for the moment we;re doing
 
 `/terms/` POST { 'name': 'vaccine', 'taxonomy': 'ebola-questions' }
 
+
+### Get count of items per term for a taxonomy
+
+`/taxonomies/<taxonomy-slug>/itemcount?start_time=<start-time>&end_time=<end_time>
+
+Returns a list of terms:
+    [ { "name": "Vaccine",
+        "long_name": "Vaccine Trial",
+        "count": 2
+      },
+      {
+        "name": "Measures",
+        "long_name": "What measures could end Ebola?",
+        "count": 1
+      },
+      {
+        "name": "Symptoms",
+        "long_name": "Symptoms/Medical",
+        "count": 0
+      },
+      ...
+    ]
 
 ### List all Terms (all taxonomies)
 
@@ -255,7 +288,7 @@ OR
 
     '/items/2314/taxonomies/terms/<term-slug>/'  DELETE
 
-- Where term slug is the unique slug for the term. 
+- Where term slug is the unique slug for the term.
 e.g.
     '/items/2314/taxonomies/terms/ebola-questions-
 

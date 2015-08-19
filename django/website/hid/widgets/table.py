@@ -40,7 +40,7 @@ class TableWidget(object):
             items,
             categories=[],
             orderable=False,
-            exclude=('category', 'delete')
+            exclude=('category', 'select_item', 'network_provider')
         )
 
         # And return context
