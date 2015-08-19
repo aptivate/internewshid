@@ -13,7 +13,7 @@ def test_multiple_new_terms_applied_to_item():
     term_names = ['Monrovia', 'age 40-45', 'pertinent']
 
     item = items.add_free_terms(
-        item['id'], 'free-tags', term_names)
+        item['id'], 'tags', term_names)
 
     stored_names = [t['name'] for t in item['terms']]
 
@@ -26,7 +26,7 @@ def test_add_free_terms_raises_transport_exception_if_item_absent():
 
     term_names = ['Monrovia', 'age 40-45', 'pertinent']
     with pytest.raises(TransportException) as excinfo:
-        items.add_free_terms(unknown_item_id, 'free-tags', term_names)
+        items.add_free_terms(unknown_item_id, 'tags', term_names)
 
     error = excinfo.value.message
 
@@ -34,7 +34,7 @@ def test_add_free_terms_raises_transport_exception_if_item_absent():
     assert error['detail'] == "Message matching query does not exist."
     assert error['item_id'] == unknown_item_id
     assert error['terms']['name'] == term_names
-    assert error['terms']['taxonomy'] == 'free-tags'
+    assert error['terms']['taxonomy'] == 'tags'
 
 
 @pytest.mark.django_db

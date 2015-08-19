@@ -39,7 +39,7 @@ def add_free_terms_to_item(item_id, terms):
 @pytest.mark.django_db
 def test_multiple_new_terms_applied_to_item(item):
     terms = {
-        'taxonomy': 'free-tags',
+        'taxonomy': 'tags',
         'name': ['Monrovia', 'age 35-40'],
     }
 
@@ -53,9 +53,9 @@ def test_multiple_new_terms_applied_to_item(item):
             taxonomy_terms[term['taxonomy']] = []
         taxonomy_terms[term['taxonomy']].append(term['name'])
 
-    assert 'free-tags' in taxonomy_terms
-    assert 'Monrovia' in taxonomy_terms['free-tags']
-    assert 'age 35-40' in taxonomy_terms['free-tags']
+    assert 'tags' in taxonomy_terms
+    assert 'Monrovia' in taxonomy_terms['tags']
+    assert 'age 35-40' in taxonomy_terms['tags']
 
 
 @pytest.mark.django_db
