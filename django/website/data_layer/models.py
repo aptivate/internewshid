@@ -23,7 +23,7 @@ class Message(DataLayerModel):
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=200, blank=True)
 
-    def apply_term(self, term):
+    def apply_terms(self, term):
         # TODO: test this
         """ Add or replace value of term.taxonomy for current Item
 

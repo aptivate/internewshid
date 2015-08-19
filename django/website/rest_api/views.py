@@ -86,7 +86,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             data = {'detail': e.message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        item.apply_term(term)
+        item.apply_terms(term)
 
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -113,7 +113,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
                 name=term_name,
             )
 
-            item.apply_term(term)
+            item.apply_terms(term)
 
         serializer = ItemSerializer(item)
 

@@ -117,30 +117,30 @@ def test_last_modified_date_on_other_item_not_updated(
 
 
 @pytest.mark.django_db
-def test_apply_term_replaces_term_for_categories():
+def test_apply_terms_replaces_term_for_categories():
     item = ItemFactory()
     taxonomy = TaxonomyFactory()  # Ensure multiplicity = optional
     term1 = TermFactory(taxonomy=taxonomy)
     term2 = TermFactory(taxonomy=taxonomy)
     assert taxonomy.is_optional
 
-    item.apply_term(term1)
+    item.apply_terms(term1)
     assert list(item.terms.all()) == [term1]
 
-    item.apply_term(term2)
+    item.apply_terms(term2)
     assert list(item.terms.all()) == [term2]
 
 
 @pytest.mark.django_db
-def test_apply_term_adds_term_for_tags():
+def test_apply_terms_adds_term_for_tags():
     item = ItemFactory()
     taxonomy = TaxonomyFactory(multiplicity='multiple')
     term1 = TermFactory(taxonomy=taxonomy)
     term2 = TermFactory(taxonomy=taxonomy)
     assert not taxonomy.is_optional
 
-    item.apply_term(term1)
+    item.apply_terms(term1)
     assert list(item.terms.all()) == [term1]
 
-    item.apply_term(term2)
+    item.apply_terms(term2)
     assert set(item.terms.all()) == set([term1, term2])
