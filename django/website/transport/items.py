@@ -111,7 +111,7 @@ def add_term(item_id, taxonomy_slug, name):
 
     For the moment both the taxonomy and term must already exist.
     """
-    view = get_view({'post': 'add_term'})
+    view = get_view({'post': 'add_terms'})
 
     term = {'taxonomy': taxonomy_slug, 'name': name}
     request = request_factory.post("", term)
@@ -144,7 +144,7 @@ def add_free_terms(item_id, taxonomy_slug, names):
     The taxonomy must already exist. Any terms that do not exist will
     be created
     """
-    view = get_view({'post': 'add_free_terms'})
+    view = get_view({'post': 'add_terms'})
 
     terms = {'taxonomy': taxonomy_slug, 'name': names}
     request = request_factory.post('', terms)
