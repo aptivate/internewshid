@@ -49,7 +49,7 @@ def item():
 
 def categorize_item(item, term):
     request = APIRequestFactory().post("", term)
-    view = ItemViewSet.as_view(actions={'post': 'add_term'})
+    view = ItemViewSet.as_view(actions={'post': 'add_terms'})
     return view(request, item_pk=item['id'])
 
 
@@ -78,10 +78,21 @@ def test_categorize_item_returns_the_categorized_item(term, item):
 
 
 @pytest.mark.django_db
-def test_categorize_item_fails_gracefully_if_term_not_found(item):
+def test_categorize_item_fails_gracefully_if_taxonomy_not_found(item):
     response = categorize_item(
         item,
         {'taxonomy': 'unknown-slug', 'name': 'unknown-term'},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['detail'] == "Taxonomy matching query does not exist."
+
+
+@pytest.mark.django_db
+def test_categorize_item_fails_gracefully_if_term_not_found(item, category):
+    response = categorize_item(
+        item,
+        {'taxonomy': category['slug'], 'name': 'unknown-term'},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST

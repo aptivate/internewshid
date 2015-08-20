@@ -2,18 +2,25 @@ from __future__ import unicode_literals, absolute_import
 
 import pytest
 
+from taxonomies.tests.factories import TaxonomyFactory
 from transport import items
 from ..exceptions import TransportException
 
 
+@pytest.fixture
+def taxonomy():
+    return TaxonomyFactory(
+        name="Test Tags", multiplicity='multiple', vocabulary='open')
+
+
 @pytest.mark.django_db
-def test_multiple_new_terms_applied_to_item():
+def test_multiple_new_terms_applied_to_item(taxonomy):
     item = items.create({'body': "What is the cuse of ebola?"})
 
     term_names = ['Monrovia', 'age 40-45', 'pertinent']
 
     item = items.add_free_terms(
-        item['id'], 'tags', term_names)
+        item['id'], taxonomy.slug, term_names)
 
     stored_names = [t['name'] for t in item['terms']]
 
@@ -21,12 +28,12 @@ def test_multiple_new_terms_applied_to_item():
 
 
 @pytest.mark.django_db
-def test_add_free_terms_raises_transport_exception_if_item_absent():
+def test_add_free_terms_raises_transport_exception_if_item_absent(taxonomy):
     unknown_item_id = 6
 
     term_names = ['Monrovia', 'age 40-45', 'pertinent']
     with pytest.raises(TransportException) as excinfo:
-        items.add_free_terms(unknown_item_id, 'tags', term_names)
+        items.add_free_terms(unknown_item_id, taxonomy.slug, term_names)
 
     error = excinfo.value.message
 
@@ -34,7 +41,7 @@ def test_add_free_terms_raises_transport_exception_if_item_absent():
     assert error['detail'] == "Message matching query does not exist."
     assert error['item_id'] == unknown_item_id
     assert error['terms']['name'] == term_names
-    assert error['terms']['taxonomy'] == 'tags'
+    assert error['terms']['taxonomy'] == taxonomy.slug
 
 
 @pytest.mark.django_db

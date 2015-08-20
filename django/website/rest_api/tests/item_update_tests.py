@@ -51,7 +51,7 @@ def test_item_terms_not_affected_by_update():
     item = create_item(body='What is the cuse of Ebola?').data
     id = item['id']
 
-    questions_category = create_category("Test Ebola Questions").data
+    questions_category = create_category(name="Test Ebola Questions").data
 
     categorize_item(item, term_for(questions_category, 'Vaccine'))
 
@@ -72,9 +72,9 @@ def test_item_terms_can_be_updated():
     item = create_item(body='What is the cuse of Ebola?').data
     id = item['id']
 
-    questions_category = create_category("Test Ebola Questions").data
-    regions_category = create_category("Test Regions").data
-    types_category = create_category("Test Item Types").data
+    questions_category = create_category(name="Test Ebola Questions").data
+    regions_category = create_category(name="Test Regions").data
+    types_category = create_category(name="Test Item Types").data
 
     categorize_item(item, term_for(questions_category, 'Vaccine'))
     categorize_item(item, term_for(regions_category, 'Monrovia'))
