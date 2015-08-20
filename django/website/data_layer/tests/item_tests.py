@@ -138,7 +138,7 @@ def test_apply_terms_adds_term_for_tags():
     taxonomy = TaxonomyFactory(multiplicity='multiple')
     term1 = TermFactory(taxonomy=taxonomy)
     term2 = TermFactory(taxonomy=taxonomy)
-    assert not taxonomy.is_optional
+    assert taxonomy.is_multiple
 
     item.apply_terms(term1)
     assert list(item.terms.all()) == [term1]

@@ -44,7 +44,7 @@ class Message(DataLayerModel):
         if not all(t.taxonomy == taxonomy for t in terms):
             raise ItemTermException("Terms cannot be applied from different taxonomies")
 
-        if taxonomy.is_optional:
+        if not taxonomy.is_multiple:
             if len(terms) > 1:
                 message = "Taxonomy '%s' does not support multiple terms" % taxonomy
                 raise ItemTermException(message)
