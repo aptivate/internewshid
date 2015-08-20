@@ -8,15 +8,16 @@ from django.utils.six.moves.urllib.parse import urlsplit
 
 from users.models import User
 
+
 @pytest.mark.django_db
 def test_user_directed_to_login_page_when_csrf_error():
-    username = 'william'
+    business_email = 'william@example.com'
     password = 'passw0rd'
 
-    User.objects.create_user(username, 'william@example.com', password)
+    User.objects.create_user(business_email, password)
 
     client = Client(enforce_csrf_checks=True)
-    data = {'username': username,
+    data = {'username': business_email,
             'password': password,
             'csrfmiddlewaretoken': 'notavalidtoken'}
     response = client.post(reverse('login'),
