@@ -389,7 +389,7 @@ def _add_items_categories(request, items):
     for item_id, taxonomy_slug, term_name in items:
         try:
             if term_name:
-                transport.items.add_term(
+                transport.items.add_terms(
                     item_id,
                     taxonomy_slug,
                     term_name

@@ -607,8 +607,8 @@ def test_item_category_can_be_updated(view, form):
 
 @pytest.mark.django_db
 def test_item_category_can_be_unset(view, form):
-    transport.items.add_term(view.item['id'], 'ebola-questions',
-                             'Ebola origins')
+    transport.items.add_terms(view.item['id'], 'ebola-questions',
+                              'Ebola origins')
 
     form.cleaned_data['category'] = ''
 
@@ -744,7 +744,7 @@ def test_free_tags_created_on_item_update(view, form):
 
 @pytest.mark.django_db
 def test_existing_tag_deleted_on_item_update(view, form):
-    transport.items.add_free_terms(view.item['id'], 'tags', ['age 35-40'])
+    transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
     form.cleaned_data['tags'] = 'Monrovia'
 

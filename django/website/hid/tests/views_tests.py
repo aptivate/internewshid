@@ -117,11 +117,11 @@ def test_process_items_removes_question_type():
     taxonomy = TaxonomyFactory(name="Ebola Questions")
     term_to_delete = TermFactory(name='term to be deleted',
                                  taxonomy=taxonomy)
-    transport.items.add_term(
+    transport.items.add_terms(
         item['id'], term_to_delete.taxonomy.slug, term_to_delete.name)
 
     term_to_keep = TermFactory(name='term not to be deleted')
-    transport.items.add_term(
+    transport.items.add_terms(
         item['id'], term_to_keep.taxonomy.slug, term_to_keep.name)
 
     url = reverse('data-view-process')

@@ -259,7 +259,7 @@ class AddEditItemView(FormView):
             transport.items.delete_all_terms(item_id, taxonomy)
             term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 
-            transport.items.add_free_terms(item_id, taxonomy, term_names)
+            transport.items.add_terms(item_id, taxonomy, term_names)
 
     def _update_item(self, item_id, form, taxonomy):
         """ Update the given item
@@ -282,7 +282,7 @@ class AddEditItemView(FormView):
         # TODO: Combine terms into single transaction
         if taxonomy:
             if category:
-                transport.items.add_term(item_id, taxonomy, category)
+                transport.items.add_terms(item_id, taxonomy, category)
             else:
                 transport.items.delete_all_terms(item_id, taxonomy)
 
@@ -309,11 +309,11 @@ class AddEditItemView(FormView):
         created_item = transport.items.create(regular_fields)
 
         # TODO: Combine terms into single transaction
-        transport.items.add_term(
+        transport.items.add_terms(
             created_item['id'], 'item-types', self.item_type['name']
         )
         if taxonomy and category:
-            transport.items.add_term(created_item['id'], taxonomy, category)
+            transport.items.add_terms(created_item['id'], taxonomy, category)
 
         self._add_free_terms(created_item['id'], free_terms)
 
