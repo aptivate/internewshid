@@ -1,8 +1,8 @@
 from django.db import models
 from django.dispatch.dispatcher import receiver
-from django.utils import timezone
 
 from taxonomies.models import Term
+from exceptions import ItemTermException
 
 
 class DataLayerModel(models.Model):
@@ -24,7 +24,6 @@ class Message(DataLayerModel):
     network_provider = models.CharField(max_length=200, blank=True)
 
     def apply_terms(self, terms):
-        # TODO: test this
         """ Add or replace value of term.taxonomy for current Item
 
         If the Item has no term in the taxonomy
@@ -40,11 +39,17 @@ class Message(DataLayerModel):
         if isinstance(terms, Term):
             terms = [terms]
 
-        if len(terms) == 1:
-            [term] = terms
+        taxonomy = terms[0].taxonomy
 
-            if term.taxonomy.is_optional:
-                self.delete_all_terms(term.taxonomy)
+        if not all(t.taxonomy == taxonomy for t in terms):
+            raise ItemTermException("Terms cannot be applied from different taxonomies")
+
+        if taxonomy.is_optional:
+            if len(terms) > 1:
+                message = "Taxonomy '%s' does not support multiple terms" % taxonomy
+                raise ItemTermException(message)
+
+            self.delete_all_terms(taxonomy)
 
         self.terms.add(*terms)
 
