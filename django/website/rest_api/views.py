@@ -85,10 +85,14 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         terms = []
         for term_name in term_data.getlist('name'):
-            term = Term.objects.by_taxonomy(
-                taxonomy=taxonomy,
-                name=term_name,
-            )
+            try:
+                term = Term.objects.by_taxonomy(
+                    taxonomy=taxonomy,
+                    name=term_name,
+                )
+            except Term.DoesNotExist as e:
+                data = {'detail': e.message}
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
             terms.append(term)
 

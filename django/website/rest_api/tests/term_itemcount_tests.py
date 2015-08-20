@@ -34,12 +34,12 @@ def get_term_itemcount_response(taxonomy_slug, get_params=None):
 
 @pytest.fixture
 def questions_category_slug():
-    return create_category("Test Ebola Questions").data['slug']
+    return create_category(name="Test Ebola Questions").data['slug']
 
 
 @pytest.fixture
 def regions_category():
-    return create_category("Regions").data
+    return create_category(name="Regions").data
 
 
 @pytest.mark.django_db

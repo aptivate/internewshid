@@ -6,6 +6,7 @@ from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
 from .item_create_view_tests import create_item
+from .taxonomy_and_term_create_tests import create_category
 from ..views import ItemViewSet
 
 
@@ -23,7 +24,7 @@ def get_item(id):
 
 def get_add_free_terms_response(item_id, terms):
     request = APIRequestFactory().post('', terms)
-    view = ItemViewSet.as_view(actions={'post': 'add_free_terms'})
+    view = ItemViewSet.as_view(actions={'post': 'add_terms'})
     response = view(request, item_pk=item_id)
 
     return response
@@ -38,8 +39,13 @@ def add_free_terms_to_item(item_id, terms):
 
 @pytest.mark.django_db
 def test_multiple_new_terms_applied_to_item(item):
+    taxonomy = create_category(name='test tags',
+                               vocabulary='open',
+                               multiplicity='multiple').data
+
+    slug = taxonomy['slug']
     terms = {
-        'taxonomy': 'free-tags',
+        'taxonomy': slug,
         'name': ['Monrovia', 'age 35-40'],
     }
 
@@ -47,15 +53,14 @@ def test_multiple_new_terms_applied_to_item(item):
 
     updated_item = get_item(item['id']).data
 
-    taxonomy_terms = {}
+    new_terms = []
     for term in updated_item['terms']:
-        if term['taxonomy'] not in taxonomy_terms:
-            taxonomy_terms[term['taxonomy']] = []
-        taxonomy_terms[term['taxonomy']].append(term['name'])
+        if term['taxonomy'] == slug:
+            new_terms.append(term['name'])
 
-    assert 'free-tags' in taxonomy_terms
-    assert 'Monrovia' in taxonomy_terms['free-tags']
-    assert 'age 35-40' in taxonomy_terms['free-tags']
+    assert len(new_terms) > 0, "No terms created with taxonomy '%s'" % slug
+    assert 'Monrovia' in new_terms
+    assert 'age 35-40' in new_terms
 
 
 @pytest.mark.django_db

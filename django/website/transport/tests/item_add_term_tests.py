@@ -11,6 +11,11 @@ from ..exceptions import TransportException
 
 
 @pytest.fixture
+def taxonomy():
+    return TaxonomyFactory()
+
+
+@pytest.fixture
 def item_data():
     item = {'body': "What is the cuse of ebola?"}
     return items.create(item)
@@ -46,11 +51,11 @@ def test_add_term_fails_if_taxonomy_does_not_exist(item_data):
 
 
 @pytest.mark.django_db
-def test_add_term_fails_if_term_does_not_exist(item_data):
+def test_add_term_fails_if_term_does_not_exist(taxonomy, item_data):
     with pytest.raises(TransportException) as excinfo:
         items.add_term(
             item_data['id'],
-            "unknown-slug",
+            taxonomy.slug,
             "unknown term name",
         )
 
