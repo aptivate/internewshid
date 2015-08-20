@@ -2,7 +2,7 @@ from django.db import models
 from django.dispatch.dispatcher import receiver
 
 from taxonomies.models import Term
-from exceptions import ItemTermException
+from taxonomies.exceptions import TermException
 
 
 class DataLayerModel(models.Model):
@@ -42,12 +42,12 @@ class Message(DataLayerModel):
         taxonomy = terms[0].taxonomy
 
         if not all(t.taxonomy == taxonomy for t in terms):
-            raise ItemTermException("Terms cannot be applied from different taxonomies")
+            raise TermException("Terms cannot be applied from different taxonomies")
 
         if not taxonomy.is_multiple:
             if len(terms) > 1:
                 message = "Taxonomy '%s' does not support multiple terms" % taxonomy
-                raise ItemTermException(message)
+                raise TermException(message)
 
             self.delete_all_terms(taxonomy)
 

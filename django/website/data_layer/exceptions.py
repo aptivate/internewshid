@@ -1,2 +1,0 @@
-class ItemTermException(Exception):
-    pass

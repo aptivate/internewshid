@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from factories import ItemFactory
 from ..models import Item
-from ..exceptions import ItemTermException
+from taxonomies.exceptions import TermException
 from taxonomies.tests.factories import TermFactory, TaxonomyFactory
 
 
@@ -167,7 +167,7 @@ def test_applying_multiple_terms_raises_exception_if_not_multiple():
     term1 = TermFactory(taxonomy=taxonomy)
     term2 = TermFactory(taxonomy=taxonomy)
 
-    with pytest.raises(ItemTermException) as excinfo:
+    with pytest.raises(TermException) as excinfo:
         item.apply_terms((term1, term2))
 
     expected_message = "Taxonomy '%s' does not support multiple terms" % (
@@ -185,7 +185,7 @@ def test_applied_terms_must_be_from_same_taxonomy():
 
     term3 = TermFactory(taxonomy=taxonomy1)
 
-    with pytest.raises(ItemTermException) as excinfo:
+    with pytest.raises(TermException) as excinfo:
         item.apply_terms((term1, term2, term3))
 
     expected_message = "Terms cannot be applied from different taxonomies"
