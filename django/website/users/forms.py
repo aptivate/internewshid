@@ -133,7 +133,6 @@ class AdminUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kargs):
         super(AdminUserCreationForm, self).__init__(*args, **kargs)
-        del self.fields['username']
 
     class Meta:
         model = User
@@ -148,7 +147,6 @@ class AdminUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kargs):
         super(UserChangeForm, self).__init__(*args, **kargs)
-        del self.fields['username']
 
     class Meta:
         model = User
