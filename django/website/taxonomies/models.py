@@ -24,10 +24,6 @@ class Taxonomy(models.Model):
         self.slug = slugify(self.name)
         super(Taxonomy, self).save(*args, **kwargs)
 
-    @property
-    def is_optional(self):
-        return self.multiplicity == 'optional'
-
     def __unicode__(self):
         return self.name
 
@@ -41,6 +37,14 @@ class Taxonomy(models.Model):
         default='optional',
         max_length=30,
     )
+
+    @property
+    def is_optional(self):
+        return self.multiplicity == 'optional'
+
+    @property
+    def is_multiple(self):
+        return self.multiplicity == 'multiple'
 
     vocabulary = models.CharField(
         choices=(
