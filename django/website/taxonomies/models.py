@@ -60,7 +60,7 @@ class Taxonomy(models.Model):
 class TermManager(models.Manager):
 
     def by_taxonomy(self, taxonomy, name):
-        """ Fetch an existing  Term by its name and its
+        """ Fetch a Term by its name and its
         Taxonomy slug which, together should be unique together.
 
         args:
@@ -73,21 +73,30 @@ class TermManager(models.Manager):
             The term object with the given name in the given Taxonomy.
 
         throws:
-            DoesNotExist if no Term matches the given combination
+            DoesNotExist if Taxonomy with the given slug does not exist
+            DoesNotExist if named Term does not exist, unless the Taxonomy
+            vocabulary is open - in this case the Term will be created
             ValueError if taxonomy is not one of the allowed types
         """
         if isinstance(taxonomy, basestring):
-            taxonomy_slug = taxonomy
-        elif isinstance(taxonomy, Taxonomy):
-            taxonomy_slug = taxonomy.slug
-        else:
+            taxonomy = Taxonomy.objects.get(slug=taxonomy)
+        elif not isinstance(taxonomy, Taxonomy):
             raise ValueError(
                 "taxonomy must be a Taxonomy instance "
                 "or a valid taxonomy slug")
-        return self.select_related('taxonomy').get(
-            taxonomy__slug=taxonomy_slug,
-            name=name
-        )
+
+        if taxonomy.is_open:
+            term, _ = self.select_related('taxonomy').get_or_create(
+                taxonomy=taxonomy,
+                name=name
+            )
+        else:
+            term = self.select_related('taxonomy').get(
+                taxonomy=taxonomy,
+                name=name
+            )
+
+        return term
 
 
 class Term(models.Model):
