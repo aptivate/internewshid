@@ -25,7 +25,7 @@ class ItemNotFound(Exception):
 class AddEditItemView(FormView):
     template_name = "hid/add_edit_item.html"
     form_class = AddEditItemForm
-    taxonomy_fields = ('tags',)
+    tag_fields = ('tags',)
     tag_delimiter = ','
 
     def _initialize_item(self, item_id, item_type):
@@ -168,7 +168,7 @@ class AddEditItemView(FormView):
             initial['category'] = self.item_terms[taxonomy][0]['name']
 
         for taxonomy, terms in self.item_terms.iteritems():
-            if taxonomy in self.taxonomy_fields:
+            if taxonomy in self.tag_fields:
                 term_names = [t['name'] for t in terms]
                 initial[taxonomy] = self.tag_delimiter.join(term_names)
 
@@ -243,19 +243,19 @@ class AddEditItemView(FormView):
         category = data.pop('category', None)
         data.pop('id', None)
 
-        free_terms = {}
+        tags = {}
         regular_fields = {}
 
         for (field_name, field_value) in data.iteritems():
-            if field_name in self.taxonomy_fields:
-                free_terms[field_name] = field_value
+            if field_name in self.tag_fields:
+                tags[field_name] = field_value
             else:
                 regular_fields[field_name] = field_value
 
-        return category, free_terms, regular_fields
+        return category, tags, regular_fields
 
-    def _add_free_terms(self, item_id, free_terms):
-        for (taxonomy, value) in free_terms.iteritems():
+    def _add_tags(self, item_id, tags):
+        for (taxonomy, value) in tags.iteritems():
             transport.items.delete_all_terms(item_id, taxonomy)
             term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 
@@ -274,7 +274,7 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        category, free_terms, regular_fields = self._separate_form_data(
+        category, tags, regular_fields = self._separate_form_data(
             form)
 
         transport.items.update(item_id, regular_fields)
@@ -286,7 +286,7 @@ class AddEditItemView(FormView):
             else:
                 transport.items.delete_all_terms(item_id, taxonomy)
 
-        self._add_free_terms(item_id, free_terms)
+        self._add_tags(item_id, tags)
 
     def _create_item(self, form, taxonomy):
         """ Create the given item
@@ -303,7 +303,7 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        category, free_terms, regular_fields = self._separate_form_data(
+        category, tags, regular_fields = self._separate_form_data(
             form)
 
         created_item = transport.items.create(regular_fields)
@@ -315,7 +315,7 @@ class AddEditItemView(FormView):
         if taxonomy and category:
             transport.items.add_terms(created_item['id'], taxonomy, category)
 
-        self._add_free_terms(created_item['id'], free_terms)
+        self._add_tags(created_item['id'], tags)
 
         return created_item
 
