@@ -50,3 +50,24 @@ def test_is_optional_false_for_multiplicity_multiple():
     taxonomy = TaxonomyFactory(multiplicity='multiple')
 
     assert not taxonomy.is_optional
+
+
+@pytest.mark.django_db
+def test_is_open_true_for_vocabulary_open():
+    taxonomy = TaxonomyFactory(vocabulary='open')
+
+    assert taxonomy.is_open
+
+
+@pytest.mark.django_db
+def test_is_open_false_for_vocabulary_fixed():
+    taxonomy = TaxonomyFactory(vocabulary='fixed')
+
+    assert not taxonomy.is_open
+
+
+@pytest.mark.django_db
+def test_is_open_false_for_vocabulary_closed():
+    taxonomy = TaxonomyFactory(vocabulary='closed')
+
+    assert not taxonomy.is_open
