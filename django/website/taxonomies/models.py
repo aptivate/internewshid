@@ -31,6 +31,8 @@ class Taxonomy(models.Model):
     def __unicode__(self):
         return self.name
 
+    # To do Categories, you use 'optional' and 'closed',
+    # to do free tagging use 'multiple' and 'open'
     multiplicity = models.CharField(
         choices=(
             ('optional', _('Zero or One')),
@@ -40,20 +42,19 @@ class Taxonomy(models.Model):
         max_length=30,
     )
 
-    # My thoughts on how this grows...
-    #
-    #
-    # vocabulary = models.CharField(
-    #   ...
-    #   choices=(
-    #      ('fixed', _('Not modifiable by any user, system only')),
-    #      ('closed', _('Only admin users who have permission to define and edit taxonomies')),
-    #      ('open', _('Any user who has permission to use taxonomies')),
-    #   )
-    # )
+    vocabulary = models.CharField(
+        choices=(
+            ('fixed', _('Not modifiable by any user, system only')),
+            ('closed', _('Only admin users who have permission to define and edit taxonomies')),
+            ('open', _('Any user who has permission to use taxonomies')),
+        ),
+        default='closed',
+        max_length=30,
+    )
 
-    # To do Categories, you use 'optional' and 'closed',
-    # to do free tagging use 'multiple' and 'open'
+    @property
+    def is_open(self):
+        return self.vocabulary == 'open'
 
 
 class TermManager(models.Manager):
