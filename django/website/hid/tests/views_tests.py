@@ -51,6 +51,13 @@ def assert_message(request, level, content):
     assert (content, level) in messages
 
 
+def assert_no_messages(request, level):
+    messages = [m.message
+                for m in request._messages._queued_messages if m.level == level]
+
+    assert messages == []
+
+
 def check_message(request, content):
     for msg in request._messages._queued_messages:
         if msg.message == content:
@@ -110,11 +117,11 @@ def test_process_items_removes_question_type():
     taxonomy = TaxonomyFactory(name="Ebola Questions")
     term_to_delete = TermFactory(name='term to be deleted',
                                  taxonomy=taxonomy)
-    transport.items.add_term(
+    transport.items.add_terms(
         item['id'], term_to_delete.taxonomy.slug, term_to_delete.name)
 
     term_to_keep = TermFactory(name='term not to be deleted')
-    transport.items.add_term(
+    transport.items.add_terms(
         item['id'], term_to_keep.taxonomy.slug, term_to_keep.name)
 
     url = reverse('data-view-process')

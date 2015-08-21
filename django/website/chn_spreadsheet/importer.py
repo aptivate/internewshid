@@ -120,7 +120,7 @@ class Importer(object):
     def save_rows(self, objects, item_type):
         for obj in objects:
             item = transport.items.create(obj)
-            transport.items.add_term(item['id'], 'item-types', item_type)
+            transport.items.add_terms(item['id'], 'item-types', item_type)
 
         return len(objects)
 

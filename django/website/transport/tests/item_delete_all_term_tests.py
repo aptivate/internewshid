@@ -22,10 +22,10 @@ def test_terms_can_be_removed_from_item(item_data):
     assert item.terms.count() == 0
 
     term = TermFactory(name='term to be deleted')
-    items.add_term(item_id, term.taxonomy.slug, term.name)
+    items.add_terms(item_id, term.taxonomy.slug, term.name)
 
     term2 = TermFactory(name='term not to be deleted')
-    items.add_term(item_id, term2.taxonomy.slug, term2.name)
+    items.add_terms(item_id, term2.taxonomy.slug, term2.name)
 
     assert item.terms.count() == 2
 

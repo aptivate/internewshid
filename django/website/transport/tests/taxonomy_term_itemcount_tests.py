@@ -45,9 +45,9 @@ def test_term_itemcount_returns_terms_and_counts(item_data,
                                                  questions_term):
 
     # This is tested more comprehensively in the API tests
-    transport.items.add_term(item_data['id'],
-                             questions_category.slug,
-                             questions_term.name)
+    transport.items.add_terms(item_data['id'],
+                              questions_category.slug,
+                              questions_term.name)
 
     terms = transport.taxonomies.term_itemcount(slug=questions_category.slug)
     counts = {term['name']: term['count'] for term in terms}
@@ -77,9 +77,9 @@ def test_term_itemcount_returns_terms_and_counts_for_range(
     items = [item_data(timestamp=now - timedelta(days=d)) for d in range(0, 9)]
 
     for item in items:
-        transport.items.add_term(item['id'],
-                                 questions_category.slug,
-                                 questions_term.name)
+        transport.items.add_terms(item['id'],
+                                  questions_category.slug,
+                                  questions_term.name)
 
     # 9 8 7 6 5 4 3 2 1 0
     # n y y y y y y y n n
@@ -107,12 +107,12 @@ def test_term_itemcount_returns_zero_term_counts_for_range(
     item_too_recent = item_data(timestamp=now)
     item_too_old = item_data(timestamp=eight_days_ago)
 
-    transport.items.add_term(item_too_recent['id'],
-                             questions_category.slug,
-                             questions_term.name)
-    transport.items.add_term(item_too_old['id'],
-                             questions_category.slug,
-                             questions_term.name)
+    transport.items.add_terms(item_too_recent['id'],
+                              questions_category.slug,
+                              questions_term.name)
+    transport.items.add_terms(item_too_old['id'],
+                              questions_category.slug,
+                              questions_term.name)
 
     [term] = transport.taxonomies.term_itemcount(
         slug=questions_category.slug,

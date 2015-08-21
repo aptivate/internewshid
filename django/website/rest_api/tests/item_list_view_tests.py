@@ -7,7 +7,7 @@ from taxonomies.tests.factories import TermFactory
 from ..views import ItemViewSet
 
 from .item_create_view_tests import create_item
-from .taxonomy_and_term_create_tests import create_category, add_term
+from .taxonomy_and_term_create_tests import create_taxonomy, add_term
 from .categorize_items_tests import categorize_item
 
 
@@ -62,7 +62,7 @@ def test_filter_by_id_list():
 
 @pytest.mark.django_db
 def test_filter_by_term():
-    taxonomy = create_category('taxonomy').data
+    taxonomy = create_taxonomy(name='taxonomy').data
     term = add_term(taxonomy=taxonomy['slug'], name='term').data
     items = [create_item(body='item %d' % i).data for i in range(3)]
 
@@ -101,7 +101,7 @@ def test_filter_by_multiple_terms():
 
 @pytest.mark.django_db
 def test_filter_by_term_works_when_term_name_includes_colon():
-    taxonomy = create_category('taxonomy').data
+    taxonomy = create_taxonomy(name='taxonomy').data
     term = add_term(taxonomy=taxonomy['slug'], name='term:with:colon').data
     item = create_item(body='item 1').data
     categorize_item(item, term)

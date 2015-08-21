@@ -14,6 +14,7 @@ from ..views.item import AddEditItemView, DEFAULT_ITEM_TYPE
 
 from .views_tests import (
     assert_message,
+    assert_no_messages,
     fix_messages,
 )
 
@@ -34,6 +35,20 @@ def item():
 @pytest.fixture
 def item_type():
     return {'name': 'question', 'long_name': 'Question'}
+
+
+@pytest.fixture
+def add_view(item_type):
+    view = AddEditItemView()
+    view.item_type = item_type
+
+    url = reverse('add-item', kwargs={'item_type': item_type['name']})
+
+    factory = RequestFactory()
+    view.request = factory.post(url)
+    view.request = fix_messages(view.request)
+
+    return view
 
 
 @pytest.fixture
@@ -592,8 +607,8 @@ def test_item_category_can_be_updated(view, form):
 
 @pytest.mark.django_db
 def test_item_category_can_be_unset(view, form):
-    transport.items.add_term(view.item['id'], 'ebola-questions',
-                             'Ebola origins')
+    transport.items.add_terms(view.item['id'], 'ebola-questions',
+                              'Ebola origins')
 
     form.cleaned_data['category'] = ''
 
@@ -706,3 +721,90 @@ def test_redirected_to_home_if_next_absent_after_delete(
     response = view._delete_item()
 
     assert response.url == '/'
+
+
+@pytest.mark.django_db
+def test_free_tags_created_on_item_update(view, form):
+    # Deliberate spaces to be stripped
+    form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
+
+    view.form_valid(form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'Important' in terms
+    assert 'age 35-40' in terms
+
+    taxonomies = [t['taxonomy'] for t in item['terms']]
+    assert 'tags' in taxonomies
+
+
+@pytest.mark.django_db
+def test_existing_tag_deleted_on_item_update(view, form):
+    transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
+
+    form.cleaned_data['tags'] = 'Monrovia'
+
+    view.form_valid(form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'age 35-40' not in terms
+
+
+@pytest.mark.django_db
+def test_free_tags_created_for_new_item(add_view, form):
+    form.cleaned_data['tags'] = 'Monrovia,Important,age 35-40'
+    form.cleaned_data['id'] = 0
+
+    add_view.form_valid(form)
+    assert_no_messages(add_view.request, messages.ERROR)
+
+    item = transport.items.get(add_view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Monrovia' in terms
+    assert 'Important' in terms
+    assert 'age 35-40' in terms
+
+    taxonomies = [t['taxonomy'] for t in item['terms']]
+    assert 'tags' in taxonomies
+
+
+@pytest.mark.django_db
+def test_form_initial_values_include_tags(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        generic_item['terms'] = [
+            {
+                'taxonomy': 'tags',
+                'name': 'Monrovia',
+                'long_name': 'Monrovia',
+            },
+            {
+                'taxonomy': 'tags',
+                'name': 'age 35-40',
+                'long_name': 'Age 35-40',
+            },
+            {
+                'taxonomy': 'tags',
+                'name': 'interesting',
+                'long_name': 'Interesting',
+            },
+        ]
+
+        get_item.return_value = generic_item
+
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103}
+        )
+
+    initial = view.get_initial()
+    assert initial['tags'] == 'Monrovia,age 35-40,interesting'

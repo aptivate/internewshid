@@ -1,8 +1,8 @@
 from django.db import models
 from django.dispatch.dispatcher import receiver
-from django.utils import timezone
 
 from taxonomies.models import Term
+from taxonomies.exceptions import TermException
 
 
 class DataLayerModel(models.Model):
@@ -23,24 +23,35 @@ class Message(DataLayerModel):
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=200, blank=True)
 
-    def apply_term(self, term):
-        # TODO: test this
-        """ Add or replace value of term.taxonomy for current Item
+    def apply_terms(self, terms):
+        """ Add or replace values of term.taxonomy for current Item
 
-        If the Item has no term in the taxonomy
-        OR if the taxonomy.is_multiple just add it.
-        IF the taxonmy is optional (categories)
-            If the Item has a term in that taxonomy already,
-                replace it
+        For taxonomies that support multiple terms eg tags, do not remove any
+        existing terms.
+
+        IF the taxonomy is optional eg categories, and the Item has a term in
+        that taxonomy already, replace it
         """
         # It bugs me that so much of the logic applying to taxonomies is here.
         # This should really be built out with an explicity through model
         # in taxonomies, with a generic foreign ken to the content type
         # being classified, then this logic could live there.
-        if term.taxonomy.is_optional:
-            self.delete_all_terms(term.taxonomy)
+        if isinstance(terms, Term):
+            terms = [terms]
 
-        self.terms.add(term)
+        taxonomy = terms[0].taxonomy
+
+        if not all(t.taxonomy == taxonomy for t in terms):
+            raise TermException("Terms cannot be applied from different taxonomies")
+
+        if not taxonomy.is_multiple:
+            if len(terms) > 1:
+                message = "Taxonomy '%s' does not support multiple terms" % taxonomy
+                raise TermException(message)
+
+            self.delete_all_terms(taxonomy)
+
+        self.terms.add(*terms)
 
     def delete_all_terms(self, taxonomy):
         for term in self.terms.filter(taxonomy=taxonomy):
