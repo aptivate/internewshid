@@ -166,10 +166,10 @@ class ContactPasswordResetForm(PasswordResetForm):
         self.users_cache = UserModel._default_manager.filter(
             business_email__iexact=email)
         if not len(self.users_cache):
-            raise ValidationError(self.error_messages['unknown'])
+            raise ValidationError("User with email '%s' not known" % email)
         if not any(user.is_active for user in self.users_cache):
             # none of the filtered users are active
-            raise ValidationError(self.error_messages['unknown'])
+            raise ValidationError("User with email '%s' not known" % email)
         return email
 
     def save(self, subject,
