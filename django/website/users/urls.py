@@ -14,7 +14,7 @@ urlpatterns = patterns(
         name='contact_update'),
     url(r'delete/(?P<pk>\d+)/$', DeleteContact.as_view(),
         name='contact_delete'),
-    url(r'activate/(?P<pk>\d+)/$', SendActivationEmailView.as_view(),
+    url(r'activate/(?P<pk>\d+)/$', SendActivationEmailView.as_view(permanent=True),
         name='contact_claim_account'),
     url(r'personal/$', UpdatePersonalInfo.as_view(), name='personal_edit'),
     url(r'export_as_csv/$', ListContactsExport.as_view(), {'format': 'csv'},
