@@ -24,13 +24,13 @@ class Message(DataLayerModel):
     network_provider = models.CharField(max_length=200, blank=True)
 
     def apply_terms(self, terms):
-        """ Add or replace value of term.taxonomy for current Item
+        """ Add or replace values of term.taxonomy for current Item
 
-        If the Item has no term in the taxonomy
-        OR if the taxonomy.is_multiple just add it.
-        IF the taxonmy is optional (categories)
-            If the Item has a term in that taxonomy already,
-                replace it
+        For taxonomies that support multiple terms eg tags, do not remove any
+        existing terms.
+
+        IF the taxonomy is optional eg categories, and the Item has a term in
+        that taxonomy already, replace it
         """
         # It bugs me that so much of the logic applying to taxonomies is here.
         # This should really be built out with an explicity through model
