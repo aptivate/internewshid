@@ -7,7 +7,7 @@ from rest_framework import status
 from data_layer.models import Item
 from .item_create_view_tests import create_item
 from .taxonomy_and_term_create_tests import (
-    create_category,
+    create_taxonomy,
     add_term,
 )
 from ..views import ItemViewSet
@@ -15,7 +15,7 @@ from ..views import ItemViewSet
 
 @pytest.fixture
 def category():
-    response = create_category(name="Test Ebola Questions")
+    response = create_taxonomy(name="Test Ebola Questions")
     assert status.is_success(response.status_code), response.data
 
     return response.data

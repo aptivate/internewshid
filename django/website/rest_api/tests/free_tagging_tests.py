@@ -6,7 +6,7 @@ from rest_framework.test import APIRequestFactory
 from rest_framework import status
 
 from .item_create_view_tests import create_item
-from .taxonomy_and_term_create_tests import create_category
+from .taxonomy_and_term_create_tests import create_taxonomy
 from ..views import ItemViewSet
 
 
@@ -39,7 +39,7 @@ def add_free_terms_to_item(item_id, terms):
 
 @pytest.mark.django_db
 def test_multiple_new_terms_applied_to_item(item):
-    taxonomy = create_category(name='test tags',
+    taxonomy = create_taxonomy(name='test tags',
                                vocabulary='open',
                                multiplicity='multiple').data
 
