@@ -218,6 +218,7 @@ AUTH_USER_MODEL = "users.User"
 EMAIL_BOT_ADDRESS = 'blackhole@aptivate.org'
 LOGIN_REDIRECT_URL = "dashboard"
 SITE_NAME = 'Internews Humanitarian Information Dashboard'
+SITE_HOSTNAME = 'localhost:8000'
 ########## END Custom user app defaults
 
 ########## BOOTSTRAP3

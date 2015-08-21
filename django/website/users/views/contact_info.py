@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.views.generic import (
@@ -17,6 +19,11 @@ from ..forms import (
 from ..tables import UserTable
 
 
+def get_permission(permission):
+    app_name = __name__.split('.')[0]
+    return '%s.%s' % (app_name, permission)
+
+
 class ListContacts(LoginRequiredMixin, PermissionRequiredMixin,
                    SingleTableMixin, ListView):
     model = User
@@ -25,7 +32,7 @@ class ListContacts(LoginRequiredMixin, PermissionRequiredMixin,
     orderable_columns_default = 'id'
     template_name = 'contacts/list_contacts.html'
     # Group required
-    permission_required = 'contacts.add_user'
+    permission_required = get_permission('add_user')
     raise_exception = True
 
     def get_success_url(self):
@@ -74,7 +81,7 @@ class AddContact(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = AddContactForm
     template_name = 'contacts/edit_contact.html'
     # Group required
-    permission_required = 'contacts.add_user'
+    permission_required = get_permission('add_user')
     raise_exception = True
 
     def get_success_url(self):
@@ -102,7 +109,7 @@ class UpdateContactBase(LoginRequiredMixin, UpdateView):
 
 class UpdateContact(PermissionRequiredMixin, UpdateContactBase):
     form_class = UpdateContactForm
-    permission_required = 'contacts.add_user'
+    permission_required = get_permission('add_user')
     raise_exception = True
 
     def form_invalid(self, form):
@@ -121,7 +128,7 @@ class UpdatePersonalInfo(UpdateContactBase):
     form_class = UpdatePersonalInfoForm
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('dashboard')
 
     def get_object(self):
         return self.request.user
@@ -132,7 +139,7 @@ class DeleteContact(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'contacts/delete_contact.html'
     form_class = DeleteContactForm
     # Group required
-    permission_required = 'contacts.delete_user'
+    permission_required = get_permission('delete_user')
     raise_exception = True
 
     def get_success_url(self):

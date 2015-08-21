@@ -1,7 +1,7 @@
 from django.test import TestCase
-from contacts.group_permissions import GroupPermissions
+from ..group_permissions import GroupPermissions
 from django.contrib.auth.models import Group
-from contacts.models import User, create_picture_upload_handler
+from ..models import User, get_picture_path
 from .factories import UserFactory
 
 
@@ -52,23 +52,19 @@ class UserManagerTests(TestCase):
 def test_create_picture_upload_handler_with_both_names():
     u = User(first_name='Ime', last_name='Priimek',
              business_email='fake@aptivate.org')
-    handler = create_picture_upload_handler('pictures')
-    assert handler(u, 'me.jpg') == 'pictures/Priimek_Ime_me.jpg'
+    assert get_picture_path(u, 'me.jpg') == 'pictures/Priimek_Ime_me.jpg'
 
 
 def test_create_picture_upload_handler_with_missing_first_name():
     u = User(last_name='Priimek', business_email='fake@aptivate.org')
-    handler = create_picture_upload_handler('pictures')
-    assert handler(u, 'me.jpg') == 'pictures/Priimek_me.jpg'
+    assert get_picture_path(u, 'me.jpg') == 'pictures/Priimek_me.jpg'
 
 
 def test_create_picture_upload_handler_with_missing_last_name():
     u = User(first_name='Ime', business_email='fake@aptivate.org')
-    handler = create_picture_upload_handler('pictures')
-    assert handler(u, 'me.jpg') == 'pictures/Ime_me.jpg'
+    assert get_picture_path(u, 'me.jpg') == 'pictures/Ime_me.jpg'
 
 
 def test_create_picture_upload_handler_with_missing_names():
     u = User(business_email='fake@aptivate.org')
-    handler = create_picture_upload_handler('pictures')
-    assert handler(u, 'me.jpg') == 'pictures/fake@aptivate.org_me.jpg'
+    assert get_picture_path(u, 'me.jpg') == 'pictures/fake@aptivate.org_me.jpg'

@@ -2,12 +2,13 @@
 from __future__ import unicode_literals
 import factory
 from django.contrib.auth.models import Group
-from contacts.models import User
-from contacts.group_permissions import GroupPermissions
+from ..models import User
+from ..group_permissions import GroupPermissions
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = User
+    class Meta:
+        model = User
 
     # must be unique so we specify and increase
     business_email = factory.Sequence(lambda n: "email%d@test.com" % n)

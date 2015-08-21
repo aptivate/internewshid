@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import pytest
 
-from contacts.views import UpdateContact
+from ..views import UpdateContact
 
 from .factories import UserFactory, ContactsManagerFactory
 

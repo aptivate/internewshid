@@ -1,4 +1,4 @@
-from contacts.forms import (
+from ..forms import (
     AddContactForm,
     UpdatePersonalInfoForm,
 )

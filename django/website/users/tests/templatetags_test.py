@@ -1,5 +1,5 @@
 from django.test import TestCase
-from contacts.templatetags import basename
+from ..templatetags import basename
 
 
 class TemplateTagsTests(TestCase):

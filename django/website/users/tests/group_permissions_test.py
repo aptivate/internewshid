@@ -2,7 +2,7 @@ import pytest
 
 from django.contrib.auth.models import Permission, Group, ContentType
 
-from contacts.group_permissions import GroupPermissions
+from ..group_permissions import GroupPermissions
 
 
 @pytest.mark.django_db

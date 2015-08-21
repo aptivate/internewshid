@@ -1,7 +1,7 @@
 from datetime import date
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from contacts.validators import year_to_now
+from ..validators import year_to_now
 
 
 today = date.today()

@@ -2,24 +2,30 @@ import pytest
 import mock
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from django_tables2 import SingleTableMixin
 
-from contacts.views import (
+from ..views import (
     ListContacts,
     AddContact,
     UpdateContactBase,
     UpdateContact,
     UpdatePersonalInfo,
-    DeleteContact
+    DeleteContact,
+    get_permission,
 )
-from contacts.forms import (
+from ..forms import (
     AddContactForm,
     UpdateContactForm,
     UpdatePersonalInfoForm,
 )
 from .factories import UserFactory, ContactsManagerFactory
+
+
+def this_app():
+    return __name__.split('.')[0]
 
 
 class BracesMixinTests(TestCase):
@@ -72,7 +78,7 @@ class SuccessUrlTests(TestCase):
         views_with_home_success_url = [UpdatePersonalInfo]
         for view in views_with_home_success_url:
             self.assertEqual(view().get_success_url(),
-                             reverse('home'),
+                             reverse('dashboard'),
                              "%s does not have home as success_url"
                              % view)
 
@@ -137,7 +143,8 @@ class AddContactTests(TestCase):
         self.form.cleaned_data = {}
 
     def test_has_expected_permissions_properties(self):
-        self.assertEqual(self.view.permission_required, 'contacts.add_user')
+        self.assertEqual(self.view.permission_required,
+                         get_permission('add_user'))
         self.assertTrue(self.view.raise_exception)
 
     def test_form_valid_calls_save_on_form(self):
@@ -157,14 +164,16 @@ class DeleteContactTests(TestCase):
 
     def test_has_expected_permissions_properties(self):
         view = DeleteContact()
-        self.assertEqual(view.permission_required, 'contacts.delete_user')
+        self.assertEqual(view.permission_required,
+                         get_permission('delete_user'))
         self.assertTrue(view.raise_exception)
 
 
 class UpdateContactTests(TestCase):
     def test_has_expected_permissions_properties(self):
         view = UpdateContact()
-        self.assertEqual(view.permission_required, 'contacts.add_user')
+        self.assertEqual(view.permission_required,
+                         get_permission('add_user'))
         self.assertTrue(view.raise_exception)
 
     def test_form_valid_redirects_to_claim_url_if_save_and_email(self):
@@ -199,7 +208,7 @@ def test_update_contact_form_invalid_adds_a_message_to_messages(rf):
     r = rf.get('/')
     view.request = r
     form = mock.MagicMock()
-    with mock.patch('contacts.views.contact_info.messages') as messages:
+    with mock.patch(this_app() + '.views.contact_info.messages') as messages:
         view.form_invalid(form)
         messages.error.assert_called_once_with(r, 'Contact data not valid, \
                 please check and try again.')
@@ -223,4 +232,3 @@ def test_no_search_term_results_in_empty_query_in_context(rf):
     view.object_list = []
     ctx = view.get_context_data(object_list=[])
     assert ctx['query'] == ''
-

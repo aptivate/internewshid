@@ -6,8 +6,8 @@ import mock
 from django.conf import settings
 from django.core import mail
 
-from contacts.forms import UpdateContactForm
-from contacts.views import SendActivationEmailView
+from ..forms import UpdateContactForm
+from ..views import SendActivationEmailView
 
 from .factories import UserFactory
 
@@ -63,8 +63,10 @@ def test_saving_a_contact_sends_email_change_if_password_check_contents():
 def test_new_contact_activation_email(rf):
     assert len(mail.outbox) == 0
     u = UserFactory()
-    view = SendActivationEmailView()
-    with mock.patch('contacts.views.activation.messages'):  # bypass messages
+    view = SendActivationEmailView(permanent=True)
+    app = __name__.split('.')[0]
+
+    with mock.patch(app + '.views.activation.messages'):  # bypass messages
         view.get(rf.get('/'), pk=u.id)
         assert len(mail.outbox) == 1
         email = mail.outbox[0]
