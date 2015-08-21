@@ -69,7 +69,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         return items
 
     @detail_route(methods=['post'])
-    def add_term(self, request, item_pk):
+    def add_terms(self, request, item_pk):
         try:
             item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist as e:
@@ -78,15 +78,25 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         term_data = request.data
         try:
-            term = Term.objects.by_taxonomy(
-                taxonomy=term_data['taxonomy'],
-                name=term_data['name'],
-            )
-        except Term.DoesNotExist as e:
+            taxonomy = Taxonomy.objects.get(slug=term_data['taxonomy'])
+        except Taxonomy.DoesNotExist as e:
             data = {'detail': e.message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        item.apply_term(term)
+        terms = []
+        for term_name in term_data.getlist('name'):
+            try:
+                term = Term.objects.by_taxonomy(
+                    taxonomy=taxonomy,
+                    name=term_name,
+                )
+            except Term.DoesNotExist as e:
+                data = {'detail': e.message}
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+            terms.append(term)
+
+        item.apply_terms(terms)
 
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)

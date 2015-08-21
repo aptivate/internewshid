@@ -90,7 +90,7 @@ def test_add_items_categories_adds_term_to_items(terms, items):
 
 @pytest.mark.django_db
 def test_add_items_categories_removes_term_from_item(term, item):
-    transport.items.add_term(item['id'], term.taxonomy.slug, term.name)
+    transport.items.add_terms(item['id'], term.taxonomy.slug, term.name)
 
     category_list = [(item['id'], term.taxonomy.slug, ''), ]
 

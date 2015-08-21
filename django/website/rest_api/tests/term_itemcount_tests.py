@@ -13,7 +13,7 @@ from ..views import TaxonomyViewSet
 from .categorize_items_tests import categorize_item
 from .item_create_view_tests import create_item
 from .taxonomy_and_term_create_tests import (
-    create_category,
+    create_taxonomy,
     add_term,
 )
 
@@ -34,12 +34,12 @@ def get_term_itemcount_response(taxonomy_slug, get_params=None):
 
 @pytest.fixture
 def questions_category_slug():
-    return create_category("Test Ebola Questions").data['slug']
+    return create_taxonomy(name="Test Ebola Questions").data['slug']
 
 
 @pytest.fixture
 def regions_category():
-    return create_category("Regions").data
+    return create_taxonomy(name="Regions").data
 
 
 @pytest.mark.django_db

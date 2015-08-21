@@ -16,8 +16,8 @@ from taxonomies.tests.factories import (
 )
 
 
-def create_category(name):
-    request = APIRequestFactory().put("", {'name': name})
+def create_taxonomy(**kwargs):
+    request = APIRequestFactory().put("", kwargs)
     view = TaxonomyViewSet.as_view(actions={'put': 'create'})
 
     response = view(request)
@@ -70,7 +70,7 @@ def test_create_a_category():
     old_count = count_taxonomies()
     assert not taxonomy_exists(category)
 
-    response = create_category(category)
+    response = create_taxonomy(name=category)
     assert status.is_success(response.status_code), response.data
 
     new_count = count_taxonomies()

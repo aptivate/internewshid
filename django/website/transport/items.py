@@ -94,14 +94,14 @@ def bulk_delete(ids):
         delete(id)
 
 
-def add_term(item_id, taxonomy_slug, name):
-    """ Add term named `name` within the Taxonomy with `taxonomy_slug` to the
+def add_terms(item_id, taxonomy_slug, names):
+    """ Add named terms `names` within the Taxonomy with `taxonomy_slug` to the
     Item with id `item_id`
 
     args:
         item_id: e.g. 67
         taxonomy_slug: e.g. 'ebola-questions'
-        name: name of a Term in the Taxonomy with given slug
+        names: names of terms in the Taxonomy with given slug
 
     returns:
         response from the server
@@ -109,21 +109,24 @@ def add_term(item_id, taxonomy_slug, name):
     raises:
        TransportException on failure
 
-    For the moment both the taxonomy and term must already exist.
+    The taxonomy must already exist. If the taxonomy is open, any terms that
+    do not exist will be created, otherwise an exception will be raised.
     """
-    view = get_view({'post': 'add_term'})
+    view = get_view({'post': 'add_terms'})
 
-    term = {'taxonomy': taxonomy_slug, 'name': name}
-    request = request_factory.post("", term)
+    terms = {'taxonomy': taxonomy_slug, 'name': names}
+    request = request_factory.post('', terms)
     response = view(request, item_pk=item_id)
 
     if status.is_success(response.status_code):
         return response.data
     else:
         response.data['status_code'] = response.status_code
-        response.data['term'] = term
+        response.data['terms'] = terms
         response.data['item_id'] = item_id
         raise TransportException(response.data)
+
+    return response.data
 
 
 def delete_all_terms(item_id, taxonomy_slug):
