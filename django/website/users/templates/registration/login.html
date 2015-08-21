@@ -12,6 +12,7 @@
             <div class="form-group panel-body">
                 <form action="." method="post">{% csrf_token %}
                 {% bootstrap_form form show_label=False %}
+                <a href="{% url "password_reset" %}"><small>Forgot password?</small></a>
                 {% bootstrap_button "Log in" button_type="submit" value="Log in" button_class="btn btn-lg btn-primary btn-block" %}
                 </form>
             </div>
