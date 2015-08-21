@@ -7,7 +7,7 @@ from django.contrib.auth.forms import (
 from django.forms import (
     ModelForm, HiddenInput, ValidationError, ImageField
 )
-from django.utils.http import int_to_base36
+from django.utils.http import urlsafe_base64_encode
 
 import mail
 import floppyforms as forms
@@ -184,7 +184,7 @@ class ContactPasswordResetForm(PasswordResetForm):
             ctx = {
                 'email': user.business_email,
                 'site': settings.SITE_HOSTNAME,
-                'uid': int_to_base36(user.pk),
+                'uid': urlsafe_base64_encode(str(user.pk)),
                 'user': user,
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
@@ -196,4 +196,5 @@ class ContactPasswordResetForm(PasswordResetForm):
                 'template_name': email_template_name,
                 'context': ctx
             }
+
             mail.notify(options)
