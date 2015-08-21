@@ -30,6 +30,7 @@ DATABASES = {
 
 EMAIL_HOST = 'localhost'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SITE_HOSTNAME = 'internewshid.dev.aptivate.org'
 
 # turn off caching
 CACHES = {
