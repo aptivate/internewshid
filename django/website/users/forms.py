@@ -8,6 +8,7 @@ from django.forms import (
     ModelForm, HiddenInput, ValidationError, ImageField
 )
 from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import ugettext as _
 
 import mail
 import floppyforms as forms
@@ -166,10 +167,10 @@ class ContactPasswordResetForm(PasswordResetForm):
         self.users_cache = UserModel._default_manager.filter(
             business_email__iexact=email)
         if not len(self.users_cache):
-            raise ValidationError("User with email '%s' not known" % email)
+            raise ValidationError(_("User with email '%s' not known" % email))
         if not any(user.is_active for user in self.users_cache):
             # none of the filtered users are active
-            raise ValidationError("User with email '%s' not known" % email)
+            raise ValidationError(_("User with email '%s' not known" % email))
         return email
 
     def save(self, subject,
