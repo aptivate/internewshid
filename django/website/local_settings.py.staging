@@ -22,4 +22,6 @@ DATABASES = {
 }
 
 EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'internewshid.stage.aptivate.org'
+
 # vi: ft=python
