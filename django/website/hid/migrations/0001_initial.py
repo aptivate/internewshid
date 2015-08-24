@@ -8,6 +8,7 @@ def create_sample_widgets(apps, schema_editor):
     Dashboard = apps.get_model('dashboard', 'Dashboard')
     WidgetInstance = apps.get_model('dashboard', 'WidgetInstance')
     main = Dashboard.objects.get(name='main')
+
     WidgetInstance.objects.create(
         dashboard=main,
         widget_type='basic-text-widget',
@@ -66,7 +67,7 @@ def create_sample_widgets(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dashboard', '0002_auto_20150709_1244')
+        ('dashboard', '0003_widgetinstance_height')
     ]
 
     operations = [
