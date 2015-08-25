@@ -354,7 +354,7 @@ if DEBUG is False:
     # Hosts/domain names that are valid for this site
     # See https://docs.djangoproject.com/en/1.8/ref/settings/#allowed-hosts
     ALLOWED_HOSTS = [
-        '.internewshid.aptivate.org',
+        'lin-internewshid.aptivate.org',
         'www.internewshid.aptivate.org',
         'fen-vz-internewshid-stage.fen.aptivate.org',
         'fen-vz-internewshid-dev.fen.aptivate.org',
