@@ -26,6 +26,7 @@ DATABASES = {
 }
 
 EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'localhost:8000'
 
 from settings import INSTALLED_APPS
 INSTALLED_APPS = (
