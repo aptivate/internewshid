@@ -39,8 +39,9 @@ class Importer(object):
                 'type': column['type'],
                 'field': column['field']}
 
-            if 'date_format' in column:
-                col_dict['date_format'] = column['date_format']
+            for c in ('date_format', 'taxonomy'):
+                if c in column:
+                    col_dict[c] = column[c]
 
             columns_map[column['name']] = col_dict
 
@@ -89,7 +90,7 @@ class Importer(object):
         # Unify difference between CSV and openpyxl cells
         return [getattr(v, 'value', v) for v in raw_row]
 
-    def process_rows(self, rows, profile_columns, skip_header=False):
+    def process_rows(self, rows, profile_columns, item_type, skip_header=False):
         # If there is no header (skip_header=False), then use profile's order of
         # columns, otherwise use header line to check mapping and define order
         first_row = self.normalize_row(rows.next()) if skip_header else None
@@ -102,7 +103,10 @@ class Importer(object):
                 values = self.normalize_row(row)
 
                 if any(values):
-                    objects.append(self.process_row(values, columns))
+                    item = self.process_row(values, columns)
+                    self._append_term_to_item(item, 'item-types', item_type)
+
+                    objects.append(item)
 
             except SheetImportException as e:
                 raise type(e), type(e)(e.message +
@@ -111,16 +115,33 @@ class Importer(object):
         return objects
 
     def process_row(self, values, columns):
-        return reduce(
-            lambda object_dict, converter: converter.add_to(object_dict),
-            [CellConverter(val, col) for val, col in zip(values, columns)],
-            {}
-        )
+        item = {}
 
-    def save_rows(self, objects, item_type):
+        for val, col in zip(values, columns):
+            converter = CellConverter(val, col)
+
+            if col['type'] == 'taxonomy':
+                self._append_term_to_item(
+                    item, col['taxonomy'], converter.convert_value())
+            else:
+                converter.add_to(item)
+
+        return item
+
+    def _append_term_to_item(self, item, taxonomy, name):
+        term = self._get_term_dict(taxonomy, name)
+        item.setdefault('terms', []).append(term)
+
+    def _get_term_dict(self, taxonomy, name):
+        return {'taxonomy': taxonomy, 'name': name}
+
+    def save_rows(self, objects):
         for obj in objects:
+            terms = obj.pop('terms')
             item = transport.items.create(obj)
-            transport.items.add_terms(item['id'], 'item-types', item_type)
+            for term in terms:
+                transport.items.add_terms(
+                    item['id'], term['taxonomy'], term['name'])
 
         return len(objects)
 
@@ -132,9 +153,10 @@ class Importer(object):
         item_type = profile.get('type')
 
         rows = self.get_rows_iterator(fobject, file_format)
-        items = self.process_rows(rows, profile['columns'], skip_header)
+        items = self.process_rows(rows, profile['columns'], item_type,
+                                  skip_header)
 
-        return self.save_rows(items, item_type)
+        return self.save_rows(items)
 
 
 class CellConverter(object):
@@ -154,7 +176,8 @@ class CellConverter(object):
             'date': lambda x: self.convert_date(),
             'text': lambda x: x,
             'integer': lambda x: int(x),
-            'number': lambda x: Decimal(x)
+            'number': lambda x: Decimal(x),
+            'taxonomy': lambda x: x,
         }
         if self.type not in converters:
             raise SheetImportException(
