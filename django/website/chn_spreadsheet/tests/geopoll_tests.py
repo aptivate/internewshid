@@ -34,3 +34,11 @@ def test_items_imported(importer):
     counts_per_item = {t['name']: t['count'] for t in item_types}
 
     assert counts_per_item['question'] == num_saved
+
+    tags = []
+    for term in items[0]['terms']:
+        if term['taxonomy'] == 'tags':
+            tags.append(term['name'])
+
+    assert len(tags) > 0, "No tags were imported"
+    assert tags[0] == "Lofa"

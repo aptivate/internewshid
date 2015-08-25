@@ -136,7 +136,14 @@ def test_get_fields_and_types(importer):
 
 
 def test_process_row(importer):
-    row = ['Short message', '5', '10.4', '1.5.2015', 'Something else']
+    row = [
+        'Short message',
+        '5',
+        '10.4',
+        '1.5.2015',
+        'Something else',
+        'Montserrado',
+    ]
 
     number = decimal.Decimal('10.4')
     date = pytz.utc.localize(datetime.datetime(2015, 5, 1))
@@ -167,6 +174,12 @@ def test_process_row(importer):
             'name': 'Province',
             'field': 'province',
             'type': 'ignore'
+        },
+        {
+            'name': 'Location',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'tags',
         }
     ]
 
@@ -175,7 +188,13 @@ def test_process_row(importer):
         'message': 'Short message',
         'age': 5,
         'price': number,
-        'created': date
+        'created': date,
+        'terms': [
+            {
+                'name': 'Montserrado',
+                'taxonomy': 'tags',
+            }
+        ]
     }
 
 
@@ -205,19 +224,12 @@ def __test_process_rows_without_or_with_header(importer, with_header):
     columns[0]['type'] = 'text'
     rows = _rows_generator()
 
-    objects = importer.process_rows(rows, columns, with_header)
-    expected_objects = [
-        {
-            'message.location': 'London',
-            'message.content': 'Short message'
-        },
-        {
-            'message.location': 'Cambridge',
-            'message.content': 'What?'
-        },
-    ]
+    objects = importer.process_rows(rows, columns, 'question', with_header)
 
-    assert objects == expected_objects
+    assert objects[0]['message.location'] == 'London'
+    assert objects[0]['message.content'] == 'Short message'
+    assert objects[1]['message.location'] == 'Cambridge'
+    assert objects[1]['message.content'] == 'What?'
 
 
 def test_process_rows_without_header(importer):
@@ -245,7 +257,7 @@ def test_process_rows_displays_line_number_on_error(importer):
 
     with_header = True
     with pytest.raises(SheetImportException) as excinfo:
-        importer.process_rows(rows, columns, with_header)
+        importer.process_rows(rows, columns, 'question', with_header)
 
     assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
@@ -288,16 +300,18 @@ def test_process_rows_ignores_empty_lines(importer):
 
     with_header = True
 
-    objects = importer.process_rows(rows, columns, with_header)
+    objects = importer.process_rows(rows, columns, 'question', with_header)
 
     expected_objects = [
         {
             'location': 'London',
-            'body': 'Short message'
+            'body': 'Short message',
+            'terms': [{'name': 'question', 'taxonomy': 'item-types'}]
         },
         {
             'location': 'Cambridge',
-            'body': 'What?'
+            'body': 'What?',
+            'terms': [{'name': 'question', 'taxonomy': 'item-types'}]
         },
     ]
 
@@ -306,8 +320,18 @@ def test_process_rows_ignores_empty_lines(importer):
 
 @pytest.mark.django_db
 def test_save_rows_creates_item_with_term(importer):
-    objects = [{'body': "Text", 'timestamp': datetime.datetime(2014, 7, 21)}]
-    assert importer.save_rows(objects, 'question') == 1
+    objects = [
+        {
+            'body': "Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'terms': [{
+                'name': 'question',
+                'taxonomy': 'item-types',
+            }],
+        }
+    ]
+
+    assert importer.save_rows(objects) == 1
 
     item_types = transport.taxonomies.term_itemcount(
         slug='item-types')
