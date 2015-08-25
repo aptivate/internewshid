@@ -29,7 +29,9 @@ DATABASES = {
 }
 
 EMAIL_HOST = 'localhost'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_HOSTNAME = 'localhost:8000'
+
 
 # turn off caching
 CACHES = {

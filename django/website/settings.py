@@ -138,6 +138,7 @@ THIRD_PARTY_APPS = (
     'django_tables2',
     'djangojs',
     'django_assets',
+    'floppyforms',
     'widget_tweaks'
 )
 
@@ -214,7 +215,9 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ########## Custom user app defaults
 # Select the correct user model
 AUTH_USER_MODEL = "users.User"
+EMAIL_BOT_ADDRESS = 'blackhole@aptivate.org'
 LOGIN_REDIRECT_URL = "dashboard"
+SITE_NAME = 'Internews Humanitarian Information Dashboard'
 ########## END Custom user app defaults
 
 ########## BOOTSTRAP3
