@@ -59,11 +59,13 @@ def test_get_columns_map(importer):
     expected_result = {
         'Province': {
             'type': 'location',
-            'field': 'message.location'
+            'field': 'message.location',
+            'name': 'Province',
         },
         'Message': {
             'type': 'text',
-            'field': 'message.content'
+            'field': 'message.content',
+            'name': 'Message',
         },
     }
 
@@ -97,8 +99,7 @@ def test_get_rows_iterator_works_on_excel_files(importer):
 
 def _make_columns_row(column_list):
     row = [d.copy() for d in column_list]
-    for col in row:
-        del col['name']  # Unify with first row version
+
     return row
 
 

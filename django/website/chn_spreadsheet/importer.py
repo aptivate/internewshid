@@ -32,19 +32,7 @@ class Importer(object):
         '''This function assumes that column names are unique for spreadsheet.
         If they are not, then you already have a problem.'''
 
-        columns_map = {}
-
-        for column in col_list:
-            col_dict = {
-                'type': column['type'],
-                'field': column['field']}
-
-            if 'date_format' in column:
-                col_dict['date_format'] = column['date_format']
-
-            columns_map[column['name']] = col_dict
-
-        return columns_map
+        return {column['name']: column for column in col_list}
 
     def get_rows_iterator(self, spreadsheet, file_format):
         if file_format == 'excel':
@@ -74,8 +62,6 @@ class Importer(object):
                     raise SheetImportException(error_msg)
         else:
             columns = [d.copy() for d in profile_columns]
-            for col in columns:
-                del col['name']  # Unify with first row version
 
         return columns
 
