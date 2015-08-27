@@ -19,9 +19,9 @@
                     <div class="col-xs-12">
                         <p class="item-meta-info">
                             {% trans "Added on " %}
-                            <span class="item-meta item-date-added">{{ item.created }}</span>
+                            <span class="item-meta item-date-added">{{ item.created | date:"SHORT_DATETIME_FORMAT"}}</span>
                             {% trans "Updated on " %}
-                            <span class="item-meta item-date-updated">{{ item.last_modified }}</span>
+                            <span class="item-meta item-date-updated">{{ item.last_modified | date:"SHORT_DATETIME_FORMAT"}}</span>
                         </p>
                     </div>
                     <div class="col-xs-12">
@@ -100,7 +100,7 @@
                             {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="pull-left btn btn-sm" %}
                         </div>
                     {% endif %}
-                </div>  
+                </div>
             </div></div>
         </form>
     </div>
