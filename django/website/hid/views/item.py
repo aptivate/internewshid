@@ -309,6 +309,11 @@ class AddEditItemView(FormView):
         created_item = transport.items.create(regular_fields)
 
         # TODO: Combine terms into single transaction
+        # TODO: Don't set this here - handle more generically as hidden form
+        # parameter
+        transport.items.add_terms(
+            created_item['id'], 'data-origins', 'Form Entry',
+        )
         transport.items.add_terms(
             created_item['id'], 'item-types', self.item_type['name']
         )
