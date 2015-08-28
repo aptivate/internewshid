@@ -778,6 +778,22 @@ def test_free_tags_created_for_new_item(add_view, form):
 
 
 @pytest.mark.django_db
+def test_data_origin_created_for_new_item(add_view, form):
+    form.cleaned_data['id'] = 0
+
+    add_view.form_valid(form)
+    assert_no_messages(add_view.request, messages.ERROR)
+
+    item = transport.items.get(add_view.item['id'])
+
+    terms = [t['name'] for t in item['terms']]
+    assert 'Form Entry' in terms
+
+    taxonomies = [t['taxonomy'] for t in item['terms']]
+    assert 'data-origins' in taxonomies
+
+
+@pytest.mark.django_db
 def test_form_initial_values_include_tags(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         generic_item['terms'] = [
