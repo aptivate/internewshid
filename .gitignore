@@ -16,3 +16,4 @@ reports/*
 *.sql.gz
 TAGS
 junit.xml
+.~lock.*

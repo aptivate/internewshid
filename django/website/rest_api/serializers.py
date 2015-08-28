@@ -66,6 +66,9 @@ class ItemSerializer(serializers.ModelSerializer):
         # when we add that feature to taxonomies.
         term_list = validated_data.pop('terms', [])
         item = Item.objects.create(**validated_data)
+
+        # TODO: This doesn't seem to be used by transport layer
+        # (terms always end up empty)
         for term_data in term_list:
             term = Term.objects.by_taxonomy(
                 taxonomy=term_data['taxonomy'],

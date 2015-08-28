@@ -85,3 +85,15 @@ def test_date_can_be_empty():
     date = converter.convert_value()
 
     assert date is None
+
+
+def test_taxonomy_field_converted():
+    value = 'Lofa'
+
+    converter = CellConverter(value, {
+        'type': 'taxonomy',
+        'field': 'terms'})
+
+    location = converter.convert_value()
+
+    assert location == value
