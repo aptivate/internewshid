@@ -36,6 +36,13 @@ def test_items_imported(importer):
 
     assert counts_per_item['rumor'] == num_saved
 
+    origins = transport.taxonomies.term_itemcount(
+        slug='data-origins')
+
+    counts_per_item = {t['name']: t['count'] for t in origins}
+
+    assert counts_per_item['Rapidpro Spreadsheet'] == num_saved
+
     tags = []
     for term in items[0]['terms']:
         if term['taxonomy'] == 'tags':

@@ -225,7 +225,8 @@ def __test_process_rows_without_or_with_header(importer, with_header):
     columns[0]['type'] = 'text'
     rows = _rows_generator()
 
-    objects = importer.process_rows(rows, columns, 'question', with_header)
+    objects = importer.process_rows(rows, columns, {'item-types': 'question'},
+                                    with_header)
 
     assert objects[0]['message.location'] == 'London'
     assert objects[0]['message.content'] == 'Short message'
@@ -258,7 +259,8 @@ def test_process_rows_displays_line_number_on_error(importer):
 
     with_header = True
     with pytest.raises(SheetImportException) as excinfo:
-        importer.process_rows(rows, columns, 'question', with_header)
+        importer.process_rows(rows, columns, {'item-types': 'question'},
+                              with_header)
 
     assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
@@ -301,7 +303,8 @@ def test_process_rows_ignores_empty_lines(importer):
 
     with_header = True
 
-    objects = importer.process_rows(rows, columns, 'question', with_header)
+    objects = importer.process_rows(rows, columns, {'item-types': 'question'},
+                                    with_header)
 
     expected_objects = [
         {
