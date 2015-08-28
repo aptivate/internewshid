@@ -32,20 +32,7 @@ class Importer(object):
         '''This function assumes that column names are unique for spreadsheet.
         If they are not, then you already have a problem.'''
 
-        columns_map = {}
-
-        for column in col_list:
-            col_dict = {
-                'type': column['type'],
-                'field': column['field']}
-
-            for c in ('date_format', 'taxonomy'):
-                if c in column:
-                    col_dict[c] = column[c]
-
-            columns_map[column['name']] = col_dict
-
-        return columns_map
+        return {column['name']: column for column in col_list}
 
     def get_rows_iterator(self, spreadsheet, file_format):
         if file_format == 'excel':
@@ -75,8 +62,6 @@ class Importer(object):
                     raise SheetImportException(error_msg)
         else:
             columns = [d.copy() for d in profile_columns]
-            for col in columns:
-                del col['name']  # Unify with first row version
 
         return columns
 
@@ -90,7 +75,7 @@ class Importer(object):
         # Unify difference between CSV and openpyxl cells
         return [getattr(v, 'value', v) for v in raw_row]
 
-    def process_rows(self, rows, profile_columns, item_type, skip_header=False):
+    def process_rows(self, rows, profile_columns, meta_data, skip_header=False):
         # If there is no header (skip_header=False), then use profile's order of
         # columns, otherwise use header line to check mapping and define order
         first_row = self.normalize_row(rows.next()) if skip_header else None
@@ -104,7 +89,9 @@ class Importer(object):
 
                 if any(values):
                     item = self.process_row(values, columns)
-                    self._append_term_to_item(item, 'item-types', item_type)
+
+                    for taxonomy, term in meta_data.iteritems():
+                        self._append_term_to_item(item, taxonomy, term)
 
                     objects.append(item)
 
@@ -150,10 +137,11 @@ class Importer(object):
 
         file_format = profile.get('format')
         skip_header = profile.get('skip_header', False)
-        item_type = profile.get('type')
+        meta_data = profile.get('taxonomies')
 
         rows = self.get_rows_iterator(fobject, file_format)
-        items = self.process_rows(rows, profile['columns'], item_type,
+
+        items = self.process_rows(rows, profile['columns'], meta_data,
                                   skip_header)
 
         return self.save_rows(items)
