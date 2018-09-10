@@ -56,7 +56,8 @@ class Importer(object):
 
             for label in first_row[:len(col_map)]:
                 try:
-                    columns.append(col_map[label])
+                    stripped_label = label.strip()
+                    columns.append(col_map[stripped_label])
                 except:
                     error_msg = _('Unknown column: %s') % label
                     raise SheetImportException(error_msg)
