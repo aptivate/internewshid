@@ -235,42 +235,26 @@ else:
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(local_settings, attr)
 
-if DEBUG is False:
-    ALLOWED_HOSTS = [
-        'lin-internewshid.aptivate.org',
-        'www.internewshid.aptivate.org',
-        'fen-vz-internewshid-stage.fen.aptivate.org',
-        'fen-vz-internewshid-dev.fen.aptivate.org',
-        'internewshid.dev.aptivate.org',
-        'internewshid.stage.aptivate.org',
-    ]
+ALLOWED_HOSTS = [
+    '*',
+]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-)
-
-TEMPLATE_DIRS = (
-    path.join(BASE_DIR, 'templates'),
-)
-
-if DEBUG:
-    TEMPLATE_LOADERS = (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )
-else:
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )),
-    )
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
