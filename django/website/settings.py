@@ -1,5 +1,13 @@
 from __future__ import unicode_literals, absolute_import
 
+import warnings
+
+warnings.filterwarnings(
+    'ignore',
+    module='floppyforms',
+    message='Unable to import floppyforms.gis'
+)
+
 from os import path
 BASE_DIR = path.abspath(path.dirname(__file__))
 
