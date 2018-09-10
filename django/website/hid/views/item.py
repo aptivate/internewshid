@@ -174,8 +174,11 @@ class AddEditItemView(FormView):
 
         return initial
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         """ Return the form object to be used """
+        if form_class is None:
+            form_class = self.form_class
+
         return form_class(self.item_type['name'], **self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
