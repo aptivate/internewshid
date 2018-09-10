@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.urls import reverse
-from django.test.testcases import SimpleTestCase
+from django.test.testcases import TestCase
 
 from .fast_dispatch import FastDispatchMixin
 from users.models import User
 
 
-class SiteNeedsAuthenticationTests(FastDispatchMixin, SimpleTestCase):
+class SiteNeedsAuthenticationTests(FastDispatchMixin, TestCase):
     def test_index_page_cant_be_accessed_when_not_logged_in(self):
         response = self.fast_dispatch('dashboard')
         self.assertEqual(settings.LOGIN_URL + '?next=' + reverse('dashboard'), response['Location'])
