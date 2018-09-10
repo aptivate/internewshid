@@ -13,6 +13,10 @@ class TaxonomySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Taxonomy
+        fields = (
+            '__all__'
+        )
+
 
     slug = serializers.SlugField(
         required=False,
@@ -24,7 +28,11 @@ class TermSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Term
-        fields = ('taxonomy', 'name', 'long_name', )
+        fields = (
+            'taxonomy',
+            'name',
+            'long_name',
+        )
 
     taxonomy = serializers.SlugRelatedField(
         slug_field='slug',
@@ -35,7 +43,11 @@ class TermSerializer(serializers.ModelSerializer):
 class TermItemCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Term
-        fields = ('name', 'long_name', 'count', )
+        fields = (
+            'name',
+            'long_name',
+            'count',
+        )
 
     count = serializers.IntegerField(
         read_only=True
@@ -43,9 +55,11 @@ class TermItemCountSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Item
+        fields = (
+            '__all__'
+        )
 
     terms = TermSerializer(many=True)
 
