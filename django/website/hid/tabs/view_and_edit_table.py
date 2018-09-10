@@ -2,7 +2,7 @@ from collections import OrderedDict
 import re
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, QueryDict
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext

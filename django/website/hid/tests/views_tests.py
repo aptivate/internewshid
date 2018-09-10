@@ -2,7 +2,7 @@ from mock import Mock
 import pytest
 
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, QueryDict
 from django.test import RequestFactory
 

@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 import collections
 from urlparse import urlsplit
 
-from django.core.urlresolvers import resolve, reverse
+from django.urls import resolve, reverse
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.auth.models import User
 from django.test.client import RequestFactory
@@ -233,7 +233,7 @@ class FastDispatchMixin(object):
     def assert_login_required(self, view_name, message='', *args, **kwargs):
         response = self.fast_dispatch(view_name, *args, **kwargs)
 
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         uri = reverse(view_name, args=kwargs.get('url_args', []),
            kwargs=kwargs.get('url_kwargs', {}))
 

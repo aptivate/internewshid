@@ -2,7 +2,7 @@ from __future__ import unicode_literals, absolute_import
 
 import pytest
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import Client
 from django.utils.six.moves.urllib.parse import urlsplit
 

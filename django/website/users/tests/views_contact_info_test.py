@@ -3,7 +3,7 @@ import mock
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from django_tables2 import SingleTableMixin
 

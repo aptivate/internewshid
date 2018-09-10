@@ -1,6 +1,6 @@
 from mock import Mock
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from ..views.upload_spreadsheet import UploadSpreadsheetView
 

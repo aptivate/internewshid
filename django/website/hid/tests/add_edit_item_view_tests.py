@@ -3,7 +3,7 @@ from mock import patch
 import pytest
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.test import RequestFactory
