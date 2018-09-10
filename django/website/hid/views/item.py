@@ -198,9 +198,9 @@ class AddEditItemView(FormView):
 
         # Add the width of the option row to the context
         option_row_widget_count = 1  # We always have 'created'
-        if 'category' in kwargs['form'].fields:
+        if 'category' in context['form'].fields:
             option_row_widget_count += 1
-        if 'region' in kwargs['form'].fields:
+        if 'region' in context['form'].fields:
             option_row_widget_count += 1
         context['option_row_width'] = 12 / option_row_widget_count
 
