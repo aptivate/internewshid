@@ -19,8 +19,10 @@ DATABASES = {
         'NAME': 'internewshid',
         'USER': 'internewshid',
         'PASSWORD': private_settings.DB_PASSWORD,
-        'HOST': '',
-        'PORT': '',
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
     }
 }
 
