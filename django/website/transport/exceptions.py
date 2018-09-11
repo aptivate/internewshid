@@ -1,4 +1,0 @@
-
-class TransportException(Exception):
-    pass
-

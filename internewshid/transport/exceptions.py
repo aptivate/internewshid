@@ -1,0 +1,3 @@
+
+class TransportException(Exception):
+    pass

@@ -1,0 +1,41 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "2.7"
+
+[packages]
+"django-bootstrap3" = "*"
+"django-tables2" = "*"
+"django.js" = {ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19", editable = true, git = "https://git@github.com/aptivate/django.js.git"}
+"linecache2" = "*"
+Django = "==1.11.15"
+MySQL-python = "*"
+Pillow = "*"
+cssmin = "*"
+django-assets = "*"
+django-braces = "*"
+django-filter = "==1.1.0"
+django-floppyforms = "*"
+django-form-utils = "*"
+django-spreadsheetresponsemixin = "*"
+django-widget-tweaks = "*"
+djangorestframework = "*"
+djangorestframework-bulk = "*"
+jsmin = "*"
+jsonfield = "*"
+openpyxl = "*"
+python-dateutil = "*"
+pytz = "*"
+
+[dev-packages]
+factory_boy = "*"
+isort = "*"
+mock = "*"
+py = "*"
+pylava = "*"
+pytest-django = "*"
+pytest-pythonpath = "*"
+pytest-cov = "*"

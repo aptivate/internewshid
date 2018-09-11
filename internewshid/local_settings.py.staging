@@ -1,0 +1,19 @@
+from __future__ import unicode_literals, absolute_import
+
+import private_settings
+
+DEBUG = False
+
+USE_X_FORWARDED_HOST = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'internewshid',
+        'USER': 'internewshid',
+        'PASSWORD': private_settings.DB_PASSWORD,
+    }
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'internewshid.stage.aptivate.org'
