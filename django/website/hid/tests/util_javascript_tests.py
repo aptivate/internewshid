@@ -7,7 +7,10 @@
 """
 from djangojs.runners import QUnitSuite, JsTemplateTestCase
 
+import pytest
 
+
+@pytest.mark.phantomjs
 class SelectAllCheckboxTest(QUnitSuite, JsTemplateTestCase):
     template_name = 'hid/tests/select_all_checkbox.html'
     js_files = (

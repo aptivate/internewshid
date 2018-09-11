@@ -1,6 +1,9 @@
 from djangojs.runners import QUnitSuite, JsTemplateTestCase
 
+import pytest
 
+
+@pytest.mark.phantomjs
 class ChartJavascriptTest(QUnitSuite, JsTemplateTestCase):
     template_name = 'hid/tests/chart.html'
     js_files = (
