@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "49d2eba8b8e826c53e907af673f790db7fbdf1e33666b1287c4ad1e4999639bd"
+            "sha256": "7dbfa00c1313b0b4fe4cdd4de41f593476fda4870e70096528a53b7829989837"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -99,7 +99,7 @@
         },
         "django.js": {
             "editable": true,
-            "git": "ssh://git@github.com/aptivate/django.js.git",
+            "git": "https://git@github.com/aptivate/django.js.git",
             "ref": "ca328a94b00023bd64f4fc1c908675edaaf2ac19"
         },
         "djangorestframework": {
@@ -339,7 +339,7 @@
                 "sha256:330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca",
                 "sha256:a7bb0f2cf3a3fd1ab2732cb49eba4252c2af4240442415b4abce3b87022a8f50"
             ],
-            "markers": "python_version < '3.0'",
+            "markers": "python_version < '3.3'",
             "version": "==1.0.2"
         },
         "futures": {
@@ -394,7 +394,7 @@
                 "sha256:8eb170f8d0d61825e09a95b38be068299ddeda82f35e96c3301a8a5e7604cb83",
                 "sha256:d1aa2a11ba7b8f7b21ab852b1fb5afb277e1bb99d5dfc663380b5015c0d80c5a"
             ],
-            "markers": "python_version < '3.6'",
+            "markers": "python_version < '3.4'",
             "version": "==2.3.2"
         },
         "pbr": {

@@ -9,7 +9,7 @@ python_version = "2.7"
 [packages]
 "django-bootstrap3" = "*"
 "django-tables2" = "*"
-"django.js" = {ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19", editable = true, git = "ssh://git@github.com/aptivate/django.js.git"}
+"django.js" = {ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19", editable = true, git = "https://git@github.com/aptivate/django.js.git"}
 "linecache2" = "*"
 Django = "==1.11.15"
 MySQL-python = "*"
