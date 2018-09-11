@@ -28,10 +28,15 @@ def notify(params, fail_silently=False, connection=None):
         except TemplateDoesNotExist:
             template = Template(template_name)
         if type(options['context']) == dict:
-            context = Context(options['context'])
+            context = options['context']
         else:
             context = options['context']
-        email_body = template.render(context)
+
+        try:
+            email_body = template.render(context)
+        except AttributeError:
+            email_body = template.render(Context(context))
+
         options['body'] = email_body
         del options['template_name']
         del options['context']
