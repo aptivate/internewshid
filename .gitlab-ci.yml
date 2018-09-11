@@ -17,7 +17,7 @@ variables:
 
 before_script:
   - pip install -U pipenv setuptools pip
-  - ln -srf internewshid/local_settings.py.dev internewshid/local_settings.py
+  - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
   - |
     echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
     echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
