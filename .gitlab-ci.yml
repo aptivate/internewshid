@@ -1,10 +1,8 @@
 ---
 
 stages:
-  - django-checks
-  - imports
+  - checks
   - style
-  - documentation
   - test
 
 image: python:2
@@ -18,31 +16,30 @@ variables:
   DJANGO_SECRET_KEY: 'nde2wr2r)#a*%n$!(zl8#3v_o!sp=hd9vbv%*e6atgr0dp=b(7'
 
 before_script:
-  - virtualenv --python=python2.7 .ve
-  - source .ve/bin/activate
+  - pip install -U pipenv setuptools pip
+  - ln -srf internewshid/local_settings.py.dev internewshid/local_settings.py
+  - |
+    echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
+    echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
 
 checks:
-  stage: django-checks
+  stage: checks
   script:
-    - python manage.py check
-    - python manage.py makemigrations --check
+    - pipenv run python manage.py check
+    - pipenv run python manage.py makemigrations --check
 
-isort:
-  stage: imports
+style:
+  stage: style
   script:
+    - pipenv run pylava internewshid
     - |
-      isort internewshid \
+      pipenv run isort internewshid \
       --recursive \
       --check-only \
       --diff \
       --settings-path=setup.cfg
 
-pylama:
-  stage: style
-  script:
-    - pylava internewshid
-
-pytest:
+test:
   stage: test
   script:
-    - pytest -v
+    - pipenv run pytest -v
