@@ -13,7 +13,7 @@ class NamedCheckBoxColumn(tables.CheckBoxColumn):
 class ItemTable(tables.Table):
     class Meta:
         attrs = {'class': 'table table-bordered table-hover table-striped'}
-        template = 'hid/table.html'
+        template_name = 'hid/table.html'
         order_by = ('-created',)
 
     select_item = tables.TemplateColumn(
