@@ -703,27 +703,6 @@ def test_item_can_be_deleted(view, form):
 
 
 @pytest.mark.django_db
-def test_redirected_to_next_if_present_after_delete(view, form):
-    view.request.POST['next'] = '/view-edit/main/questions/'
-
-    response = view._delete_item()
-
-    assert response.url == '/view-edit/main/questions/'
-
-
-@pytest.mark.django_db
-def test_redirected_to_home_if_next_absent_after_delete(
-        view, form):
-
-    # Do we need this ?
-    # 'next' should always be present in the form so this
-    # should never happen
-    response = view._delete_item()
-
-    assert response.url == '/'
-
-
-@pytest.mark.django_db
 def test_free_tags_created_on_item_update(view, form):
     # Deliberate spaces to be stripped
     form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
