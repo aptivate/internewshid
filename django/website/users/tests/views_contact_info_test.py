@@ -23,7 +23,6 @@ from ..forms import (
 )
 from .factories import UserFactory, ContactsManagerFactory
 
-
 def this_app():
     return __name__.split('.')[0]
 
@@ -175,13 +174,6 @@ class UpdateContactTests(TestCase):
         self.assertEqual(view.permission_required,
                          get_permission('add_user'))
         self.assertTrue(view.raise_exception)
-
-    def test_form_valid_redirects_to_claim_url_if_save_and_email(self):
-        view = UpdateContact()
-        view.request = RequestFactory().post('/')
-        view.request.POST.update({'save-and-email': ''})
-        view.object = mock.Mock(id=3)
-        assert view.get_success_url() == reverse('contact_claim_account', args=(3,))
 
 
 class UpdatePersonalInfoTests(TestCase):

@@ -6,7 +6,6 @@ from ..views import UpdateContact
 
 from .factories import UserFactory, ContactsManagerFactory
 
-
 @pytest.mark.integration
 @pytest.mark.groupfactory
 @pytest.mark.django_db
