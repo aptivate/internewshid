@@ -21,6 +21,7 @@ before_script:
   - |
     echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
     echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
+  - pipenv install --dev --two
 
 checks:
   stage: checks
@@ -42,4 +43,4 @@ style:
 test:
   stage: test
   script:
-    - pipenv run pytest -v
+    - pipenv run pytest -v --cov
