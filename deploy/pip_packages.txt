@@ -1,5 +1,5 @@
 -e git+ssh://git@github.com/aptivate/dye.git@3a6f8889130b9c616ab5ca02e74d4f029e00ca95#egg=dye
--e git+ssh://git@github.com/aptivate/django.js.git@9277461357a039ae3c5fc1b1aae2db0673b40087#egg=django.js
+-e git+ssh://git@github.com/aptivate/django.js.git@ca328a94b00023bd64f4fc1c908675edaaf2ac19#egg=django.js
 
 Django==1.11.15
 MySQL-python==1.2.5
