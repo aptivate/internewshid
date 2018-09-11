@@ -2,8 +2,8 @@ from django.db.models import Count
 from django.utils.translation import ugettext as _
 
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
-from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from data_layer.models import (
@@ -68,7 +68,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         return items
 
-    @detail_route(methods=['post'])
+    @action(methods=['post'], detail=True)
     def add_terms(self, request, item_pk):
         try:
             item = Item.objects.get(pk=item_pk)
@@ -101,7 +101,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @detail_route(methods=['post'])
+    @action(methods=['post'], detail=True)
     def delete_all_terms(self, request, item_pk):
         taxonomy_slug = request.data['taxonomy']
 
@@ -135,7 +135,7 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
 
     lookup_field = 'slug'
 
-    @detail_route(methods=['get'])
+    @action(methods=['get'], detail=True)
     def itemcount(self, request, slug):
         try:
             taxonomy = Taxonomy.objects.get(slug=slug)
