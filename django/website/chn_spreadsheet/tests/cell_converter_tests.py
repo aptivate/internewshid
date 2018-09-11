@@ -45,7 +45,7 @@ def test_convert_value_raises_on_unknown_type():
     converter = CellConverter(value, {'type': type, 'field': ''})
     with pytest.raises(SheetImportException) as excinfo:
         converter.convert_value()
-    assert excinfo.value.message == _(u"Unknown data type 'location' ")
+    assert str(excinfo.value) == _(u"Unknown data type 'location' ")
 
 
 def test_convert_value_raises_on_malformed_value():
@@ -57,8 +57,11 @@ def test_convert_value_raises_on_malformed_value():
     with pytest.raises(SheetImportException) as excinfo:
         converter.convert_value()
 
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Can not process value 'not_integer' of type 'integer' ") in messages
+    messages = str(excinfo.value).split('\n')
+    assert any((
+        _(u"'not_integer' of type 'integer' ")
+        in message for message in messages
+    ))
 
 
 def test_convert_value_raises_on_date_without_format():
@@ -71,8 +74,11 @@ def test_convert_value_raises_on_date_without_format():
     with pytest.raises(SheetImportException) as excinfo:
         converter.convert_value()
 
-    messages = excinfo.value.message.split('\n')
-    assert _(u"Date format not specified for 'created' ") in messages
+    messages = str(excinfo.value).split('\n')
+    assert any((
+        _(u"Date format not specified for 'created' ")
+        in message for message in messages
+    ))
 
 
 def test_date_can_be_empty():

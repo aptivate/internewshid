@@ -194,7 +194,7 @@ def test_applying_multiple_terms_raises_exception_if_not_multiple(
 
     expected_message = "Taxonomy '%s' does not support multiple terms" % (
         optional_term1.taxonomy)
-    assert excinfo.value.message == expected_message
+    assert str(excinfo.value) == expected_message
 
 
 @pytest.mark.django_db
@@ -210,4 +210,4 @@ def test_applied_terms_must_be_from_same_taxonomy(item,
         item.apply_terms((term1, term2, term3))
 
     expected_message = "Terms cannot be applied from different taxonomies"
-    assert excinfo.value.message == expected_message
+    assert str(excinfo.value) == expected_message

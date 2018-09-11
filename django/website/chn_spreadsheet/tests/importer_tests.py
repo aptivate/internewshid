@@ -52,7 +52,7 @@ def test_get_profile_raises_on_unknown_label(importer):
 
     with pytest.raises(SheetImportException) as excinfo:
         importer.get_profile('unknownlabel')
-    assert excinfo.value.message == _('Misconfigured service. Source "unknownlabel" does not exist')
+    assert str(excinfo.value) == _('Misconfigured service. Source "unknownlabel" does not exist')
 
 
 def test_get_columns_map(importer):
@@ -78,11 +78,11 @@ def test_get_rows_iterator_raises_on_non_excel_files(importer):
 
     with pytest.raises(SheetImportException) as excinfo:
         importer.get_rows_iterator('not_a_file', 'excel')
-    assert excinfo.value.message == _('Expected excel file. Received file in an unrecognized format.')
+    assert str(excinfo.value) == _('Expected excel file. Received file in an unrecognized format.')
 
     with pytest.raises(SheetImportException) as excinfo:
         importer.get_rows_iterator(None, 'pdf')
-    assert excinfo.value.message == _('Unsupported file format: pdf')
+    assert str(excinfo.value) == _('Unsupported file format: pdf')
 
 
 def test_get_rows_iterator_works_on_excel_files(importer):
@@ -262,7 +262,7 @@ def test_process_rows_displays_line_number_on_error(importer):
         importer.process_rows(rows, columns, {'item-types': 'question'},
                               with_header)
 
-    assert excinfo.value.message == _(u"Unknown data type 'location' in row 2 ")
+    assert str(excinfo.value) == _(u"Unknown data type 'location' in row 2 ")
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
 
