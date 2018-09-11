@@ -22,6 +22,7 @@ before_script:
     echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
     echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
   - pipenv install --dev --two --deploy
+  - apt update && apt install -y node-less
 
 checks:
   stage: checks
