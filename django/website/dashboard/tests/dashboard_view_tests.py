@@ -8,7 +8,7 @@ from dashboard.widget_pool import register_widget
 from hid.assets import use_assets
 
 
-class TestWidget(object):
+class CustomTestWidget(object):
     """ A test widget with a template name and an implementation of
         of get_context_data
     """
@@ -34,16 +34,16 @@ class TestDashboardView(TestCase):
         """ Register a number of widget types we can use for
             out tests
         """
-        register_widget('test-widget-1', TestWidget(
+        register_widget('test-widget-1', CustomTestWidget(
             ['file.js', 'app/file.js'],
             ['file.css', 'app/file.css']
         ))
-        register_widget('test-widget-2', TestWidget(
+        register_widget('test-widget-2', CustomTestWidget(
             ['some.js', 'file.js', 'app2/file.js'],
             ['some.css', 'file.css', 'app2/file.css']
         ))
-        register_widget('test-widget-3', TestWidget())
-        register_widget('test-widget-4', TestWidget())
+        register_widget('test-widget-3', CustomTestWidget())
+        register_widget('test-widget-4', CustomTestWidget())
 
     def setup_dashboard(self, name, widgets=None):
         """ Helper function to setup a dashboard."""

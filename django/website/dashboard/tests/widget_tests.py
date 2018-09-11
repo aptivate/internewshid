@@ -6,7 +6,7 @@ from dashboard.templatetags.render_widget import render_widget
 from dashboard.widget_pool import register_widget, get_widget, WidgetError
 
 
-class TestWidget(object):
+class CustomTestWidget(object):
     """ A test widget with a template name and an implementation of
         of get_context_data
     """
@@ -23,14 +23,14 @@ class TestWidget(object):
         return ret
 
 
-class TestWidgetNoContextData(object):
+class CustomTestWidgetNoContextData(object):
     """ A test widget with a template name, and which does not
         implement get_context_data
     """
     template_name = 'something.html'
 
 
-class TestWidgetNoTemplateName(object):
+class CustomTestWidgetNoTemplateName(object):
     """ A test widget without a template name, and with an
         implementation of get_context_data
     """
@@ -38,7 +38,7 @@ class TestWidgetNoTemplateName(object):
         return {}
 
 
-class TestWidgetRaisesException(object):
+class CustomTestWidgetRaisesException(object):
     """ A test widget which raises a generic exception in
         get_context_data
     """
@@ -48,7 +48,7 @@ class TestWidgetRaisesException(object):
         raise Exception('message raised from get_context_data')
 
 
-class TestWidgetRaisesWidgetError(object):
+class CustomTestWidgetRaisesWidgetError(object):
     """ A test widget which raises a WidgetError in
         get_context_data
     """
@@ -102,19 +102,19 @@ class WidgetPoolTestCase(TestCase):
             raise ValueError()
 
     def test_widget_is_registered(self):
-        test_widget = TestWidget()
+        test_widget = CustomTestWidget()
         register_widget('test-widget', test_widget)
         self.assertEqual(get_widget('test-widget'), test_widget)
 
     def test_registering_twice_overrides_existing_widget(self):
-        test_widget = TestWidget()
+        test_widget = CustomTestWidget()
         register_widget('test-widget', test_widget)
-        test_widget_2 = TestWidget()
+        test_widget_2 = CustomTestWidget()
         register_widget('test-widget', test_widget_2)
         self.assertEqual(get_widget('test-widget'), test_widget_2)
 
     def test_render_widget_loads_widget_type(self):
-        test_widget = TestWidget(context={'is_test_widget': True})
+        test_widget = CustomTestWidget(context={'is_test_widget': True})
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
@@ -123,7 +123,7 @@ class WidgetPoolTestCase(TestCase):
         self.assertTrue(context['is_test_widget'])
 
     def test_render_widget_uses_template_name(self):
-        test_widget = TestWidget(template_name='test-widget-template')
+        test_widget = CustomTestWidget(template_name='test-widget-template')
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
@@ -137,7 +137,7 @@ class WidgetPoolTestCase(TestCase):
         """ Test render widget calls get_context_data with the widget
             instance settings.
         """
-        test_widget = TestWidget()
+        test_widget = CustomTestWidget()
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget', {'test': 'value'})
         with patch(self.render_to_string_method) as mock:
@@ -149,7 +149,7 @@ class WidgetPoolTestCase(TestCase):
         """ Test render widget accepts widget types that do not implement
             get_context_data.
         """
-        test_widget = TestWidgetNoContextData()
+        test_widget = CustomTestWidgetNoContextData()
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
@@ -161,7 +161,7 @@ class WidgetPoolTestCase(TestCase):
         """ Test render widget uses a default template when template_name
             is missing from the widget type object
         """
-        test_widget = TestWidgetNoTemplateName()
+        test_widget = CustomTestWidgetNoTemplateName()
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
@@ -178,7 +178,7 @@ class WidgetPoolTestCase(TestCase):
             display a generic error message, not the content of the
             exception
         """
-        test_widget = TestWidgetRaisesException()
+        test_widget = CustomTestWidgetRaisesException()
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
@@ -200,7 +200,7 @@ class WidgetPoolTestCase(TestCase):
         """ Test that a widget which raises a WidgetError exception will
             display the error message provided in the exception.
         """
-        test_widget = TestWidgetRaisesWidgetError()
+        test_widget = CustomTestWidgetRaisesWidgetError()
         register_widget('test-widget', test_widget)
         widget_instance = MockWidgetInstance('test-widget')
         with patch(self.render_to_string_method) as mock:
