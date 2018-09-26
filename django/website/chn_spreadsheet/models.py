@@ -17,3 +17,6 @@ class SheetProfile(models.Model):
     label = models.CharField(max_length=256)
     profile = JSONField(
         load_kwargs={'object_pairs_hook': collections.OrderedDict})
+
+    def __unicode__(self):
+        return self.label
