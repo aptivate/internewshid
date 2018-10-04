@@ -1,3 +1,4 @@
+.ansible
 *.pyc
 .coverage
 .pytest_cache
