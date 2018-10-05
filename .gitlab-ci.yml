@@ -28,22 +28,15 @@ before_script:
 checks:
   stage: checks
   script:
-    - pipenv run python manage.py check
-    - pipenv run python manage.py makemigrations --check
+    - make checks
 
 style:
   stage: style
   allow_failure: true
   script:
-    - pipenv run pylava internewshid
-    - |
-      pipenv run isort internewshid \
-      --recursive \
-      --check-only \
-      --diff \
-      --settings-path=setup.cfg
+    - make style
 
 test:
   stage: test
   script:
-    - pipenv run pytest -v --cov
+    - make test
