@@ -64,11 +64,12 @@ class Message(DataLayerModel):
             self.terms.remove(term)
 
     def __unicode__(self):
-        return "{}: '{}' @{}".format(
+        return u"{}: '{}' @{}".format(
             self.id,
             self.body,
             self.timestamp
         )
+
 
 # TODO: rename this class
 Item = Message
