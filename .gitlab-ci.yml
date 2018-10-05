@@ -17,7 +17,7 @@ variables:
   DJANGO_SETTINGS_MODULE: settings
 
 before_script:
-  - pip install -U pipenv setuptools pip
+  - pip install -U pipenv setuptools 'pip<=18.0' # https://github.com/pypa/pipenv/issues/2924
   - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
   - |
     echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
