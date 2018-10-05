@@ -24,6 +24,7 @@ class Message(DataLayerModel):
     # we're pretty sure `body` is not the right name now. Leaving this here as
     # something to deal with when we get further into work.
     body = models.TextField()
+    translation = models.TextField(blank=True)
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=200, blank=True)
