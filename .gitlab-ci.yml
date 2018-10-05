@@ -14,7 +14,6 @@ variables:
   MYSQL_DATABASE: internewshid
   MYSQL_ROOT_PASSWORD: passw0rd
   DJANGO_SECRET_KEY: 'nde2wr2r)#a*%n$!(zl8#3v_o!sp=hd9vbv%*e6atgr0dp=b(7'
-  DJANGO_SETTINGS_MODULE: settings
 
 before_script:
   - pip install -U pipenv setuptools 'pip<=18.0' # https://github.com/pypa/pipenv/issues/2924

@@ -31,6 +31,3 @@ style: isort pylava
 test:
 	$(PIPENV) pytest -v --cov
 .PHONY: test
-
-gitlab-ci: checks style test
-.PHONY: gitlab-ci
