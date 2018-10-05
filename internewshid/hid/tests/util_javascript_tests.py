@@ -6,6 +6,7 @@
     test template.
 """
 import pytest
+
 from djangojs.runners import JsTemplateTestCase, QUnitSuite
 
 
