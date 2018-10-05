@@ -7,10 +7,6 @@ ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
 DJANGOJS_DEBUG = DEBUG
 
-DEPLOY_ENV = "localdev"
-DEPLOY_ENV_NAME = "Local dev copy"
-DEPLOY_ENV_COLOR = '#ff9900'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
