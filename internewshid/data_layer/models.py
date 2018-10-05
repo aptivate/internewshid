@@ -18,6 +18,11 @@ class DataLayerModel(models.Model):
 
 
 class Message(DataLayerModel):
+    # FIXME(lukem): We're thinking that this can be named 'source' or
+    # `original` or something like that since it more closely resembles our
+    # current thinking and since we're adding the new `translation` field,
+    # we're pretty sure `body` is not the right name now. Leaving this here as
+    # something to deal with when we get further into work.
     body = models.TextField()
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
