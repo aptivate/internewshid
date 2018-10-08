@@ -7,12 +7,12 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
-import transport
 from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
-from transport.exceptions import TransportException
+
+import transport
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
@@ -119,9 +119,9 @@ class ViewAndEditTableTab(object):
         if len(taxonomy_slugs) == 0:
             return ()
 
-        terms = transport.terms.list(taxonomy=taxonomy_slugs[0])
-        terms.sort(key=lambda e: e['name'].lower())
-        return tuple((t['name'], t['name']) for t in terms)
+        all_terms = transport.terms.list(taxonomy=taxonomy_slugs[0])
+        all_terms.sort(key=lambda e: e['name'].lower())
+        return tuple((t['name'], t['name']) for t in all_terms)
 
     def _build_actions_dropdown(self, question_types):
         items = [
@@ -229,10 +229,7 @@ class ViewAndEditTableTab(object):
                 # Not our place to validate this.
                 pass
             if tax == 'item-types':
-                matches = transport.terms.list(
-                    taxonomy=tax,
-                    name=name
-                )
+                matches = transport.terms.list(taxonomy=tax, name=name)
                 if len(matches) > 0:
                     return matches[0]
 
@@ -395,12 +392,9 @@ def _add_items_categories(request, items):
                     term_name
                 )
             else:
-                transport.items.delete_all_terms(
-                    item_id,
-                    taxonomy_slug
-                )
+                transport.items.delete_all_terms(item_id, taxonomy_slug)
             success += 1
-        except TransportException:
+        except transport.exceptions.TransportException:
             failed += 1
     if success > 0:
         msg = ungettext("Updated %d item.",
