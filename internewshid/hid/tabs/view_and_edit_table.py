@@ -11,7 +11,6 @@ from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
-
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
