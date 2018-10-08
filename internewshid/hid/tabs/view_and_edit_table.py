@@ -12,7 +12,9 @@ from hid.constants import ITEM_TYPE_CATEGORY
 from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
 
-import transport
+from transport import items as transport_items
+from transport import terms as transport_terms
+from transport.exceptions import TransportException
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
@@ -76,7 +78,7 @@ class ViewAndEditTableTab(object):
                 QuerySet: The items to list on the page
         """
         filters = kwargs.get('filters', {})
-        return transport.items.list(**filters)
+        return transport_items.list(**filters)
 
     def _get_columns_to_exclude(self, **kwargs):
         """ Given the tab settings, return the columns to exclude
@@ -119,7 +121,7 @@ class ViewAndEditTableTab(object):
         if len(taxonomy_slugs) == 0:
             return ()
 
-        all_terms = transport.terms.list(taxonomy=taxonomy_slugs[0])
+        all_terms = transport_terms.list(taxonomy=taxonomy_slugs[0])
         all_terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in all_terms)
 
@@ -229,7 +231,7 @@ class ViewAndEditTableTab(object):
                 # Not our place to validate this.
                 pass
             if tax == 'item-types':
-                matches = transport.terms.list(taxonomy=tax, name=name)
+                matches = transport_terms.list(taxonomy=tax, name=name)
                 if len(matches) > 0:
                     return matches[0]
 
@@ -361,7 +363,7 @@ def _delete_items(request, deleted):
             items (list of int): List of items to delete
     """
     try:
-        transport.items.bulk_delete(deleted)
+        transport_items.bulk_delete(deleted)
         num_deleted = len(deleted)
         msg = ungettext("%d item deleted.",
                         "%d items deleted.",
@@ -386,15 +388,15 @@ def _add_items_categories(request, items):
     for item_id, taxonomy_slug, term_name in items:
         try:
             if term_name:
-                transport.items.add_terms(
+                transport_items.add_terms(
                     item_id,
                     taxonomy_slug,
                     term_name
                 )
             else:
-                transport.items.delete_all_terms(item_id, taxonomy_slug)
+                transport_items.delete_all_terms(item_id, taxonomy_slug)
             success += 1
-        except transport.exceptions.TransportException:
+        except TransportException:
             failed += 1
     if success > 0:
         msg = ungettext("Updated %d item.",
