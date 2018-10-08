@@ -5,6 +5,8 @@
         <h2>{{ title }}</h2>
     </div>
     <div class='panel-body'>
-        {% render_table table %}
+        {% if table %}
+          {% render_table table %}
+        {% endif %}
     </div>
 </div>
