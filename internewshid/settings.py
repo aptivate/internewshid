@@ -250,4 +250,11 @@ TEMPLATES = [
 CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
 
 if DEBUG:
-    INSTALLED_APPS += ('django_extensions',)
+    INSTALLED_APPS += (
+        'django_extensions',
+        'debug_toolbar',
+    )
+
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
