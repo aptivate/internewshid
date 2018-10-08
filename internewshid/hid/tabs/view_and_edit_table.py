@@ -168,6 +168,7 @@ class ViewAndEditTableTab(object):
 
     def get_context_data(self, tab_instance, request, **kwargs):
         question_types = self._get_category_options(**kwargs)
+
         # Build the table
         table = ItemTable(
             self._get_items(**kwargs),

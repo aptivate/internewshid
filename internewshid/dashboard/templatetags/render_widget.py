@@ -20,11 +20,13 @@ def render_widget(widget_instance):
     template context.
     """
     widget = None
+
     # Get settings, if any
     if widget_instance.settings:
         settings = widget_instance.settings
     else:
         settings = {}
+
     # Get widget
     try:
         widget = get_widget(widget_instance.widget_type)
@@ -35,6 +37,7 @@ def render_widget(widget_instance):
             'widget_type': widget_instance.widget_type
         }
         context['empty_type'] = widget_instance.widget_type
+
     if widget:
         # Get template
         try:
@@ -46,6 +49,7 @@ def render_widget(widget_instance):
                 'widget_type': widget_instance.widget_type
             }
             widget = None
+
     if widget:
         # Get context
         try:
