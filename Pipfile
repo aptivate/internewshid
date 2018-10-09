@@ -29,7 +29,7 @@ jsonfield = "*"
 openpyxl = "*"
 python-dateutil = "*"
 pytz = "*"
-django-constance = "*"
+django-constance = {version = "*", extras = ["database"]}
 
 [dev-packages]
 factory_boy = "*"
