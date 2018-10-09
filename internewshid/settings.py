@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import collections
+import json
 import warnings
 from copy import deepcopy
 from os import path
@@ -85,6 +86,7 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'bootstrap3',
+    'constance',
     'rest_framework',
     'django_tables2',
     'djangojs',
@@ -183,6 +185,12 @@ LOGGING = {
             'level': 'INFO',
         },
     }
+}
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'ITEM_TYPE_CATEGORY': (json.dumps({'question': 'ebola-questions'}),
+                           'Single item-type taxonomy to use for categorisation'),
 }
 
 REST_FRAMEWORK = {
