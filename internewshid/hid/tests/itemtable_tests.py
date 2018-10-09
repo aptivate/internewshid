@@ -61,3 +61,38 @@ def test_get_row_select_values_does_not_remove_empty():
     ]
     actual = ItemTable.get_row_select_values(post_params, 'category')
     assert sorted(expected) == sorted(actual)  # Order is not important
+
+
+@mock.patch('hid.tables.loader')
+def test_render_category_passes_context_to_template(mock_loader):
+    mock_template = mock.MagicMock()
+    mock_template.render = mock.MagicMock()
+    mock_loader.get_template = mock.MagicMock(
+        return_value=mock_template)
+
+    value = [
+        {
+            u'long_name': u'Repatriation',
+            u'name': u'Repatriation',
+            u'taxonomy': u'ebola-questions'
+        }
+    ]
+
+    categories = (
+        ('Repatriation', 'Repatriation'),
+        ('Pregnancy', 'Pregnancy'),
+        ('Safety', 'Safety'),
+    )
+
+    table = ItemTable([], categories=categories)
+
+    record = mock.Mock()
+    table.render_category(record, value)
+
+    context = {
+        'categories': categories,
+        'selected': ['Repatriation'],
+        'record': record,
+    }
+
+    mock_template.render.assert_called_with(context)

@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 import django_tables2 as tables
 
+from hid.constants import ITEM_TYPE_CATEGORY
+
 
 class NamedCheckBoxColumn(tables.CheckBoxColumn):
     @property
@@ -54,7 +56,7 @@ class ItemTable(tables.Table):
         Template = loader.get_template('hid/categories_column.html')
         selected = []
         for term in value:
-            if term['taxonomy'] == 'ebola-questions':
+            if term['taxonomy'] == ITEM_TYPE_CATEGORY['question']:
                 selected.append(term['name'])
         ctx = {
             'categories': self.categories,
