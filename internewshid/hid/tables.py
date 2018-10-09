@@ -31,7 +31,11 @@ class ItemTable(tables.Table):
     )
     body = tables.TemplateColumn(
         template_name='hid/body_column.html',
-        verbose_name=_('Item')
+        verbose_name=_('Original')
+    )
+    translation = tables.TemplateColumn(
+        template_name='hid/translation_column.html',
+        verbose_name=_('Translation')
     )
     network_provider = tables.Column(
         verbose_name=_('Network Provider')

@@ -110,7 +110,6 @@ DATA_LAYER_APPS = (
 
 INSTALLED_APPS = DATA_LAYER_APPS + LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -195,7 +194,6 @@ REST_FRAMEWORK = {
 }
 
 
-
 def update_recursive(dest, source):
     for k, v in source.iteritems():
         if dest.get(k, None) and isinstance(v, collections.Mapping):
@@ -250,3 +248,13 @@ TEMPLATES = [
 ]
 
 CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
+
+if DEBUG:
+    INSTALLED_APPS += (
+        'django_extensions',
+        'debug_toolbar',
+    )
+
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )

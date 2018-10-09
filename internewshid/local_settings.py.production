@@ -6,9 +6,6 @@ DEBUG = False
 ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
 
-DEPLOY_ENV = "production"
-DEPLOY_ENV_NAME = "Production Server"
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

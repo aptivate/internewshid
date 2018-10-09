@@ -25,7 +25,7 @@
                         </p>
                     </div>
                     <div class="col-xs-12">
-                        <div class="col-xs-12 input-group form-group item-text {% if form.body.errors %}has-error{% endif %}">
+                        <div class="col-xs-12 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
                                 {{ item_type_label }}
                                 <span class="item-id">{{ item.id }}</span>
@@ -33,7 +33,23 @@
                                     <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
                             </label>
-                            {{ form.body|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your question text here" }}
+                            {{ form.body|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your original text here" }}
+                        </div>
+                        <div class="col-xs-12 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
+                            <label>
+                                {{ item_type_label }}
+                                <span class="item-id">{{ item.id }}</span>
+                                {% if form.body.errors %}
+                                    <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                                {% endif %}
+                            </label>
+                            {% if form.translation %}
+                              <!-- NOTE(lukem): if you update the `add_class` definitions here, then update the dummy `textarea` below too -->
+                              {{ form.translation|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your translation text here" }}
+                            {% else %}
+                              <!-- Lump in dummy `textarea` since Jinja2 doesn't render correctly if it is empty -->
+                              <textarea name="body" rows="4" class="form-control" required="" placeholder="Type your translation text here" cols="40" id="id_body"></textarea>
+                            {% endif %}
                         </div>
                         {% if form.tags %}
                             <div class="col-xs-12 form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">

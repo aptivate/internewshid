@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 
@@ -12,3 +13,9 @@ urlpatterns = [
     url(r'^view-edit/', include('tabbed_page.urls')),
     url(r'^', include('hid.urls'))
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url('__debug__/', include(debug_toolbar.urls)),
+    ]

@@ -70,4 +70,5 @@ class BasicTextWidget(object):
             'html': html
         }
 
+
 register_widget('basic-text-widget', BasicTextWidget())

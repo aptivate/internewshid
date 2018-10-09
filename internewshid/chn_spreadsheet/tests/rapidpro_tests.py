@@ -24,7 +24,10 @@ def test_items_imported(importer):
     items = transport.items.list()
     assert len(items) == num_saved
 
-    assert items[0]['body'] == "That there is a special budget to give money to the family of each dead in Liberia since the Ebola outbreak."
+    assert items[0]['body'] == (
+        "That there is a special budget to give money to the "
+        "family of each dead in Liberia since the Ebola outbreak."
+    )
     assert items[0]['timestamp'] == pytz.utc.localize(
         datetime.datetime(2015, 4, 19, 21, 35, 20))
     assert items[0]['network_provider'] == '8737 (Cellcom)'
