@@ -41,7 +41,7 @@ def create_sample_widgets(apps, schema_editor):
         width=6,
         height='medium',
         settings={
-            'title': 'Yes antoher widget title',
+            'title': 'Yes another widget title',
             'text': 'Yet another text'
         }
     )
