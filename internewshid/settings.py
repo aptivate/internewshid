@@ -87,6 +87,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'bootstrap3',
     'constance',
+    'constance.backends.database',
     'rest_framework',
     'django_tables2',
     'djangojs',
