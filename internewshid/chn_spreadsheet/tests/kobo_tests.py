@@ -28,6 +28,9 @@ def test_kobo_items_imported(importer):
     assert items[0]['translation'] == ''
     assert isinstance(items[0]['timestamp'], datetime.datetime)
 
+    for item in items:
+        transport.items.create(item)
+
     tags = []
     for term in items[0]['terms']:
         if term['taxonomy'] == 'tags':
