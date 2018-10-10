@@ -39,6 +39,3 @@ class AddEditItemForm(forms.Form):
             self.fields['category'] = forms.ChoiceField(
                 choices=choices, required=False
             )
-        # The template already has support for optional fields:
-        # 'region' (select)
-        # 'tags' (text input)
