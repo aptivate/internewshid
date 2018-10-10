@@ -13,6 +13,10 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=True
     )
+    translation = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     timestamp = forms.DateTimeField(required=True)
     next = forms.CharField(
         widget=forms.HiddenInput,
