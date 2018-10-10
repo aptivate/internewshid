@@ -15,3 +15,4 @@ class HidAppConfig(AppConfig):
         register_tab('view-and-edit-table', ViewAndEditTableTab())
         register_widget('term-count-chart', TermCountChartWidget())
         register_widget('table-widget', TableWidget())
+        register_widget('question-chart-widget', TableWidget())
