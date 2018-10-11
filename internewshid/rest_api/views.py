@@ -17,7 +17,12 @@ from .serializers import (
 
 class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     serializer_class = ItemSerializer
-    filter_fields = ('created', 'body', 'timestamp', )
+    filter_fields = (
+        'created',
+        'body',
+        'translation',
+        'timestamp',
+    )
 
     def get_queryset(self):
         """ Return the queryset for this view.
