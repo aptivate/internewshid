@@ -163,7 +163,7 @@ class CellConverter(object):
     def convert_value(self):
         converters = {
             'date': lambda x: self.convert_date(),
-            'text': lambda x: x,
+            'text': lambda x: x if x else '',
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x,
