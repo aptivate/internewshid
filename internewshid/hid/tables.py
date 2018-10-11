@@ -21,31 +21,38 @@ class ItemTable(tables.Table):
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
-        verbose_name=_('Select')
+        verbose_name=_('Select'),
+        attrs={'td': {'class': 'col-md-1'}}
     )
     created = tables.columns.DateTimeColumn(
         verbose_name=_('Imported'),
         format=settings.SHORT_DATETIME_FORMAT,
+        attrs={'td': {'class': 'col-md-1'}}
     )
     timestamp = tables.columns.DateTimeColumn(
         verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
+        attrs={'td': {'class': 'col-md-1'}}
     )
     body = tables.TemplateColumn(
         template_name='hid/body_column.html',
-        verbose_name=_('Original')
+        verbose_name=_('Original'),
+        attrs={'td': {'class': 'col-md-4'}}
     )
     translation = tables.TemplateColumn(
         template_name='hid/translation_column.html',
-        verbose_name=_('Translation')
+        verbose_name=_('Translation'),
+        attrs={'td': {'class': 'col-md-4'}}
     )
     network_provider = tables.Column(
-        verbose_name=_('Network Provider')
+        verbose_name=_('Network Provider'),
+        attrs={'td': {'class': 'col-md-4'}}
     )
     category = tables.TemplateColumn(
         verbose_name=_('Question Type'),
         template_name='hid/categories_column.html',
-        accessor='terms'
+        accessor='terms',
+        attrs={'td': {'class': 'col-md-4'}}
     )
 
     def __init__(self, *args, **kwargs):
