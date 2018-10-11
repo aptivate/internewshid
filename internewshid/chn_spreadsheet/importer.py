@@ -82,7 +82,6 @@ class Importer(object):
         # columns, otherwise use header line to check mapping and define order
         first_row = self.normalize_row(rows.next()) if skip_header else None
         columns = self.order_columns(profile_columns, first_row)
-        # columns = [{'field': "...", 'type': "..."}, ...]
 
         objects = []
         for i, row in enumerate(rows, 2 if first_row else 1):
