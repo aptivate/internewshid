@@ -17,12 +17,16 @@
             <div class="panel panel-default"><div class="panel-body">
                 <div class="col-xs-12"><div class="row">
                     <div class="col-xs-12">
-                        <p class="item-meta-info">
-                            {% trans "Added on " %}
-                            <span class="item-meta item-date-added">{{ item.created | date:"SHORT_DATETIME_FORMAT"}}</span>
-                            {% trans "Updated on " %}
-                            <span class="item-meta item-date-updated">{{ item.last_modified | date:"SHORT_DATETIME_FORMAT"}}</span>
-                        </p>
+                        {% if item %}
+                          <p class="item-meta-info">
+                              {% trans "Added on " %}
+                              <span class="item-meta item-date-added">{{ item.created | date:"SHORT_DATETIME_FORMAT"}}</span>
+                              {% trans "Updated on " %}
+                              <span class="item-meta item-date-updated">{{ item.last_modified | date:"SHORT_DATETIME_FORMAT"}}</span>
+                              {% trans "Identifier " %}
+                              <span class="item-id">{{ item.id }}</span>
+                          </p>
+                        {% endif %}
                     </div>
                     <div class="col-xs-12">
                         <div class="col-xs-12 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
@@ -35,22 +39,17 @@
                             </label>
                             {{ form.body|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your original text here" }}
                         </div>
-                        <div class="col-xs-12 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
-                            <label>
-                                {{ item_type_label }}
-                                <span class="item-id">{{ item.id }}</span>
-                                {% if form.translation.errors %}
-                                    <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
-                                {% endif %}
-                            </label>
-                            {% if form.translation %}
-                              <!-- Note(lukem): if you update the definitions here, then update the dummy `textarea` below too -->
+                        {% if form.translation %}
+                          <div class="col-xs-12 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
+                              <label>
+                                  Translation  <!-- Note(lukem): probably should do something better here -->
+                                  {% if form.translation.errors %}
+                                      <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                                  {% endif %}
+                              </label>
                               {{ form.translation|add_class:'form-control'|attr:"rows:4"|attr:"placeholder:Type your translation text here" }}
-                            {% else %}
-                              <!-- Note(lukem): Lump in dummy `textarea` since Jinja2 doesn't render correctly if it is empty -->
-                              <textarea name="translation" rows="4" class="form-control" placeholder="Type your translation text here" cols="40" id="id_body"></textarea>
-                            {% endif %}
-                        </div>
+                          </div>
+                        {% endif %}
                         {% if form.tags %}
                             <div class="col-xs-12 form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">
                               <span class="input-group-addon"><span class="fa fa-tags fa-fw"></span>

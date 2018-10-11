@@ -13,6 +13,14 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=True
     )
+    # Note(lukem): we do filtering for this field on the table layer but not on
+    # the form layer. So, for example, if you change the TabbedPage JSON blob
+    # to not include this field, it won't show on the table view. But you'll
+    # always see it on the form view because we don't filter there.
+    translation = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     timestamp = forms.DateTimeField(required=True)
     next = forms.CharField(
         widget=forms.HiddenInput,
@@ -35,6 +43,3 @@ class AddEditItemForm(forms.Form):
             self.fields['category'] = forms.ChoiceField(
                 choices=choices, required=False
             )
-        # The template already has support for optional fields:
-        # 'region' (select)
-        # 'tags' (text input)

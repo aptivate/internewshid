@@ -155,11 +155,15 @@ class AddEditItemView(FormView):
             initial = {
                 'id': self.item['id'],
                 'body': self.item['body'],
+                'translation': self.item.get('translation'),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
                     'next',
-                    self.request.META.get('HTTP_REFERER', reverse('dashboard'))),
-
+                    self.request.META.get(
+                        'HTTP_REFERER',
+                        reverse('dashboard')
+                    )
+                ),
             }
 
         taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
