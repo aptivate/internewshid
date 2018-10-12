@@ -64,6 +64,7 @@ class ItemSerializer(serializers.ModelSerializer):
         """ Create an item with nested metadata terms
         The validated data looks something like this:
         {   "body": "some text",
+            "translation": "some other text",  # can be empty
             "terms": [
                 {"taxonomy": "animal", "name": "Dog"},
                 {"taxonomy": "thing", "name": "foo"}

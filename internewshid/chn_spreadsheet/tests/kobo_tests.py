@@ -6,6 +6,8 @@ import pytest
 import transport
 from importer_tests import importer
 
+from data_layer.models import Item
+
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
 
@@ -15,9 +17,8 @@ def test_kobo_items_imported(importer):
     assert len(transport.items.list()) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
-    f = open(file_path, 'rb')
+    num_saved = importer.store_spreadsheet('kobo', open(file_path, 'rb'))
 
-    num_saved = importer.store_spreadsheet('kobo', f)
     assert num_saved > 0
 
     items = transport.items.list()
@@ -41,3 +42,23 @@ def test_kobo_items_imported(importer):
         'female',
         'Camp 4',
     ))
+
+
+@pytest.mark.django_db
+def test_kobo_empty_body_is_allowed(importer):
+    file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
+    importer.store_spreadsheet('kobo', open(file_path, 'rb'))
+    items = transport.items.list()
+
+    with_empty_body_item = items[1]
+
+    assert with_empty_body_item['body'] == ''
+
+    assert Item.objects.count() == 3
+
+    for item in items:
+        transport.items.create(with_empty_body_item)
+
+    item = Item.objects.last()
+
+    assert item.body == ''

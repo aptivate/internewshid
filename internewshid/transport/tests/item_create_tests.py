@@ -25,9 +25,3 @@ def test_create_item_creates_item(now):
     assert 'id' in response
     new_count = len(items.list())
     assert new_count > old_count
-
-
-def test_create_item_throws_exception_for_missing_body():
-    with pytest.raises(TransportException) as excinfo:
-        items.create({})
-    assert 'body' in excinfo.value.message

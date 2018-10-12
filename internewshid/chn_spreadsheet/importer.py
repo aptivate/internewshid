@@ -82,7 +82,6 @@ class Importer(object):
         # columns, otherwise use header line to check mapping and define order
         first_row = self.normalize_row(rows.next()) if skip_header else None
         columns = self.order_columns(profile_columns, first_row)
-        # columns = [{'field': "...", 'type': "..."}, ...]
 
         objects = []
         for i, row in enumerate(rows, 2 if first_row else 1):
@@ -163,7 +162,7 @@ class CellConverter(object):
     def convert_value(self):
         converters = {
             'date': lambda x: self.convert_date(),
-            'text': lambda x: x,
+            'text': lambda x: x if x else '',
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x,
