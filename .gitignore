@@ -12,3 +12,4 @@ internewshid/uploads
 *.sql
 *.sql.gz
 TAGS
+*~
