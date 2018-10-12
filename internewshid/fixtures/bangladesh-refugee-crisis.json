@@ -1,0 +1,203 @@
+[
+  {
+    "model": "taxonomies.taxonomy",
+    "pk": 7,
+    "fields": {
+      "name": "Bangladesh Refugee Crisis Sectors",
+      "slug": "bangladesh-refugee-crisis-sectors",
+      "multiplicity": "optional",
+      "vocabulary": "closed"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 54,
+    "fields": {
+      "name": "WASH",
+      "taxonomy": 7,
+      "long_name": "WASH"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 55,
+    "fields": {
+      "name": "NFI / Shelter",
+      "taxonomy": 7,
+      "long_name": "NFI / Shelter"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 56,
+    "fields": {
+      "name": "Health",
+      "taxonomy": 7,
+      "long_name": "Health"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 57,
+    "fields": {
+      "name": "Education",
+      "taxonomy": 7,
+      "long_name": "Education"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 58,
+    "fields": {
+      "name": "Nutrition",
+      "taxonomy": 7,
+      "long_name": "Nutrition"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 59,
+    "fields": {
+      "name": "Child Protection",
+      "taxonomy": 7,
+      "long_name": "Child Protection"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 60,
+    "fields": {
+      "name": "Food Security",
+      "taxonomy": 7,
+      "long_name": "Food Security"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 61,
+    "fields": {
+      "name": "GBV",
+      "taxonomy": 7,
+      "long_name": "GBV"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 62,
+    "fields": {
+      "name": "Site Management",
+      "taxonomy": 7,
+      "long_name": "Site Management"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 63,
+    "fields": {
+      "name": "Protection",
+      "taxonomy": 7,
+      "long_name": "Protection"
+    }
+  },
+  {
+    "model": "dashboard.widgetinstance",
+    "pk": 1,
+    "fields": {
+      "dashboard": 1,
+      "widget_type": "basic-text-widget",
+      "row": 1,
+      "column": 1,
+      "width": 4,
+      "height": "tall",
+      "settings": "{\"text\":\"<p>Some of these rumours are also being addressed in the Internews HIS narrowcast programme \\u2018Bala-Bura\\u2019 (played in listening groups throughout the camps) and the Internews HRSM radio programme \\u2018Talking Peace\\u2019 (every Monday 16.00h on Radio Naf).</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: 26-Sep-2018\"}"
+    }
+  },
+  {
+    "model": "dashboard.widgetinstance",
+    "pk": 2,
+    "fields": {
+      "dashboard": 1,
+      "widget_type": "term-count-chart",
+      "row": 1,
+      "column": 0,
+      "width": 8,
+      "height": "tall",
+      "settings": "{\"taxonomy\":\"bangladesh-refugee-crisis-sectors\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"2018-09-13\",\"end_time\":\"2018-09-20\"}],\"title\":\"All feedback (recent)\"}"
+    }
+  },
+  {
+    "model": "dashboard.widgetinstance",
+    "pk": 3,
+    "fields": {
+      "dashboard": 1,
+      "widget_type": "table-widget",
+      "row": 2,
+      "column": 0,
+      "width": 12,
+      "height": "tall",
+      "settings": "{\"count\":25,\"order_by\":\"-timestamp\",\"filters\":{},\"title\":\"Recent Updates\"}"
+    }
+  },
+  {
+    "model": "dashboard.widgetinstance",
+    "pk": 4,
+    "fields": {
+      "dashboard": 1,
+      "widget_type": "term-count-chart",
+      "row": 3,
+      "column": 0,
+      "width": 12,
+      "height": "tall",
+      "settings": "{\"taxonomy\":\"bangladesh-refugee-crisis-sectors\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"1970-01-01\",\"end_time\":\"2100-01-01\"}],\"title\":\"All feedback\"}"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$15tPyazbIfk8$NM0Ir7ZnK2ukElrteRhmtBW4Ga6Rn3fePQCw/ZOrYpA=",
+      "last_login": "2018-10-11T10:05:01.886Z",
+      "is_superuser": true,
+      "business_email": "user@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2018-10-10T12:17:49.867Z",
+      "title": "",
+      "first_name": "User",
+      "last_name": "Example",
+      "gender": "",
+      "contact_type": "",
+      "home_address": "",
+      "business_address": "",
+      "country": "",
+      "nationality": "",
+      "job_title": "",
+      "area_of_specialisation": "",
+      "personal_email": "",
+      "skype_id": "",
+      "yahoo_messenger": "",
+      "msn_id": "",
+      "home_tel": "",
+      "business_tel": "",
+      "mobile": "",
+      "fax": "",
+      "notes": "",
+      "picture": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "tabbed_page.tabinstance",
+    "pk": 4,
+    "fields": {
+      "settings": "{\"source\":\"kobo\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"body\",\"translation\",\"category\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"],\"filters\":{\"terms\":[]},\"label\":\"Feedback\"}",
+      "tab_type": "view-and-edit-table",
+      "page": 1,
+      "name": "feedback",
+      "default": false,
+      "position": 2,
+      "label": "Feedback"
+    }
+  }
+]
