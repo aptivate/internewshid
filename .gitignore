@@ -13,3 +13,5 @@ internewshid/uploads
 *.sql.gz
 TAGS
 *~
+*.~lock.*#
+.python-version
