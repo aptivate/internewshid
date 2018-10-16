@@ -98,6 +98,17 @@
                                 </div>
                             </div>
                         {% endif %}
+                        {% if form.location %}
+                            <div class="col-sm-{{ option_row_width }} col-xs-12 pull-left form-group input-group item-location {% if form.location.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Location" %}
+                                    {% if form.location.errors %}
+                                        <span class='help-block'>({{ form.location.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.location|add_class:'form-control'|attr:"Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div></div>
                 <div class="col-xs-12">

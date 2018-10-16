@@ -156,6 +156,7 @@ class AddEditItemView(FormView):
                 'id': self.item['id'],
                 'body': self.item['body'],
                 'translation': self.item.get('translation', ''),
+                'location': self.item.get('location', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
                     'next',

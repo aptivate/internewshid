@@ -28,6 +28,7 @@ class Message(DataLayerModel):
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=200, blank=True)
+    location = models.CharField(max_length=100, blank=True)
 
     def apply_terms(self, terms):
         """ Add or replace values of term.taxonomy for current Item
