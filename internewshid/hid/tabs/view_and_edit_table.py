@@ -64,19 +64,22 @@ class ViewAndEditTableTab(object):
             )
         }
 
-    def _get_items(self, **kwargs):
-        """ Given the tab settings, return the list of items
+    def _get_items(self, filters=None):
+        """ Given the filters, return the list of items
             to include in the page
 
             Args:
-                **kwargs (dict): Tab settings. If present
+                filters (dict): Tab settings. If present
                     kwargs['filters'] is expected to be
                     a dictionary of filters that is passed
                     on to the transport API.
             Reruns:
                 QuerySet: The items to list on the page
         """
-        filters = kwargs.get('filters', {})
+
+        if filters is None:
+            filters = {}
+
         return transport_items.list(**filters)
 
     def _get_columns_to_exclude(self, **kwargs):
@@ -170,9 +173,18 @@ class ViewAndEditTableTab(object):
     def get_context_data(self, tab_instance, request, **kwargs):
         question_types = self._get_category_options(**kwargs)
 
+        filters = kwargs.get('filters', {})
+        category_filter = request.GET.get('category-filter', None)
+        categories = kwargs.get('categories', None)
+
+        if category_filter and categories:
+            filters.setdefault('terms', []).append(
+                '{}:{}'.format(categories[0], category_filter)
+            )
+
         # Build the table
         table = ItemTable(
-            self._get_items(**kwargs),
+            self._get_items(filters=filters),
             categories=question_types,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
