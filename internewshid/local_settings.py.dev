@@ -1,18 +1,23 @@
 from __future__ import unicode_literals, absolute_import
 
-import private_settings
+from os import environ
+
+from private_settings import DB_PASSWORD
 
 DEBUG = True
 ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
 DJANGOJS_DEBUG = DEBUG
 
+# `MYSQL_DATABASE` and `MYSQL_ROOT_PASSWORD` are used for the CI
+# https://hub.docker.com/_/mysql/
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'internewshid',
-        'USER': 'internewshid',
-        'PASSWORD': private_settings.DB_PASSWORD,
+        'NAME': environ.get('MYSQL_DATABASE', 'internewshid'),
+        'USER': environ.get('APTIVATE_CLI_MYSQL_USER', 'internewshid'),
+        'HOST': environ.get('APTIVATE_CLI_MYSQL_HOST', 'localhost'),
+        'PASSWORD': environ.get('MYSQL_ROOT_PASSWORD', DB_PASSWORD),
         'TEST': {
             'CHARSET': 'utf8',
             'COLLATION': 'utf8_general_ci',
