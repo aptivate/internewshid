@@ -6,8 +6,6 @@ import pytest
 
 from transport import items
 
-from ..exceptions import TransportException
-
 
 @pytest.fixture
 def now():

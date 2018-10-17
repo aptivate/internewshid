@@ -5,13 +5,13 @@ import pytest
 import pytz
 
 import transport
-from importer_tests import importer
+from importer_tests import importer  # noqa
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db  # noqa
 def test_items_imported(importer):
     assert len(transport.items.list()) == 0
 

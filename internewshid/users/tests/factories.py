@@ -25,7 +25,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     title = u"ｔïｔｌë"
 
 
-
 def ContactsManagerFactory():
     group_name = 'Contacts Managers'
     try:

@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.urls import reverse
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -103,6 +102,7 @@ class UpdateContactBase(LoginRequiredMixin, UpdateView):
         else:
             url = reverse('contact_update', args=(self.object.id,))
         return url
+
 
 class UpdateContact(PermissionRequiredMixin, UpdateContactBase):
     form_class = UpdateContactForm

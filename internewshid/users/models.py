@@ -4,8 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
 from django.db.models import (
-    BooleanField, CharField, DateTimeField, EmailField, FileField, ImageField,
-    TextField
+    BooleanField, CharField, DateTimeField, EmailField, ImageField, TextField
 )
 from django.utils import timezone
 
