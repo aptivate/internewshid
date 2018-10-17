@@ -63,20 +63,20 @@ class AddContactForm(BetterModelForm):
 
     class Meta:
         model = User
-        fieldsets = [('all', {'fields':
-                 ['business_email', 'title', 'first_name',
-                  'last_name', 'personal_email', 'is_active',
-                  # Address
-                  'home_address', 'business_address', 'country', 'nationality',
-                  # Personal info
-                  'gender',
-                  # Work
-                  'job_title', 'area_of_specialisation',
-                  # Phones & fax
-                  'home_tel', 'business_tel', 'mobile', 'fax',
-                  # IM
-                  'skype_id', 'yahoo_messenger', 'msn_id',
-                  'notes', 'picture']})]
+        fieldsets = [('all', {'fields': [
+            'business_email', 'title', 'first_name',
+            'last_name', 'personal_email', 'is_active',
+            # Address
+            'home_address', 'business_address', 'country', 'nationality',
+            # Personal info
+            'gender',
+            # Work
+            'job_title', 'area_of_specialisation',
+            # Phones & fax
+            'home_tel', 'business_tel', 'mobile', 'fax',
+            # IM
+            'skype_id', 'yahoo_messenger', 'msn_id',
+            'notes', 'picture']})]
         widgets = {
             'title': TitleInput,
         }

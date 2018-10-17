@@ -14,7 +14,6 @@ class TaxonomySerializer(serializers.ModelSerializer):
             '__all__'
         )
 
-
     slug = serializers.SlugField(
         required=False,
         # FIXME: max_length=250, causes AppRegistryNotReady excpetion!" Go figure

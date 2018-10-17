@@ -368,7 +368,7 @@ def _delete_items(request, deleted):
                         "%d items deleted.",
                         num_deleted) % num_deleted
         messages.success(request, msg)
-    except:
+    except Exception:
         msg = _("There was an error while deleting.")
         messages.error(request, msg)
 

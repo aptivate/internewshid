@@ -4,8 +4,6 @@ import pytest
 
 from transport import items
 
-from ..exceptions import TransportException
-
 
 @pytest.mark.django_db
 def test_update_item_updates_item():

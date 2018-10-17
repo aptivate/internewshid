@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.urls import reverse
@@ -8,7 +7,7 @@ import pytest
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from django_tables2 import SingleTableMixin
 
-from ..forms import AddContactForm, UpdateContactForm, UpdatePersonalInfoForm
+from ..forms import AddContactForm, UpdatePersonalInfoForm
 from ..views import (
     AddContact, DeleteContact, ListContacts, UpdateContact, UpdateContactBase,
     UpdatePersonalInfo, get_permission
@@ -184,8 +183,9 @@ class UpdatePersonalInfoTests(TestCase):
         view.request = request
         self.assertEqual(view.get_object(), request.user)
 
+
 ###############################
-#pytest style starts here
+# pytest style starts here
 ###############################
 def test_update_contact_form_invalid_adds_a_message_to_messages(rf):
     view = UpdateContact()
