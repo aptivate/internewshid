@@ -7,7 +7,9 @@ from rest_framework.test import APIRequestFactory
 from data_layer.models import Item
 
 from ..views import ItemViewSet
-from .categorize_items_tests import categorize_item, item, term, category # noqa
+from .categorize_items_tests import (  # noqa
+    categorize_item, category, item, term
+)
 from .item_delete_tests import delete_item
 
 
