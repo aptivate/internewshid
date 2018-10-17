@@ -1,41 +1,24 @@
 ---
 
-stages:
-  - checks
-  - style
-  - test
-
-image: python:2
+image: aptivate/pyenv-pythons:latest
 
 services:
   - mysql:5.7
 
 variables:
+  MYSQL_ROOT_PASSWORD: internewshid
   MYSQL_DATABASE: internewshid
-  MYSQL_ROOT_PASSWORD: passw0rd
-  DJANGO_SECRET_KEY: 'nde2wr2r)#a*%n$!(zl8#3v_o!sp=hd9vbv%*e6atgr0dp=b(7'
+  APTIVATE_CLI_MYSQL_USER: root
+  APTIVATE_CLI_MYSQL_PASS: "$MYSQL_ROOT_PASSWORD"
+  APTIVATE_CLI_MYSQL_HOST: mysql
 
 before_script:
-  - pip install -U pipenv setuptools 'pip<=18.0' # https://github.com/pypa/pipenv/issues/2924
-  - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
-  - |
-    echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
-    echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
-  - pipenv sync --dev
-  - apt update && apt install -y node-less
+  - pip install pipenv aptivate-cli
+  - apc deploy --no-input
 
-checks:
-  stage: checks
+gitlab-ci:
   script:
-    - make checks
-
-style:
-  stage: style
-  allow_failure: true
-  script:
-    - make style
-
-test:
-  stage: test
-  script:
-    - make test
+    - apc checks
+    - apc pylava
+    - apc isort
+    - apc pytest -v --cov
