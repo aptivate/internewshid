@@ -42,7 +42,7 @@
                         {% if form.translation %}
                           <div class="col-xs-12 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
                               <label>
-                                  Translation  <!-- Note(lukem): probably should do something better here -->
+                                  {% trans "Translation" %}
                                   {% if form.translation.errors %}
                                       <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
                                   {% endif %}
