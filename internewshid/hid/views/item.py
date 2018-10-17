@@ -115,7 +115,8 @@ class AddEditItemView(FormView):
         """
         try:
             self._initialize_item(
-                kwargs.get('item_id'), kwargs.get('item_type')
+                kwargs.get('item_id'),
+                kwargs.get('item_type')
             )
         except ItemNotFound:
             return self._response(
@@ -156,6 +157,7 @@ class AddEditItemView(FormView):
                 'id': self.item['id'],
                 'body': self.item['body'],
                 'translation': self.item.get('translation', ''),
+                'location': self.item.get('location', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
                     'next',

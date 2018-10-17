@@ -191,7 +191,7 @@
     "model": "tabbed_page.tabinstance",
     "pk": 4,
     "fields": {
-      "settings": "{\"source\":\"kobo\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"body\",\"translation\",\"category\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"],\"filters\":{\"terms\":[]},\"label\":\"Feedback\"}",
+      "settings": "{\"source\":\"kobo\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"body\",\"translation\",\"category\",\"location\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"],\"filters\":{\"terms\":[]},\"label\":\"Feedback\"}",
       "tab_type": "view-and-edit-table",
       "page": 1,
       "name": "feedback",

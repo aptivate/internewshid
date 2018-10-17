@@ -21,6 +21,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'created',
         'body',
         'translation',
+        'location',
         'timestamp',
     )
 
