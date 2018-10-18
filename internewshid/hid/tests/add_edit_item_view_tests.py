@@ -10,6 +10,8 @@ from django.utils import timezone
 import pytest
 from mock import patch
 
+from hid.constants import ITEM_TYPE_CATEGORY
+from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 import transport
 from transport.exceptions import TransportException
 
@@ -552,6 +554,10 @@ def test_submitting_form_creates_an_item_with_correct_fields(item_type):
 
 @pytest.mark.django_db
 def test_submitting_form_creates_an_item_with_a_category(item_type):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+    TermFactory(taxonomy=taxonomy, name='Ebola updates',
+                long_name='What are the current updates on Ebola.')
+
     body = 'Hello, here is a new item'
     (view, response) = make_request(
         AddEditItemView,
@@ -571,10 +577,11 @@ def test_submitting_form_creates_an_item_with_a_category(item_type):
     assert view.item['id'] > 0
     item = transport.items.get(view.item['id'])
     expected_term = {
-        'taxonomy': 'ebola-questions',
+        'taxonomy': taxonomy.name,
         'name': 'Ebola updates',
         'long_name': 'What are the current updates on Ebola.'
     }
+
     assert expected_term in item['terms']
 
 
@@ -591,6 +598,9 @@ def test_item_can_be_updated(view, form):
 
 @pytest.mark.django_db
 def test_item_category_can_be_updated(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+    TermFactory(taxonomy=taxonomy, name='Ebola updates')
+
     form.cleaned_data['category'] = 'Ebola updates',
 
     view.form_valid(form)
@@ -598,12 +608,15 @@ def test_item_category_can_be_updated(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert terms['ebola-questions'] == 'Ebola updates'
+    assert terms[taxonomy.name] == 'Ebola updates'
 
 
 @pytest.mark.django_db
 def test_item_category_can_be_unset(view, form):
-    transport.items.add_terms(view.item['id'], 'ebola-questions',
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+
+    transport.items.add_terms(view.item['id'], taxonomy.name,
                               'Ebola origins')
 
     form.cleaned_data['category'] = ''
@@ -613,11 +626,14 @@ def test_item_category_can_be_unset(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert 'ebola-questions' not in terms
+    assert taxonomy.name not in terms
 
 
 @pytest.mark.django_db
 def test_item_category_not_required(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+
     form.cleaned_data['category'] = ''
 
     view.form_valid(form)
@@ -625,11 +641,14 @@ def test_item_category_not_required(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert 'ebola-questions' not in terms
+    assert taxonomy.name not in terms
 
 
 @pytest.mark.django_db
 def test_item_update_logs_message_and_redirects(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+
     view.item_type['long_name'] = 'Question'
 
     response = view.form_valid(form)
@@ -655,6 +674,8 @@ def test_item_update_transport_exception_logs_message(view, form):
 
 @pytest.mark.django_db
 def test_item_term_update_transport_exception_logs_message(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
     form.cleaned_data['category'] = "A category that doesn't exist"
@@ -667,12 +688,13 @@ def test_item_term_update_transport_exception_logs_message(view, form):
 
 @pytest.mark.django_db
 def test_item_term_delete_transport_exception_logs_message(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
     form.cleaned_data['category'] = ''
 
     # Not sure if this is good practice
-    from ..constants import ITEM_TYPE_CATEGORY
     ITEM_TYPE_CATEGORY['question'] = 'unknown-slug'
 
     view.form_valid(form)
