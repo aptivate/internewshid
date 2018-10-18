@@ -171,10 +171,10 @@ class ViewAndEditTableTab(object):
         })
 
     def get_context_data(self, tab_instance, request, **kwargs):
-        question_types = self._get_category_options(**kwargs)
+        category_options = self._get_category_options(**kwargs)
 
         filters = kwargs.get('filters', {})
-        category_filter = request.GET.get('category-filter', None)
+        category_filter = request.GET.get('category', None)
         categories = kwargs.get('categories', None)
 
         if category_filter and categories:
@@ -185,7 +185,7 @@ class ViewAndEditTableTab(object):
         # Build the table
         table = ItemTable(
             self._get_items(filters=filters),
-            categories=question_types,
+            categories=category_options,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
             order_by=request.GET.get('sort', None),
@@ -199,7 +199,7 @@ class ViewAndEditTableTab(object):
             tab_instance,
             kwargs.get('source', None)
         )
-        actions = self._build_actions_dropdown(question_types)
+        actions = self._build_actions_dropdown(category_options)
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
@@ -212,11 +212,12 @@ class ViewAndEditTableTab(object):
             'table': table,
             'upload_form': upload_form,
             'actions': actions,
-            'has_categories': len(question_types) > 0,
+            'category_options': category_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
-            })
+            }),
+            'dynamic_filters': kwargs.get('dynamic_filters', [])
         }
 
     def _get_item_type_filter(self, kwargs):

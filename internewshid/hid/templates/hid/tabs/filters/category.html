@@ -1,0 +1,8 @@
+{% if category_options %}
+<select name="category" class="form-control">
+        <option value="" selected="selected">---------</option>
+        {% for cat in category_options %}
+        <option value="{{ cat.0 }}"{% if cat.0 in selected %} selected="selected"{% endif %}>{{ cat.1 }}</option>
+        {% endfor %}
+    </select>
+{% endif %}

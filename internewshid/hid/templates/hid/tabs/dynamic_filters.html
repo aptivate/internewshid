@@ -1,0 +1,11 @@
+{% load bootstrap3 %}
+<div class="panel panel-default">
+  <form action="" method="get" class="form form-inline">
+    {% for filter in dynamic_filters %}
+    {% with "hid/tabs/filters/"|add:filter|add:".html" as filter_template %}
+    {% include filter_template %}
+    {% endwith %}
+    {% endfor %}
+    {% bootstrap_button 'Apply Filters' %}
+  </form>
+</div>

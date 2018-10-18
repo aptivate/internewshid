@@ -383,7 +383,7 @@ def test_table_items_filtered_by_item_type_category():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={'category-filter': 'WASH'})
+    request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[sectors.name]
@@ -423,7 +423,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={'category-filter': 'WASH'})
+    request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[sectors.name],
@@ -435,3 +435,40 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
     ids = [t['id'] for t in table.data.data]
 
     assert ids == [female_wash_item['id']]
+
+
+@pytest.mark.django_db
+def test_dynamic_filters_read_from_tab_instance():
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        dynamic_filters=['category'])
+
+    assert context_data['dynamic_filters'] == ['category']
+
+
+@pytest.mark.django_db
+def test_category_options_in_context_data():
+    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
+    TermFactory(name='WASH', taxonomy=sectors)
+    TermFactory(name='Child Protection', taxonomy=sectors)
+    TermFactory(name='GBV', taxonomy=sectors)
+
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=[sectors.name])
+
+    assert context_data['category_options'] == (
+        ('Child Protection', 'Child Protection'),
+        ('GBV', 'GBV'),
+        ('WASH', 'WASH'),
+    )
