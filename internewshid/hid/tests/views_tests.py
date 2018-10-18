@@ -386,7 +386,8 @@ def test_table_items_filtered_by_item_type_category():
     request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
-        tab_instance, request, categories=[sectors.name]
+        tab_instance, request, categories=[sectors.name],
+        dynamic_filters=['category']
     )
 
     table = context_data['table']

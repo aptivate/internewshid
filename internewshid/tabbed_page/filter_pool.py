@@ -1,5 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
+_pool = {}
+
 
 class MissingFilterError(Exception):
     pass
