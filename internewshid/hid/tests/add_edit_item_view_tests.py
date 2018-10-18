@@ -10,9 +10,9 @@ from django.utils import timezone
 import pytest
 from mock import patch
 
+import transport
 from hid.constants import ITEM_TYPE_CATEGORY
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
-import transport
 from transport.exceptions import TransportException
 
 from ..views.item import DEFAULT_ITEM_TYPE, AddEditItemView
