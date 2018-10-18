@@ -6,6 +6,8 @@
     {% include filter_template %}
     {% endwith %}
     {% endfor %}
-    {% bootstrap_button 'Apply Filters' %}
+    <div class="form-group table-button-group">
+      {% bootstrap_button 'Apply filters' button_class="btn btn-default btn-sm" %}
+    </div>
   </form>
 </div>

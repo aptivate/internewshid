@@ -27,8 +27,8 @@
           {% endif %}
         </div>
     </div>
-    {% include "hid/tabs/dynamic_filters.html" %}
     <div class="panel-body">
+        {% include "hid/tabs/dynamic_filters.html" %}
         <form action="{% url "data-view-process" %}"
               method="post"
               class="view-items-form">
