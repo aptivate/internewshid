@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import collections
 from urlparse import urlsplit
 
-from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.files import File
 from django.test.client import RequestFactory
@@ -48,10 +47,13 @@ class FastDispatchMixin(object):
 
     default_cms_page = None
 
-    def get_fake_request(self, path, method='get', get_params=None,
-        post_params=None, request_extras=None, file_params=None):
-
-        get_params = get_params  if get_params  else {}
+    def get_fake_request(self, path,
+                         method='get',
+                         get_params=None,
+                         post_params=None,
+                         request_extras=None,
+                         file_params=None):
+        get_params = get_params if get_params else {}
         post_params = post_params if post_params else {}
         file_params = file_params if file_params else {}
 
@@ -65,8 +67,10 @@ class FastDispatchMixin(object):
                 request.GET.setlist(key, value)
             else:
                 if not isinstance(value, basestring):
-                    raise Exception("GET and POST can only contain strings, "
-                        "but %s = %s (%s)" % (key, value, value.__class__))
+                    raise Exception(
+                        "GET and POST can only contain strings, "
+                        "but %s = %s (%s)" % (key, value, value.__class__)
+                    )
                 request.GET.setlist(key, [value])
 
         request.POST = request.POST.copy()
@@ -77,8 +81,10 @@ class FastDispatchMixin(object):
                 request.POST.setlist(key, value)
             else:
                 if not isinstance(value, basestring):
-                    raise Exception("GET and POST can only contain strings, "
-                        "but %s = %s (%s)" % (key, value, value.__class__))
+                    raise Exception(
+                        "GET and POST can only contain strings, "
+                        "but %s = %s (%s)" % (key, value, value.__class__)
+                    )
                 request.POST.setlist(key, [value])
 
         for key, value in file_params.iteritems():
@@ -113,11 +119,12 @@ class FastDispatchMixin(object):
         return request
 
     def fast_dispatch(self, view_name, method='get', url_args=None,
-        url_kwargs=None, post_params=None, get_params=None, language=None,
-        request_extras=None, file_params=None):
+                      url_kwargs=None, post_params=None,
+                      get_params=None, language=None,
+                      request_extras=None, file_params=None):
 
-        url_args = url_args    if url_args    else []
-        url_kwargs = url_kwargs  if url_kwargs  else {}
+        url_args = url_args if url_args else []
+        url_kwargs = url_kwargs if url_kwargs else {}
 
         from django.utils.translation import override
         with override(language):
@@ -125,8 +132,10 @@ class FastDispatchMixin(object):
             resolved = resolve(path)
 
             view = resolved.func
-            view.request = self.get_fake_request(path, method, get_params,
-                post_params, request_extras, file_params)
+            view.request = self.get_fake_request(
+                path, method, get_params, post_params,
+                request_extras, file_params
+            )
             self.last_request = view.request
             response = view(view.request, *resolved.args, **resolved.kwargs)
             response.view = view
@@ -144,8 +153,9 @@ class FastDispatchMixin(object):
         self.assertTrue(response._headers['location'][1].endswith(expected_url))
         self.assertEqual(response.status_code, 302)
 
-    def assert_not_redirected(self, response, expected_status_code=200,
-        msg_prefix=''):
+    def assert_not_redirected(self, response,
+                              expected_status_code=200,
+                              msg_prefix=''):
 
         if msg_prefix:
             msg_prefix += ": "
@@ -157,8 +167,11 @@ class FastDispatchMixin(object):
             # no location header
             pass
 
-        self.assertEqual(response.status_code, expected_status_code,
-            msg_prefix)
+        self.assertEqual(
+            response.status_code,
+            expected_status_code,
+            msg_prefix
+        )
 
     def assert_no_adminform_with_errors(self, response):
         if not hasattr(response, 'context'):
@@ -180,18 +193,22 @@ class FastDispatchMixin(object):
                 # should this be line.errors()?
                 # as FieldlineWithCustomReadOnlyField.errors
                 # is a method, not a property:
-                self.assertIsNone(line.errors,
-                    "should not be any errors on %s" % line)
+                self.assertIsNone(
+                    line.errors, "should not be any errors on %s" % line
+                )
                 for field in line:
                     # similarly django.contrib.admin.helpers.AdminField.errors
                     # is a method:
-                    self.assertIsNone(field.errors,
-                        "should not be any errors on %s" % field)
+                    self.assertIsNone(
+                        field.errors,
+                        "should not be any errors on %s" % field
+                    )
 
         self.assertIsNone(adminform.form.non_field_errors)
 
-    def assert_redirected_mini(self, response, expected_url, status_code=302,
-            host=None, msg_prefix=''):
+    def assert_redirected_mini(self, response,
+                               expected_url, status_code=302,
+                               host=None, msg_prefix=''):
         """
         Without trying to retrieve the redirect target URL, so it works with
         fast_dispatch.
@@ -212,8 +229,8 @@ class FastDispatchMixin(object):
             msg_prefix = content + u"\n\n" + unicode(msg_prefix)
 
         self.assertEqual(response.status_code, status_code,
-            msg_prefix + "Response didn't redirect as expected: Response"
-            " code was %d (expected %d)" % (response.status_code, status_code))
+                         msg_prefix + "Response didn't redirect as expected: Response"
+                         " code was %d (expected %d)" % (response.status_code, status_code))
 
         actual_url = response['Location']
         scheme, netloc, path, query, fragment = urlsplit(actual_url)
@@ -228,15 +245,18 @@ class FastDispatchMixin(object):
         """
 
         self.assertEqual(actual_url, expected_url,
-            msg_prefix + "Response redirected to '%s', expected '%s'" %
-                (actual_url, expected_url))
+                         msg_prefix + "Response redirected to '%s', expected '%s'" %
+                         (actual_url, expected_url))
 
     def assert_login_required(self, view_name, message='', *args, **kwargs):
         response = self.fast_dispatch(view_name, *args, **kwargs)
 
         from django.urls import reverse
-        uri = reverse(view_name, args=kwargs.get('url_args', []),
-           kwargs=kwargs.get('url_kwargs', {}))
+        uri = reverse(
+            view_name,
+            args=kwargs.get('url_args', []),
+            kwargs=kwargs.get('url_kwargs', {})
+        )
 
         from django.conf import settings
         login_url = settings.LOGIN_URL + "?next=" + uri
@@ -267,15 +287,17 @@ class FastDispatchMixin(object):
         you can always throw it away.
         """
 
-        self.assertIn('__getitem__', dir(container), "Only use this assertion "
-            "with a dict as the container")
+        self.assertIn('__getitem__', dir(container), (
+            "Only use this assertion " "with a dict as the container"
+        ))
         self.assertIn(member, container, msg=msg)
 
         try:
             return container[member]
         except TypeError as e:
-            raise TypeError(("%s (is the second argument really a " +
-                "dictionary? %s)") % (e, container))
+            raise TypeError((
+                "%s (is the second argument really a " + "dictionary? %s)"
+            ) % (e, container))
 
     def assertContains(self, response, text, count=None, status_code=200,
                        msg_prefix='', html=False):
@@ -290,8 +312,9 @@ class FastDispatchMixin(object):
         msg_prefix = content + "\n\n" + msg_prefix
 
         try:
-            super(FastDispatchMixin, self).assertContains(response, text,
-                count, status_code, msg_prefix, html)
+            super(FastDispatchMixin, self).assertContains(
+                response, text, count, status_code, msg_prefix, html
+            )
         except AssertionError as e:
             import sys
             raise sys.exc_info()[0], "%s\n\nThe complete response was:\n%s" % \
@@ -307,8 +330,9 @@ class FastDispatchMixin(object):
         """
 
         from django.contrib.sites.models import Site
-        return "http://%s%s" % (Site.objects.get_current().domain,
-            relative_url)
+        return "http://%s%s" % (
+            Site.objects.get_current().domain, relative_url
+        )
 
     def absolute_url_for_request(self, relative_url):
         """

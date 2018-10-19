@@ -4,15 +4,14 @@ from os import path
 import pytest
 
 import transport
-from importer_tests import importer
-
 from data_layer.models import Item
+from importer_tests import importer  # noqa
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db  # noqa
 def test_kobo_items_imported(importer):
     assert len(transport.items.list()) == 0
 
@@ -27,6 +26,7 @@ def test_kobo_items_imported(importer):
 
     assert items[0]['body'] == 'the community members want more food.'
     assert items[0]['translation'] == ''
+    assert items[0]['location'] == 'Camp 4'
     assert isinstance(items[0]['timestamp'], datetime.datetime)
 
     for item in items:
@@ -40,11 +40,10 @@ def test_kobo_items_imported(importer):
     assert len(tags) > 0
     assert all(tag in tags for tag in (
         'female',
-        'Camp 4',
     ))
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db  # noqa
 def test_kobo_empty_body_is_allowed(importer):
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
     importer.store_spreadsheet('kobo', open(file_path, 'rb'))

@@ -3,12 +3,9 @@ from __future__ import unicode_literals
 
 import os
 
-from django.conf import settings
 from django.core import mail as django_mail
-from django.core.mail import EmailMessage
 from django.test.utils import override_settings
 
-import mock
 import pytest
 
 from mail import DEFAULT_FROM, notify
@@ -39,6 +36,7 @@ TEST_TEMPLATES = [
         },
     },
 ]
+
 
 def test_notify_sends_all_parameters():
     params = options.copy()

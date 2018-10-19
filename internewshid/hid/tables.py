@@ -44,6 +44,11 @@ class ItemTable(tables.Table):
         verbose_name=_('Translation'),
         attrs={'td': {'class': 'col-md-4'}}
     )
+    location = tables.TemplateColumn(
+        template_name='hid/location_column.html',
+        verbose_name=_('Location'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
     network_provider = tables.Column(
         verbose_name=_('Network Provider'),
         attrs={'td': {'class': 'col-md-4'}}

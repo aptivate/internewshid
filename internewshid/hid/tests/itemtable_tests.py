@@ -1,5 +1,6 @@
 import mock
 
+from hid.constants import ITEM_TYPE_CATEGORY
 from hid.tables import ItemTable
 
 
@@ -74,7 +75,7 @@ def test_render_category_passes_context_to_template(mock_loader):
         {
             u'long_name': u'Repatriation',
             u'name': u'Repatriation',
-            u'taxonomy': u'ebola-questions'
+            u'taxonomy': ITEM_TYPE_CATEGORY['question'],
         }
     ]
 

@@ -111,9 +111,9 @@ class GroupPermissions(object):
             if isinstance(permission, basestring) else permission
         return "{0}.{1}".format(p.content_type.app_label, p.codename)
 
-    #================================================================
+    # ================================================================
     # Custom Permissions
-    #================================================================
+    # ================================================================
     '''
     Defined here and not in class Meta because South doesn't handle
     that yet and we would need to run syncdb --all on deployment.
@@ -128,17 +128,17 @@ class GroupPermissions(object):
         (EDIT_LOGFRAME, 'Edit logframe data', get_user_model()),
     ]
 
-    #================================================================
+    # ================================================================
     # Group names
-    #================================================================
+    # ================================================================
 
     CONTACTS_MGR = 'Contacts managers'
     LOGFRAME_EDITORS = 'Logframe editors'
 
     def _add_contacts_managers_permissions(self):
-        #=================================================
+        # =================================================
         # CONTACTS MANAGERS
-        #=================================================
+        # =================================================
         self.create_custom_permissions()
         with self.groups(self.CONTACTS_MGR):
             self.add_permissions(get_user_model(), 'add_personal_info')
@@ -147,9 +147,9 @@ class GroupPermissions(object):
             self.add_permissions(get_user_model(), 'delete_user')
 
     def _add_logframe_editors_permissions(self):
-        #=================================================
+        # =================================================
         # LOGFRAME EDITORS
-        #=================================================
+        # =================================================
         self.create_custom_permissions()
         with self.groups(self.LOGFRAME_EDITORS):
             self.add_permissions(get_user_model(), 'edit_logframe')

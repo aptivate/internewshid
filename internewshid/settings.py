@@ -210,6 +210,7 @@ def update_recursive(dest, source):
         else:
             dest[k] = deepcopy(source[k])
 
+
 try:
     import local_settings
 except ImportError:
@@ -219,7 +220,7 @@ except ImportError:
 else:
     import re
     for attr in dir(local_settings):
-        match = re.search('^EXTRA_(\w+)', attr)
+        match = re.search('^EXTRA_(\w+)', attr)  # noqa
         if match:
             name = match.group(1)
             value = getattr(local_settings, attr)

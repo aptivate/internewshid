@@ -10,7 +10,7 @@ from .factories import TaxonomyFactory, TermFactory
 def term_with_context():
     tax = TaxonomyFactory()  # known taxonomy
     _ = TermFactory(name="name")  # term with same name in different taxonomy
-    _ = TermFactory(taxonomy=tax) # another different term in the sam taxonomy
+    _ = TermFactory(taxonomy=tax)  # another different term in the sam taxonomy
     return TermFactory(taxonomy=tax, name="name")
 
 
