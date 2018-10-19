@@ -722,6 +722,7 @@ def test_item_can_be_deleted(view, form):
 
 @pytest.mark.django_db
 def test_free_tags_created_on_item_update(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
     # Deliberate spaces to be stripped
     form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
@@ -741,6 +742,7 @@ def test_free_tags_created_on_item_update(view, form):
 
 @pytest.mark.django_db
 def test_existing_tag_deleted_on_item_update(view, form):
+    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
     transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
     form.cleaned_data['tags'] = 'Monrovia'
