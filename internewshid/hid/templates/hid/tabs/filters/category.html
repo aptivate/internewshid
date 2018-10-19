@@ -1,8 +1,9 @@
 {% if category_options %}
+{% load i18n %}
 <div class="form-group table-button-group">
-<label class="col-sm-3 control-label" for="category-selector">Topic</label>
+<label class="col-sm-3 control-label" for="category-selector">{% trans "Topic" %}</label>
 <select id="category-selector" name="category" class="form-control">
-        <option value=""{% if not request.GET.category %} selected="selected"{% endif %}>All topics</option>
+        <option value=""{% if not request.GET.category %} selected="selected"{% endif %}>{% trans "All topics" %}</option>
         {% for cat in category_options %}
         <option value="{{ cat.0 }}"{% if cat.0 == request.GET.category %} selected="selected"{% endif %}>{{ cat.1 }}</option>
         {% endfor %}
