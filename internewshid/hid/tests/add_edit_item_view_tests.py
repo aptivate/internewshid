@@ -12,11 +12,24 @@ from mock import patch
 
 import transport
 from hid.constants import ITEM_TYPE_CATEGORY
-from taxonomies.tests.factories import TaxonomyFactory, TermFactory
+from taxonomies.models import Taxonomy
+from taxonomies.tests.factories import TermFactory
 from transport.exceptions import TransportException
 
 from ..views.item import DEFAULT_ITEM_TYPE, AddEditItemView
 from .views_tests import assert_message, assert_no_messages, fix_messages
+
+
+@pytest.fixture
+def item_type_taxonomy():
+    slug = ITEM_TYPE_CATEGORY['question']
+
+    try:
+        taxonomy = Taxonomy.objects.get(slug=slug)
+    except Taxonomy.DoesNotExist:
+        taxonomy = Taxonomy.objects.create(name=slug)
+
+    return taxonomy
 
 
 @pytest.fixture
@@ -553,9 +566,9 @@ def test_submitting_form_creates_an_item_with_correct_fields(item_type):
 
 
 @pytest.mark.django_db
-def test_submitting_form_creates_an_item_with_a_category(item_type):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-    TermFactory(taxonomy=taxonomy, name='Ebola updates',
+def test_submitting_form_creates_an_item_with_a_category(item_type_taxonomy,
+                                                         item_type):
+    TermFactory(taxonomy=item_type_taxonomy, name='Ebola updates',
                 long_name='What are the current updates on Ebola.')
 
     body = 'Hello, here is a new item'
@@ -577,7 +590,7 @@ def test_submitting_form_creates_an_item_with_a_category(item_type):
     assert view.item['id'] > 0
     item = transport.items.get(view.item['id'])
     expected_term = {
-        'taxonomy': taxonomy.name,
+        'taxonomy': item_type_taxonomy.slug,
         'name': 'Ebola updates',
         'long_name': 'What are the current updates on Ebola.'
     }
@@ -597,9 +610,8 @@ def test_item_can_be_updated(view, form):
 
 
 @pytest.mark.django_db
-def test_item_category_can_be_updated(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-    TermFactory(taxonomy=taxonomy, name='Ebola updates')
+def test_item_category_can_be_updated(view, form, item_type_taxonomy):
+    TermFactory(taxonomy=item_type_taxonomy, name='Ebola updates')
 
     form.cleaned_data['category'] = 'Ebola updates',
 
@@ -608,15 +620,14 @@ def test_item_category_can_be_updated(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert terms[taxonomy.name] == 'Ebola updates'
+    assert terms[item_type_taxonomy.slug] == 'Ebola updates'
 
 
 @pytest.mark.django_db
-def test_item_category_can_be_unset(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+def test_item_category_can_be_unset(view, form, item_type_taxonomy):
+    TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
-    transport.items.add_terms(view.item['id'], taxonomy.name,
+    transport.items.add_terms(view.item['id'], item_type_taxonomy.slug,
                               'Ebola origins')
 
     form.cleaned_data['category'] = ''
@@ -626,13 +637,12 @@ def test_item_category_can_be_unset(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert taxonomy.name not in terms
+    assert item_type_taxonomy.slug not in terms
 
 
 @pytest.mark.django_db
-def test_item_category_not_required(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+def test_item_category_not_required(view, form, item_type_taxonomy):
+    TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     form.cleaned_data['category'] = ''
 
@@ -641,13 +651,12 @@ def test_item_category_not_required(view, form):
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
-    assert taxonomy.name not in terms
+    assert item_type_taxonomy.slug not in terms
 
 
 @pytest.mark.django_db
-def test_item_update_logs_message_and_redirects(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-    TermFactory(taxonomy=taxonomy, name='Ebola origins')
+def test_item_update_logs_message_and_redirects(view, form, item_type_taxonomy):
+    TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     view.item_type['long_name'] = 'Question'
 
@@ -673,9 +682,8 @@ def test_item_update_transport_exception_logs_message(view, form):
 
 
 @pytest.mark.django_db
-def test_item_term_update_transport_exception_logs_message(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-
+def test_item_term_update_transport_exception_logs_message(view, form,
+                                                           item_type_taxonomy):
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
     form.cleaned_data['category'] = "A category that doesn't exist"
@@ -687,19 +695,19 @@ def test_item_term_update_transport_exception_logs_message(view, form):
 
 
 @pytest.mark.django_db
-def test_item_term_delete_transport_exception_logs_message(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
-
+def test_item_term_delete_transport_exception_logs_message(view, form,
+                                                           item_type_taxonomy):
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
     form.cleaned_data['category'] = ''
 
     # Not sure if this is good practice
+    old_category = ITEM_TYPE_CATEGORY['question']
     ITEM_TYPE_CATEGORY['question'] = 'unknown-slug'
 
     view.form_valid(form)
 
-    ITEM_TYPE_CATEGORY['question'] = 'ebola-questions'
+    ITEM_TYPE_CATEGORY['question'] = old_category
 
     assert_message(view.request,
                    messages.ERROR,
@@ -721,8 +729,7 @@ def test_item_can_be_deleted(view, form):
 
 
 @pytest.mark.django_db
-def test_free_tags_created_on_item_update(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+def test_free_tags_created_on_item_update(view, form, item_type_taxonomy):
     # Deliberate spaces to be stripped
     form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
@@ -741,8 +748,7 @@ def test_free_tags_created_on_item_update(view, form):
 
 
 @pytest.mark.django_db
-def test_existing_tag_deleted_on_item_update(view, form):
-    taxonomy = TaxonomyFactory(name=ITEM_TYPE_CATEGORY['question'])
+def test_existing_tag_deleted_on_item_update(view, form, item_type_taxonomy):
     transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
     form.cleaned_data['tags'] = 'Monrovia'

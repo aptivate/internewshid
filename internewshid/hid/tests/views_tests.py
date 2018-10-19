@@ -7,15 +7,29 @@ import pytest
 from mock import Mock
 
 import transport
+from hid.constants import ITEM_TYPE_CATEGORY
 from hid.tabs.view_and_edit_table import (
     DELETE_COMMAND, REMOVE_QTYPE_COMMAND, ViewAndEditTableTab, _delete_items,
     _get_view_and_edit_form_request_parameters,
     view_and_edit_table_form_process_items
 )
 from tabbed_page.tests.factories import TabbedPageFactory, TabInstanceFactory
+from taxonomies.models import Taxonomy
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 
 ReqFactory = RequestFactory()
+
+
+@pytest.fixture
+def item_type_taxonomy():
+    slug = ITEM_TYPE_CATEGORY['question']
+
+    try:
+        taxonomy = Taxonomy.objects.get(slug=slug)
+    except Taxonomy.DoesNotExist:
+        taxonomy = Taxonomy.objects.create(name=slug)
+
+    return taxonomy
 
 
 def fix_messages(request):
@@ -95,15 +109,14 @@ def test_process_items_deletes_items(request_item):
 
 
 @pytest.mark.django_db
-def test_process_items_removes_question_type():
+def test_process_items_removes_question_type(item_type_taxonomy):
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
     [item] = list(transport.items.list())
 
-    taxonomy = TaxonomyFactory(name="Ebola Questions")
     term_to_delete = TermFactory(name='term to be deleted',
-                                 taxonomy=taxonomy)
+                                 taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         item['id'], term_to_delete.taxonomy.slug, term_to_delete.name)
 
