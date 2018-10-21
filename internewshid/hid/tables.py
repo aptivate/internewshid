@@ -29,31 +29,28 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
         attrs={'td': {'class': 'col-md-1'}}
     )
-    timestamp = tables.columns.DateTimeColumn(
-        verbose_name=_('Created'),
-        format=settings.SHORT_DATETIME_FORMAT,
-        attrs={'td': {'class': 'col-md-1'}}
+    category = tables.TemplateColumn(
+        verbose_name=_('Topic'),
+        template_name='hid/categories_column.html',
+        accessor='terms',
+        attrs={'td': {'class': 'col-md-2'}}
     )
     body = tables.TemplateColumn(
         template_name='hid/body_column.html',
-        verbose_name=_('Original'),
-        attrs={'td': {'class': 'col-md-4'}}
+        verbose_name=_('Feedback'),
+        attrs={'td': {'class': 'col-md-3'}}
     )
     translation = tables.TemplateColumn(
         template_name='hid/translation_column.html',
         verbose_name=_('Translation'),
-        attrs={'td': {'class': 'col-md-4'}}
+        attrs={'td': {'class': 'col-md-3'}}
     )
-    network_provider = tables.Column(
-        verbose_name=_('Network Provider'),
-        attrs={'td': {'class': 'col-md-4'}}
+    timestamp = tables.columns.DateTimeColumn(
+        verbose_name=_('Created'),
+        format=settings.SHORT_DATETIME_FORMAT,
+        attrs={'td': {'class': 'col-md-2'}}
     )
-    category = tables.TemplateColumn(
-        verbose_name=_('Question Type'),
-        template_name='hid/categories_column.html',
-        accessor='terms',
-        attrs={'td': {'class': 'col-md-4'}}
-    )
+   
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')

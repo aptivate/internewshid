@@ -2,6 +2,7 @@
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 <div class="panel panel-default">
+   <!--
     <div class="panel-heading panel-heading-large clearfix">
         <span class="fa fa-table fa-fw"></span>
         <h2>{{ type_label }}</h2>
@@ -27,15 +28,18 @@
           {% endif %}
         </div>
     </div>
-    <div class="panel-body">
+    -->
+    <div class="panel-body panel-body-list-table">
         <form action="{% url "data-view-process" %}"
               method="post"
               class="view-items-form">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}" />
+            <!--
             {% with button_placement="top" %}
                 {% include "hid/tabs/view_and_edit_buttons.html" %}
             {% endwith %}
+            -->
             {% with pagination_class="pagination-circle-nav" %}
                 {% render_table table %}
             {% endwith %}

@@ -12,12 +12,12 @@
 @gray:                   #78716e;
 @gray-darker:            darken(@gray, 50%);
 @gray-dark:              darken(@gray, 30%);
-@gray-light:             #C3BCB4;
+@gray-light:             #c9c9c9;
 @gray-lighter:           #EDECEC;
 @gray-lightest:          #FAFAFA;
 
-@brand-primary:         #0F6CB6;
-@brand-secondary:       #002D62;
+@brand-primary:         #0f6cb6;
+@brand-secondary:       #002a5b;
 @brand-success:         #56AC4A;
 @brand-info:            #404965;
 @brand-warning:         #F29E30;
@@ -29,7 +29,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #fff;
+@body-bg:               #eee;
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -45,15 +45,16 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Helvetica Neue", Arial, Helvetica, sans, sans-serif;
+@font-family-sans-serif:  'Noto Sans', Arial, Helvetica, sans, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          15px;
+@font-size-base:          16px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
-@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
+@font-size-medium:        ceil((@font-size-base * 0.85)); // ~14px
+@font-size-small:         ceil((@font-size-base * 0.75)); // ~12px
 
 @font-size-h1:            floor((@font-size-base * 2)); // ~30px
 @font-size-h2:            floor((@font-size-base * 1.9)); // ~28px
@@ -106,8 +107,8 @@
 @line-height-small:         1.5;
 
 @border-radius-base:        0;
-@border-radius-large:       0;
-@border-radius-small:       0;
+@border-radius-large:       10px;
+@border-radius-small:       4px;
 
 //** Global color for active items (e.g., navs or dropdowns).
 @component-active-color:    #fff;
@@ -360,7 +361,7 @@
 
 // Basics of a navbar
 @navbar-height:                    50px;
-@navbar-margin-bottom:             @line-height-computed;
+@navbar-margin-bottom:             0;
 @navbar-border-radius:             @border-radius-base;
 @navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
 @navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
@@ -372,7 +373,7 @@
 
 // Navbar links
 @navbar-default-link-color:                @gray-dark;
-@navbar-default-link-hover-color:          @brand-primary;
+@navbar-default-link-hover-color:          @brand-secondary;
 @navbar-default-link-hover-bg:             darken(@navbar-default-bg, 10%);
 @navbar-default-link-active-color:         @navbar-default-link-hover-color;
 @navbar-default-link-active-bg:            @navbar-default-link-hover-bg;
@@ -381,7 +382,7 @@
 
 // Navbar brand label
 @navbar-default-brand-color:               @navbar-default-link-color;
-@navbar-default-brand-hover-color:         #fff;
+@navbar-default-brand-hover-color:        lighten(@navbar-default-link-color,10%);
 @navbar-default-brand-hover-bg:            none;
 
 // Navbar toggle
@@ -421,8 +422,8 @@
 //##
 
 //=== Shared nav styles
-@nav-link-padding:                          10px 15px;
-@nav-link-hover-bg:                         @gray-light;
+@nav-link-padding:                          1em 2em;
+@nav-link-hover-bg:                         lighten(@brand-secondary,30%);
 
 @nav-disabled-link-color:                   @gray-light;
 @nav-disabled-link-hover-color:             @gray-light;
@@ -440,10 +441,11 @@
 @nav-tabs-justified-active-link-border-color:     @body-bg;
 
 //== Pills
-@nav-pills-border-radius:                   @border-radius-base;
-@nav-pills-active-link-hover-bg:            @component-active-bg;
-@nav-pills-active-link-hover-color:         @component-active-color;
-
+@nav-pills-border-radius:                   4px;
+@nav-pills-active-link-hover-bg:            @brand-secondary;
+@nav-pills-active-link-hover-color:         #fff;
+@nav-pills-hover-bg:                        @brand-secondary;
+@nav-pills-hover-border:              solid 1px @brand-secondary;         
 
 //== Pagination
 //

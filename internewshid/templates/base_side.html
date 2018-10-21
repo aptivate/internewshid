@@ -1,47 +1,66 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% load render_table from django_tables2 %}
 {% block content %}
+
 <!-- Navigation -->
-    <div class="navbar-default sidebar" role="navigation">
-        <div class="col-xs-12 featured-image"></div>
-        <nav class="sidebar-nav navbar-collapse collapse">
-            <ul class="nav" id="side-menu">
-                <li><a class="active" href="{% url "dashboard" %}"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a></li>
-                {# <li><a href="{% url "sources" %}"><span class="fa fa-download fa-fw"></span> Sources</a></li> #}
-                <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit</a></li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-collapse -->
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><span><abbr title="{% trans 'Humanitarian Information Dashboard'%} ">{% trans "HID  " %} </abbr><span>Cox's bazaar, Bangladesh</span></span></a>
+        
     </div>
-    <!-- /.sidebar -->
-    <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-                <button title="show/hide menu" data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand pull-left" href="/">{% trans "HID  " %}<span class="subtitle">{% trans "Humanitarian Information Dashboard" %}</span></a>
-            </div>
-        <!-- /.navbar-header -->
-        {% if request.user.is_authenticated %}
-        <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown pull-right">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="fa fa-user fa-fw"></span>  {{ request.user }}  <span class="fa fa-caret-down"> </span>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
-                    <li><a href="{% url "logout" %}?next={% url 'login' %}" class=""><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
-                </ul>
-                <!-- /.dropdown-user -->
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav nav-pills">
+        <li class="active"><a href="{% url "dashboard" %}">Dashboard <span class="sr-only">(current)</span></a></li>
+        <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}">Feedback</a></li>
+      </ul>
+      <form class="nav navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+              <a href="#">Upload data</a>
+              <div class="last-uploaded">Last upload <span>12/10/18</span></div>
             </li>
-        </ul>
-        {% endif %}
-        <!-- /.navbar-top-links -->
-    </nav>
-    <!-- /Navigation -->
+          <li><a href="#">Export data</a></li>
+        
+         {% if request.user.is_authenticated %}
+            <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="fa fa-gear fa-fw"></span> Settings  <span class="fa fa-caret-down"> </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                       <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-user fa-fw"></span> Your Account {{ request.user }}</a></li>
+                        <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url "logout" %}?next={% url 'login' %}"><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+            {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
     <!-- Main Content -->
     <div id="page-wrapper">
         <div class="row">
