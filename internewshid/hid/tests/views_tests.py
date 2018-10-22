@@ -466,9 +466,10 @@ def test_dynamic_filters_read_from_tab_instance():
 
 @pytest.mark.django_db
 def test_category_options_in_context_data(item_type_taxonomy):
-    Term.objects.get_or_create(name='WASH')
-    Term.objects.get_or_create(name='GBV')
-    Term.objects.get_or_create(name='Child Protection')
+    Term.objects.get_or_create(name='WASH', taxonomy=item_type_taxonomy)
+    Term.objects.get_or_create(name='GBV', taxonomy=item_type_taxonomy)
+    Term.objects.get_or_create(name='Child Protection',
+                               taxonomy=item_type_taxonomy)
 
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
