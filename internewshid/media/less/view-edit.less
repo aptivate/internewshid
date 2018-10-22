@@ -33,8 +33,9 @@
             border: solid 1px @gray-light;
 	        float: none;
             font-size: @font-size-small;
-            padding: .1em 1em;
+            padding: .1rem 1rem;
             color: @brand-primary;
+            height: 3rem;
         }
         &:last-child{
             border-right: none;
@@ -45,7 +46,7 @@
             background-color: @brand-primary;
             color: #fff;
             line-height: 1.8;
-            padding: .4em 1em;
+            padding: .4rem 1rem;
             border-radius: @border-radius-large;
             border: solid 1px @brand-primary;
             white-space: nowrap;
@@ -91,6 +92,10 @@ table,
   border:none;
 }
 
+.table-background{
+    background-color: white;
+}
+
 thead{
     background-color: @brand-secondary;
 	text-transform: uppercase;
@@ -123,6 +128,17 @@ thead{
 tbody {
     font-size: @font-size-small;
 }
+
+.table tr.selected{
+    background-color: #e3edf8;
+    border: solid 1px @brand-secondary;
+}
+
+.table-hover > tbody > tr.selected:hover{
+        background-color: darken(#e3edf8, 10%);
+
+}
+
 .table .form-control {
   line-height:1em;
   height:inherit;

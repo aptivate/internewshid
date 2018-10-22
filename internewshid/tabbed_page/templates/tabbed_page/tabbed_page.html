@@ -3,76 +3,7 @@
 {% load render_tab %}
 
 {% block maincontent %}
-<!--
-<div class="row">
-    <div class="col-xs-12">
-        <h1 class="sr-only">{% trans "View &amp; Edit" %}</h1>
-        <ul class="nav nav-tabs pull-left" role="tablist">
-            {% for tab in view.tabs %}
-                <li role="presentation"
-                    {% if tab == view.active_tab %}class="active"{% endif %}>
-                    <a href="{% url 'tabbed-page' name=view.page.name tab_name=tab.name %}">
-                        {% trans tab.label %}
-                    </a>
-                </li>
-                <li>thi sjsjs</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
--->
-<form>
-<div class="row filters">
-   
-    <div class="filter-dates form-group input-group">
-        <label>Dates</label>
-        <input type="text" name="timestamp" value="10/08/18 - 10/10/18" required="" placeholder="yyyy-mm-dd" class="form-control" aria-describedby="basic-addon1" id="id_timestamp">
-    </div>             
-    <div class="filter-topic form-group input-group">
-        <label>Topic</label>
-        <div class="selectContainer">
-            <select name="category" class="form-control" id="id_category">
-              <option value="">All topics</option>
-              <option value="Ebola updates" selected="">Ebola updates</option>
-            </select>
-        </div>
-    </div>
-    <div class="filter-location form-group input-group">
-       <label>Location</label>
-        <div class="selectContainer">
-            <select name="category" class="form-control" id="id_category">
-                <option value="">All loctions</option>
-                <option value="Ebola updates" selected="">Ebola updates</option>
-            </select>
-        </div>
-    </div>
-    <div class="filter-tags form-group input-group">
-        <label>Tags</label>
-        <input type="text" name="timestamp" value="What matters, Flying news" required="" placeholder="yyyy-mm-dd" class="form-control" aria-describedby="basic-addon1" id="id_timestamp">
-    </div>
-    <div class="filter-gender form-group input-group">
-        <label for="">Gender</label>
-        <div class="selectContainer">
-            <select name="category" class="form-control" id="id_category">
-                <option value="">All genders</option>
-                <option value="F" selected="">Female</option>
-                <option value="M" selected="">Male</option>
-            </select>
-        </div>
-    </div>
-    <div class="filter-age form-group input-group">
-        <label>Age</label>
-        <input type="text" name="ages" value="18 - 45" required="" placeholder="yyyy-mm-dd" class="form-control" aria-describedby="basic-addon1" id="id_ages">
-    </div>
-    <div class="filter-apply form-group input-group">
-        <button class="">Apply filters</button>
-    </div>
-</div>
-</form>    
 
-<div class='row'>
-    <div class="col-lg-12">
-        {% render_tab view.active_tab %}
-    </div>
-</div>
+    {% render_tab view.active_tab %}
+
 {% endblock maincontent %}

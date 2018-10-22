@@ -5,7 +5,7 @@
 <div class="table-container">
 {% endif %}
 {% block table %}
-<table class="table table-hover table-striped table-no-border"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+<table class="table table-hover table-striped table-no-border table-background"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
     {% spaceless %}
     {% block table.thead %}
     <thead>

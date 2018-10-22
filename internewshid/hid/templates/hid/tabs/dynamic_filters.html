@@ -1,13 +1,62 @@
 {% load bootstrap3 %}
-<div class="panel panel-default">
-  <form action="" method="get" class="form form-inline">
+<form action="" method="get">
+   <div class="row filters">
     {% for filter in dynamic_filters %}
     {% with "hid/tabs/filters/"|add:filter|add:".html" as filter_template %}
     {% include filter_template %}
     {% endwith %}
     {% endfor %}
-    <div class="form-group table-button-group">
-      {% bootstrap_button 'Apply filters' button_class="btn btn-default btn-sm" %}
+  
+    <div class="filter-dates form-group input-group">
+        <label>Dates</label>
+        <!-- Dummy field data -->
+        <input type="text" name="timestamp" value="10/08/18 - 10/10/18" required="" placeholder="yyyy-mm-dd" class="form-control" aria-describedby="basic-addon1" id="id_timestamp">
+    </div>             
+    <div class="filter-topic form-group input-group">
+        <label>Topic</label>
+        <!-- Dummy field data -->
+        <div class="selectContainer">
+            <select name="topic" class="form-control" id="id_topic">
+              <option value="">All topics</option>
+              <option value="Ebola updates" selected="">Ebola updates</option>
+            </select>
+        </div>
     </div>
-  </form>
-</div>
+    <div class="filter-location form-group input-group">
+       <label>Location</label>
+       <!-- Dummy field data -->
+        <div class="selectContainer">
+            <select name="location" class="form-control" id="id_location">
+                <option value="">All locations</option>
+                <option value="Ebola updates" selected="">Camp 4E</option>
+            </select>
+        </div>
+    </div>
+    <div class="filter-tags form-group input-group">
+        <label>Tags</label>
+        <!-- Dummy field data -->
+        <input type="text" name="tags" value="What matters, Flying news" required="" placeholder="yyyy-mm-dd" class="form-control" aria-describedby="basic-addon1" id="id_tags">
+    </div>
+    <div class="filter-gender form-group input-group">
+        <label for="">Gender</label>
+        <!-- Dummy field data -->
+        <div class="selectContainer">
+            <select name="gender" class="form-control" id="id_gender">
+                <option value="">All genders</option>
+                <option value="F" selected="">Female</option>
+                <option value="M" selected="">Male</option>
+            </select>
+        </div>
+    </div>
+    <div class="filter-age form-group input-group">
+        <label>Age</label>
+        <!-- Dummy field data -->
+        <input type="text" name="age" value="18 - 45" required="" placeholder="yy" class="form-control" aria-describedby="basic-addon1" id="id_age">
+    </div>
+    <div class="filter-apply form-group input-group ">
+      {% bootstrap_button 'Apply filters' button_class="btn btn-default btn-md" %}
+    </div>
+    <a href="#" class="filter-reset form-group">Reset</a>
+    </div>
+<form>
+
