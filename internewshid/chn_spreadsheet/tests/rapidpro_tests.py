@@ -1,10 +1,10 @@
 import datetime
 from os import path
 
+from django.core.management import call_command
+
 import pytest
 import pytz
-
-from django.core.management import call_command
 
 import transport
 from importer_tests import importer  # noqa

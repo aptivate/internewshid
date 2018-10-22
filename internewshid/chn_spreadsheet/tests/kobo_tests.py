@@ -1,9 +1,9 @@
 import datetime
 from os import path
 
-import pytest
-
 from django.core.management import call_command
+
+import pytest
 
 import transport
 from data_layer.models import Item
