@@ -56,9 +56,8 @@ KOBO_CONFIG = {
     },
     {
       "name": "Location",
-      "field": "terms",
-      "type": "taxonomy",
-      "taxonomy": "tags"
+      "field": "location",
+      "type": "text",
     },
     {
       "name": "comment",

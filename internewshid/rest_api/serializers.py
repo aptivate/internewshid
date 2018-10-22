@@ -14,7 +14,6 @@ class TaxonomySerializer(serializers.ModelSerializer):
             '__all__'
         )
 
-
     slug = serializers.SlugField(
         required=False,
         # FIXME: max_length=250, causes AppRegistryNotReady excpetion!" Go figure
@@ -61,16 +60,7 @@ class ItemSerializer(serializers.ModelSerializer):
     terms = TermSerializer(many=True)
 
     def create(self, validated_data):
-        """ Create an item with nested metadata terms
-        The validated data looks something like this:
-        {   "body": "some text",
-            "translation": "some other text",  # can be empty
-            "terms": [
-                {"taxonomy": "animal", "name": "Dog"},
-                {"taxonomy": "thing", "name": "foo"}
-            ],
-        }
-        """
+        """ Create an item with nested metadata terms."""
         # find all terms listed in term_data and link to item
         # in future, we might theoreteically be adding new tags here too,
         # in which case there will be more edge cases to detect

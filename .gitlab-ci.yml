@@ -13,6 +13,7 @@ variables:
   APTIVATE_CLI_MYSQL_HOST: mysql
 
 before_script:
+  - apt update && apt install -y nodejs node-less
   - pip install pipenv aptivate-cli
   - apc deploy --no-input
 

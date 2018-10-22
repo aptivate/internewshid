@@ -45,9 +45,16 @@ class ItemTable(tables.Table):
         verbose_name=_('Translation'),
         attrs={'td': {'class': 'col-md-3'}}
     )
+
     timestamp = tables.columns.DateTimeColumn(
         verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+        
+    location = tables.TemplateColumn(
+        template_name='hid/location_column.html',
+        verbose_name=_('Location'),
         attrs={'td': {'class': 'col-md-2'}}
     )
    

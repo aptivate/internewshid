@@ -40,7 +40,7 @@ class Importer(object):
             try:
                 wb = load_workbook(spreadsheet, read_only=True)
                 ws = wb[wb.sheetnames[0]]
-            except:
+            except Exception:
                 error_msg = _('Expected excel file. Received file in an unrecognized format.')
                 raise SheetImportException(error_msg)
             rows = ws.rows
@@ -59,7 +59,7 @@ class Importer(object):
                 try:
                     stripped_label = label.strip()
                     columns.append(col_map[stripped_label])
-                except:
+                except Exception:
                     error_msg = _('Unknown column: %s') % label
                     raise SheetImportException(error_msg)
         else:
@@ -199,7 +199,7 @@ class CellConverter(object):
         try:
             date_time = datetime.datetime.strptime(self.value,
                                                    self.date_format)
-        except:
+        except Exception:
             date_time = dateutil.parser.parse(self.value)
 
         return date_time

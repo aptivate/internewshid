@@ -2,8 +2,7 @@
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 <div class="panel panel-default">
-   <!--
-    <div class="panel-heading panel-heading-large clearfix">
+  <div class="panel-heading panel-heading-large clearfix">
         <span class="fa fa-table fa-fw"></span>
         <h2>{{ type_label }}</h2>
         <div class="pull-right btn-group">
@@ -28,8 +27,9 @@
           {% endif %}
         </div>
     </div>
-    -->
+    
     <div class="panel-body panel-body-list-table">
+        {% include "hid/tabs/dynamic_filters.html" %}
         <form action="{% url "data-view-process" %}"
               method="post"
               class="view-items-form">

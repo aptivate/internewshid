@@ -1,7 +1,5 @@
-from django.contrib.auth.models import Group
 from django.test import TestCase
 
-from ..group_permissions import GroupPermissions
 from ..models import User, get_picture_path
 from .factories import UserFactory
 
