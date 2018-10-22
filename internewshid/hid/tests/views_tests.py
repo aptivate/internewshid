@@ -14,7 +14,7 @@ from hid.tabs.view_and_edit_table import (
     view_and_edit_table_form_process_items
 )
 from tabbed_page.tests.factories import TabbedPageFactory, TabInstanceFactory
-from taxonomies.models import Taxonomy
+from taxonomies.models import Taxonomy, Term
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 
 ReqFactory = RequestFactory()
@@ -372,7 +372,7 @@ def test_view_and_edit_table_tab_sets_add_button_context():
 
 
 @pytest.mark.django_db
-def test_table_items_filtered_by_item_type_category():
+def test_table_items_filtered_by_item_type_category(item_type_taxonomy):
     wash_item = transport.items.create({
         'body': "Message in WASH category",
     })
@@ -385,12 +385,11 @@ def test_table_items_filtered_by_item_type_category():
         'body': "Message in no category",
     })
 
-    sectors = TaxonomyFactory(name="bangladesh-refugee-crisis-sectors")
-    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    wash_term = TermFactory(name='WASH', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
 
-    gbv_term = TermFactory(name='GBV', taxonomy=sectors)
+    gbv_term = TermFactory(name='GBV', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         gbv_item['id'], gbv_term.taxonomy.slug, gbv_term.name)
 
@@ -399,7 +398,7 @@ def test_table_items_filtered_by_item_type_category():
     request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
-        tab_instance, request, categories=[sectors.name],
+        tab_instance, request, categories=[item_type_taxonomy.slug],
         dynamic_filters=['category']
     )
 
@@ -411,7 +410,8 @@ def test_table_items_filtered_by_item_type_category():
 
 
 @pytest.mark.django_db
-def test_table_items_filtered_by_item_type_category_and_default_filter():
+def test_table_items_filtered_by_item_type_category_and_default_filter(
+        item_type_taxonomy):
     female_wash_item = transport.items.create({
         'body': 'Message from female in WASH category',
     })
@@ -420,8 +420,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
         'body': 'Message from male in WASH category',
     })
 
-    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
-    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    wash_term = TermFactory(name='WASH', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         female_wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
     transport.items.add_terms(
@@ -440,7 +439,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
     request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
-        tab_instance, request, categories=[sectors.name],
+        tab_instance, request, categories=[item_type_taxonomy.slug],
         filters={'terms': ['tags:female']}
     )
 
@@ -466,12 +465,7 @@ def test_dynamic_filters_read_from_tab_instance():
 
 
 @pytest.mark.django_db
-def test_category_options_in_context_data():
-    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
-    TermFactory(name='WASH', taxonomy=sectors)
-    TermFactory(name='Child Protection', taxonomy=sectors)
-    TermFactory(name='GBV', taxonomy=sectors)
-
+def test_category_options_in_context_data(item_type_taxonomy):
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
     request = Mock(GET={})
@@ -479,10 +473,12 @@ def test_category_options_in_context_data():
 
     context_data = tab.get_context_data(tab_instance,
                                         request,
-                                        categories=[sectors.name])
+                                        categories=[item_type_taxonomy.slug])
 
-    assert context_data['category_options'] == (
-        ('Child Protection', 'Child Protection'),
-        ('GBV', 'GBV'),
-        ('WASH', 'WASH'),
-    )
+    assert len(context_data['category_options']) > 0
+
+    terms = Term.objects.filter(taxonomy=item_type_taxonomy).order_by('name')
+
+    expected_options = [(t.name, t.name) for t in terms]
+
+    assert context_data['category_options'] == tuple(expected_options)
