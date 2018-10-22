@@ -293,7 +293,7 @@
             "name": "feedback",
             "page": 1,
             "position": 2,
-            "settings": "{\"label\":\"Feedback\",\"source\":\"kobo\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"location\",\"body\",\"translation\",\"category\"],\"filters\":{\"terms\":[\"tags:female\"]},\"dynamic_filters\":[\"category\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"]}",
+            "settings": "{\"label\":\"Feedback\",\"source\":\"kobo\",\"columns\":[\"select_item\",\"created\",\"timestamp\,\"body\",\"translation\",\"category\",\"location\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"category\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"]}",
             "tab_type": "view-and-edit-table"
         },
         "model": "tabbed_page.tabinstance",

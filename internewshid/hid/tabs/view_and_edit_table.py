@@ -11,6 +11,7 @@ from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
+from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
@@ -64,20 +65,38 @@ class ViewAndEditTableTab(object):
             )
         }
 
-    def _get_items(self, **kwargs):
-        """ Given the tab settings, return the list of items
+    def _get_items(self, request, **kwargs):
+        """ Given the filters, return the list of items
             to include in the page
 
             Args:
-                **kwargs (dict): Tab settings. If present
+                request: View request object
+                kwargs (dict): Tab settings. If present
                     kwargs['filters'] is expected to be
                     a dictionary of filters that is passed
                     on to the transport API.
-            Reruns:
+            Returns:
                 QuerySet: The items to list on the page
         """
-        filters = kwargs.get('filters', {})
+
+        filters = self._get_filters(request, **kwargs)
+
         return transport_items.list(**filters)
+
+    def _get_filters(self, request, **kwargs):
+        filters = kwargs.pop('filters', {})
+        self._apply_dynamic_filters(filters, request, **kwargs)
+
+        return filters
+
+    def _apply_dynamic_filters(self, filters, request, **kwargs):
+        dynamic_filters = kwargs.get('dynamic_filters', [])
+
+        for dynamic_filter_name in dynamic_filters:
+            filter = get_filter(dynamic_filter_name)
+            filter_value = request.GET.get(dynamic_filter_name, None)
+            if filter_value:
+                filter.apply(filters, filter_value, **kwargs)
 
     def _get_columns_to_exclude(self, **kwargs):
         """ Given the tab settings, return the columns to exclude
@@ -168,12 +187,12 @@ class ViewAndEditTableTab(object):
         })
 
     def get_context_data(self, tab_instance, request, **kwargs):
-        question_types = self._get_category_options(**kwargs)
+        category_options = self._get_category_options(**kwargs)
 
         # Build the table
         table = ItemTable(
-            self._get_items(**kwargs),
-            categories=question_types,
+            self._get_items(request, **kwargs),
+            categories=category_options,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
             order_by=request.GET.get('sort', None),
@@ -187,7 +206,7 @@ class ViewAndEditTableTab(object):
             tab_instance,
             kwargs.get('source', None)
         )
-        actions = self._build_actions_dropdown(question_types)
+        actions = self._build_actions_dropdown(category_options)
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
@@ -200,11 +219,12 @@ class ViewAndEditTableTab(object):
             'table': table,
             'upload_form': upload_form,
             'actions': actions,
-            'has_categories': len(question_types) > 0,
+            'category_options': category_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
-            })
+            }),
+            'dynamic_filters': kwargs.get('dynamic_filters', [])
         }
 
     def _get_item_type_filter(self, kwargs):

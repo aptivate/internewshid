@@ -369,3 +369,120 @@ def test_view_and_edit_table_tab_sets_add_button_context():
         'name': test_item_type.name,
         'long_name': test_item_type.long_name
     }
+
+
+@pytest.mark.django_db
+def test_table_items_filtered_by_item_type_category():
+    wash_item = transport.items.create({
+        'body': "Message in WASH category",
+    })
+
+    gbv_item = transport.items.create({
+        'body': "Message in GBV category",
+    })
+
+    transport.items.create({
+        'body': "Message in no category",
+    })
+
+    sectors = TaxonomyFactory(name="bangladesh-refugee-crisis-sectors")
+    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    transport.items.add_terms(
+        wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
+
+    gbv_term = TermFactory(name='GBV', taxonomy=sectors)
+    transport.items.add_terms(
+        gbv_item['id'], gbv_term.taxonomy.slug, gbv_term.name)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={'category': 'WASH'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[sectors.name],
+        dynamic_filters=['category']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert ids == [wash_item['id']]
+
+
+@pytest.mark.django_db
+def test_table_items_filtered_by_item_type_category_and_default_filter():
+    female_wash_item = transport.items.create({
+        'body': 'Message from female in WASH category',
+    })
+
+    male_wash_item = transport.items.create({
+        'body': 'Message from male in WASH category',
+    })
+
+    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
+    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    transport.items.add_terms(
+        female_wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
+    transport.items.add_terms(
+        male_wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
+
+    tags = TaxonomyFactory(name='tags')
+    female_term = TermFactory(name='female', taxonomy=tags)
+    male_term = TermFactory(name='male', taxonomy=tags)
+    transport.items.add_terms(
+        female_wash_item['id'], female_term.taxonomy.slug, female_term.name)
+    transport.items.add_terms(
+        male_wash_item['id'], male_term.taxonomy.slug, male_term.name)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={'category': 'WASH'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[sectors.name],
+        filters={'terms': ['tags:female']}
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert ids == [female_wash_item['id']]
+
+
+@pytest.mark.django_db
+def test_dynamic_filters_read_from_tab_instance():
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        dynamic_filters=['category'])
+
+    assert context_data['dynamic_filters'] == ['category']
+
+
+@pytest.mark.django_db
+def test_category_options_in_context_data():
+    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
+    TermFactory(name='WASH', taxonomy=sectors)
+    TermFactory(name='Child Protection', taxonomy=sectors)
+    TermFactory(name='GBV', taxonomy=sectors)
+
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=[sectors.name])
+
+    assert context_data['category_options'] == (
+        ('Child Protection', 'Child Protection'),
+        ('GBV', 'GBV'),
+        ('WASH', 'WASH'),
+    )
