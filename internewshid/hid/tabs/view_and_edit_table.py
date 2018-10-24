@@ -9,7 +9,6 @@ from django.utils.translation import ungettext
 
 from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
-from hid.forms.upload import UploadForm
 from hid.tables import ItemTable
 from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
@@ -170,22 +169,6 @@ class ViewAndEditTableTab(object):
 
         return actions
 
-    def _build_upload_form(self, tab_instance, source):
-        if source is None:
-            return None
-
-        next_url = reverse(
-            'tabbed-page',
-            kwargs={
-                'name': tab_instance.page.name,
-                'tab_name': tab_instance.name,
-            })
-
-        return UploadForm(initial={
-            'source': source,
-            'next': next_url,
-        })
-
     def get_context_data(self, tab_instance, request, **kwargs):
         category_options = self._get_category_options(**kwargs)
 
@@ -202,10 +185,6 @@ class ViewAndEditTableTab(object):
             page=request.GET.get('page', 1)
         )
 
-        upload_form = self._build_upload_form(
-            tab_instance,
-            kwargs.get('source', None)
-        )
         actions = self._build_actions_dropdown(category_options)
 
         # Ensure we have the assets we want
@@ -217,7 +196,7 @@ class ViewAndEditTableTab(object):
             'add_button_for': self._get_item_type_filter(kwargs),
             'type_label': kwargs.get('label', '?'),
             'table': table,
-            'upload_form': upload_form,
+            'source': kwargs.get('source'),
             'actions': actions,
             'category_options': category_options,
             'next': reverse('tabbed-page', kwargs={

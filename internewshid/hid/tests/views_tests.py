@@ -258,55 +258,6 @@ def test_actions_excludes_remove_question_type_option_for_no_categories():
     assert 'remove-question-type' not in actions['items']
 
 
-@pytest.mark.django_db
-def test_upload_form_source_read_from_settings():
-    page = TabbedPageFactory()
-    tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request,
-                                        source='rapidpro')
-
-    form = context_data['upload_form']
-    assert form.initial.get('source') == 'rapidpro'
-
-
-@pytest.mark.django_db
-def test_upload_form_next_url_read_from_tab_instance():
-    page = TabbedPageFactory(name='main')
-    tab_instance = TabInstanceFactory(page=page, name='rumors')
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request,
-                                        source='rapidpro')
-
-    form = context_data['upload_form']
-
-    expected_url = reverse('tabbed-page',
-                           kwargs={'name': 'main', 'tab_name': 'rumors'})
-
-    assert form.initial.get('next') == expected_url
-
-
-@pytest.mark.django_db
-def test_no_upload_form_when_source_not_set():
-    page = TabbedPageFactory(name='main')
-    tab_instance = TabInstanceFactory(page=page, name='all')
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request)
-
-    form = context_data['upload_form']
-
-    assert form is None
-
-
 def test_views_item_get_request_parameters_renames_items_of_active_location():
     query = QueryDict(
         'action=something-bottom&item-top=top-value&item-bottom=bottom-value'

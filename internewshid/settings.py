@@ -192,6 +192,12 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'ITEM_TYPE_CATEGORY': (json.dumps({'question': 'ebola-questions'}),
                            'Single item-type taxonomy to use for categorisation'),
+    'DEFAULT_TABBED_PAGE_NAME': ('main',
+                                 'Name of default tabbed page'),
+    'DEFAULT_TAB_NAME': ('all',
+                         'Name of default tab within page'),
+    'GLOBAL_DATA_SOURCE': ('kobo',
+                           'Sheet profile to use when loading data from the main menu'),
 }
 
 REST_FRAMEWORK = {
@@ -248,6 +254,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
