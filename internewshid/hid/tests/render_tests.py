@@ -1,5 +1,5 @@
-from mock import Mock, patch
 import pytest
+from mock import Mock, patch
 
 from ..templatetags.render_upload_form import render_upload_form
 
