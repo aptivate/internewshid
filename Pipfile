@@ -30,6 +30,7 @@ openpyxl = "*"
 python-dateutil = "*"
 pytz = "*"
 django-constance = {version = "*", extras = ["database"]}
+rest-pandas = "*"
 
 [dev-packages]
 factory_boy = "*"

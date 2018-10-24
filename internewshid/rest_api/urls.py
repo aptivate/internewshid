@@ -1,8 +1,10 @@
-from django.conf import settings
+from django.conf.urls import url
 
 from rest_framework import routers
 
-from .views import ItemViewSet, TaxonomyViewSet, TermViewSet
+from .views import (
+    ItemViewSet, LocationCoverageView, TaxonomyViewSet, TermViewSet
+)
 
 router = routers.SimpleRouter()
 router.register(
@@ -19,5 +21,10 @@ router.register(
     TermViewSet,
 )
 
-
-urlpatterns = router.urls if settings.DEBUG else []
+urlpatterns = [
+    url(
+        r'location-coverage/$',
+        LocationCoverageView.as_view(),
+        name='location-coverage'
+    ),
+] + router.urls
