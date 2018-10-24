@@ -46,7 +46,7 @@
          {% if request.user.is_authenticated %}
             <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="fa fa-gear fa-fw"></span> Settings  <span class="fa fa-caret-down"> </span>
+                        Settings  <span class="fa fa-caret-down"> </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                        <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-user fa-fw"></span> Your Account {{ request.user }}</a></li>
@@ -96,7 +96,7 @@
     </div>
     
     <div class="project-info">
-        <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
+        <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}/images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
     </div>
     <!-- /Main Content -->
 {% endblock content %}
