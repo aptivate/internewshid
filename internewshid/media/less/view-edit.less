@@ -129,15 +129,17 @@ tbody {
     font-size: @font-size-small;
 }
 
-.table tr.selected{
+.table-striped > tbody > tr.selected.odd,
+.table-striped > tbody > tr.selected.even{
     background-color: #e3edf8;
     border: solid 1px @brand-secondary;
 }
 
-.table-hover > tbody > tr.selected:hover{
+.table-striped > tbody > tr.selected.odd:hover,
+.table-striped > tbody > tr.selected.even:hover{
         background-color: darken(#e3edf8, 10%);
-
 }
+
 
 .table .form-control {
   line-height:1em;
