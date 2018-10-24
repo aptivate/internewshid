@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% load render_upload_form %}
 {% block content %}
 <!-- Navigation -->
     <div class="navbar-default sidebar" role="navigation">
@@ -25,6 +27,9 @@
                 <a class="navbar-brand pull-left" href="/">{% trans "HID  " %}<span class="subtitle">{% trans "Humanitarian Information Dashboard" %}</span></a>
             </div>
         <!-- /.navbar-header -->
+        {% url 'tabbed-page' config.DEFAULT_TABBED_PAGE_NAME config.DEFAULT_TAB_NAME as next_url %}
+        {% trans 'data' as type_label %}
+        {% render_upload_form config.GLOBAL_DATA_SOURCE next_url type_label %}
         {% if request.user.is_authenticated %}
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown pull-right">
@@ -73,10 +78,9 @@
             </div>
         </div>
     </div>
-    
+
     <div class="project-info">
         <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
     </div>
     <!-- /Main Content -->
 {% endblock content %}
-

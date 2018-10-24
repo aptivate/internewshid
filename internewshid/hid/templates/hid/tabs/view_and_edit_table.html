@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
+{% load render_upload_form %}
 <div class="panel panel-default">
   <div class="panel-heading panel-heading-large clearfix">
         <span class="fa fa-table fa-fw"></span>
@@ -15,16 +16,7 @@
                   {% endblocktrans %}
               </a>
           {% endif %}
-          {% if upload_form %}
-            <form action="{% url "sources-upload" %}"
-                  method="post"
-                  enctype="multipart/form-data"
-                  class="auto-upload-file pull-left">
-                {% csrf_token %}
-                    {% bootstrap_form upload_form show_label=False %}
-                    <a class="btn item-source-upload btn-primary upload-button pull-left" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-upload fa-fw"></span>{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
-            </form>
-          {% endif %}
+          {% render_upload_form source next type_label %}
         </div>
     </div>
     <div class="panel-body">
