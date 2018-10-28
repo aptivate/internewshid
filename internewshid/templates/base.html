@@ -2,6 +2,7 @@
 {% load assets %}
 {% load bootstrap3 %}
 {% load i18n %}
+{% load static %}
 <html>
 <head>
   <meta charset="utf-8">
@@ -20,15 +21,15 @@
   {% assets "css_assets" %}
       <link href="{{ ASSET_URL }}" medial="all" rel="stylesheet" />
   {% endassets %}
-  <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico?v=1"/>
+  <link rel="shortcut icon" href="{% static "images/favicon.ico" %}?v=1" />
 </head>
 
 <body class="stretch-vertical">
-   
+
     {% block content %}
     <div class="container-fluid stretch-vertical">
         <div class="row container-row">
-            
+
             <div class="col-sm-12 col-md-12 main internews-main">
 
             {% block maincontent %}
