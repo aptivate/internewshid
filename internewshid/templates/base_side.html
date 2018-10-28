@@ -38,12 +38,7 @@
         {% url 'tabbed-page' config.DEFAULT_TABBED_PAGE_NAME config.DEFAULT_TAB_NAME as next_url %}
         {% trans 'data' as type_label %}
         {% render_upload_form config.GLOBAL_DATA_SOURCE next_url type_label %}
-          <div class="last-uploaded">Last upload
-              <span>12/10/18</span>
-            </div>
         </li>
-        <li><a href="#">Export data</a></li>
-
         {% if request.user.is_authenticated %}
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
