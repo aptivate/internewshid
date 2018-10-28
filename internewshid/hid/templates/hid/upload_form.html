@@ -4,9 +4,9 @@
 <form action="{% url "sources-upload" %}"
       method="post"
       enctype="multipart/form-data"
-      class="auto-upload-file pull-left">
+      class="auto-upload-file nav navbar-form navbar-left">
   {% csrf_token %}
   {% bootstrap_form upload_form show_label=False %}
-  <a class="btn item-source-upload upload-button pull-left" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}">{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
+  <a class="btn upload-button pull-left" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}">{% blocktrans %}Upload {{ type_label }}{% endblocktrans %}</a>
 </form>
 {% endif %}
