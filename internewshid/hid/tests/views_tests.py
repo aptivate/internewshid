@@ -7,15 +7,29 @@ import pytest
 from mock import Mock
 
 import transport
+from hid.constants import ITEM_TYPE_CATEGORY
 from hid.tabs.view_and_edit_table import (
     DELETE_COMMAND, REMOVE_QTYPE_COMMAND, ViewAndEditTableTab, _delete_items,
     _get_view_and_edit_form_request_parameters,
     view_and_edit_table_form_process_items
 )
 from tabbed_page.tests.factories import TabbedPageFactory, TabInstanceFactory
+from taxonomies.models import Taxonomy, Term
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 
 ReqFactory = RequestFactory()
+
+
+@pytest.fixture
+def item_type_taxonomy():
+    slug = ITEM_TYPE_CATEGORY['question']
+
+    try:
+        taxonomy = Taxonomy.objects.get(slug=slug)
+    except Taxonomy.DoesNotExist:
+        taxonomy = Taxonomy.objects.create(name=slug)
+
+    return taxonomy
 
 
 def fix_messages(request):
@@ -95,15 +109,14 @@ def test_process_items_deletes_items(request_item):
 
 
 @pytest.mark.django_db
-def test_process_items_removes_question_type():
+def test_process_items_removes_question_type(item_type_taxonomy):
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
     [item] = list(transport.items.list())
 
-    taxonomy = TaxonomyFactory(name="Ebola Questions")
     term_to_delete = TermFactory(name='term to be deleted',
-                                 taxonomy=taxonomy)
+                                 taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         item['id'], term_to_delete.taxonomy.slug, term_to_delete.name)
 
@@ -245,55 +258,6 @@ def test_actions_excludes_remove_question_type_option_for_no_categories():
     assert 'remove-question-type' not in actions['items']
 
 
-@pytest.mark.django_db
-def test_upload_form_source_read_from_settings():
-    page = TabbedPageFactory()
-    tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request,
-                                        source='rapidpro')
-
-    form = context_data['upload_form']
-    assert form.initial.get('source') == 'rapidpro'
-
-
-@pytest.mark.django_db
-def test_upload_form_next_url_read_from_tab_instance():
-    page = TabbedPageFactory(name='main')
-    tab_instance = TabInstanceFactory(page=page, name='rumors')
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request,
-                                        source='rapidpro')
-
-    form = context_data['upload_form']
-
-    expected_url = reverse('tabbed-page',
-                           kwargs={'name': 'main', 'tab_name': 'rumors'})
-
-    assert form.initial.get('next') == expected_url
-
-
-@pytest.mark.django_db
-def test_no_upload_form_when_source_not_set():
-    page = TabbedPageFactory(name='main')
-    tab_instance = TabInstanceFactory(page=page, name='all')
-    request = Mock(GET={})
-    tab = ViewAndEditTableTab()
-
-    context_data = tab.get_context_data(tab_instance,
-                                        request)
-
-    form = context_data['upload_form']
-
-    assert form is None
-
-
 def test_views_item_get_request_parameters_renames_items_of_active_location():
     query = QueryDict(
         'action=something-bottom&item-top=top-value&item-bottom=bottom-value'
@@ -359,7 +323,7 @@ def test_view_and_edit_table_tab_sets_add_button_context():
 
 
 @pytest.mark.django_db
-def test_table_items_filtered_by_item_type_category():
+def test_table_items_filtered_by_item_type_category(item_type_taxonomy):
     wash_item = transport.items.create({
         'body': "Message in WASH category",
     })
@@ -372,12 +336,11 @@ def test_table_items_filtered_by_item_type_category():
         'body': "Message in no category",
     })
 
-    sectors = TaxonomyFactory(name="bangladesh-refugee-crisis-sectors")
-    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    wash_term = TermFactory(name='WASH', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
 
-    gbv_term = TermFactory(name='GBV', taxonomy=sectors)
+    gbv_term = TermFactory(name='GBV', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         gbv_item['id'], gbv_term.taxonomy.slug, gbv_term.name)
 
@@ -386,7 +349,7 @@ def test_table_items_filtered_by_item_type_category():
     request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
-        tab_instance, request, categories=[sectors.name],
+        tab_instance, request, categories=[item_type_taxonomy.slug],
         dynamic_filters=['category']
     )
 
@@ -398,7 +361,8 @@ def test_table_items_filtered_by_item_type_category():
 
 
 @pytest.mark.django_db
-def test_table_items_filtered_by_item_type_category_and_default_filter():
+def test_table_items_filtered_by_item_type_category_and_default_filter(
+        item_type_taxonomy):
     female_wash_item = transport.items.create({
         'body': 'Message from female in WASH category',
     })
@@ -407,8 +371,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
         'body': 'Message from male in WASH category',
     })
 
-    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
-    wash_term = TermFactory(name='WASH', taxonomy=sectors)
+    wash_term = TermFactory(name='WASH', taxonomy=item_type_taxonomy)
     transport.items.add_terms(
         female_wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
     transport.items.add_terms(
@@ -427,7 +390,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter():
     request = Mock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
-        tab_instance, request, categories=[sectors.name],
+        tab_instance, request, categories=[item_type_taxonomy.slug],
         filters={'terms': ['tags:female']}
     )
 
@@ -453,11 +416,11 @@ def test_dynamic_filters_read_from_tab_instance():
 
 
 @pytest.mark.django_db
-def test_category_options_in_context_data():
-    sectors = TaxonomyFactory(name='bangladesh-refugee-crisis-sectors')
-    TermFactory(name='WASH', taxonomy=sectors)
-    TermFactory(name='Child Protection', taxonomy=sectors)
-    TermFactory(name='GBV', taxonomy=sectors)
+def test_category_options_in_context_data(item_type_taxonomy):
+    Term.objects.get_or_create(name='WASH', taxonomy=item_type_taxonomy)
+    Term.objects.get_or_create(name='GBV', taxonomy=item_type_taxonomy)
+    Term.objects.get_or_create(name='Child Protection',
+                               taxonomy=item_type_taxonomy)
 
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
@@ -466,10 +429,12 @@ def test_category_options_in_context_data():
 
     context_data = tab.get_context_data(tab_instance,
                                         request,
-                                        categories=[sectors.name])
+                                        categories=[item_type_taxonomy.slug])
 
-    assert context_data['category_options'] == (
-        ('Child Protection', 'Child Protection'),
-        ('GBV', 'GBV'),
-        ('WASH', 'WASH'),
-    )
+    assert len(context_data['category_options']) > 0
+
+    terms = Term.objects.filter(taxonomy=item_type_taxonomy).order_by('name')
+
+    expected_options = [(t.name, t.name) for t in terms]
+
+    assert context_data['category_options'] == tuple(expected_options)

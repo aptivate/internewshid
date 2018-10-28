@@ -1,0 +1,18 @@
+[
+    {
+        "fields": {
+            "label": "geopoll",
+            "profile": "{\"name\":\"Geopoll\",\"format\":\"excel\",\"label\":\"geopoll\",\"skip_header\":1,\"taxonomies\":{\"contexts\":\"Ebola-Liberia\",\"countries\":\"Liberia\",\"data-origins\":\"Geopoll Spreadsheet\",\"item-types\":\"question\"},\"columns\":[{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Province\",\"taxonomy\":\"tags\"},{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"CreatedDate\",\"date_format\":\"%m/%d/%y\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"AgeGroup\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"QuestIO\"}]}"
+        },
+        "model": "chn_spreadsheet.sheetprofile",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "label": "rapidpro",
+            "profile": "{\"name\":\"RapidPro\",\"format\":\"excel\",\"label\":\"rapidpro\",\"skip_header\":1,\"taxonomies\":{\"contexts\":\"Ebola-Liberia\",\"countries\":\"Liberia\",\"data-origins\":\"Rapidpro Spreadsheet\",\"item-types\":\"rumor\"},\"columns\":[{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Phone\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Name\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Groups\"},{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"Last Seen\",\"date_format\":\"%m/%d/%y %H:%M:%S\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"Rumors (Text) - DEY Say sample flow\"},{\"field\":\"network_provider\",\"type\":\"text\",\"name\":\"Channel\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Region\",\"taxonomy\":\"tags\"}]}"
+        },
+        "model": "chn_spreadsheet.sheetprofile",
+        "pk": 2
+    }
+]

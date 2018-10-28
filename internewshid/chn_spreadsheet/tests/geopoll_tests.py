@@ -1,6 +1,8 @@
 import datetime
 from os import path
 
+from django.core.management import call_command
+
 import pytest
 import pytz
 
@@ -9,6 +11,12 @@ from importer_tests import importer  # noqa
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
+
+
+@pytest.fixture
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command('loaddata', 'liberia-ebola.json')
 
 
 @pytest.mark.django_db  # noqa

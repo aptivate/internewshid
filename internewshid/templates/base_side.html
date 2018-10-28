@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
-{% load render_table from django_tables2 %}
+{% load render_upload_form %}
 {% block content %}
 
 <!-- Navigation -->
@@ -17,7 +16,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/"><span><abbr title="{% trans 'Humanitarian Information Dashboard'%} ">{% trans "HID  " %} </abbr><span>Cox's bazaar, Bangladesh</span></span></a>
-        
+
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -36,32 +35,33 @@
 
       <ul class="nav navbar-nav navbar-right nav-utilities">
         <li>
-          <a href="#">Upload data</a>
-          <div class="last-uploaded">Last upload 
+        {% url 'tabbed-page' config.DEFAULT_TABBED_PAGE_NAME config.DEFAULT_TAB_NAME as next_url %}
+        {% trans 'data' as type_label %}
+        {% render_upload_form config.GLOBAL_DATA_SOURCE next_url type_label %}
+          <div class="last-uploaded">Last upload
               <span>12/10/18</span>
             </div>
         </li>
-          <li><a href="#">Export data</a></li>
-        
-         {% if request.user.is_authenticated %}
-            <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Settings  <span class="fa fa-caret-down"> </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                       <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-user fa-fw"></span> Your Account {{ request.user }}</a></li>
-                        <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{% url "logout" %}?next={% url 'login' %}"><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-            {% endif %}
+        <li><a href="#">Export data</a></li>
+
+        {% if request.user.is_authenticated %}
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+             Settings  <span class="fa fa-caret-down"> </span>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-user fa-fw"></span> Your Account {{ request.user }}</a></li>
+                <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url "logout" %}?next={% url 'login' %}"><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
 
     <!-- Main Content -->
     <div id="page-wrapper">
@@ -94,10 +94,9 @@
             </div>
         </div>
     </div>
-    
+
     <div class="project-info">
         <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}/images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
     </div>
     <!-- /Main Content -->
 {% endblock content %}
-
