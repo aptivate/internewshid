@@ -6,6 +6,7 @@ import django_tables2 as tables
 
 from hid.constants import ITEM_TYPE_CATEGORY
 
+
 class NamedCheckBoxColumn(tables.CheckBoxColumn):
     @property
     def header(self):
