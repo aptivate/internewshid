@@ -23,8 +23,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav nav-pills">
-        <li class="active"><a href="{% url "dashboard" %}">Dashboard <span class="sr-only">(current)</span></a></li>
-        <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}">Feedback</a></li>
+        <li {% if request.resolver_match.url_name == "dashboard" %}class="active"{% endif %}><a href="{% url "dashboard" %}">Dashboard <span class="sr-only">(current)</span></a></li>
+        <li {% if request.resolver_match.url_name == "tabbed-page" %}class="active"{% endif %}><a href="{% url "tabbed-page" name="main" tab_name="all" %}">Feedback</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right nav-utilities">
