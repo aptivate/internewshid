@@ -37,7 +37,6 @@
             var checked = $(selectors.td_input + ':checked').length,
                 all = $(selectors.td_input).length,
                 checked_all = all === checked;
-
             $(selectors.th_select + ' input').prop("checked", checked_all);
         }
 
@@ -49,5 +48,12 @@
         }
 
         init();
+        
+        // Highlight single row on select 
+        $( "input[type=checkbox]" ).click(function(event){
+            console.log('aaa');
+            $( event.target ).closest( "tr" ).toggleClass('selected');
+        });
+        
     });
 })(jQuery);

@@ -21,9 +21,9 @@ body {
   }
   #page-wrapper {
       position: inherit;
-      margin: 50px 0 0 250px;
+      margin: 0;
       min-height: 1000px;
-      background-color: @gray-lighter;
+      background-color: @brand-secondary;
       .box-shadow-inset(inset, 0px, 0px);
   }
 }
@@ -46,34 +46,114 @@ body {
 #page-wrapper {
   padding:0 @padding-large-horizontal;
 }
-
+.navbar-default{
+    padding: 2% 1% 2% 2%;
+    background-color:@body-bg;
+    border-bottom:1px solid @gray;
+}
 // Branding
+ul.nav.nav-pills:after{
+    clear: none;
+}
+.navbar-brand {
+    background: url(../images/internews-logo.svg) no-repeat transparent;
+    background-size: contain;
+    font-weight: bold;
+    font-size: small;
+    line-height: 1;
+    min-width: 150px;
+    margin-right: 2em;
+    color: @brand-secondary;
 
-h2.navbar-brand {
-  font-size:15px;
-  font-weight: bold;
+    span {
+            display: inline-block;
+            width: 183px;
+            margin-left: 23%;
+            margin-top: 12%;
+
+        span{
+            color: @brand-primary;
+            margin: 0;
+        }
+    }
+
 }
 
 @media(min-width:@screen-sm-min){
   .navbar-brand {
-    font-size:24px;
     padding-top:@padding-small-vertical * 3;
   }
 }
 
-.subtitle {
-    display: block;
-    float: right;
-    width: 150px;
+
+
+// Navs =======================================================================
+// Search form
+.navbar-form{
+    .form-control{
+        border-radius: 8px;
+    }
+    button[type="submit"]{
+        display: none;
+    }
+}
+// Utilities list
+.nav-utilities{
+    font-size: @font-size-medium;
+}
+.dropdown-menu {
+
+  & > li > a:hover,
+  & > li > a:focus {
+    background-image: none;
+  }
 }
 
-.subtitle {
-    font-size: 12px;
-    line-height: 1em;
-    padding-left: @padding-small-horizontal;
+
+// Pills
+// -------------------------
+.nav-pills {
+  > li {
+      font-weight: bold;
+    float: left;
+
+    // Links rendered as pills
+    > a {
+      border-radius: @border-radius-small;
+        border: solid 1px transparent;
+        &:hover,
+        &:focus {
+            color: @brand-primary;
+            background-color: transparent;
+            border: solid 1px @brand-secondary;
+        }
+    }
+    + li {
+      margin-left: 2px;
+    }
+
+    // Active state
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @nav-pills-active-link-hover-color;
+        background-color: @nav-pills-active-link-hover-bg;
+        border: solid 1px @brand-secondary;
+      }
+    }
+  }
 }
 
-// Navigation
+// Secondary header nav
+.last-uploaded{
+    font-size: small;
+    line-height: 1;
+    color: @brand-primary;
+    span{
+        color: @brand-secondary;
+    }
+}
 
 .navbar-static-top {
   position:absolute;
@@ -90,6 +170,7 @@ h2.navbar-brand {
         top:0;
       }
 }
+
 
 .navbar-top-links {
     margin-right: 0;
@@ -119,7 +200,7 @@ h2.navbar-brand {
 
 .navbar-top-links > li > a,
 .navbar-top-links > li > a > .fa {
-  color:@body-bg;
+  color:@gray-dark;
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -246,13 +327,7 @@ h2.navbar-brand {
     }
 }
 
-.featured-image {
-  background-image:url(../images/talking-peace.jpg);
-  background-repeat:no-repeat;
-  background-size:cover;
-  min-height:200px;
-  z-index:@zindex-navbar-fixed;
-}
+
 
 @media(max-width:@screen-xs) {
     .sidebar {
@@ -261,9 +336,6 @@ h2.navbar-brand {
  }
 
  @media(min-width:@screen-xs-min) and (max-width:@screen-sm) {
-    .featured-image {
-      display:none;
-    }
     .sidebar {
       margin-top:76px;
     }
@@ -281,22 +353,20 @@ h2.navbar-brand {
   margin-left:2px;
 }
 
+
+// Dashboard
+.main-content > .dashboard{
+    margin-top: 1em;
+}
 //Project info
 
 .project-info {
-  position: fixed;
-  bottom: 30px;
-  text-align: center;
-  width: 250px;
-  font-size:12.5px;
-  margin:0;
-  z-index:@zindex-navbar-fixed;
+    float:left;
 }
 
 @media(max-width:@screen-sm){
   .project-info{
     width: 100%;
-    background-color: @gray-lightest;
     height: 30px;
     .box-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
     bottom: 0;
@@ -305,41 +375,23 @@ h2.navbar-brand {
 }
 
 .project-info > a {
-  width:120px;
-  display:inline-block;
-}
-.project-info > a > img {
-  width:100%;
+  color:white;
 }
 
 //Site info
 
 .site-info {
-    border-top:1px solid #f5f5f5;
-
-}
-
-.site-info {
-  font-size:12.5px;
-  color:@gray;
-  margin:0;
-  text-align:right;
-  padding:@padding-small-vertical;
-  padding-bottom:0;
-  & p{
-    margin:0;
-  }
-  & a{
-    color:@gray;
+  float:right;
+  > a {
+    color:white;
   }
 }
 
 @media(max-width:@screen-sm){
   .site-info {
-    text-align:center;
-    padding-bottom:50px;
   }
 }
+
 
 
 // Buttons
@@ -385,24 +437,10 @@ h2.navbar-brand {
 //footer
 
 .footer {
-    bottom: 0;
-    width:100%;
-    position: fixed;
-    height:100px;
-
+   padding:15px 0;
+   color:white;
+   justify-content:space-between;
 }
-
-.footer {
-    color: #78716e;
-    font-size: 13px;
-    text-align: center;
-    padding:@padding-base-vertical;
-    background-color:@gray-lighter;
-    a {
-      color:@gray;
-    }
-}
-
 
 // Login Page
 
@@ -460,7 +498,11 @@ h2.navbar-brand {
 // Auto-upload button. Progressive enhencement, this
 // will be displayed if the associated js executes.
 .auto-upload-file .upload-button {
+    font-size: 14px;
     display: none;
+    &:hover, &:focus {
+        color: @gray-dark;
+    }
 }
 
 // Grid Demo Elements
@@ -577,6 +619,10 @@ h2.navbar-brand {
             color: darken(@brand-warning, 15%);
         }
     }
+}
+
+.panel-body-list-table{
+    padding: 0;
 }
 
 //icons

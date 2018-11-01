@@ -1,5 +1,6 @@
 {% extends "base_side.html" %}
 {% load i18n %}
+{% load static %}
 {% load bootstrap3 %}
 
 {% block maincontent %}
@@ -7,8 +8,10 @@
     <ul class="list-unstyled">
         {% for source in sources %}
         <li class="well item-source clearfix">
-            <div class="item-source-info pull-left">
-                <h2><img  alt="{{ source.name }}" src="{{ STATIC_URL }}images/logo-{{ source.name }}.png"/></h2>
+          <div class="item-source-info pull-left">
+            {% with "images/logo-"|add:source.name|add:".png" as logo_filename %}
+            <h2><img  alt="{{ source.name }}" src="{% static logo_filename %}"/></h2>
+            {% endwith %}
             </div>
 
             <form action="{% url "sources-upload" %}" method="post" enctype="multipart/form-data" class="item-source-actions auto-upload-file pull-right">
@@ -26,4 +29,3 @@
     </ul>
 
 {% endblock maincontent %}
-

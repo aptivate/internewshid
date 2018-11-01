@@ -1,13 +1,13 @@
 {% load bootstrap3 %}
-<div class="panel panel-default">
-  <form action="" method="get" class="form form-inline">
+<form action="" method="get">
+    <div class="row filters">
     {% for filter in dynamic_filters %}
     {% with "hid/tabs/filters/"|add:filter|add:".html" as filter_template %}
     {% include filter_template %}
     {% endwith %}
     {% endfor %}
-    <div class="form-group table-button-group">
-      {% bootstrap_button 'Apply filters' button_class="btn btn-default btn-sm" %}
+        <div class="filter-apply form-group input-group ">
+        {% bootstrap_button 'Apply filters' button_class="btn btn-default btn-md" %}
+        </div>
     </div>
-  </form>
-</div>
+</form>

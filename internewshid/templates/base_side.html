@@ -1,52 +1,57 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
+{% load static %}
 {% load render_upload_form %}
 {% block content %}
+
 <!-- Navigation -->
-    <div class="navbar-default sidebar" role="navigation">
-        <div class="col-xs-12 featured-image"></div>
-        <nav class="sidebar-nav navbar-collapse collapse">
-            <ul class="nav" id="side-menu">
-                <li><a class="active" href="{% url "dashboard" %}"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a></li>
-                {# <li><a href="{% url "sources" %}"><span class="fa fa-download fa-fw"></span> Sources</a></li> #}
-                <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-pencil fa-fw"></span> View &amp; Edit</a></li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-collapse -->
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><span><span>{{ config.CONTEXT_LOCATION }}</span></span></a>
+
     </div>
-    <!-- /.sidebar -->
-    <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-                <button title="show/hide menu" data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand pull-left" href="/">{% trans "HID  " %}<span class="subtitle">{% trans "Humanitarian Information Dashboard" %}</span></a>
-            </div>
-        <!-- /.navbar-header -->
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav nav-pills">
+        <li {% if request.resolver_match.url_name == "dashboard" %}class="active"{% endif %}><a href="{% url "dashboard" %}">Dashboard <span class="sr-only">(current)</span></a></li>
+        <li {% if request.resolver_match.url_name == "tabbed-page" %}class="active"{% endif %}><a href="{% url "tabbed-page" name="main" tab_name="all" %}">Feedback</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right nav-utilities">
+        <li>
         {% url 'tabbed-page' config.DEFAULT_TABBED_PAGE_NAME config.DEFAULT_TAB_NAME as next_url %}
         {% trans 'data' as type_label %}
         {% render_upload_form config.GLOBAL_DATA_SOURCE next_url type_label %}
+        </li>
         {% if request.user.is_authenticated %}
-        <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown pull-right">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="fa fa-user fa-fw"></span>  {{ request.user }}  <span class="fa fa-caret-down"> </span>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
-                    <li><a href="{% url "logout" %}?next={% url 'login' %}" class=""><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
-        </ul>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+             Settings  <span class="fa fa-caret-down"> </span>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="{% url "tabbed-page" name="main" tab_name="all" %}"><span class="fa fa-user fa-fw"></span> Your Account {{ request.user }}</a></li>
+                <li><a href="{% url "admin:index" %}"><span class="fa fa-gear fa-fw"></span>{% trans "Administration" %}</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url "logout" %}?next={% url 'login' %}"><span class="fa fa-sign-out fa-fw"></span>{% trans "Log out" %}</a></li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
         {% endif %}
-        <!-- /.navbar-top-links -->
-    </nav>
-    <!-- /Navigation -->
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
     <!-- Main Content -->
     <div id="page-wrapper">
         <div class="row">
@@ -72,15 +77,16 @@
                     {% block maincontent %}
                     {% endblock maincontent %}
                 </div>
-                <div class="row site-info">
-                    <p>developed by<a href="http://www.aptivate.org" title="Aptivate website"> Aptivate</a></p>
+                <div class="footer row">
+                    <div class="project-info">
+                        <a href="http://www.internews.org" title="a project of Internews">{% trans "a project of Internews" %}</a>
+                    </div>
+                    <div class="site-info">
+                        developed by <a href="http://www.aptivate.org" title="Aptivate website">Aptivate</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="project-info">
-        <a href="http://www.internews.org" title="a project of Internews"><img src="{{ STATIC_URL }}images/rsz_a-project-of-internews.png" alt="a project of Internews"></a>
     </div>
     <!-- /Main Content -->
 {% endblock content %}

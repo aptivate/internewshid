@@ -2,39 +2,19 @@
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 {% load render_upload_form %}
-<div class="panel panel-default">
-  <div class="panel-heading panel-heading-large clearfix">
-        <span class="fa fa-table fa-fw"></span>
-        <h2>{{ type_label }}</h2>
-        <div class="pull-right btn-group">
-          {% if add_button_for %}
-              <a class="btn btn-primary" type="button"
-                  href="{% url "add-item" item_type=add_button_for.name %}?next={{ request.path }}">
-                  <span class="fa fa-fw fa-plus-square"></span>
-                  {% blocktrans with add_button_for.long_name as label %}
-                      Add {{ label }}
-                  {% endblocktrans %}
-              </a>
-          {% endif %}
-          {% render_upload_form source next type_label %}
-        </div>
-    </div>
-    <div class="panel-body">
-        {% include "hid/tabs/dynamic_filters.html" %}
-        <form action="{% url "data-view-process" %}"
-              method="post"
-              class="view-items-form">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}" />
-            {% with button_placement="top" %}
-                {% include "hid/tabs/view_and_edit_buttons.html" %}
-            {% endwith %}
-            {% with pagination_class="pagination-circle-nav" %}
-                {% render_table table %}
-            {% endwith %}
-            {% with button_placement="bottom" %}
-                {% include "hid/tabs/view_and_edit_buttons.html" %}
-            {% endwith %}
-        </form>
-    </div>
+<div class="panel-body panel-body-list-table">
+    {% render_upload_form source next type_label %}
+    {% include "hid/tabs/dynamic_filters.html" %}
+    <form action="{% url "data-view-process" %}"
+          method="post"
+          class="view-items-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% with pagination_class="pagination-circle-nav" %}
+            {% render_table table %}
+        {% endwith %}
+        {% with button_placement="bottom" %}
+            {% include "hid/tabs/view_and_edit_buttons.html" %}
+        {% endwith %}
+    </form>
 </div>
