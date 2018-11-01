@@ -359,16 +359,12 @@ ul.nav.nav-pills:after{
 //Project info
 
 .project-info {
-  text-align: center;
-  width: 250px;
-  font-size:12.5px;
-  margin:0;
+    float:left;
 }
 
 @media(max-width:@screen-sm){
   .project-info{
     width: 100%;
-    background-color: @gray-lightest;
     height: 30px;
     .box-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
     bottom: 0;
@@ -377,34 +373,20 @@ ul.nav.nav-pills:after{
 }
 
 .project-info > a {
-  width:120px;
-  display:inline-block;
-}
-.project-info > a > img {
-  width:100%;
+  color:white;
 }
 
 //Site info
 
 .site-info {
-  font-size:12.5px;
-  color:@gray;
-  margin:0;
-  text-align:right;
-  padding:@padding-small-vertical;
-  padding-bottom:0;
-  & p{
-    margin:0;
-  }
-  & a{
-    color:@gray;
+  float:right;
+  > a {
+    color:white;
   }
 }
 
 @media(max-width:@screen-sm){
   .site-info {
-    text-align:center;
-    padding-bottom:50px;
   }
 }
 
@@ -453,24 +435,10 @@ ul.nav.nav-pills:after{
 //footer
 
 .footer {
-    bottom: 0;
-    width:100%;
-    position: fixed;
-    height:100px;
-
+   padding:15px 0;
+   color:white;
+   justify-content:space-between;
 }
-
-.footer {
-    color: #78716e;
-    font-size: 13px;
-    text-align: center;
-    padding:@padding-base-vertical;
-    background-color:@gray-lighter;
-    a {
-      color:@gray;
-    }
-}
-
 
 // Login Page
 
