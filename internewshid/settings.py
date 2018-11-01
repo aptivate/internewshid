@@ -200,6 +200,8 @@ CONSTANCE_CONFIG = {
                            'Sheet profile to use when loading data from the main menu'),
 }
 
+DJANGO_TABLES2_PAGE_RANGE = 6
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_RENDERER_CLASSES': (
