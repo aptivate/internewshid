@@ -190,12 +190,14 @@ LOGGING = {
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    'ITEM_TYPE_CATEGORY': (json.dumps({'question': 'ebola-questions'}),
-                           'Single item-type taxonomy to use for categorisation'),
+    'CONTEXT_LOCATION': ("Cox's Bazaar, Bangladesh",
+                         'Location of dashboard deployment'),
     'DEFAULT_TABBED_PAGE_NAME': ('main',
                                  'Name of default tabbed page'),
     'DEFAULT_TAB_NAME': ('all',
                          'Name of default tab within page'),
+    'ITEM_TYPE_CATEGORY': (json.dumps({'question': 'ebola-questions'}),
+                           'Single item-type taxonomy to use for categorisation'),
     'GLOBAL_DATA_SOURCE': ('kobo',
                            'Sheet profile to use when loading data from the main menu'),
 }
