@@ -1,6 +1,6 @@
 // View/edit
 
-// Filters 
+// Filters
 
 
 
@@ -10,8 +10,8 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 1em 0 0 2%;
-    
-    
+
+
     [class^="filter-"]{
         display: flex;
         flex-direction: row;
@@ -20,7 +20,7 @@
         margin-right: 2%;
         align-items: baseline;
 
-                
+
         label{
             font-size: @font-size-small;
             font-weight: bold;
@@ -50,7 +50,7 @@
             border-radius: @border-radius-large;
             border: solid 1px @brand-primary;
             white-space: nowrap;
-            
+
         }
     }
 }
@@ -64,6 +64,8 @@
 
 table,
 .table {
+
+  background-color:white;
 
   a:not(.btn) {
     text-decoration: none;
@@ -104,7 +106,7 @@ thead{
         .asc, .desc{
             background-color: @brand-primary;
         }
-        
+
         a{
             color: #fff;
             text-decoration: none!important;
@@ -121,7 +123,7 @@ thead{
         &.asc a:after{
             content: '\f0aa';
         }
-       
+
     }
 }
 
@@ -170,12 +172,48 @@ td.created, td.timestamp {
   padding-right:0;
 }
 
-.view-items-form .pagination {
-    margin-top: 0;
-    padding-right: 0;
+.view-items-form {
+  .pagination-wrapper {
+    color:white;
+    display:flex;
+    margin-bottom:10px;
+    justify-content:space-between;
+
+    > .box {
+      flex:1;
+      display:inline-flex;
+      justify-content:center;
+    }
+
+    > .box:first-child > span {
+      margin-right:auto;
+    }
+
+    > .box:last-child > span {
+      margin-left:auto;
+    }
+
+    > .pagination-pages {
+      flex-grow:2;
+    }
+  }
+
+  .pagination {
+    margin:0;
+    padding:0;
     li {
       padding:10px;
+
+      > a {
+        position:static;
+        float:none;
+        color:white;
+        background-color:@brand-secondary;
+        border:none;
+        padding:0;
+      }
     }
+  }
 }
 
 .messages-box {
@@ -241,17 +279,23 @@ th.select_action {
   text-align:center;
 }
 
-input[type="checkbox"] {
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  width: 20px;
-  height: 20px;
-  font-size: 15px;
-  background-color: @gray;
-  background-image:url(../images/checkbox-sprite.png);
-    background-repeat: no-repeat;
-  background-position:top left;
-    border-radius: 50%;
+
+.select-item-id-checkbox {
+   > input[type="checkbox"] + .fa-check-circle:before,
+   > input[type="checkbox"] + label > .fa-check-circle:before {
+       font-size:25px;
+       content: "\f10c";
+       color:@brand-primary;
+   }
+
+   > input[type="checkbox"]:checked + .fa-check-circle:before,
+   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+       content: "\f058";
+   }
+
+   > input[type="checkbox"] {
+     display:none;
+   }
 }
 
 @-moz-document url-prefix() {
