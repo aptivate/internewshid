@@ -77,11 +77,13 @@
                     {% block maincontent %}
                     {% endblock maincontent %}
                 </div>
-                <div class="project-info">
-                    <a href="http://www.internews.org" title="a project of Internews"><img src="{% static "/images/rsz_a-project-of-internews.png" %}" alt="a project of Internews"></a>
-                </div>
-                <div class="row site-info">
-                    <p>developed by<a href="http://www.aptivate.org" title="Aptivate website"> Aptivate</a></p>
+                <div class="footer row">
+                    <div class="project-info">
+                        <a href="http://www.internews.org" title="a project of Internews">{% trans "a project of Internews" %}</a>
+                    </div>
+                    <div class="site-info">
+                        developed by <a href="http://www.aptivate.org" title="Aptivate website">Aptivate</a>
+                    </div>
                 </div>
             </div>
         </div>
