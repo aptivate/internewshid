@@ -432,7 +432,7 @@ def test_table_items_filtered_by_date_range():
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
-        dynamic_filters=['start_time', 'end_time']
+        dynamic_filters=['time_range']
     )
 
     table = context_data['table']
