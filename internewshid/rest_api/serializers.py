@@ -68,7 +68,7 @@ class ItemSerializer(serializers.ModelSerializer):
             '__all__'
         )
 
-    terms = TermSerializer(many=True)
+    terms = TermSerializer(many=True, required=False)
 
     def create(self, validated_data):
         """ Create an item with nested metadata terms."""
