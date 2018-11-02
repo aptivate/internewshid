@@ -5,13 +5,14 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
+from rest_pandas import PandasView
 
 from data_layer.models import Item
 from taxonomies.models import Taxonomy, Term
 
 from .serializers import (
-    ItemSerializer, TaxonomySerializer, TermItemCountSerializer,
-    TermSerializer
+    ItemSerializer, LocationCoverageSerializer, TaxonomySerializer,
+    TermItemCountSerializer, TermSerializer
 )
 
 
@@ -194,3 +195,8 @@ class TermViewSet(viewsets.ModelViewSet):
             items = items.filter(taxonomy__slug=taxonomy_slug)
 
         return items
+
+
+class LocationCoverageView(PandasView):
+    queryset = Item.objects.all()
+    serializer_class = LocationCoverageSerializer
