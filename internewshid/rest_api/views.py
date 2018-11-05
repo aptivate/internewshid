@@ -65,6 +65,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
             items = items.filter(terms__id=matches[0].id)
 
+        start_time = self.request.query_params.get('start_time', None)
+        end_time = self.request.query_params.get('end_time', None)
+
+        if start_time is not None and end_time is not None:
+            items = items.filter(timestamp__range=[start_time, end_time])
+
         return items
 
     @action(methods=['post'], detail=True)

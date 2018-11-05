@@ -93,9 +93,7 @@ class ViewAndEditTableTab(object):
 
         for dynamic_filter_name in dynamic_filters:
             filter = get_filter(dynamic_filter_name)
-            filter_value = request.GET.get(dynamic_filter_name, None)
-            if filter_value:
-                filter.apply(filters, filter_value, **kwargs)
+            filter.apply(filters, request.GET, **kwargs)
 
     def _get_columns_to_exclude(self, **kwargs):
         """ Given the tab settings, return the columns to exclude

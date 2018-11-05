@@ -78,6 +78,38 @@ def test_filter_by_term():
 
 
 @pytest.mark.django_db
+def test_filter_by_date_range():
+    create_item(
+        body="Too old item",
+        timestamp='2018-10-25 23:59:59'
+    )
+
+    create_item(
+        body="In range item 1",
+        timestamp='2018-10-26 00:00:00'
+    )
+
+    create_item(
+        body="In range item 2",
+        timestamp='2018-10-27 00:00:00'
+    )
+
+    create_item(
+        body="Too new item",
+        timestamp='2018-10-27 00:00:01'
+    )
+
+    payload = get(data={
+        'start_time': '2018-10-26 00:00:00',
+        'end_time': '2018-10-27 00:00:00'
+    }).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == "In range item 1"
+    assert payload[1]['body'] == "In range item 2"
+
+
+@pytest.mark.django_db
 def test_filter_by_multiple_terms():
     # TODO: Refactor to use the REST API when we can add
     # multiple terms to an item

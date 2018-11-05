@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="filter-dates form-group input-group input-daterange">
+  <label>Dates</label>
+  <input type="date" value="{{ request.GET.start_time }}" class="form-control" name="start_time">
+  <input type="date" value="{{ request.GET.end_time }}" class="form-control" name="end_time">
+</div>

@@ -402,6 +402,51 @@ def test_table_items_filtered_by_item_type_category_and_default_filter(
 
 
 @pytest.mark.django_db
+def test_table_items_filtered_by_date_range():
+    too_old = transport.items.create({
+        'body': "Too old item",
+        'timestamp': '2018-10-25 23:59:59'
+    })
+
+    in_range_1 = transport.items.create({
+        'body': "In range item 1",
+        'timestamp': '2018-10-26 00:00:00'
+    })
+
+    in_range_2 = transport.items.create({
+        'body': "In range item 1",
+        'timestamp': '2018-10-27 00:00:00'
+    })
+
+    too_new = transport.items.create({
+        'body': "Too new item",
+        'timestamp': '2018-10-27 00:00:01'
+    })
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = Mock(GET={
+        'start_time': '2018-10-26',
+        'end_time': '2018-10-27',
+    })
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['time_range']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert in_range_1['id'] in ids
+    assert in_range_2['id'] in ids
+
+    assert too_old['id'] not in ids
+    assert too_new['id'] not in ids
+
+
+@pytest.mark.django_db
 def test_dynamic_filters_read_from_tab_instance():
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
