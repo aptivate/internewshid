@@ -119,13 +119,14 @@ ul.nav.nav-pills:after{
 
     // Links rendered as pills
     > a {
-      border-radius: @border-radius-small;
+        border-radius: @border-radius-small;
         border: solid 1px transparent;
+        transition: border 0.25s ease;
         &:hover,
         &:focus {
             color: @brand-primary;
             background-color: transparent;
-            border: solid 1px @brand-secondary;
+            border: solid 1px @brand-primary;
         }
     }
     + li {
@@ -327,8 +328,6 @@ ul.nav.nav-pills:after{
     }
 }
 
-
-
 @media(max-width:@screen-xs) {
     .sidebar {
       margin-top:96px;
@@ -400,6 +399,21 @@ ul.nav.nav-pills:after{
     color: inherit;
     background-color: transparent;
     transition: all .5s;
+
+}
+
+.btn-border {
+    color: @gray-base;
+    background-color: transparent;
+    border: solid 1px @gray;
+    transition: background-color .25s ease-in;
+    &:hover,
+    &:focus{
+        color: @brand-primary;
+        background-color: #fff;
+        border-color: @brand-primary;
+    }
+
 }
 
 .btn-primary.btn-outline {
@@ -621,6 +635,25 @@ ul.nav.nav-pills:after{
     }
 }
 
+.panel-gray {
+    border-color: @gray;
+    background-color: @gray-lightest;
+    .panel-heading {
+        border-color: @gray;
+        color: white;
+        background-color: @gray;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-warning;
+        &:hover {
+            color: darken(@brand-warning, 15%);
+        }
+    }
+}
+
 .panel-body-list-table{
     padding: 0;
 }
@@ -629,4 +662,8 @@ ul.nav.nav-pills:after{
 .fa-fw {
   color:@gray-base;
   margin-right:5px;
+}
+
+label{
+    font-size: small;
 }

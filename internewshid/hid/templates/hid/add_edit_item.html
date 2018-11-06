@@ -9,132 +9,127 @@
             {% csrf_token %}
             {{ form.id }}
             {{ form.next }}
-            <div class="panel panel-default">
+            <div class="panel panel-gray">
                <div class="panel-body">
-                   <div class="col-xs-12">
-                    <div class="row">
+                   Editing ID {{ item.id }}
+                   <div class="row">
                     
-                        {% if item %}
-                          <p class="item-meta-info">
-                              {% trans "Added on " %}
-                              <span class="item-meta item-date-added">{{ item.created | date:"SHORT_DATETIME_FORMAT"}}</span>
-                              {% trans "Updated on " %}
-                              <span class="item-meta item-date-updated">{{ item.last_modified | date:"SHORT_DATETIME_FORMAT"}}</span>
-                              {% trans "Identifier " %}
-                              <span class="item-id">{{ item.id }}</span>
-                          </p>
-                        {% endif %}
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-3 col-sm-{{ option_row_width }} pull-left form-group input-group item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
+                    
+                    {% if form.body %}       
+                        <div class="col-xs-12 col-md-4 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
-                            {% trans "Reported date" %}
-                            {% if form.timestamp.errors %}
-                                <span class='help-block'>({{ form.timestamp.errors|join:", " }})</span>
-                            {% endif %}
-                        </label>
-                        {{ form.timestamp|add_class:'form-control'|attr:"placeholder:yyyy-mm-dd"|attr:"aria-describedby:basic-addon1" }}
-                    </div>
-
-                    {% if form.category %}
-                    <div class="col-sm-{{ option_row_width }} col-xs-12 col-md-3 pull-left form-group input-group item-category {% if form.category.errors %}has-error{% endif %}">
-                        <label>
-                            {{ item_type_label}} {% trans "type" %}
-                            {% if form.category.errors %}
-                                <span class='help-block'>({{ form.category.errors|join:", " }})</span>
-                            {% endif %}
-                        </label>
-                        <div class="selectContainer">
-                            {{ form.category|add_class:'form-control' }}
+                               {% trans "Feedback" %}
+                                {{ item_type_label }}
+                                <span class="item-id">{{ item.id }}</span>
+                                {% if form.body.errors %}
+                                    <span class='help-block'>({{ form.body.errors|join:", " }})</span>
+                                {% endif %}
+                            </label>
+                            {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
                         </div>
-                    </div>
                     {% endif %}
-
-                    {% if form.region %}
-                    <div class="col-sm-{{ option_row_width }} col-xs-12 col-md-3 pull-left form-group input-group item-region {% if form.region.errors %}has-error{% endif %}">
-                        <label>
-                            {% trans "Region" %}
-                            {% if form.region.errors %}
-                                <span class='help-block'>({{ form.category.errors|join:", " }})</span>
-                            {% endif %}
-                        </label>
-                        <div class="selectContainer">
-                            {{ form.region|add_class:'form-control' }}
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    {% if form.location %}
-                    <div class="col-sm-{{ option_row_width }} col-xs-12 col-md-3 pull-left form-group input-group item-location {% if form.location.errors %}has-error{% endif %}">
-                        <label>
-                            {% trans "Location" %}
-                            {% if form.location.errors %}
-                                <span class='help-block'>({{ form.location.errors|join:", " }})</span>
-                            {% endif %}
-                        </label>
-                        {{ form.location|add_class:'form-control'|attr:"Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
-                    </div>
-                    {% endif %}
-                </div>
-                    <div class="row">        
-                    <div class="col-xs-12 col-md-6 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
-                        <label>
-                           {% trans "Feedback" %}
-                            {{ item_type_label }}
-                            <span class="item-id">{{ item.id }}</span>
-                            {% if form.body.errors %}
-                                <span class='help-block'>({{ form.body.errors|join:", " }})</span>
-                            {% endif %}
-                        </label>
-                        {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
-                    </div>
                     
                     {% if form.translation %}
-                    <div class="col-xs-12 col-md-6 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
-                          <label>
-                              {% trans "Translation" %}
-                              {% if form.translation.errors %}
-                                  <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
-                              {% endif %}
-                          </label>
-                          {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
-                    </div>
+                        <div class="col-xs-12 col-md-4 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
+                              <label>
+                                 {% trans "Translation" %}
+                                  {% if form.translation.errors %}
+                                      <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                                  {% endif %}
+                              </label>
+                              {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
+                        </div>
                     {% endif %}
-                    </div>
+                    
+                        <div class="col-xs-12 col-md-3 input-group form-group item-attributes-text">
+                        
+                            {% if form.category %}
+                            <div class="form-group pull-left input-group item-category {% if form.category.errors %}has-error{% endif %}">
+                               <label>
+                                     {{ item_type_label}} {% trans "type" %}
+                                    {% if form.category.errors %}
+                                        <span class='help-block'>({{ form.category.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.category|add_class:'form-control' }}
+                            </div>
+                            {% endif %}
+
+                            {% if form.tags %}
+                            <div class="form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">
+                                 <label>
+                                      {% trans "Tags" %}
+                                      {% if form.tags.errors %}
+                                          <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
+                                      {% endif %}
+                                </label>
+                              {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
+                            </div>
+                            {% endif %}
+
+                            <div class="form-group input-group item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
+                                <label>
+                                {% trans "Reported date" %}
+                                {% if form.timestamp.errors %}
+                                    <span class='help-block'>({{ form.timestamp.errors|join:", " }})</span>
+                                {% endif %}
+                                </label>
+                                {{ form.timestamp|add_class:'form-control'|attr:"placeholder:yyyy-mm-dd"|attr:"aria-describedby:basic-addon1" }}
+                            </div>
+
+                            {% if form.region %}
+                            <div class="form-group input-group item-region {% if form.region.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Region" %}
+                                    {% if form.region.errors %}
+                                        <span class='help-block'>({{ form.category.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                <div class="selectContainer">
+                                    {{ form.region|add_class:'form-control' }}
+                                </div>
+                            </div>
+                            {% endif %}
+                    
+                            {% if form.location %}
+                            <div class="form-group input-group item-location {% if form.location.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Location" %}
+                                    {% if form.location.errors %}
+                                        <span class='help-block'>({{ form.location.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.location|add_class:'form-control'|attr:"Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+                        </div>
+                   </div>
+                   
+                    
+                    
+                    
                     <div class="row">
-                    {% if form.tags %}
-                    <div class="col-xs-12 form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">
-                         <span class="input-group-addon"><span class="fa fa-tags fa-fw"></span>
-                              {% trans "Tags" %}
-                              {% if form.tags.errors %}
-                                  <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
-                              {% endif %}
-                        </span>
-                      {{ form.tags|add_class:'form-control'|attr:'placeholder:type and hit enter'|attr:'data-role:tagsinput' }}
+                       
+                        <div class="col-xs-12 col-md-4 form-group pull-right">
+                           {% if update %}
+                            {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-lg btn-success" %}
+                            {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-lg btn-border" %}
+                            {% else %}
+                            {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="btn btn-lg btn-success" %}
+                                    {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-lg btn-border" %}
+                                    {% endif %}
+                        </div>
+                          
+                        <div class="col-xs-12 col-md-8 form-group pull-left">
+                            {% bootstrap_button "Delete" button_type="submit" name="action" value="delete" button_class="btn btn-danger" %}
+                        </div>
+                            
+                    
+                            
+                        </div>
                     </div>
-                    {% endif %}
-                    </div>
-                    <div class="row">
-                <div class="col-xs-12">
-                    {% if update %}
-                        <div class="form-group pull-right">
-                            {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="pull-right btn btn-lg btn-success" %}
-                            {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="pull-left btn btn-sm" %}
-                        </div>
-                        <div class="form-group pull-left">
-                            {% bootstrap_button "Delete" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-sm" %}
-                        </div>
-                    {% else %}
-                        <div class="form-group  pull-right">
-                            {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="pull-right btn btn-lg btn-success" %}
-                            {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="pull-left btn btn-sm" %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
                 </div>
                 </div>
-            </div>
         </form>
     </div>
 {% endblock maincontent %}
