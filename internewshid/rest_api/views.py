@@ -69,7 +69,11 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         tags = self.request.query_params.get('tags', None)
         if tags is not None:
-            items = items.filter(terms__name__icontains=tags)
+            exact_match_items = items.filter(terms__name__iexact=tags)
+            if exact_match_items.exists():
+                items = exact_match_items
+            else:
+                items = items.filter(terms__name__icontains=tags)
 
         location = self.request.query_params.get('location', None)
         if location is not None:
