@@ -2,7 +2,9 @@ from django.db.models import Count
 from django.utils.translation import ugettext as _
 
 from rest_framework import status, viewsets
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_pandas import PandasView
@@ -204,5 +206,7 @@ class TermViewSet(viewsets.ModelViewSet):
 
 
 class LocationCoverageView(PandasView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Item.objects.all()
     serializer_class = LocationCoverageSerializer
