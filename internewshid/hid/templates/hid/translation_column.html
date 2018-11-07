@@ -1,5 +1,5 @@
 {% if request %}
-    <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.translation }}</a>
+    <a target="_blank" href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.translation }}</a>
 {% else %}
     {{ record.translation }}
 {% endif %}
