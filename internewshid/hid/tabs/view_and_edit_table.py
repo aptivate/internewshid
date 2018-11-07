@@ -146,8 +146,11 @@ class ViewAndEditTableTab(object):
         return tuple((t['name'], t['name']) for t in all_terms)
 
     def _get_location_options(self, **kwargs):
-        items = transport_items.list()
-        return {'items': list(set(item['location'] for item in items))}
+        locations = filter(None, [
+            item['location'] for item
+            in transport_items.list()
+        ])
+        return {'items': list(set(locations))}
 
     def _build_actions_dropdown(self, question_types):
         items = [
