@@ -21,7 +21,7 @@ def client(django_user_model):
 
 def test_location_coverage_unauthenticated():
     response = APIClient().get(reverse('location-coverage'))
-    assert response.status_code == '403'
+    assert response.status_code == 403
 
 
 def test_location_coverage(client):
