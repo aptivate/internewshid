@@ -13,9 +13,9 @@
                <div class="panel-body">
                    Editing ID {{ item.id }}
                    <div class="row">
-                    
-                    
-                    {% if form.body %}       
+
+
+                    {% if form.body %}
                         <div class="col-xs-12 col-md-4 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
                                {% trans "Feedback" %}
@@ -28,7 +28,7 @@
                             {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
                         </div>
                     {% endif %}
-                    
+
                     {% if form.translation %}
                         <div class="col-xs-12 col-md-4 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
                               <label>
@@ -40,9 +40,9 @@
                               {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
                         </div>
                     {% endif %}
-                    
+
                         <div class="col-xs-12 col-md-3 input-group form-group item-attributes-text">
-                        
+
                             {% if form.category %}
                             <div class="form-group pull-left input-group item-category {% if form.category.errors %}has-error{% endif %}">
                                <label>
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                             {% endif %}
-                    
+
                             {% if form.location %}
                             <div class="form-group input-group item-location {% if form.location.errors %}has-error{% endif %}">
                                 <label>
@@ -104,12 +104,12 @@
                             {% endif %}
                         </div>
                    </div>
-                   
-                    
-                    
-                    
+
+
+
+
                     <div class="row">
-                       
+
                         <div class="col-xs-12 col-md-4 form-group pull-right">
                            {% if update %}
                             {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-lg btn-success" %}
@@ -119,13 +119,13 @@
                                     {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-lg btn-border" %}
                                     {% endif %}
                         </div>
-                          
+
                         <div class="col-xs-12 col-md-8 form-group pull-left">
                             {% bootstrap_button "Delete" button_type="submit" name="action" value="delete" button_class="btn btn-danger" %}
                         </div>
-                            
-                    
-                            
+
+
+
                         </div>
                     </div>
                 </div>

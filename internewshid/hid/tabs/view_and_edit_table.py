@@ -146,8 +146,11 @@ class ViewAndEditTableTab(object):
         return tuple((t['name'], t['name']) for t in all_terms)
 
     def _get_location_options(self, **kwargs):
-        items = transport_items.list()
-        return {'items': list(set(item['location'] for item in items))}
+        locations = filter(None, [
+            item['location'] for item
+            in transport_items.list()
+        ])
+        return {'items': list(set(locations))}
 
     def _build_actions_dropdown(self, question_types):
         items = [
@@ -193,6 +196,8 @@ class ViewAndEditTableTab(object):
                 request.GET.pop('start_time')
             if request.GET.get('end_time'):
                 request.GET.pop('end_time')
+            if request.GET.get('tags'):
+                request.GET.pop('tags')
         else:
             filters = kwargs.get('filters', {})
 
@@ -219,6 +224,9 @@ class ViewAndEditTableTab(object):
             )
             if previously_selected_location is not False:
                 location_options.update({'selected': previously_selected_location})
+
+        if request.GET.get('tags', False):
+            filters.update(tags=request.GET['tags'])
 
         items = self._get_items(request, **kwargs)
 
