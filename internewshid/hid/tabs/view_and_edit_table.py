@@ -182,7 +182,7 @@ class ViewAndEditTableTab(object):
 
         # We're doing all sorts of completely mad stuff anyway!
         # https://stackoverflow.com/questions/18930234/django-modifying-the-request-object
-        if hasattr('request.GET', '_mutable'):
+        if not request.GET._mutable:
             request.GET._mutable = True
 
         if 'clear' == request.GET.get('button-clear', None):
