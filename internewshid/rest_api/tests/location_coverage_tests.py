@@ -37,7 +37,10 @@ def test_location_coverage(client):
     item2 = Item.objects.create()
 
     response = client.get(reverse('location-coverage'))
+
+    assert 'location-coverage.csv' in response.serialize_headers()
     assert response.accepted_media_type == 'text/csv'
+
     reader = csv.DictReader(StringIO(response.content))
 
     assert reader.fieldnames == ['row', 'location', 'terms', 'timestamp']
