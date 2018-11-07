@@ -210,3 +210,9 @@ class LocationCoverageView(PandasView):
     permission_classes = (IsAuthenticated,)
     queryset = Item.objects.all()
     serializer_class = LocationCoverageSerializer
+
+    def get(self, *args, **kwargs):
+        response = super(LocationCoverageView, self).get(*args, **kwargs)
+        filename = 'attachment;filename={}'.format('location-coverage.csv')
+        response['Content-Disposition'] = filename
+        return response
