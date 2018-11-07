@@ -7,7 +7,6 @@
 .filters{
     background-color: #fff;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	padding: 1em 0 0 2%;
 
@@ -37,6 +36,11 @@
             color: @brand-primary;
             height: 3rem;
         }
+        // add space between when two or more input boxes are adjacent
+        .form-control + .form-control{
+                margin-left: 1em;
+            }
+    
         &:last-child{
             border-right: none;
         }
@@ -140,12 +144,13 @@ tbody {
 .table-striped > tbody > tr.selected.odd,
 .table-striped > tbody > tr.selected.even{
     background-color: #e3edf8;
-    border: solid 1px @brand-secondary;
+    // border: solid 1px @brand-secondary;
+    transition: background-color 0.25s ease;
 }
 
 .table-striped > tbody > tr.selected.odd:hover,
 .table-striped > tbody > tr.selected.even:hover{
-        background-color: darken(#e3edf8, 10%);
+    background-color: darken(#e3edf8, 10%);
 }
 
 
@@ -290,13 +295,16 @@ th.select_action {
    > input[type="checkbox"] + .fa-check-circle:before,
    > input[type="checkbox"] + label > .fa-check-circle:before {
        font-size:25px;
-       content: "\f10c";
-       color:@brand-primary;
+       content: "\f058";
+       color:@gray;
+       &:hover{
+           color: red;
+       }
    }
 
    > input[type="checkbox"]:checked + .fa-check-circle:before,
    > input[type="checkbox"]:checked + label > .fa-check-circle:before {
-       content: "\f058";
+       color:@brand-primary;
    }
 
    > input[type="checkbox"] {
@@ -322,6 +330,14 @@ input[type="checkbox"]:checked {
  border:none;
 }
 
+tbody select option{
+	line-height: 2;
+	padding: 10px;
+    &:hover{
+        background-color: @brand-primary;
+        color: #fff;
+    }
+}
 // Place the upload button in the header.
 form.header-upload-form {
     position: absolute;
@@ -345,19 +361,14 @@ form.header-upload-form {
 }
 
 
-.input-group.item-original-text {
-  background-color:@brand-primary;
-  color:white;
-  padding:20px 20px;
+.input-group.item-original-text,
+.input-group.item-translation-text,
+.input-group.item-attributes-text{
     float: left;
+	padding: 1em 1em 1em 2em;
+	margin-left: 1rem;
 }
 
-.input-group.item-translation-text {
-  background-color:@brand-primary;
-  color:white;
-  padding:20px 20px;
-    float: left;
-}
 
 .view-items-form table .body a {
     text-decoration: none;
