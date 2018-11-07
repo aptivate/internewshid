@@ -4,7 +4,7 @@ from django.test import RequestFactory
 from django.urls import reverse
 
 import pytest
-from mock import Mock
+from mock import MagicMock
 
 import transport
 from hid.constants import ITEM_TYPE_CATEGORY
@@ -228,7 +228,7 @@ def test_get_category_options_orders_by_lowercase_name():
 def test_actions_includes_remove_question_type_option():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
+    request = MagicMock(GET={})
     tab = ViewAndEditTableTab()
 
     term = TermFactory()
@@ -247,7 +247,7 @@ def test_actions_includes_remove_question_type_option():
 def test_actions_excludes_remove_question_type_option_for_no_categories():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
+    request = MagicMock(GET={})
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -307,7 +307,7 @@ def test_view_and_edit_table_tab_sets_add_button_context():
     )
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
+    request = MagicMock(GET={})
     tab = ViewAndEditTableTab()
 
     filters = {'terms': ['item-types:test-item-type']}
@@ -346,7 +346,7 @@ def test_table_items_filtered_by_item_type_category(item_type_taxonomy):
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={'category': 'WASH'})
+    request = MagicMock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[item_type_taxonomy.slug],
@@ -387,7 +387,7 @@ def test_table_items_filtered_by_item_type_category_and_default_filter(
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={'category': 'WASH'})
+    request = MagicMock(GET={'category': 'WASH'})
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[item_type_taxonomy.slug],
@@ -425,7 +425,7 @@ def test_table_items_filtered_by_date_range():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={
+    request = MagicMock(GET={
         'start_time': '2018-10-26',
         'end_time': '2018-10-27',
     })
@@ -450,7 +450,7 @@ def test_table_items_filtered_by_date_range():
 def test_dynamic_filters_read_from_tab_instance():
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
+    request = MagicMock(GET={})
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -469,7 +469,7 @@ def test_category_options_in_context_data(item_type_taxonomy):
 
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
-    request = Mock(GET={})
+    request = MagicMock(GET={})
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,

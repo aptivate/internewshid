@@ -67,9 +67,12 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
             items = items.filter(terms__id=matches[0].id)
 
+        location = self.request.query_params.get('location', None)
+        if location is not None:
+            items = items.filter(location__icontains=location)
+
         start_time = self.request.query_params.get('start_time', None)
         end_time = self.request.query_params.get('end_time', None)
-
         if start_time is not None and end_time is not None:
             items = items.filter(timestamp__range=[start_time, end_time])
 

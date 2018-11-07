@@ -78,8 +78,12 @@ class ViewAndEditTableTab(object):
             Returns:
                 QuerySet: The items to list on the page
         """
-
         filters = self._get_filters(request, **kwargs)
+
+        locations = filters.get('location', False)
+        if locations is not False:
+            if locations == 'All Locations':
+                filters.pop('location')
 
         return transport_items.list(**filters)
 
@@ -141,6 +145,10 @@ class ViewAndEditTableTab(object):
         all_terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in all_terms)
 
+    def _get_location_options(self, **kwargs):
+        items = transport_items.list()
+        return {'items': list(set(item['location'] for item in items))}
+
     def _build_actions_dropdown(self, question_types):
         items = [
             (NONE_COMMAND, '---------'),
@@ -170,10 +178,53 @@ class ViewAndEditTableTab(object):
 
     def get_context_data(self, tab_instance, request, **kwargs):
         category_options = self._get_category_options(**kwargs)
+        location_options = self._get_location_options(**kwargs)
+
+        # We're doing all sorts of completely mad stuff anyway!
+        # https://stackoverflow.com/questions/18930234/django-modifying-the-request-object
+        if hasattr('request.GET', '_mutable'):
+            request.GET._mutable = True
+
+        if 'clear' == request.GET.get('button-clear', None):
+            filters = {}
+            if request.GET.get('location'):
+                request.GET.pop('location')
+            if request.GET.get('start_time'):
+                request.GET.pop('start_time')
+            if request.GET.get('end_time'):
+                request.GET.pop('end_time')
+        else:
+            filters = kwargs.get('filters', {})
+
+        # Try to thread GET query parameters between GET/POST
+        threaded_filters = {}
+        if 'clear' != request.GET.get('button-clear', None):
+            if request.META.get('HTTP_REFERER', False):
+                referer = request.META['HTTP_REFERER']
+                parsed = urlparse(referer)
+                params = parse_qs(parsed.query)
+
+                if params.get('start_time', False):
+                    threaded_filters.update({'start_time': params['start_time'][0]})
+                if params.get('end_time', False):
+                    threaded_filters.update({'end_time': params['end_time'][0]})
+                if params.get('location', False):
+                    threaded_filters.update({'location': params['location'][0]})
+
+            filters.update(threaded_filters)
+
+            previously_selected_location = (
+                request.GET.get('location', False) or
+                threaded_filters.get('location', False)
+            )
+            if previously_selected_location is not False:
+                location_options.update({'selected': previously_selected_location})
+
+        items = self._get_items(request, **kwargs)
 
         # Build the table
         table = ItemTable(
-            self._get_items(request, **kwargs),
+            items,
             categories=category_options,
             exclude=self._get_columns_to_exclude(**kwargs),
             orderable=True,
@@ -185,19 +236,6 @@ class ViewAndEditTableTab(object):
         )
 
         actions = self._build_actions_dropdown(category_options)
-
-        # Try to thread GET query parameters between GET/POST
-        threaded_filters = {}
-        if request.META.get('HTTP_REFERER', False):
-            referer = request.META['HTTP_REFERER']
-            parsed = urlparse(referer)
-            params = parse_qs(parsed.query)
-            if params.get('start_time', False):
-                threaded_filters.update({'start_time': params['start_time'][0]})
-            if params.get('end_time', False):
-                threaded_filters.update({'end_time': params['end_time'][0]})
-        filters = kwargs.get('filters', {})
-        filters.update(threaded_filters)
 
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
@@ -211,6 +249,7 @@ class ViewAndEditTableTab(object):
             'source': kwargs.get('source'),
             'actions': actions,
             'category_options': category_options,
+            'locations': location_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
@@ -343,7 +382,6 @@ def view_and_edit_table_form_process_items(request):
         if params['action'] == 'batchupdate':
             selected = ItemTable.get_selected(params)
             _handle_batch_action(request, params['batchaction'], selected)
-
         elif params['action'] == 'save':
             changes = ItemTable.get_row_select_values(params, 'category')
             # TODO: Work out the item type.
