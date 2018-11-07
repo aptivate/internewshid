@@ -9,6 +9,13 @@ class CategoryFilter(object):
             )
 
 
+class TagsFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        tags = kwargs.get('tags', None)
+        if tags is not None:
+            filters.update(tags=tags)
+
+
 class TimeRangeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
         start_time = query_dict.get('start_time', None)

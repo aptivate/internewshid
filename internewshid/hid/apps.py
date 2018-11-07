@@ -11,6 +11,7 @@ class HidAppConfig(AppConfig):
             CategoryFilter,
             LocationFilter,
             TimeRangeFilter,
+            TagsFilter,
         )
         from hid.tabs.view_and_edit_table import ViewAndEditTableTab
         from hid.widgets.term_count_chart import TermCountChartWidget
@@ -21,6 +22,7 @@ class HidAppConfig(AppConfig):
         register_filter('category', CategoryFilter())
         register_filter('time_range', TimeRangeFilter())
         register_filter('location', LocationFilter())
+        register_filter('tags', TagsFilter())
 
         register_tab('view-and-edit-table', ViewAndEditTableTab())
 

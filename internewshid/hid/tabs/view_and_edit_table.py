@@ -196,6 +196,8 @@ class ViewAndEditTableTab(object):
                 request.GET.pop('start_time')
             if request.GET.get('end_time'):
                 request.GET.pop('end_time')
+            if request.GET.get('tags'):
+                request.GET.pop('tags')
         else:
             filters = kwargs.get('filters', {})
 
@@ -222,6 +224,9 @@ class ViewAndEditTableTab(object):
             )
             if previously_selected_location is not False:
                 location_options.update({'selected': previously_selected_location})
+
+        if request.GET.get('tags', False):
+            filters.update(tags=request.GET['tags'])
 
         items = self._get_items(request, **kwargs)
 
