@@ -35,6 +35,12 @@ class ItemTable(tables.Table):
         accessor='terms',
         attrs={'td': {'class': 'col-md-2'}}
     )
+    tags = tables.TemplateColumn(
+        verbose_name=_('Tags'),
+        template_name='hid/tags_column.html',
+        accessor='terms',
+        attrs={'td': {'class': 'col-md-2'}}
+    )
     body = tables.TemplateColumn(
         template_name='hid/body_column.html',
         verbose_name=_('Feedback'),
@@ -71,6 +77,17 @@ class ItemTable(tables.Table):
             'selected': selected,
             'record': record
         }
+
+        return Template.render(ctx)
+
+    def render_tags(self, record, value):
+        Template = loader.get_template('hid/tags_column.html')
+
+        try:
+            tags = [term['name'] for term in record['terms']]
+            ctx = {'tags': ', '.join(tags)}
+        except KeyError:
+            ctx = {'tags': []}
 
         return Template.render(ctx)
 
