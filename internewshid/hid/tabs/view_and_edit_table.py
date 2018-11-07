@@ -1,5 +1,6 @@
 import re
 from collections import OrderedDict
+from urlparse import parse_qs, urlparse
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect, QueryDict
@@ -185,6 +186,19 @@ class ViewAndEditTableTab(object):
 
         actions = self._build_actions_dropdown(category_options)
 
+        # Try to thread GET query parameters between GET/POST
+        threaded_filters = {}
+        if request.META.get('HTTP_REFERER', False):
+            referer = request.META['HTTP_REFERER']
+            parsed = urlparse(referer)
+            params = parse_qs(parsed.query)
+            if params.get('start_time', False):
+                threaded_filters.update({'start_time': params['start_time'][0]})
+            if params.get('end_time', False):
+                threaded_filters.update({'end_time': params['end_time'][0]})
+        filters = kwargs.get('filters', {})
+        filters.update(threaded_filters)
+
         # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
         require_assets('hid/js/select_all_checkbox.js')
@@ -201,6 +215,7 @@ class ViewAndEditTableTab(object):
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
             }),
+            'filters': filters,
             'dynamic_filters': kwargs.get('dynamic_filters', [])
         }
 
