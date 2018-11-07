@@ -110,6 +110,19 @@ def test_filter_by_date_range():
 
 
 @pytest.mark.django_db
+def test_filter_by_location():
+    create_item(body='item1', location='foo')
+    create_item(body='neo', location='somewhere')
+    create_item(body='item2', location='bar')
+
+    payload = get(data={'location': 'somewhere'}).data
+
+    assert len(payload) == 1
+    assert payload[0]['body'] == 'neo'
+    assert payload[0]['location'] == 'somewhere'
+
+
+@pytest.mark.django_db
 def test_filter_by_multiple_terms():
     # TODO: Refactor to use the REST API when we can add
     # multiple terms to an item

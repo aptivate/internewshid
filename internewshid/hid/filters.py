@@ -19,3 +19,10 @@ class TimeRangeFilter(object):
                 start_time=start_time,
                 end_time=end_time
             )
+
+
+class LocationFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        location = query_dict.get('location', None)
+        if location is not None:
+            filters.update(location=location)

@@ -7,7 +7,11 @@ class HidAppConfig(AppConfig):
 
     def ready(self):
         from dashboard.widget_pool import register_widget
-        from hid.filters import CategoryFilter, TimeRangeFilter
+        from hid.filters import (
+            CategoryFilter,
+            LocationFilter,
+            TimeRangeFilter,
+        )
         from hid.tabs.view_and_edit_table import ViewAndEditTableTab
         from hid.widgets.term_count_chart import TermCountChartWidget
         from hid.widgets.table import TableWidget
@@ -16,6 +20,7 @@ class HidAppConfig(AppConfig):
 
         register_filter('category', CategoryFilter())
         register_filter('time_range', TimeRangeFilter())
+        register_filter('location', LocationFilter())
 
         register_tab('view-and-edit-table', ViewAndEditTableTab())
 
