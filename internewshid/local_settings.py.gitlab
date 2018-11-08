@@ -1,0 +1,31 @@
+from __future__ import unicode_literals, absolute_import
+
+from os import environ
+
+DEBUG = True
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
+DJANGOJS_DEBUG = DEBUG
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': environ['MYSQL_DATABASE'],
+        'USER': 'root',
+        'HOST': 'mysql',
+        'PASSWORD': environ['MYSQL_ROOT_PASSWORD'],
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
+    }
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'localhost:8000'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
