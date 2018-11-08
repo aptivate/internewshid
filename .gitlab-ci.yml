@@ -11,13 +11,11 @@ variables:
   APTIVATE_CLI_MYSQL_USER: root
   APTIVATE_CLI_MYSQL_PASS: "$MYSQL_ROOT_PASSWORD"
   APTIVATE_CLI_MYSQL_HOST: mysql
-  FIXTURES: "internewshid/hid/fixtures/bangladesh-refugee-crisis.json"
 
 before_script:
   - apt update && apt install -y nodejs node-less
   - pip install pipenv aptivate-cli
   - apc deploy --no-input
-  - pipenv run python manage.py loaddata $FIXTURES
 
 gitlab-ci:
   script:
