@@ -280,6 +280,14 @@
         "pk": 3
     },
     {
+      "fields": {
+          "label": "etc",
+          "profile": "{\"name\":\"ETC\",\"format\":\"excel\",\"label\":\"etc\",\"skip_header\":1,\"taxonomies\":{},\"columns\":[{\"field\":\"taxonomy\",\"type\":\"text\",\"name\":\"Category\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"Issue\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Logged by\"},{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"Date\",\"date_format\":\"%Y-%m-%d\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Gender\",\"taxonomy\":\"tags\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Age\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"}]}"
+      },
+      "model": "chn_spreadsheet.sheetprofile",
+      "pk": 4
+    },
+    {
         "fields": {
             "name": "main"
         },
