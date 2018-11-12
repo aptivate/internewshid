@@ -84,7 +84,10 @@ class ItemTable(tables.Table):
         Template = loader.get_template('hid/tags_column.html')
 
         try:
-            tags = filter(None, [term['name'] for term in record['terms']])
+            tags = filter(None, [
+                term['name'] for term in record['terms']
+                if term['taxonomy'] == 'tags'
+            ])
             ctx = {'tags': ', '.join(tags)}
         except KeyError:
             ctx = {'tags': []}
