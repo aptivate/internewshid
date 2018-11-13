@@ -4,13 +4,9 @@
     <label class="col-sm-3 control-label" for="location-selector">{% trans "Location" %}</label>
     <div class="select-container">
       <select id="location-selector" name="location" class="form-control">
-        <option value="All Locations">All Locations</option>
+        <option value="All Locations" selected="selected">All Locations</option>
         {% for location in locations.items %}
-          {% if location == locations.selected %}
-            <option value="{{ location }}" selected="selected">{{ location }}</option>
-          {% else %}
-            <option value="{{ location }}">{{ location }}</option>
-          {% endif %}
+          <option value="{{ location }}">{{ location }}</option>
         {% endfor %}
       </select>
     </div>
