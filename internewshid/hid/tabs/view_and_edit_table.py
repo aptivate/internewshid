@@ -96,12 +96,13 @@ class ViewAndEditTableTab(object):
             request.session[self.SESSION_FILTERS_KEY] = {}
             return {}
 
+        # If we've just saved an Item, then pass through filters
+        if (self.SESSION_FILTERS_KEY in request.session and
+                '/edit/' in request.environ.get('HTTP_REFERER', '')):
+            filters = request.session[self.SESSION_FILTERS_KEY]
+
         # Always stuff the filters into the session
         request.session[self.SESSION_FILTERS_KEY] = filters
-
-        if '/edit/' in request.environ.get('HTTP_REFERER', ''):
-            # If we've just saved an Item, then pass through filters
-            filters = request.session[self.SESSION_FILTERS_KEY]
 
         return filters
 
