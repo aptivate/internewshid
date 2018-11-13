@@ -6,7 +6,8 @@ from chn_spreadsheet.models import get_spreadsheet_choices
 class UploadForm(forms.Form):
     source = forms.ChoiceField(
         choices=get_spreadsheet_choices,
-        required=True
+        required=True,
+        widget=forms.RadioSelect,
     )
     next = forms.CharField(
         widget=forms.HiddenInput,
