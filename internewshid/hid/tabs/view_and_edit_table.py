@@ -1,6 +1,5 @@
 import re
 from collections import OrderedDict
-from urlparse import parse_qs, urlparse
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect, QueryDict
@@ -42,6 +41,7 @@ class ViewAndEditTableTab(object):
 
     """
     template_name = 'hid/tabs/view_and_edit_table.html'
+    SESSION_FILTERS_KEY = 'THREADED_FILTERS'
 
     def _build_action_dropdown_group(self, label='', items=[], prefix=''):
         """ Helper method to build a group of actions used in the
@@ -80,16 +80,28 @@ class ViewAndEditTableTab(object):
         """
         filters = self._get_filters(request, **kwargs)
 
-        locations = filters.get('location', False)
-        if locations is not False:
-            if locations == 'All Locations':
-                filters.pop('location')
+        locations = filters.get('location')
+        if locations and locations == 'All Locations':
+            filters.pop('location')
 
         return transport_items.list(**filters)
 
     def _get_filters(self, request, **kwargs):
         filters = kwargs.pop('filters', {})
+
         self._apply_dynamic_filters(filters, request, **kwargs)
+
+        # If we've hit the 'clear filters' button
+        if 'clear' == request.GET.get('button-clear'):
+            request.session[self.SESSION_FILTERS_KEY] = {}
+            return {}
+
+        # Always stuff the filters into the session
+        request.session[self.SESSION_FILTERS_KEY] = filters
+
+        if '/edit/' in request.environ.get('HTTP_REFERER', ''):
+            # If we've just saved an Item, then pass through filters
+            filters = request.session[self.SESSION_FILTERS_KEY]
 
         return filters
 
@@ -97,8 +109,8 @@ class ViewAndEditTableTab(object):
         dynamic_filters = kwargs.get('dynamic_filters', [])
 
         for dynamic_filter_name in dynamic_filters:
-            filter = get_filter(dynamic_filter_name)
-            filter.apply(filters, request.GET, **kwargs)
+            _filter = get_filter(dynamic_filter_name)
+            _filter.apply(filters, request.GET, **kwargs)
 
     def _get_columns_to_exclude(self, **kwargs):
         """ Given the tab settings, return the columns to exclude
@@ -184,54 +196,9 @@ class ViewAndEditTableTab(object):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(**kwargs)
 
-        # We're doing all sorts of completely mad stuff anyway!
-        # https://stackoverflow.com/questions/18930234/django-modifying-the-request-object
-        if not request.GET._mutable:
-            request.GET._mutable = True
-
-        if 'clear' == request.GET.get('button-clear', None):
-            filters = {}
-            if request.GET.get('location'):
-                request.GET.pop('location')
-            if request.GET.get('start_time'):
-                request.GET.pop('start_time')
-            if request.GET.get('end_time'):
-                request.GET.pop('end_time')
-            if request.GET.get('tags'):
-                request.GET.pop('tags')
-        else:
-            filters = kwargs.get('filters', {})
-
-        # Try to thread GET query parameters between GET/POST
-        threaded_filters = {}
-        if 'clear' != request.GET.get('button-clear', None):
-            if request.META.get('HTTP_REFERER', False):
-                referer = request.META['HTTP_REFERER']
-                parsed = urlparse(referer)
-                params = parse_qs(parsed.query)
-
-                if params.get('start_time', False):
-                    threaded_filters.update({'start_time': params['start_time'][0]})
-                if params.get('end_time', False):
-                    threaded_filters.update({'end_time': params['end_time'][0]})
-                if params.get('location', False):
-                    threaded_filters.update({'location': params['location'][0]})
-
-            filters.update(threaded_filters)
-
-            previously_selected_location = (
-                request.GET.get('location', False) or
-                threaded_filters.get('location', False)
-            )
-            if previously_selected_location is not False:
-                location_options.update({'selected': previously_selected_location})
-
-        if request.GET.get('tags', False):
-            filters.update(tags=request.GET['tags'])
-
+        filters = kwargs.get('filters', {})
         items = self._get_items(request, **kwargs)
 
-        # Build the table
         table = ItemTable(
             items,
             categories=category_options,
@@ -239,6 +206,7 @@ class ViewAndEditTableTab(object):
             orderable=True,
             order_by=request.GET.get('sort', None),
         )
+
         table.paginate(
             per_page=kwargs.get('per_page', 25),
             page=request.GET.get('page', 1)
@@ -246,11 +214,9 @@ class ViewAndEditTableTab(object):
 
         actions = self._build_actions_dropdown(category_options)
 
-        # Ensure we have the assets we want
         require_assets('hid/js/automatic_file_upload.js')
         require_assets('hid/js/select_all_checkbox.js')
 
-        # And return the context
         return {
             'add_button_for': self._get_item_type_filter(kwargs),
             'type_label': kwargs.get('label', '?'),
