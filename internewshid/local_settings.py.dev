@@ -2,12 +2,16 @@ from __future__ import unicode_literals, absolute_import
 
 from os import environ
 
+from pymysql import install_as_MySQLdb
+
 from private_settings import DB_PASSWORD
 
 DEBUG = True
 ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
 DJANGOJS_DEBUG = DEBUG
+
+install_as_MySQLdb()
 
 # `MYSQL_DATABASE` and `MYSQL_ROOT_PASSWORD` are used for the CI
 # https://hub.docker.com/_/mysql/

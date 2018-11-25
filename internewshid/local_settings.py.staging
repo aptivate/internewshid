@@ -2,9 +2,13 @@ from __future__ import unicode_literals, absolute_import
 
 import private_settings
 
+from pymysql import install_as_MySQLdb
+
 DEBUG = False
 
 USE_X_FORWARDED_HOST = True
+
+install_as_MySQLdb()
 
 DATABASES = {
     'default': {
