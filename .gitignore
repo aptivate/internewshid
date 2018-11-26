@@ -15,3 +15,4 @@ TAGS
 *~
 *.~lock.*#
 .python-version
+.ve
