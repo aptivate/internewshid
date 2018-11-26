@@ -5,8 +5,8 @@ import private_settings
 from pymysql import install_as_MySQLdb
 
 DEBUG = False
-
-USE_X_FORWARDED_HOST = True
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
 
 install_as_MySQLdb()
 
@@ -20,4 +20,4 @@ DATABASES = {
 }
 
 EMAIL_HOST = 'localhost'
-SITE_HOSTNAME = 'internewshid.stage.aptivate.org'
+SITE_HOSTNAME = 'lin-internewshid-stage.aptivate.org'

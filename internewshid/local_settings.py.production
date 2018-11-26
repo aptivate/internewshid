@@ -20,4 +20,4 @@ DATABASES = {
 }
 
 EMAIL_HOST = 'localhost'
-SITE_HOSTNAME = 'lin-internewshid.aptivate.org'
+SITE_HOSTNAME = 'lin-internewshid-prod.aptivate.org'
