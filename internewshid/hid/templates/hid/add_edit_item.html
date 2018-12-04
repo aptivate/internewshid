@@ -102,6 +102,55 @@
                                 {{ form.location|add_class:'form-control'|attr:"Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
+
+                            {% if form.gender %}
+                            <div class="form-group input-group item-gender {% if form.gender.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Gender" %}
+                                    {% if form.gender.errors %}
+                                        <span class='help-block'>({{ form.gender.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.gender|add_class:'form-control'|attr:"Gender"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
+                            {% if form.age %}
+                            <div class="form-group input-group item-age {% if form.age.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Age" %}
+                                    {% if form.age.errors %}
+                                        <span class='help-block'>({{ form.age.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.age|add_class:'form-control'|attr:"Age"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
+                            {% if form.ennumerator %}
+                            <div class="form-group input-group item-ennumerator {% if form.ennumerator.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Ennumerator" %}
+                                    {% if form.ennumerator.errors %}
+                                        <span class='help-block'>({{ form.ennumerator.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.ennumerator|add_class:'form-control'|attr:"Ennumerator"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
+                            {% if form.source %}
+                            <div class="form-group input-group item-source {% if form.source.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Source" %}
+                                    {% if form.source.errors %}
+                                        <span class='help-block'>({{ form.source.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.source|add_class:'form-control'|attr:"Source"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
                         </div>
                    </div>
 

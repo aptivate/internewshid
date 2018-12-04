@@ -21,6 +21,22 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
+    gender = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
+    age = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
+    ennumerator = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
+    source = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     timestamp = forms.DateTimeField(required=True)
     next = forms.CharField(
         widget=forms.HiddenInput,

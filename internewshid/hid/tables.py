@@ -61,6 +61,26 @@ class ItemTable(tables.Table):
         verbose_name=_('Location'),
         attrs={'td': {'class': 'col-md-2'}}
     )
+    gender = tables.TemplateColumn(
+        template_name='hid/gender_column.html',
+        verbose_name=_('Gender'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+    age = tables.TemplateColumn(
+        template_name='hid/age_column.html',
+        verbose_name=_('Age'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+    ennumerator = tables.TemplateColumn(
+        template_name='hid/ennumerator_column.html',
+        verbose_name=_('Ennumerator'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+    source = tables.TemplateColumn(
+        template_name='hid/source_column.html',
+        verbose_name=_('Source'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories')

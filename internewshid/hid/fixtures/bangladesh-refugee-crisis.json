@@ -302,7 +302,7 @@
             "name": "feedback",
             "page": 1,
             "position": 2,
-            "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"body\",\"translation\",\"category\",\"location\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\", \"location\", \"tags\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"]}",
+            "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"created\",\"timestamp\",\"body\",\"translation\",\"category\",\"location\",\"gender\",\"age\",\"ennumerator\",\"source\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\", \"location\", \"tags\"],\"categories\":[\"bangladesh-refugee-crisis-sectors\"]}",
             "tab_type": "view-and-edit-table"
         },
         "model": "tabbed_page.tabinstance",
