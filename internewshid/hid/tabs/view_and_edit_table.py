@@ -97,7 +97,7 @@ class ViewAndEditTableTab(object):
             filters.pop('ennumerator')
 
         source = filters.get('source')
-        if ages and ages == 'All Sources':
+        if source and source == 'All Sources':
             filters.pop('source')
 
         return transport_items.list(**filters)
