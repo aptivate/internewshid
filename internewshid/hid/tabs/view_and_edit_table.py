@@ -281,7 +281,7 @@ class ViewAndEditTableTab(object):
             'gender': gender_options,
             'age': age_options,
             'ennumerator': ennumerator_options,
-            'source': source_options,
+            'source_filters': source_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
