@@ -84,6 +84,22 @@ class ViewAndEditTableTab(object):
         if locations and locations == 'All Locations':
             filters.pop('location')
 
+        genders = filters.get('gender')
+        if genders and genders == 'All Genders':
+            filters.pop('gender')
+
+        ages = filters.get('age')
+        if ages and ages == 'All Ages':
+            filters.pop('age')
+
+        ennumerators = filters.get('ennumerator')
+        if ennumerators and ennumerators == 'All Ennumerators':
+            filters.pop('ennumerator')
+
+        source = filters.get('source')
+        if ages and ages == 'All Sources':
+            filters.pop('source')
+
         return transport_items.list(**filters)
 
     def _get_filters(self, request, **kwargs):
@@ -166,6 +182,39 @@ class ViewAndEditTableTab(object):
         locations.sort()
         return {'items': locations}
 
+    def _get_gender_options(self, **kwargs):
+        genders = list(set(filter(None, [
+            item['gender'] for item
+            in transport_items.list()
+        ])))
+        genders.sort()
+        return {'items': genders}
+
+    def _get_age_options(self, **kwargs):
+        ages = list(set(filter(None, [
+            item['age'] for item
+            in transport_items.list()
+        ])))
+        ages.sort()
+        return {'items': ages}
+
+    def _get_ennumerator_options(self, **kwargs):
+        ennumerators = list(set(filter(None, [
+            item['ennumerator'] for item
+            in transport_items.list()
+        ])))
+        ennumerators.sort()
+        return {'items': ennumerators}
+
+
+    def _get_source_options(self, **kwargs):
+        sources = list(set(filter(None, [
+            item['source'] for item
+            in transport_items.list()
+        ])))
+        sources.sort()
+        return {'items': sources}
+
     def _build_actions_dropdown(self, question_types):
         items = [
             (NONE_COMMAND, '---------'),
@@ -196,6 +245,10 @@ class ViewAndEditTableTab(object):
     def get_context_data(self, tab_instance, request, **kwargs):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(**kwargs)
+        gender_options = self._get_gender_options(**kwargs)
+        age_options = self._get_age_options(**kwargs)
+        ennumerator_options = self._get_ennumerator_options(**kwargs)
+        source_options = self._get_source_options(**kwargs)
 
         filters = kwargs.get('filters', {})
         items = self._get_items(request, **kwargs)
@@ -226,6 +279,10 @@ class ViewAndEditTableTab(object):
             'actions': actions,
             'category_options': category_options,
             'locations': location_options,
+            'gender': gender_options,
+            'age': age_options,
+            'ennumerator': ennumerator_options,
+            'source': source_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name

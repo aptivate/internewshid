@@ -33,3 +33,31 @@ class LocationFilter(object):
         location = query_dict.get('location', None)
         if location is not None:
             filters.update(location=location)
+
+
+class GenderFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        gender = query_dict.get('gender', None)
+        if gender is not None:
+            filters.update(gender=gender)
+
+
+class AgeFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        age = query_dict.get('age', None)
+        if age is not None:
+            filters.update(age=age)
+
+
+class EnnumeratorFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        ennumerator = query_dict.get('ennumerator', None)
+        if ennumerator is not None:
+            filters.update(ennumerator=ennumerator)
+
+
+class SourceFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        source = query_dict.get('source', None)
+        if source is not None:
+            filters.update(source=source)

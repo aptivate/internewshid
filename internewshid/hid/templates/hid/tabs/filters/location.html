@@ -1,9 +1,9 @@
 {% if locations.items %}
   {% load i18n %}
   <div class="filter-location form-group input-group">
-    <label class="col-sm-3 control-label" for="location-selector">{% trans "Location" %}</label>
     <div class="select-container">
-      <select id="location-selector" name="location" class="form-control">
+      <label class="col-sm-3 control-label" for="location-selector">{% trans "Location" %}</label>
+      <select style="width:110px;" id="location-selector" name="location" class="form-control">
         <option value="All Locations" selected="selected">All Locations</option>
         {% for location in locations.items %}
           <option value="{{ location }}">{{ location }}</option>

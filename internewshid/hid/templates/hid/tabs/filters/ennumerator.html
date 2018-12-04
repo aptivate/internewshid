@@ -1,0 +1,14 @@
+{% if ennumerator.items %}
+  {% load i18n %}
+  <div class="filter-ennumerator form-group input-group">
+    <div class="select-container">
+      <label class="col-sm-3 control-label" for="ennumerator-selector">{% trans "Ennumerator" %}</label>
+      <select style="width:135px;" id="ennumerator-selector" name="ennumerator" class="form-control">
+        <option value="All Ennumerators" selected="selected">All Ennumerators</option>
+        {% for ennumerator in ennumerator.items %}
+          <option value="{{ ennumerator }}">{{ ennumerator }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endif %}

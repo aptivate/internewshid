@@ -1,0 +1,14 @@
+{% if age.items %}
+  {% load i18n %}
+  <div class="filter-age form-group input-group">
+    <div class="select-container">
+      <label class="col-sm-3 control-label" for="age-selector">{% trans "Age" %}</label>
+      <select style="width:80px;" id="age-selector" name="age" class="form-control">
+        <option value="All Ages" selected="selected">All Ages</option>
+        {% for age in age.items %}
+          <option value="{{ age }}">{{ age }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endif %}

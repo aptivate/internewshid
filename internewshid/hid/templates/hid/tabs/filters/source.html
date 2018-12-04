@@ -1,0 +1,14 @@
+{% if source.items %}
+  {% load i18n %}
+  <div class="filter-source form-group input-group">
+    <div class="select-container">
+      <label class="col-sm-3 control-label" for="source-selector">{% trans "Source" %}</label>
+      <select style="width:100px;" id="source-selector" name="source" class="form-control">
+        <option value="All Sources" selected="selected">All Sources</option>
+        {% for source in source.items %}
+          <option value="{{ source }}">{{ source }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endif %}
