@@ -29,16 +29,9 @@ class ItemTable(tables.Table):
         format=settings.SHORT_DATETIME_FORMAT,
         attrs={'td': {'class': 'col-md-1'}}
     )
-    category = tables.TemplateColumn(
-        verbose_name=_('Topic'),
-        template_name='hid/categories_column.html',
-        accessor='terms',
-        attrs={'td': {'class': 'col-md-2'}}
-    )
-    tags = tables.TemplateColumn(
-        verbose_name=_('Tags'),
-        template_name='hid/tags_column.html',
-        accessor='terms',
+    timestamp = tables.columns.DateTimeColumn(
+        verbose_name=_('Created'),
+        format=settings.SHORT_DATETIME_FORMAT,
         attrs={'td': {'class': 'col-md-2'}}
     )
     body = tables.TemplateColumn(
@@ -51,14 +44,16 @@ class ItemTable(tables.Table):
         verbose_name=_('Translation'),
         attrs={'td': {'class': 'col-md-3'}}
     )
-    timestamp = tables.columns.DateTimeColumn(
-        verbose_name=_('Created'),
-        format=settings.SHORT_DATETIME_FORMAT,
+    category = tables.TemplateColumn(
+        verbose_name=_('Theme'),
+        template_name='hid/categories_column.html',
+        accessor='terms',
         attrs={'td': {'class': 'col-md-2'}}
     )
-    location = tables.TemplateColumn(
-        template_name='hid/location_column.html',
-        verbose_name=_('Location'),
+    tags = tables.TemplateColumn(
+        verbose_name=_('Tags'),
+        template_name='hid/tags_column.html',
+        accessor='terms',
         attrs={'td': {'class': 'col-md-2'}}
     )
     gender = tables.TemplateColumn(
@@ -69,6 +64,11 @@ class ItemTable(tables.Table):
     age = tables.TemplateColumn(
         template_name='hid/age_column.html',
         verbose_name=_('Age'),
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+    location = tables.TemplateColumn(
+        template_name='hid/location_column.html',
+        verbose_name=_('Location'),
         attrs={'td': {'class': 'col-md-2'}}
     )
     ennumerator = tables.TemplateColumn(
