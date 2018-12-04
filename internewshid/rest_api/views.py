@@ -25,6 +25,10 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'body',
         'translation',
         'location',
+        'gender',
+        'age',
+        'ennumerator',
+        'source',
         'timestamp',
     )
 
@@ -78,6 +82,22 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         location = self.request.query_params.get('location', None)
         if location is not None:
             items = items.filter(location__icontains=location)
+
+        gender = self.request.query_params.get('gender', None)
+        if gender is not None:
+            items = items.filter(gender__icontains=gender)
+
+        age = self.request.query_params.get('age', None)
+        if age is not None:
+            items = items.filter(age__icontains=age)
+
+        ennumerator = self.request.query_params.get('ennumerator', None)
+        if ennumerator is not None:
+            items = items.filter(ennumerator__icontains=ennumerator)
+
+        source = self.request.query_params.get('source', None)
+        if source is not None:
+            items = items.filter(source__icontains=source)
 
         start_time = self.request.query_params.get('start_time', None)
         end_time = self.request.query_params.get('end_time', None)

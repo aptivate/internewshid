@@ -206,7 +206,6 @@ class ViewAndEditTableTab(object):
         ennumerators.sort()
         return {'items': ennumerators}
 
-
     def _get_source_options(self, **kwargs):
         sources = list(set(filter(None, [
             item['source'] for item
