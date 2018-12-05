@@ -174,42 +174,37 @@ class ViewAndEditTableTab(object):
         all_terms.sort(key=lambda e: e['name'].lower())
         return tuple((t['name'], t['name']) for t in all_terms)
 
-    def _get_location_options(self, **kwargs):
+    def _get_location_options(self, items_list, **kwargs):
         locations = list(set(filter(None, [
-            item['location'] for item
-            in transport_items.list()
+            item['location'] for item in items_list
         ])))
         locations.sort()
         return {'items': locations}
 
-    def _get_gender_options(self, **kwargs):
+    def _get_gender_options(self, items_list, **kwargs):
         genders = list(set(filter(None, [
-            item['gender'] for item
-            in transport_items.list()
+            item['gender'] for item in items_list
         ])))
         genders.sort()
         return {'items': genders}
 
-    def _get_age_options(self, **kwargs):
+    def _get_age_options(self, items_list, **kwargs):
         ages = list(set(filter(None, [
-            item['age'] for item
-            in transport_items.list()
+            item['age'] for item in items_list
         ])))
         ages.sort()
         return {'items': ages}
 
-    def _get_ennumerator_options(self, **kwargs):
+    def _get_ennumerator_options(self, items_list, **kwargs):
         ennumerators = list(set(filter(None, [
-            item['ennumerator'] for item
-            in transport_items.list()
+            item['ennumerator'] for item in items_list
         ])))
         ennumerators.sort()
         return {'items': ennumerators}
 
-    def _get_source_options(self, **kwargs):
+    def _get_source_options(self, items_list, **kwargs):
         sources = list(set(filter(None, [
-            item['source'] for item
-            in transport_items.list()
+            item['source'] for item in items_list
         ])))
         sources.sort()
         return {'items': sources}
@@ -242,15 +237,15 @@ class ViewAndEditTableTab(object):
         return actions
 
     def get_context_data(self, tab_instance, request, **kwargs):
-        category_options = self._get_category_options(**kwargs)
-        location_options = self._get_location_options(**kwargs)
-        gender_options = self._get_gender_options(**kwargs)
-        age_options = self._get_age_options(**kwargs)
-        ennumerator_options = self._get_ennumerator_options(**kwargs)
-        source_options = self._get_source_options(**kwargs)
-
         filters = kwargs.get('filters', {})
         items = self._get_items(request, **kwargs)
+
+        category_options = self._get_category_options(**kwargs)
+        location_options = self._get_location_options(items, **kwargs)
+        gender_options = self._get_gender_options(items, **kwargs)
+        age_options = self._get_age_options(items, **kwargs)
+        ennumerator_options = self._get_ennumerator_options(items, **kwargs)
+        source_options = self._get_source_options(items, **kwargs)
 
         table = ItemTable(
             items,
