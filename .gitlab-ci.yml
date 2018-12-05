@@ -1,6 +1,6 @@
 ---
 
-image: aptivate/pyenv-pythons:latest
+image: python:2.7
 
 services:
   - mysql:5.7
@@ -14,14 +14,12 @@ before_script:
   - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
   - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
   - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
-  - apt update
-  - apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
-  - pip install pipenv aptivate-cli
-  - pipenv sync --dev
+  - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
+  - pip install pipenv && pipenv sync --dev
 
 gitlab-ci:
   script:
-    - apc checks
-    - apc pylava
-    - apc isort
-    - apc pytest -v --cov
+    - pipenv run python manage.py check
+    - pipenv run pylava -o setup.cfg
+    - pipenv run isort -q -rc -c -df -sp setup.cfg
+    - pipenv run pytest -v --cov
