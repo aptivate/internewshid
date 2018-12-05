@@ -44,9 +44,11 @@ def test_kobo_master_items_imported(importer, django_db_setup):
         transport.items.create(item)
 
     tags = []
-    for term in items[0]['terms']:
-        if term['taxonomy'] == 'tags':
-            tags.append(term['name'])
+    for item in items:
+        for term in item['terms']:
+            if term['taxonomy'] == 'tags':
+                assert term['name'] != 'None'
+                tags.append(term['name'])
 
     assert len(tags) > 0
     assert all(tag in tags for tag in (

@@ -165,7 +165,7 @@ class CellConverter(object):
             'text': lambda x: x if x else '',
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
-            'taxonomy': lambda x: x,
+            'taxonomy': lambda x: x if x else '',
         }
         if self.type not in converters:
             raise SheetImportException(
