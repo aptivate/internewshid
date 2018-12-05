@@ -54,6 +54,24 @@
                             </div>
                             {% endif %}
 
+                            {% if form.feedback_type %}
+                            <div class="form-group pull-left input-group item-feedback-type {% if form.feedback_type.errors %}has-error{% endif %}">
+                               <label>
+                                    {% trans "Feedback Type" %}
+                                    {% if form.feedback_type.errors %} <span class='help-block'>({{ form.feedback_type.errors|join:", " }})</span> {% endif %}
+                                </label>
+                                <select name="{{ form.feedback_type.name }}" class="form-control">
+                                  {% for choice in form.feedback_type.field.choices %}
+                                    {% if form.initial.feedback_type == choice.0 %}
+                                      <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% else %}
+                                      <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                  {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+
                             {% if form.tags %}
                             <div class="form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">
                                  <label>
@@ -81,7 +99,7 @@
                                 <label>
                                     {% trans "Region" %}
                                     {% if form.region.errors %}
-                                        <span class='help-block'>({{ form.category.errors|join:", " }})</span>
+                                        <span class='help-block'>({{ form.region.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 <div class="selectContainer">

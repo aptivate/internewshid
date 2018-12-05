@@ -30,6 +30,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'ennumerator',
         'source',
         'timestamp',
+        'feedback_type',
     )
 
     def get_queryset(self):

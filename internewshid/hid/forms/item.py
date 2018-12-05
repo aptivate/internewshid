@@ -1,6 +1,7 @@
 from django import forms
 
 import transport
+from data_layer.models import Item
 from hid.constants import ITEM_TYPE_CATEGORY
 
 
@@ -50,6 +51,7 @@ class AddEditItemForm(forms.Form):
     def __init__(self, item_type, *args, **kwargs):
         """ Add extra fields depending on item_type """
         super(AddEditItemForm, self).__init__(*args, **kwargs)
+
         if item_type in ITEM_TYPE_CATEGORY:
             terms = transport.terms.list(
                 taxonomy=ITEM_TYPE_CATEGORY[item_type]
@@ -59,3 +61,11 @@ class AddEditItemForm(forms.Form):
             self.fields['category'] = forms.ChoiceField(
                 choices=choices, required=False
             )
+
+        choices = (('', '-----'),)
+        choices += Item.FEEDBACK_TYPE_CHOICES
+        self.fields['feedback_type'] = forms.ChoiceField(
+            choices=choices,
+            required=False,
+            widget=forms.RadioSelect()
+        )

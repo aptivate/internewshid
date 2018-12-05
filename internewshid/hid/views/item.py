@@ -161,6 +161,7 @@ class AddEditItemView(FormView):
                 'gender': self.item.get('gender', ''),
                 'age': self.item.get('age', ''),
                 'ennumerator': self.item.get('ennumerator', ''),
+                'feedback_type': self.item.get('feedback_type', ''),
                 'source': self.item.get('source', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
@@ -254,6 +255,7 @@ class AddEditItemView(FormView):
     def _separate_form_data(self, form):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
+        feedback_type = data.pop('feedback_type', None)
         data.pop('id', None)
 
         tags = {}
@@ -265,7 +267,7 @@ class AddEditItemView(FormView):
             else:
                 regular_fields[field_name] = field_value
 
-        return category, tags, regular_fields
+        return category, tags, feedback_type, regular_fields
 
     def _add_tags(self, item_id, tags):
         for (taxonomy, value) in tags.iteritems():
@@ -287,7 +289,7 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        category, tags, regular_fields = self._separate_form_data(
+        category, tags, feedback_type, regular_fields = self._separate_form_data(
             form)
 
         transport.items.update(item_id, regular_fields)
@@ -298,6 +300,9 @@ class AddEditItemView(FormView):
                 transport.items.add_terms(item_id, taxonomy, category)
             else:
                 transport.items.delete_all_terms(item_id, taxonomy)
+
+        if feedback_type:
+            transport.items.add_feedback_type(item_id, feedback_type)
 
         self._add_tags(item_id, tags)
 
@@ -316,7 +321,7 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        category, tags, regular_fields = self._separate_form_data(
+        category, tags, feedback_type, regular_fields = self._separate_form_data(
             form)
 
         created_item = transport.items.create(regular_fields)
