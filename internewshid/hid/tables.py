@@ -24,11 +24,15 @@ class ItemTable(tables.Table):
         verbose_name=_('Select'),
         attrs={'td': {'class': 'col-md-1'}}
     )
-    created = tables.columns.DateTimeColumn(
-        verbose_name=_('Imported'),
-        format=settings.SHORT_DATETIME_FORMAT,
-        attrs={'td': {'class': 'col-md-1'}}
-    )
+    # Note(lukem): based on adding a bunch of new table fields, we have little
+    # space now on the table view. So, since we have not seen any demands from
+    # for this field (seems useful but anyway), we drop it for now to save
+    # space. Un-commenting this will bring it right back
+    # created = tables.columns.DateTimeColumn(
+    #     verbose_name=_('Imported'),
+    #     format=settings.SHORT_DATETIME_FORMAT,
+    #     attrs={'td': {'class': 'col-md-1'}}
+    # )
     timestamp = tables.columns.DateTimeColumn(
         verbose_name=_('Created'),
         format=settings.SHORT_DATETIME_FORMAT,
