@@ -5,9 +5,11 @@ from .models import Item
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = (
+        'age',
         'body',
-        'translation',
+        'gender',
         'timestamp',
+        'translation',
     )
 
 
