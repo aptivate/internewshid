@@ -1,8 +1,8 @@
 {% if request %}
     {% if record.body %}
-      <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.body }}</a>
+      <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.body | title }}</a>
     {% else %}
-      <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'><p class="missing-body"> Missing text </p></a>
+      <a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'><p class="missing-body"> Missing Text </p></a>
     {% endif %}
 {% else %}
     {{ record.body }}

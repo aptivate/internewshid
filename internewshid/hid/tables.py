@@ -112,7 +112,11 @@ class ItemTable(tables.Table):
                 term['name'] for term in record['terms']
                 if term['taxonomy'] == 'tags'
             ])
-            ctx = {'tags': ', '.join(tags)}
+            tags = [' '.join([x.capitalize() for x in t.split()]) for t in tags]
+            ctx = {'tags': ', '.join(list(filter(
+                lambda tag: tag != 'None' and tag is not None,
+                tags
+            )))}
         except KeyError:
             ctx = {'tags': []}
 

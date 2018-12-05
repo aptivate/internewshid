@@ -6,7 +6,7 @@
       <select style="width:100px;" id="source-selector" name="source" class="form-control">
         <option value="All Sources" selected="selected">All Sources</option>
         {% for source in source_filters.items %}
-          <option value="{{ source }}">{{ source }}</option>
+          <option value="{{ source }}">{{ source | title }}</option>
         {% endfor %}
       </select>
     </div>

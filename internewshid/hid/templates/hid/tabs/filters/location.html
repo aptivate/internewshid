@@ -6,7 +6,7 @@
       <select style="width:110px;" id="location-selector" name="location" class="form-control">
         <option value="All Locations" selected="selected">All Locations</option>
         {% for location in locations.items %}
-          <option value="{{ location }}">{{ location }}</option>
+          <option value="{{ location }}">{{ location | title }}</option>
         {% endfor %}
       </select>
     </div>

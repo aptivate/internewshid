@@ -2,7 +2,7 @@
 <select name="category-{{ record.id }}" class="form-control">
         <option value="" selected="selected">---------</option>
         {% for cat in categories %}
-        <option value="{{ cat.0 }}"{% if cat.0 in selected %} selected="selected"{% endif %}>{{ cat.1 }}</option>
+        <option value="{{ cat.0 }}"{% if cat.0 in selected %} selected="selected"{% endif %}>{{ cat.1 | title }}</option>
         {% endfor %}
     </select>
 {% endif %}

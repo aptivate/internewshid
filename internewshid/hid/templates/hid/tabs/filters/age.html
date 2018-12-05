@@ -6,7 +6,7 @@
       <select style="width:80px;" id="age-selector" name="age" class="form-control">
         <option value="All Ages" selected="selected">All Ages</option>
         {% for age in age.items %}
-          <option value="{{ age }}">{{ age }}</option>
+          <option value="{{ age }}">{{ age | title }}</option>
         {% endfor %}
       </select>
     </div>

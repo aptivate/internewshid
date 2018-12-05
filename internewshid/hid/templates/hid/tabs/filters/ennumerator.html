@@ -6,7 +6,7 @@
       <select style="width:135px;" id="ennumerator-selector" name="ennumerator" class="form-control">
         <option value="All Ennumerators" selected="selected">All Ennumerators</option>
         {% for ennumerator in ennumerator.items %}
-          <option value="{{ ennumerator }}">{{ ennumerator }}</option>
+          <option value="{{ ennumerator }}">{{ ennumerator | title }}</option>
         {% endfor %}
       </select>
     </div>
