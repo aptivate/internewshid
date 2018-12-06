@@ -5,14 +5,15 @@
     background-color: #fff;
     display: flex;
     align-items: center;
-    padding: 1em 0 0 2%;
+    padding: .5rem 1rem 0;
 
     [class^="filter-"]{
         display: flex;
         flex-direction: row;
+		flex-wrap: wrap;
         border-right: solid 1px @gray-lighter;
-        padding-right: 0.1%;
-        margin-right: 0.1%;
+        padding-right: 0.5%;
+        margin-right: 1%;
         align-items: baseline;
 
 
@@ -20,27 +21,41 @@
             font-size: @font-size-small;
             font-weight: bold;
             text-transform: uppercase;
-            margin-right: 8%;
+			margin:0 1% 0 0;
+    		padding: 0 0 .5rem 1rem;
         }
         // input & selects
         .form-control{
             border-radius: 8px!important;
             border: solid 1px @gray-light;
-	        float: none;
             font-size: @font-size-small;
-            padding: .1rem 1rem;
+            padding: .1rem .5rem;
             color: @brand-primary;
             height: 3rem;
+			width: auto;
         }
         // add space between when two or more input boxes are adjacent
-        .form-control + .form-control{ margin-left: 0.5%; }
-
+        .form-control + .form-control{ margin-left: 1.5%; flex-wrap: nowrap}
+		
+		// Apply and cancel buttons
         &:last-child{
             border-right: none;
+			flex-wrap: nowrap;
+			padding-right: 0;
+			margin: 0;
         }
     }
-    .filter-apply{
-        button{
+	
+	.filter-dates {
+		label{flex-basis: 100%;}
+    	> input[type=date] {
+      		line-height:inherit;
+			flex-basis: 48%;
+    	}
+	}
+    
+	.filter-apply{
+        button[name="button-apply"]{
             background-color: @brand-primary;
             color: #fff;
             line-height: 1.8;
@@ -48,28 +63,14 @@
             border-radius: @border-radius-large;
             border: solid 1px @brand-primary;
             white-space: nowrap;
-
         }
+		button[name="button-clear"]{
+			font-size: smaller;
+		}
     }
 }
 
-.filter-clear {
-  button {
-    margin-right: 10px;
-  }
-}
 
-.filter-location{
-  label{
-      margin-right: 20% !important;
-  }
-}
-
-.filter-dates {
-    > input[type=date] {
-      line-height:inherit;
-    }
-}
 
 @media(max-width:@screen-sm){
     [class^="filter-"]{
@@ -80,6 +81,7 @@
 
 table,
 .table {
+	table-layout: fixed;
 
   background-color:white;
 
@@ -104,9 +106,12 @@ table,
 }
 
 
-.table-no-border > thead > tr > th, .table > tbody > tr > th,
-.table-no-border > tfoot > tr > th, .table > thead > tr > td,
-.table-no-border > tbody > tr > td, .table > tfoot > tr > td {
+.table-no-border > thead > tr > th, 
+.table > tbody > tr > th,
+.table-no-border > tfoot > tr > th, 
+.table > thead > tr > td,
+.table-no-border > tbody > tr > td, 
+.table > tfoot > tr > td {
   border:none;
 }
 
@@ -118,6 +123,9 @@ thead{
     background-color: @brand-secondary;
 	text-transform: uppercase;
 	font-size: small;
+	> tr > th{
+		border-bottom: 0!important;
+	}
     th.orderable {
         .asc, .desc{
             background-color: @brand-primary;
@@ -139,7 +147,6 @@ thead{
         &.asc a:after{
             content: '\f0aa';
         }
-
     }
 }
 
@@ -150,7 +157,6 @@ tbody {
 .table-striped > tbody > tr.selected.odd,
 .table-striped > tbody > tr.selected.even{
     background-color: #e3edf8;
-    // border: solid 1px @brand-secondary;
     transition: background-color 0.25s ease;
 }
 

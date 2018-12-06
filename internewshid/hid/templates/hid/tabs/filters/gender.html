@@ -1,14 +1,12 @@
 {% if gender.items %}
   {% load i18n %}
   <div class="filter-gender form-group input-group">
-    <div class="select-container">
-      <label class="col-sm-3 control-label" for="gender-selector">{% trans "Gender" %}</label>
-      <select style="width:100px;" id="gender-selector" name="gender" class="form-control">
+      <label class="control-label" for="gender-selector">{% trans "Gender" %}</label>
+      <select id="gender-selector" name="gender" class="form-control">
         <option value="All Genders" selected="selected">All Genders</option>
         {% for gender in gender.items %}
           <option value="{{ gender }}">{{ gender | title }}</option>
         {% endfor %}
       </select>
-    </div>
   </div>
 {% endif %}
