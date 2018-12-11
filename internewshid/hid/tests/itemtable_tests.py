@@ -1,6 +1,6 @@
-import mock
-
 from django.template import Context
+
+import mock
 
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.tables import ItemTable
