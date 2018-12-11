@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.template import loader
 from django.utils.translation import ugettext_lazy as _
 
