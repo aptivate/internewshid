@@ -188,13 +188,6 @@ class ViewAndEditTableTab(object):
         genders.sort()
         return {'items': genders}
 
-    def _get_age_options(self, items_list, **kwargs):
-        ages = list(set(filter(None, [
-            item['age'] for item in items_list
-        ])))
-        ages.sort()
-        return {'items': ages}
-
     def _get_ennumerator_options(self, items_list, **kwargs):
         ennumerators = list(set(filter(None, [
             item['ennumerator'] for item in items_list
@@ -243,7 +236,6 @@ class ViewAndEditTableTab(object):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
-        age_options = self._get_age_options(items, **kwargs)
         ennumerator_options = self._get_ennumerator_options(items, **kwargs)
         source_options = self._get_source_options(items, **kwargs)
 
@@ -274,7 +266,6 @@ class ViewAndEditTableTab(object):
             'category_options': category_options,
             'locations': location_options,
             'gender': gender_options,
-            'age': age_options,
             'ennumerator': ennumerator_options,
             'source_filters': source_options,
             'next': reverse('tabbed-page', kwargs={

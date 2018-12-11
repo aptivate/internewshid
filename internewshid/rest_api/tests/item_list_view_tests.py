@@ -110,6 +110,38 @@ def test_filter_by_date_range():
 
 
 @pytest.mark.django_db
+def test_filter_by_age_range():
+    create_item(
+        body="Too old item",
+        age='38'
+    )
+
+    create_item(
+        body="In range item 1",
+        age='34'
+    )
+
+    create_item(
+        body="In range item 2",
+        age='37'
+    )
+
+    create_item(
+        body="Too young item",
+        age='33'
+    )
+
+    payload = get(data={
+        'from_age': '34',
+        'to_age': '37'
+    }).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == "In range item 1"
+    assert payload[1]['body'] == "In range item 2"
+
+
+@pytest.mark.django_db
 def test_filter_by_location():
     create_item(body='item1', location='foo')
     create_item(body='neo', location='somewhere')

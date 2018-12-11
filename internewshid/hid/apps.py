@@ -8,7 +8,7 @@ class HidAppConfig(AppConfig):
     def ready(self):
         from dashboard.widget_pool import register_widget
         from hid.filters import (
-            AgeFilter,
+            AgeRangeFilter,
             CategoryFilter,
             EnnumeratorFilter,
             GenderFilter,
@@ -27,7 +27,7 @@ class HidAppConfig(AppConfig):
         register_filter('time_range', TimeRangeFilter())
         register_filter('location', LocationFilter())
         register_filter('gender', GenderFilter())
-        register_filter('age', AgeFilter())
+        register_filter('age_range', AgeRangeFilter())
         register_filter('ennumerator', EnnumeratorFilter())
         register_filter('source', SourceFilter())
         register_filter('tags', TagsFilter())
