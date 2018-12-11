@@ -123,6 +123,26 @@ def test_filter_by_location():
 
 
 @pytest.mark.django_db
+def test_filter_by_enumeraotr():
+    create_item(
+        body='item1',
+        ennumerator='Yasmin')
+    create_item(
+        body='item2',
+        ennumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
+    )
+
+    payload = get(
+        data={
+            'ennumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
+        }
+    ).data
+
+    assert len(payload) == 1
+    assert payload[0]['body'] == 'item2'
+
+
+@pytest.mark.django_db
 def test_filter_by_multiple_terms():
     # TODO: Refactor to use the REST API when we can add
     # multiple terms to an item
