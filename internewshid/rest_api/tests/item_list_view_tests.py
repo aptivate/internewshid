@@ -195,7 +195,6 @@ def test_empty_term_filter_ignored():
     assert payload[1]['body'] == item2['body']
 
 
-
 @pytest.mark.django_db
 def test_item_listed_with_associated_terms():
     # TODO: Refactor to use the REST API when we can add
