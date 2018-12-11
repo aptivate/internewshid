@@ -1,5 +1,7 @@
 import mock
 
+from django.template import Context
+
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.tables import ItemTable
 
@@ -97,3 +99,38 @@ def test_render_category_passes_context_to_template(mock_loader):
     }
 
     mock_template.render.assert_called_with(context)
+
+
+@mock.patch('hid.tables.loader')
+def test_render_tags_passes_record_and_tags_to_template(mock_loader):
+    mock_template = mock.MagicMock()
+    mock_template.render = mock.MagicMock()
+    mock_loader.get_template = mock.MagicMock(
+        return_value=mock_template)
+
+    record = {
+        'terms': [
+            {
+                'name': 'foo',
+                'taxonomy': 'tags',
+            },
+            {
+                'name': 'bar',
+                'taxonomy': 'tags',
+            },
+            {
+                'name': 'baz',
+                'taxonomy': 'not tags',
+            },
+        ]
+    }
+
+    table = ItemTable([], categories=None)
+    table.context = Context()
+
+    table.render_tags(record, None)
+
+    args, kwargs = mock_template.render.call_args
+
+    assert args[0]['record'] == record
+    assert args[0]['tags'] == 'Foo, Bar'
