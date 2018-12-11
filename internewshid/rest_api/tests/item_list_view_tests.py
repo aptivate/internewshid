@@ -123,7 +123,7 @@ def test_filter_by_location():
 
 
 @pytest.mark.django_db
-def test_filter_by_enumeraotr():
+def test_filter_by_enumerator():
     create_item(
         body='item1',
         ennumerator='Yasmin')
