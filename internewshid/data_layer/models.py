@@ -37,7 +37,7 @@ class Message(DataLayerModel):
     location = models.CharField(max_length=100, blank=True)
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
-    ennumerator = models.CharField(max_length=200, blank=True)
+    enumerator = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=200, blank=True)
     feedback_type = models.CharField(
         max_length=100,

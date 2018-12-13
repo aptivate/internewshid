@@ -160,7 +160,7 @@ class AddEditItemView(FormView):
                 'location': self.item.get('location', ''),
                 'gender': self.item.get('gender', ''),
                 'age': self.item.get('age', ''),
-                'ennumerator': self.item.get('ennumerator', ''),
+                'enumerator': self.item.get('enumerator', ''),
                 'feedback_type': self.item.get('feedback_type', ''),
                 'source': self.item.get('source', ''),
                 'timestamp': self.item['timestamp'],

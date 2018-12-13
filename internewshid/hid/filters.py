@@ -56,11 +56,11 @@ class AgeRangeFilter(object):
             )
 
 
-class EnnumeratorFilter(object):
+class EnumeratorFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        ennumerator = query_dict.get('ennumerator', None)
-        if ennumerator is not None:
-            filters.update(ennumerator=ennumerator)
+        enumerator = query_dict.get('enumerator', None)
+        if enumerator is not None:
+            filters.update(enumerator=enumerator)
 
 
 class SourceFilter(object):

@@ -10,7 +10,7 @@ class HidAppConfig(AppConfig):
         from hid.filters import (
             AgeRangeFilter,
             CategoryFilter,
-            EnnumeratorFilter,
+            EnumeratorFilter,
             GenderFilter,
             LocationFilter,
             SourceFilter,
@@ -28,7 +28,7 @@ class HidAppConfig(AppConfig):
         register_filter('location', LocationFilter())
         register_filter('gender', GenderFilter())
         register_filter('age_range', AgeRangeFilter())
-        register_filter('ennumerator', EnnumeratorFilter())
+        register_filter('enumerator', EnumeratorFilter())
         register_filter('source', SourceFilter())
         register_filter('tags', TagsFilter())
 

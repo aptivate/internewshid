@@ -92,9 +92,9 @@ class ViewAndEditTableTab(object):
         if ages and ages == 'All Ages':
             filters.pop('age')
 
-        ennumerators = filters.get('ennumerator')
-        if ennumerators and ennumerators == 'All Ennumerators':
-            filters.pop('ennumerator')
+        enumerators = filters.get('enumerator')
+        if enumerators and enumerators == 'All Enumerators':
+            filters.pop('enumerator')
 
         source = filters.get('source')
         if source and source == 'All Sources':
@@ -188,12 +188,12 @@ class ViewAndEditTableTab(object):
         genders.sort()
         return {'items': genders}
 
-    def _get_ennumerator_options(self, items_list, **kwargs):
-        ennumerators = list(set(filter(None, [
-            item['ennumerator'] for item in items_list
+    def _get_enumerator_options(self, items_list, **kwargs):
+        enumerators = list(set(filter(None, [
+            item['enumerator'] for item in items_list
         ])))
-        ennumerators.sort()
-        return {'items': ennumerators}
+        enumerators.sort()
+        return {'items': enumerators}
 
     def _get_source_options(self, items_list, **kwargs):
         sources = list(set(filter(None, [
@@ -236,7 +236,7 @@ class ViewAndEditTableTab(object):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
-        ennumerator_options = self._get_ennumerator_options(items, **kwargs)
+        enumerator_options = self._get_enumerator_options(items, **kwargs)
         source_options = self._get_source_options(items, **kwargs)
 
         table = ItemTable(
@@ -266,7 +266,7 @@ class ViewAndEditTableTab(object):
             'category_options': category_options,
             'locations': location_options,
             'gender': gender_options,
-            'ennumerator': ennumerator_options,
+            'enumerator': enumerator_options,
             'source_filters': source_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
