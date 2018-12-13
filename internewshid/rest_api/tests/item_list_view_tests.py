@@ -158,15 +158,15 @@ def test_filter_by_location():
 def test_filter_by_enumerator():
     create_item(
         body='item1',
-        ennumerator='Yasmin')
+        enumerator='Yasmin')
     create_item(
         body='item2',
-        ennumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
+        enumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
     )
 
     payload = get(
         data={
-            'ennumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
+            'enumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
         }
     ).data
 

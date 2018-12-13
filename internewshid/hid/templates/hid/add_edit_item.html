@@ -144,15 +144,15 @@
                             </div>
                             {% endif %}
 
-                            {% if form.ennumerator %}
-                            <div class="form-group input-group item-ennumerator {% if form.ennumerator.errors %}has-error{% endif %}">
+                            {% if form.enumerator %}
+                            <div class="form-group input-group item-enumerator {% if form.enumerator.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Ennumerator" %}
-                                    {% if form.ennumerator.errors %}
-                                        <span class='help-block'>({{ form.ennumerator.errors|join:", " }})</span>
+                                    {% trans "Enumerator" %}
+                                    {% if form.enumerator.errors %}
+                                        <span class='help-block'>({{ form.enumerator.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.ennumerator|add_class:'form-control'|attr:"Ennumerator"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
+                                {{ form.enumerator|add_class:'form-control'|attr:"Enumerator"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
 

@@ -71,9 +71,9 @@ class ItemTable(tables.Table):
         verbose_name=_('Location'),
         attrs={'td': {'class': 'col-md-2'}}
     )
-    ennumerator = tables.TemplateColumn(
-        template_name='hid/ennumerator_column.html',
-        verbose_name=_('Ennumerator'),
+    enumerator = tables.TemplateColumn(
+        template_name='hid/enumerator_column.html',
+        verbose_name=_('Enumerator'),
         attrs={'td': {'class': 'col-md-2'}}
     )
     source = tables.TemplateColumn(
