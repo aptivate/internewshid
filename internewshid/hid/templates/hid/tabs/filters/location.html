@@ -5,7 +5,7 @@
       <select id="location-selector" name="location" class="form-control">
         <option value="All Locations" selected="selected">All Locations</option>
         {% for location in locations.items %}
-          <option value="{{ location }}"{% if location == request.GET.location %} selected="selected"{% endif %}>{{ location | title }}</option>
+          <option value="{{ location }}"{% if location == request.GET.location %} selected="selected"{% endif %}>{{ location }}</option>
         {% endfor %}
       </select>
   </div>
