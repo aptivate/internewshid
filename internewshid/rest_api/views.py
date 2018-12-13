@@ -63,22 +63,15 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         terms = self.request.query_params.getlist('terms', [])
         for taxonomy_and_term in terms:
             (taxonomy, term) = taxonomy_and_term.split(':', 1)
-            matches = Term.objects.filter(
-                name=term, taxonomy__slug=taxonomy
-            )
-            if len(matches) == 0:
-                # If the term doesn't exist, there can be no matches
-                return Item.objects.none()
+            if term:
+                matches = Term.objects.filter(
+                    name=term, taxonomy__slug=taxonomy
+                )
+                if len(matches) == 0:
+                    # If the term doesn't exist, there can be no matches
+                    return Item.objects.none()
 
-            items = items.filter(terms__id=matches[0].id)
-
-        tags = self.request.query_params.get('tags', None)
-        if tags is not None:
-            exact_match_items = items.filter(terms__name__iexact=tags)
-            if exact_match_items.exists():
-                items = exact_match_items
-            else:
-                items = items.filter(terms__name__icontains=tags)
+                items = items.filter(terms__id=matches[0].id)
 
         location = self.request.query_params.get('location', None)
         if location is not None:

@@ -479,7 +479,6 @@ def test_table_items_filtered_by_age_range():
         tab_instance, request, categories=[],
         dynamic_filters=['age_range']
     )
-
     table = context_data['table']
 
     ids = [t['id'] for t in table.data.data]
@@ -489,6 +488,53 @@ def test_table_items_filtered_by_age_range():
 
     assert too_old['id'] not in ids
     assert too_young['id'] not in ids
+
+
+@pytest.mark.django_db
+def test_table_items_filtered_by_tags():
+    tags = TaxonomyFactory(name="Tags")
+    not_tags = TaxonomyFactory(name="Not tags")
+
+    female_item = transport.items.create({
+        'body': 'Message from female',
+    })
+
+    male_item = transport.items.create({
+        'body': 'Message from male',
+    })
+
+    another_item = transport.items.create({
+        'body': 'Another message',
+    })
+
+    tags = TaxonomyFactory(name='tags')
+    female_term = TermFactory(name='female', taxonomy=tags)
+    male_term = TermFactory(name='male', taxonomy=tags)
+
+    non_tag_term = TermFactory(name='female', taxonomy=not_tags)
+
+    transport.items.add_terms(
+        female_item['id'], female_term.taxonomy.slug, female_term.name)
+    transport.items.add_terms(
+        male_item['id'], male_term.taxonomy.slug, male_term.name)
+    transport.items.add_terms(
+        another_item['id'], non_tag_term.taxonomy.slug, non_tag_term.name)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}},
+                        GET={'tags': 'female'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request,
+        dynamic_filters=['tags']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert ids == [female_item['id']]
 
 
 @pytest.mark.django_db
