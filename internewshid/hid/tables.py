@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.template import loader
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,18 +23,15 @@ class ItemTable(tables.Table):
         verbose_name=_('Select'),
         attrs={'td': {'class': 'col-md-1'}}
     )
-    # Note(lukem): based on adding a bunch of new table fields, we have little
-    # space now on the table view. So, since we have not seen any demands from
-    # for this field (seems useful but anyway), we drop it for now to save
-    # space. Un-commenting this will bring it right back
-    # created = tables.columns.DateTimeColumn(
-    #     verbose_name=_('Imported'),
-    #     format=settings.SHORT_DATETIME_FORMAT,
-    #     attrs={'td': {'class': 'col-md-1'}}
-    # )
-    timestamp = tables.columns.DateTimeColumn(
+
+    created = tables.columns.TemplateColumn(
+        template_name='hid/created_column.html',
+        verbose_name=_('Imported'),
+        attrs={'td': {'class': 'col-md-1'}}
+    )
+    timestamp = tables.columns.TemplateColumn(
+        template_name='hid/timestamp_column.html',
         verbose_name=_('Created'),
-        format=settings.SHORT_DATETIME_FORMAT,
         attrs={'td': {'class': 'col-md-2'}}
     )
     body = tables.TemplateColumn(
@@ -107,20 +103,24 @@ class ItemTable(tables.Table):
     def render_tags(self, record, value):
         Template = loader.get_template('hid/tags_column.html')
 
+        context = self.context
+
         try:
             tags = filter(None, [
                 term['name'] for term in record['terms']
                 if term['taxonomy'] == 'tags'
             ])
             tags = [' '.join([x.capitalize() for x in t.split()]) for t in tags]
-            ctx = {'tags': ', '.join(list(filter(
+            context['tags'] = ', '.join(list(filter(
                 lambda tag: tag != 'None' and tag is not None,
                 tags
-            )))}
+            )))
         except KeyError:
-            ctx = {'tags': []}
+            context['tags'] = []
 
-        return Template.render(ctx)
+        context['record'] = record
+
+        return Template.render(context.flatten())
 
     @staticmethod
     def get_selected(params):

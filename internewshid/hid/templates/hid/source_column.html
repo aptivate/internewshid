@@ -1,1 +1,1 @@
-{{ record.source | title }}
+<a href='{% url "edit-item" item_id=record.id %}?next={{ request.path }}'>{{ record.source | title }}</a>
