@@ -22,7 +22,7 @@ from .views_tests import assert_message, assert_no_messages, fix_messages
 
 @pytest.fixture
 def item_type_taxonomy():
-    slug = ITEM_TYPE_CATEGORY['question']
+    slug = ITEM_TYPE_CATEGORY['all']
 
     try:
         taxonomy = Taxonomy.objects.get(slug=slug)
@@ -191,6 +191,7 @@ def an_item_type():
     }
 
 
+@pytest.mark.django_db
 def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -203,6 +204,7 @@ def test_the_item_is_added_to_the_view_on_get_requests(generic_item):
     assert view.item == generic_item
 
 
+@pytest.mark.django_db
 def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -215,6 +217,7 @@ def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
     assert view.item_type['name'] == 'generic'
 
 
+@pytest.mark.django_db
 def test_there_is_a_default_item_type_on_get_requests(item_without_item_type):
     default_item_type = {
         'name': 'a-default-type',
@@ -234,6 +237,7 @@ def test_there_is_a_default_item_type_on_get_requests(item_without_item_type):
         assert view.item_type == default_item_type
 
 
+@pytest.mark.django_db
 def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -257,6 +261,7 @@ def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
     }
 
 
+@pytest.mark.django_db
 def test_the_item_is_added_to_the_view_on_post_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -274,6 +279,7 @@ def test_the_item_is_added_to_the_view_on_post_requests(generic_item):
     assert view.item == generic_item
 
 
+@pytest.mark.django_db
 def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -291,6 +297,7 @@ def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
     assert view.item_type['name'] == 'generic'
 
 
+@pytest.mark.django_db
 def test_there_is_a_default_item_type_on_post_requests(item_without_item_type):
     default_item_type = {
         'name': 'a-default-type',
@@ -315,6 +322,7 @@ def test_there_is_a_default_item_type_on_post_requests(item_without_item_type):
         assert view.item_type == default_item_type
 
 
+@pytest.mark.django_db
 def test_the_item_terms_are_added_to_the_view_on_post_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -343,6 +351,7 @@ def test_the_item_terms_are_added_to_the_view_on_post_requests(generic_item):
     }
 
 
+@pytest.mark.django_db
 def test_form_initial_values_set_that_of_item(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -358,6 +367,7 @@ def test_form_initial_values_set_that_of_item(generic_item):
     assert initial['timestamp'] == datetime(2016, 6, 6)
 
 
+@pytest.mark.django_db
 def test_form_next_url_is_next_query_parameter(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -372,6 +382,7 @@ def test_form_next_url_is_next_query_parameter(generic_item):
     assert initial['next'] == 'http://example.com'
 
 
+@pytest.mark.django_db
 def test_form_next_url_is_referer_if_no_next_query_parameter(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -387,6 +398,7 @@ def test_form_next_url_is_referer_if_no_next_query_parameter(generic_item):
     assert initial['next'] == '/view-edit/main/rumors'
 
 
+@pytest.mark.django_db
 def test_form_next_url_is_dashboard_if_nothing_else_set(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -400,6 +412,7 @@ def test_form_next_url_is_dashboard_if_nothing_else_set(generic_item):
     assert initial['next'] == reverse('dashboard')
 
 
+@pytest.mark.django_db
 def test_context_data_includes_the_item(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -413,6 +426,7 @@ def test_context_data_includes_the_item(generic_item):
     assert response.context_data['item']['id'] == 1001
 
 
+@pytest.mark.django_db
 def test_context_data_includes_item_type_label(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -426,6 +440,7 @@ def test_context_data_includes_item_type_label(generic_item):
     assert response.context_data['item_type_label'] == 'Generic'
 
 
+@pytest.mark.django_db
 def test_correct_item_is_fetched_during_request(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -440,6 +455,7 @@ def test_correct_item_is_fetched_during_request(generic_item):
     assert args[0] == 103
 
 
+@pytest.mark.django_db
 def test_displaying_existing_item_returns_template_response(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -702,12 +718,12 @@ def test_item_term_delete_transport_exception_logs_message(view, form,
     form.cleaned_data['category'] = ''
 
     # Not sure if this is good practice
-    old_category = ITEM_TYPE_CATEGORY['question']
-    ITEM_TYPE_CATEGORY['question'] = 'unknown-slug'
+    old_category = ITEM_TYPE_CATEGORY['all']
+    ITEM_TYPE_CATEGORY['all'] = 'unknown-slug'
 
     view.form_valid(form)
 
-    ITEM_TYPE_CATEGORY['question'] = old_category
+    ITEM_TYPE_CATEGORY['all'] = old_category
 
     assert_message(view.request,
                    messages.ERROR,

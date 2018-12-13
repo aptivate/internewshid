@@ -48,13 +48,13 @@ class AddEditItemForm(forms.Form):
         required=False
     )
 
-    def __init__(self, item_type, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """ Add extra fields depending on item_type """
         super(AddEditItemForm, self).__init__(*args, **kwargs)
 
-        if item_type in ITEM_TYPE_CATEGORY:
+        if 'all' in ITEM_TYPE_CATEGORY:
             terms = transport.terms.list(
-                taxonomy=ITEM_TYPE_CATEGORY[item_type]
+                taxonomy=ITEM_TYPE_CATEGORY['all']
             )
             choices = (('', '-----'),)
             choices += tuple((t['name'], t['name']) for t in terms)

@@ -77,7 +77,7 @@ def test_render_category_passes_context_to_template(mock_loader):
         {
             u'long_name': u'Repatriation',
             u'name': u'Repatriation',
-            u'taxonomy': ITEM_TYPE_CATEGORY['question'],
+            u'taxonomy': ITEM_TYPE_CATEGORY['all'],
         }
     ]
 

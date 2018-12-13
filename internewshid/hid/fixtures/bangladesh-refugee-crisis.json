@@ -311,7 +311,7 @@
     {
         "fields": {
             "key": "ITEM_TYPE_CATEGORY",
-            "value": "gAJYMQAAAHsicXVlc3Rpb24iOiAiYmFuZ2xhZGVzaC1yZWZ1Z2VlLWNyaXNpcy1zZWN0b3JzIn1xAS4="
+            "value": "gAJYLAAAAHsiYWxsIjogImJhbmdsYWRlc2gtcmVmdWdlZS1jcmlzaXMtc2VjdG9ycyJ9cQEu"
         },
         "model": "database.constance",
         "pk": 1

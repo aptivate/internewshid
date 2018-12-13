@@ -5,21 +5,20 @@ from ..forms.item import AddEditItemForm
 
 def test_form_does_not_have_category_field_if_not_defined():
     item_type_category = {
-        'some-item-type': 'some-taxonomy'
     }
-    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
-        form = AddEditItemForm('another-item-type')
+    with patch('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
+        form = AddEditItemForm()
         assert 'category' not in form.fields
 
 
 def test_form_does_have_category_field_if_defined():
     item_type_category = {
-        'some-item-type': 'some-taxonomy'
+        'all': 'some-taxonomy'
     }
-    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
+    with patch('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
         with patch('hid.forms.item.transport.terms.list') as term_list:
             term_list.return_value = []
-            form = AddEditItemForm('some-item-type')
+            form = AddEditItemForm()
             assert 'category' in form.fields
 
 

@@ -90,7 +90,7 @@ class ItemTable(tables.Table):
         Template = loader.get_template('hid/categories_column.html')
         selected = []
         for term in value:
-            if term['taxonomy'] == ITEM_TYPE_CATEGORY['question']:
+            if term['taxonomy'] == ITEM_TYPE_CATEGORY['all']:
                 selected.append(term['name'])
         ctx = {
             'categories': self.categories,

@@ -379,7 +379,7 @@ def _categorize_items(request, items, category):
     # TODO: Work out the item type.
     _add_items_categories(
         request,
-        [(item, ITEM_TYPE_CATEGORY['question'], category)
+        [(item, ITEM_TYPE_CATEGORY['all'], category)
          for item in items])
 
 
@@ -405,7 +405,7 @@ def view_and_edit_table_form_process_items(request):
             # TODO: Work out the item type.
             _add_items_categories(
                 request,
-                [(item, ITEM_TYPE_CATEGORY['question'], category)
+                [(item, ITEM_TYPE_CATEGORY['all'], category)
                  for item, category in changes]
             )
         elif params['action'] != 'none':

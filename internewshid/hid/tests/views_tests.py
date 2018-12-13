@@ -22,7 +22,7 @@ ReqFactory = RequestFactory()
 
 @pytest.fixture
 def item_type_taxonomy():
-    slug = ITEM_TYPE_CATEGORY['question']
+    slug = ITEM_TYPE_CATEGORY['all']
 
     try:
         taxonomy = Taxonomy.objects.get(slug=slug)

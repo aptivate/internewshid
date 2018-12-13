@@ -173,7 +173,7 @@ class AddEditItemView(FormView):
                 ),
             }
 
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        taxonomy = ITEM_TYPE_CATEGORY.get('all')
         if (taxonomy and taxonomy in self.item_terms
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
@@ -190,7 +190,7 @@ class AddEditItemView(FormView):
         if form_class is None:
             form_class = self.form_class
 
-        return form_class(self.item_type['name'], **self.get_form_kwargs())
+        return form_class(**self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
         """ Get the form's context data
@@ -220,7 +220,7 @@ class AddEditItemView(FormView):
     def form_valid(self, form):
         """ Form submit handler """
         item_description = self._get_item_description()
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        taxonomy = ITEM_TYPE_CATEGORY.get('all')
         item_id = int(form.cleaned_data['id'])
 
         try:

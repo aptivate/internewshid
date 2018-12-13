@@ -196,7 +196,7 @@ CONSTANCE_CONFIG = {
                                  'Name of default tabbed page'),
     'DEFAULT_TAB_NAME': ('all',
                          'Name of default tab within page'),
-    'ITEM_TYPE_CATEGORY': (json.dumps({'question': 'ebola-questions'}),
+    'ITEM_TYPE_CATEGORY': (json.dumps({'all': 'ebola-questions'}),
                            'Single item-type taxonomy to use for categorisation'),
     'GLOBAL_DATA_SOURCE': ('kobo',
                            'Sheet profile to use when loading data from the main menu'),
