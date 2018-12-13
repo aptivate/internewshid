@@ -81,9 +81,11 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if gender is not None:
             items = items.filter(gender__icontains=gender)
 
-        age = self.request.query_params.get('age', None)
-        if age is not None:
-            items = items.filter(age__icontains=age)
+        from_age = self.request.query_params.get('from_age', None)
+        to_age = self.request.query_params.get('to_age', None)
+
+        if from_age is not None and to_age is not None:
+            items = items.filter(age__range=[from_age, to_age])
 
         ennumerator = self.request.query_params.get('ennumerator', None)
         if ennumerator is not None:

@@ -447,6 +447,50 @@ def test_table_items_filtered_by_date_range():
 
 
 @pytest.mark.django_db
+def test_table_items_filtered_by_age_range():
+    too_old = transport.items.create({
+        'body': "Too old item",
+        'age': '38'
+    })
+
+    in_range_1 = transport.items.create({
+        'body': "In range item 1",
+        'age': '37',
+    })
+
+    in_range_2 = transport.items.create({
+        'body': "In range item 1",
+        'age': '36',
+    })
+
+    too_young = transport.items.create({
+        'body': "Too young item",
+        'age': '35',
+    })
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
+        'from_age': '36',
+        'to_age': '37',
+    })
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['age_range']
+    )
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert in_range_1['id'] in ids
+    assert in_range_2['id'] in ids
+
+    assert too_old['id'] not in ids
+    assert too_young['id'] not in ids
+
+
+@pytest.mark.django_db
 def test_table_items_filtered_by_tags():
     tags = TaxonomyFactory(name="Tags")
     not_tags = TaxonomyFactory(name="Not tags")
