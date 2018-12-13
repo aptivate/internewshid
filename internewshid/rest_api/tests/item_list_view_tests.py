@@ -110,6 +110,38 @@ def test_filter_by_date_range():
 
 
 @pytest.mark.django_db
+def test_filter_by_age_range():
+    create_item(
+        body="Too old item",
+        age='38'
+    )
+
+    create_item(
+        body="In range item 1",
+        age='34'
+    )
+
+    create_item(
+        body="In range item 2",
+        age='37'
+    )
+
+    create_item(
+        body="Too young item",
+        age='33'
+    )
+
+    payload = get(data={
+        'from_age': '34',
+        'to_age': '37'
+    }).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == "In range item 1"
+    assert payload[1]['body'] == "In range item 2"
+
+
+@pytest.mark.django_db
 def test_filter_by_location():
     create_item(body='item1', location='foo')
     create_item(body='neo', location='somewhere')
@@ -120,6 +152,26 @@ def test_filter_by_location():
     assert len(payload) == 1
     assert payload[0]['body'] == 'neo'
     assert payload[0]['location'] == 'somewhere'
+
+
+@pytest.mark.django_db
+def test_filter_by_enumerator():
+    create_item(
+        body='item1',
+        ennumerator='Yasmin')
+    create_item(
+        body='item2',
+        ennumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
+    )
+
+    payload = get(
+        data={
+            'ennumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
+        }
+    ).data
+
+    assert len(payload) == 1
+    assert payload[0]['body'] == 'item2'
 
 
 @pytest.mark.django_db
@@ -157,6 +209,22 @@ def test_filter_by_term_works_when_term_name_includes_colon():
 
     assert len(payload) == 1
     assert payload[0]['body'] == item['body']
+
+
+@pytest.mark.django_db
+def test_empty_term_filter_ignored():
+    taxonomy = create_taxonomy(name='taxonomy').data
+    term = add_term(taxonomy=taxonomy['slug'], name='my term').data
+    item1 = create_item(body='item 1').data
+    item2 = create_item(body='item 2').data
+    categorize_item(item1, term)
+
+    term_filter = '{}:'.format(taxonomy['slug'])
+    payload = get(data={'terms': [term_filter]}).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == item1['body']
+    assert payload[1]['body'] == item2['body']
 
 
 @pytest.mark.django_db

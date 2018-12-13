@@ -11,9 +11,11 @@ class CategoryFilter(object):
 
 class TagsFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        tags = kwargs.get('tags', None)
+        tags = query_dict.get('tags', None)
         if tags is not None:
-            filters.update(tags=tags)
+            filters.setdefault('terms', []).append(
+                'tags:{}'.format(tags)
+            )
 
 
 class TimeRangeFilter(object):
@@ -42,11 +44,16 @@ class GenderFilter(object):
             filters.update(gender=gender)
 
 
-class AgeFilter(object):
+class AgeRangeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        age = query_dict.get('age', None)
-        if age is not None:
-            filters.update(age=age)
+        from_age = query_dict.get('from_age', None)
+        to_age = query_dict.get('to_age', None)
+
+        if from_age is not None and to_age is not None:
+            filters.update(
+                from_age=from_age,
+                to_age=to_age
+            )
 
 
 class EnnumeratorFilter(object):

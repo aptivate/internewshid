@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="filter-age form-group input-group">
+  <label class="control-label">{% trans "Ages" %}</label>
+  <input type="number" value="{{ filters.from_age }}" class="form-control" name="from_age">
+  <input type="number" value="{{ filters.to_age }}" class="form-control" name="to_age">
+</div>
