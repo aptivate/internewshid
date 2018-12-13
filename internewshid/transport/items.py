@@ -66,6 +66,7 @@ def create(item):
         return response.data
     else:
         response.data['status_code'] = response.status_code
+        response.data['item'] = item
         raise TransportException(response.data)
 
 
