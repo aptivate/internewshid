@@ -5,7 +5,7 @@
       <select id="gender-selector" name="gender" class="form-control">
         <option value="All Genders" selected="selected">All Genders</option>
         {% for gender in gender.items %}
-          <option value="{{ gender }}">{{ gender | title }}</option>
+          <option value="{{ gender }}"{% if gender == request.GET.gender %} selected="selected"{% endif %}>{{ gender | title }}</option>
         {% endfor %}
       </select>
   </div>

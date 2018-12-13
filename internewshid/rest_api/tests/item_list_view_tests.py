@@ -123,6 +123,26 @@ def test_filter_by_location():
 
 
 @pytest.mark.django_db
+def test_filter_by_enumerator():
+    create_item(
+        body='item1',
+        ennumerator='Yasmin')
+    create_item(
+        body='item2',
+        ennumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
+    )
+
+    payload = get(
+        data={
+            'ennumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
+        }
+    ).data
+
+    assert len(payload) == 1
+    assert payload[0]['body'] == 'item2'
+
+
+@pytest.mark.django_db
 def test_filter_by_multiple_terms():
     # TODO: Refactor to use the REST API when we can add
     # multiple terms to an item
@@ -157,6 +177,22 @@ def test_filter_by_term_works_when_term_name_includes_colon():
 
     assert len(payload) == 1
     assert payload[0]['body'] == item['body']
+
+
+@pytest.mark.django_db
+def test_empty_term_filter_ignored():
+    taxonomy = create_taxonomy(name='taxonomy').data
+    term = add_term(taxonomy=taxonomy['slug'], name='my term').data
+    item1 = create_item(body='item 1').data
+    item2 = create_item(body='item 2').data
+    categorize_item(item1, term)
+
+    term_filter = '{}:'.format(taxonomy['slug'])
+    payload = get(data={'terms': [term_filter]}).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == item1['body']
+    assert payload[1]['body'] == item2['body']
 
 
 @pytest.mark.django_db
