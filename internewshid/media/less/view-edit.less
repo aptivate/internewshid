@@ -36,7 +36,7 @@
         }
         // add space between when two or more input boxes are adjacent
         .form-control + .form-control{ margin-left: 1.5%; flex-wrap: nowrap}
-		
+
 		// Apply and cancel buttons
         &:last-child{
             border-right: none;
@@ -45,15 +45,27 @@
 			margin: 0;
         }
     }
-	
+
 	.filter-dates {
-		label{flex-basis: 100%;}
+		> label{flex-basis: 100%;}
     	> input[type=date] {
       		line-height:inherit;
 			flex-basis: 48%;
     	}
 	}
-    
+
+    .filter-age {
+		> label{flex-basis: 100%;}
+        > .form-control {
+            width: 5rem;
+            margin-right:1rem;
+        }
+    }
+
+    .filter-enumerator {
+        width: 13rem;
+    }
+
 	.filter-apply{
         button[name="button-apply"]{
             background-color: @brand-primary;
@@ -106,11 +118,11 @@ table,
 }
 
 
-.table-no-border > thead > tr > th, 
+.table-no-border > thead > tr > th,
 .table > tbody > tr > th,
-.table-no-border > tfoot > tr > th, 
+.table-no-border > tfoot > tr > th,
 .table > thead > tr > td,
-.table-no-border > tbody > tr > td, 
+.table-no-border > tbody > tr > td,
 .table > tfoot > tr > td {
   border:none;
 }
