@@ -1,7 +1,6 @@
 from django import forms
 
 import transport
-from data_layer.models import Item
 from hid.constants import ITEM_TYPE_CATEGORY
 
 
@@ -48,24 +47,51 @@ class AddEditItemForm(forms.Form):
         required=False
     )
 
-    def __init__(self, item_type, *args, **kwargs):
-        """ Add extra fields depending on item_type """
+    def __init__(self, *args, **kwargs):
         super(AddEditItemForm, self).__init__(*args, **kwargs)
 
-        if item_type in ITEM_TYPE_CATEGORY:
-            terms = transport.terms.list(
-                taxonomy=ITEM_TYPE_CATEGORY[item_type]
-            )
-            choices = (('', '-----'),)
-            choices += tuple((t['name'], t['name']) for t in terms)
+        self._maybe_add_category_field()
+        self._maybe_add_feedback_type_field()
+
+    def _maybe_add_category_field(self):
+        # This used to be more flexible in that we had partial
+        # support for per- item/feedback/message type categories
+        # but it was never fully implemented and it was confusing
+        # so for now we have one set of categories for all types
+        choices = self._get_category_choices()
+
+        if choices is not None:
             self.fields['category'] = forms.ChoiceField(
                 choices=choices, required=False
             )
 
-        choices = (('', '-----'),)
-        choices += Item.FEEDBACK_TYPE_CHOICES
-        self.fields['feedback_type'] = forms.ChoiceField(
-            choices=choices,
-            required=False,
-            widget=forms.RadioSelect()
+    def _get_category_choices(self):
+        return self._get_term_choices(ITEM_TYPE_CATEGORY['all'])
+
+    def _maybe_add_feedback_type_field(self):
+        choices = self._get_feedback_type_choices()
+
+        if choices is not None:
+            self.fields['feedback_type'] = forms.ChoiceField(
+                choices=choices,
+                required=False,
+                widget=forms.RadioSelect()
+            )
+
+    def _get_feedback_type_choices(self):
+        return self._get_term_choices('item-types')
+
+    def _get_term_choices(self, taxonomy):
+        terms = transport.terms.list(
+            taxonomy=taxonomy
         )
+
+        if len(terms) > 0:
+            sorted_terms = sorted(terms, key=lambda k: k['long_name'])
+
+            choices = (('', '-----'),)
+            choices += tuple((t['name'], t['long_name']) for t in sorted_terms)
+
+            return choices
+
+        return None

@@ -132,12 +132,6 @@ def add_terms(item_id, taxonomy_slug, names):
     return response.data
 
 
-def add_feedback_type(item_id, feedback_type):
-    item = get(item_id)
-    item['feedback_type'] = feedback_type
-    update(item_id, item)
-
-
 def delete_all_terms(item_id, taxonomy_slug):
     view = get_view({'post': 'delete_all_terms'})
 

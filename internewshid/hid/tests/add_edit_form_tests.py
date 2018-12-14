@@ -3,29 +3,84 @@ from mock import patch
 from ..forms.item import AddEditItemForm
 
 
-def test_form_does_not_have_category_field_if_not_defined():
+@patch.object(AddEditItemForm, '_get_category_choices')
+@patch.object(AddEditItemForm, '_get_feedback_type_choices')
+def test_form_does_not_have_category_field_if_not_defined(
+    feedback_choices,
+    category_choices
+):
+    category_choices.return_value = None
+    feedback_choices.return_value = None
+
+    form = AddEditItemForm()
+    assert 'category' not in form.fields
+
+
+@patch.object(AddEditItemForm, '_get_category_choices')
+@patch.object(AddEditItemForm, '_get_feedback_type_choices')
+def test_form_has_category_field_if_categories_defined(
+    feedback_choices,
+    category_choices
+):
+    feedback_choices.return_value = None
+
+    category_choices.return_value = (('', '-----'), ('wash', 'WASH'),)
+    form = AddEditItemForm()
+    assert 'category' in form.fields
+
+
+@patch.object(AddEditItemForm, '_get_category_choices')
+@patch.object(AddEditItemForm, '_get_feedback_type_choices')
+def test_form_does_not_have_feedback_types_if_not_defined(
+    feedback_choices,
+    category_choices
+):
+    category_choices.return_value = None
+    feedback_choices.return_value = None
+    form = AddEditItemForm()
+
+    assert 'feedback_type' not in form.fields
+
+
+@patch.object(AddEditItemForm, '_get_category_choices')
+def test_form_has_feedback_types_if_defined(
+    category_choices
+):
+    with patch('hid.forms.item.transport.terms.list') as term_list:
+        term_list.return_value = [
+            {
+                'taxonomy': 'item-types',
+                'name': 'rumour',
+                'long_name': 'Rumour'
+            },
+            {
+                'taxonomy': 'item-types',
+                'name': 'question',
+                'long_name': 'Question'
+            },
+            {
+                'taxonomy': 'item-types',
+                'name': 'concern',
+                'long_name': 'Concern'
+            },
+        ]
+        expected_choices = [
+            ('', '-----'),
+            ('concern', 'Concern'),
+            ('question', 'Question'),
+            ('rumour', 'Rumour')
+        ]
+
+        form = AddEditItemForm()
+
+        assert 'feedback_type' in form.fields
+        assert form.fields['feedback_type'].choices == expected_choices
+
+
+@patch.object(AddEditItemForm, '_get_feedback_type_choices')
+def test_form_category_has_expected_choices(feedback_choices):
     item_type_category = {
-        'some-item-type': 'some-taxonomy'
-    }
-    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
-        form = AddEditItemForm('another-item-type')
-        assert 'category' not in form.fields
-
-
-def test_form_does_have_category_field_if_defined():
-    item_type_category = {
-        'some-item-type': 'some-taxonomy'
-    }
-    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
-        with patch('hid.forms.item.transport.terms.list') as term_list:
-            term_list.return_value = []
-            form = AddEditItemForm('some-item-type')
-            assert 'category' in form.fields
-
-
-def test_form_category_has_expected_choices():
-    item_type_category = {
-        'some-item-type': 'some-taxonomy'
+        'all': 'some-taxonomy'
     }
     with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
         with patch('hid.forms.item.transport.terms.list') as term_list:
@@ -43,21 +98,23 @@ def test_form_category_has_expected_choices():
             ]
             expected_choices = [
                 ('', '-----'),
-                ('name1', 'name1'),
-                ('name2', 'name2')
+                ('name1', 'long name one'),
+                ('name2', 'long name two')
             ]
-            form = AddEditItemForm('some-item-type')
+            form = AddEditItemForm()
             assert 'category' in form.fields
             assert form.fields['category'].choices == expected_choices
 
 
-def test_category_field_is_not_required():
-    item_type_category = {
-        'some-item-type': 'some-taxonomy'
-    }
-    with patch.dict('hid.forms.item.ITEM_TYPE_CATEGORY', item_type_category):
-        with patch('hid.forms.item.transport.terms.list') as term_list:
-            term_list.return_value = []
-            form = AddEditItemForm('some-item-type')
+@patch.object(AddEditItemForm, '_get_category_choices')
+@patch.object(AddEditItemForm, '_get_feedback_type_choices')
+def test_category_field_is_not_required(
+    feedback_choices,
+    category_choices
+):
+    feedback_choices.return_value = None
+    category_choices.return_value = (('', '-----'), ('wash', 'WASH'),)
+
+    form = AddEditItemForm()
 
     assert not form.fields['category'].required

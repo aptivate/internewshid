@@ -161,7 +161,6 @@ class AddEditItemView(FormView):
                 'gender': self.item.get('gender', ''),
                 'age': self.item.get('age', ''),
                 'enumerator': self.item.get('enumerator', ''),
-                'feedback_type': self.item.get('feedback_type', ''),
                 'source': self.item.get('source', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
@@ -173,7 +172,7 @@ class AddEditItemView(FormView):
                 ),
             }
 
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        taxonomy = ITEM_TYPE_CATEGORY.get('all')
         if (taxonomy and taxonomy in self.item_terms
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
@@ -183,6 +182,9 @@ class AddEditItemView(FormView):
                 term_names = [t['name'] for t in terms]
                 initial[taxonomy] = self.tag_delimiter.join(term_names)
 
+        if 'item-types' in self.item_terms:
+            initial['feedback_type'] = self.item_terms['item-types'][0]['name']
+
         return initial
 
     def get_form(self, form_class=None):
@@ -190,7 +192,7 @@ class AddEditItemView(FormView):
         if form_class is None:
             form_class = self.form_class
 
-        return form_class(self.item_type['name'], **self.get_form_kwargs())
+        return form_class(**self.get_form_kwargs())
 
     def get_context_data(self, **kwargs):
         """ Get the form's context data
@@ -219,22 +221,21 @@ class AddEditItemView(FormView):
 
     def form_valid(self, form):
         """ Form submit handler """
-        item_description = self._get_item_description()
-        taxonomy = ITEM_TYPE_CATEGORY.get(self.item_type['name'])
+        taxonomy = ITEM_TYPE_CATEGORY.get('all')
         item_id = int(form.cleaned_data['id'])
 
         try:
             if item_id == 0:
                 self.item = self._create_item(form, taxonomy)
+                item_description = self._get_item_description()
                 message = _("%s %d successfully created.") % (
                     item_description,
                     self.item['id']
                 )
                 message_code = messages.SUCCESS
             else:
-                self._update_item(
-                    item_id, form, taxonomy
-                )
+                self._update_item(item_id, form)
+                item_description = self._get_item_description()
                 message = _("%s %d successfully updated.") % (
                     item_description,
                     item_id,
@@ -276,7 +277,7 @@ class AddEditItemView(FormView):
 
             transport.items.add_terms(item_id, taxonomy, term_names)
 
-    def _update_item(self, item_id, form, taxonomy):
+    def _update_item(self, item_id, form):
         """ Update the given item
 
             Args:
@@ -295,14 +296,19 @@ class AddEditItemView(FormView):
         transport.items.update(item_id, regular_fields)
 
         # TODO: Combine terms into single transaction
-        if taxonomy:
-            if category:
-                transport.items.add_terms(item_id, taxonomy, category)
-            else:
-                transport.items.delete_all_terms(item_id, taxonomy)
+        category_taxonomy = ITEM_TYPE_CATEGORY.get('all')
+
+        if category:
+            transport.items.add_terms(item_id, category_taxonomy, category)
+        else:
+            transport.items.delete_all_terms(item_id, category_taxonomy)
 
         if feedback_type:
-            transport.items.add_feedback_type(item_id, feedback_type)
+            item = transport.items.add_terms(item_id, 'item-types', feedback_type)
+
+            self.item_type = self._get_item_type_term(item)
+        else:
+            transport.items.delete_all_terms(item_id, 'item-types')
 
         self._add_tags(item_id, tags)
 
@@ -324,6 +330,9 @@ class AddEditItemView(FormView):
         category, tags, feedback_type, regular_fields = self._separate_form_data(
             form)
 
+        if not feedback_type:
+            feedback_type = self.item_type['name']
+
         created_item = transport.items.create(regular_fields)
 
         # TODO: Combine terms into single transaction
@@ -332,9 +341,11 @@ class AddEditItemView(FormView):
         transport.items.add_terms(
             created_item['id'], 'data-origins', 'Form Entry',
         )
-        transport.items.add_terms(
-            created_item['id'], 'item-types', self.item_type['name']
+        updated_item = transport.items.add_terms(
+            created_item['id'], 'item-types', feedback_type
         )
+        self.item_type = self._get_item_type_term(updated_item)
+
         if taxonomy and category:
             transport.items.add_terms(created_item['id'], taxonomy, category)
 
@@ -387,3 +398,10 @@ class AddEditItemView(FormView):
 
     def _get_item_description(self):
         return self.item_type['long_name']
+
+    def _get_item_type_term(self, item):
+        for term in item['terms']:
+            if term['taxonomy'] == 'item-types':
+                return term
+
+        return self.item_type

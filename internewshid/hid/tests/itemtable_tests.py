@@ -77,7 +77,7 @@ def test_render_category_passes_context_to_template(mock_loader):
         {
             u'long_name': u'Repatriation',
             u'name': u'Repatriation',
-            u'taxonomy': ITEM_TYPE_CATEGORY['question'],
+            u'taxonomy': ITEM_TYPE_CATEGORY['all'],
         }
     ]
 
@@ -134,3 +134,40 @@ def test_render_tags_passes_record_and_tags_to_template(mock_loader):
 
     assert args[0]['record'] == record
     assert args[0]['tags'] == 'Foo, Bar'
+
+
+@mock.patch('hid.tables.loader')
+def test_render_feedback_type_passes_context_to_template(mock_loader):
+    mock_template = mock.MagicMock()
+    mock_template.render = mock.MagicMock()
+    mock_loader.get_template = mock.MagicMock(
+        return_value=mock_template)
+
+    value = [
+        {
+            u'long_name': u'Rumour',
+            u'name': u'rumour',
+            u'taxonomy': 'item-types',
+        },
+        {
+            u'long_name': u'Concern',
+            u'name': u'concern',
+            u'taxonomy': 'item-types',
+        }
+    ]
+
+    table = ItemTable([])
+    table.context = Context()
+
+    record = mock.Mock()
+    table.render_feedback_type(record, value)
+
+    context = {
+        'feedback_types': 'Concern, Rumour',
+        'record': record,
+    }
+
+    args, kwargs = mock_template.render.call_args
+
+    assert args[0]['record'] == record
+    assert args[0]['feedback_types'] == 'Concern, Rumour'
