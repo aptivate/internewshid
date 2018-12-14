@@ -693,6 +693,7 @@ def test_item_feedback_type_can_be_updated(view, form):
     form.cleaned_data['feedback_type'] = 'concern',
 
     view.form_valid(form)
+
     item = transport.items.get(view.item['id'])
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
