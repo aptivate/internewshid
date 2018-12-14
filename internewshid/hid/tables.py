@@ -82,8 +82,15 @@ class ItemTable(tables.Table):
         attrs={'td': {'class': 'col-md-2'}}
     )
 
+    feedback_type = tables.TemplateColumn(
+        template_name='hid/feedback_type_column.html',
+        verbose_name=_('Feedback type'),
+        accessor='terms',
+        attrs={'td': {'class': 'col-md-2'}}
+    )
+
     def __init__(self, *args, **kwargs):
-        self.categories = kwargs.pop('categories')
+        self.categories = kwargs.pop('categories', [])
         super(ItemTable, self).__init__(*args, **kwargs)
 
     def render_category(self, record, value):
@@ -99,6 +106,21 @@ class ItemTable(tables.Table):
         }
 
         return Template.render(ctx)
+
+    def render_feedback_type(self, record, value):
+        Template = loader.get_template('hid/feedback_type_column.html')
+
+        context = self.context
+
+        feedback_types = []
+        for term in value:
+            if term['taxonomy'] == 'item-types':
+                feedback_types.append(term['long_name'])
+
+        context['record'] = record
+        context['feedback_types'] = ', '.join(sorted(feedback_types))
+
+        return Template.render(context.flatten())
 
     def render_tags(self, record, value):
         Template = loader.get_template('hid/tags_column.html')
