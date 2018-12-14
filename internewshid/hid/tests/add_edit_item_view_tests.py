@@ -696,6 +696,7 @@ def test_item_feedback_type_can_be_updated(view, form):
     form.cleaned_data['feedback_type'] = 'concern',
 
     view.form_valid(form)
+    assert_no_messages(view.request, messages.ERROR)
 
     item = transport.items.get(view.item['id'])
 
@@ -723,6 +724,11 @@ def test_item_feedback_type_can_be_unset(view, form, item_type_taxonomy):
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
     assert 'item-types' not in terms
+
+    # Message defaults to Question
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Question %s successfully updated." % view.item['id'])
 
 
 @pytest.mark.django_db
