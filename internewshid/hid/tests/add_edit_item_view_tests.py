@@ -689,6 +689,9 @@ def test_item_category_can_be_unset(view, form, item_type_taxonomy):
 def test_item_feedback_type_can_be_updated(view, form):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern')
+    TermFactory(taxonomy=taxonomy, name='rumour')
+
+    transport.items.add_terms(view.item['id'], 'item-types', 'rumour')
 
     form.cleaned_data['feedback_type'] = 'concern',
 
