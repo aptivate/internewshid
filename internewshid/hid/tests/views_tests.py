@@ -377,7 +377,7 @@ def test_table_items_filtered_by_item_type_and_default_filter(
     transport.items.add_terms(
         male_wash_item['id'], wash_term.taxonomy.slug, wash_term.name)
 
-    tags = TaxonomyFactory(name='tags')
+    tags = TaxonomyFactory(name='Tags', slug='tags')
     female_term = TermFactory(name='female', taxonomy=tags)
     male_term = TermFactory(name='male', taxonomy=tags)
     transport.items.add_terms(
@@ -492,7 +492,7 @@ def test_table_items_filtered_by_age_range():
 
 @pytest.mark.django_db
 def test_table_items_filtered_by_tags():
-    tags = TaxonomyFactory(name="Tags")
+    tags = TaxonomyFactory(name="Tags", slug="tags")
     not_tags = TaxonomyFactory(name="Not tags")
 
     female_item = transport.items.create({
@@ -507,7 +507,7 @@ def test_table_items_filtered_by_tags():
         'body': 'Another message',
     })
 
-    tags = TaxonomyFactory(name='tags')
+    tags = TaxonomyFactory(name='Tags', slug='tags')
     female_term = TermFactory(name='female', taxonomy=tags)
     male_term = TermFactory(name='male', taxonomy=tags)
 

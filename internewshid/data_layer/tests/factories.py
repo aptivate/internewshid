@@ -19,8 +19,3 @@ class ItemFactory(DjangoModelFactory):
     timestamp = fuzzy.FuzzyDateTime(
         timezone.now() + timedelta(days=-365)
     )
-    feedback_type = fuzzy.FuzzyChoice([
-        'Concern',
-        'Question',
-        'Rumour',
-    ])

@@ -13,7 +13,7 @@ from mock import patch
 import transport
 from hid.constants import ITEM_TYPE_CATEGORY
 from taxonomies.models import Taxonomy
-from taxonomies.tests.factories import TermFactory
+from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 from transport.exceptions import TransportException
 
 from ..views.item import DEFAULT_ITEM_TYPE, AddEditItemView
@@ -22,6 +22,8 @@ from .views_tests import assert_message, assert_no_messages, fix_messages
 
 @pytest.fixture
 def item_type_taxonomy():
+    # TODO: Rename this. This is the taxonomy used to categories items
+    # not the taxonomy called 'item-types'
     slug = ITEM_TYPE_CATEGORY['all']
 
     try:
@@ -615,6 +617,33 @@ def test_submitting_form_creates_an_item_with_a_category(item_type_taxonomy,
 
 
 @pytest.mark.django_db
+def test_item_can_be_deleted_with_post_request(item):
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+    TermFactory(taxonomy=taxonomy, name='concern')
+
+    transport.items.add_terms(item['id'], 'item-types', 'concern')
+
+    (view, response) = make_request(
+        AddEditItemView,
+        'edit-item',
+        kwargs={'item_id': item['id']},
+        request_type='post',
+        post={
+            'action': 'delete'
+        }
+    )
+
+    with pytest.raises(TransportException) as excinfo:
+        transport.items.get(item['id'])
+
+    assert excinfo.value.message['status_code'] == 404
+
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Concern %s successfully deleted." % item['id'])
+
+
+@pytest.mark.django_db
 def test_item_can_be_updated(view, form):
     new_text = "What is the cause of Ebola?"
     form.cleaned_data['body'] = new_text,
@@ -654,6 +683,42 @@ def test_item_category_can_be_unset(view, form, item_type_taxonomy):
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
 
     assert item_type_taxonomy.slug not in terms
+
+
+@pytest.mark.django_db
+def test_item_feedback_type_can_be_updated(view, form):
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+    TermFactory(taxonomy=taxonomy, name='concern')
+
+    form.cleaned_data['feedback_type'] = 'concern',
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert terms['item-types'] == 'concern'
+
+    assert_message(view.request,
+                   messages.SUCCESS,
+                   "Concern %s successfully updated." % view.item['id'])
+
+
+@pytest.mark.django_db
+def test_item_feedback_type_can_be_unset(view, form, item_type_taxonomy):
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+    TermFactory(taxonomy=taxonomy, name='concern')
+
+    transport.items.add_terms(view.item['id'], 'item-types', 'concern')
+
+    form.cleaned_data['feedback_type'] = ''
+
+    view.form_valid(form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'item-types' not in terms
 
 
 @pytest.mark.django_db
@@ -815,6 +880,29 @@ def test_data_origin_created_for_new_item(add_view, form):
 
 
 @pytest.mark.django_db
+def test_feedback_type_for_new_item(add_view, form):
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+    TermFactory(taxonomy=taxonomy, name='rumour', long_name='Rumour')
+
+    form.cleaned_data['id'] = 0
+    form.cleaned_data['feedback_type'] = 'rumour'
+
+    add_view.form_valid(form)
+    assert_no_messages(add_view.request, messages.ERROR)
+
+    item = transport.items.get(add_view.item['id'])
+
+    terms = [t for t in item['terms'] if t['taxonomy'] == 'item-types']
+
+    assert len(terms) == 1
+
+    assert terms[0]['name'] == 'rumour'
+    assert_message(add_view.request,
+                   messages.SUCCESS,
+                   "Rumour %s successfully created." % add_view.item['id'])
+
+
+@pytest.mark.django_db
 def test_form_initial_values_include_tags(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         generic_item['terms'] = [
@@ -845,3 +933,26 @@ def test_form_initial_values_include_tags(generic_item):
 
     initial = view.get_initial()
     assert initial['tags'] == 'Monrovia,age 35-40,interesting'
+
+
+@pytest.mark.django_db
+def test_form_initial_values_include_feedback_type(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        generic_item['terms'] = [
+            {
+                'taxonomy': 'item-types',
+                'name': 'concern',
+                'long_name': 'Concern',
+            },
+        ]
+
+        get_item.return_value = generic_item
+
+        (view, response) = make_request(
+            AddEditItemView,
+            'edit-item',
+            kwargs={'item_id': 103}
+        )
+
+        initial = view.get_initial()
+        assert initial['feedback_type'] == 'concern'
