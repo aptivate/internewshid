@@ -88,10 +88,6 @@ class ViewAndEditTableTab(object):
         if genders and genders == 'All Genders':
             filters.pop('gender')
 
-        ages = filters.get('age')
-        if ages and ages == 'All Ages':
-            filters.pop('age')
-
         enumerators = filters.get('enumerator')
         if enumerators and enumerators == 'All Enumerators':
             filters.pop('enumerator')
@@ -202,6 +198,15 @@ class ViewAndEditTableTab(object):
         sources.sort()
         return {'items': sources}
 
+    def _get_feedback_type_options(self):
+        terms = transport_terms.list(taxonomy='item-types')
+
+        sorted_terms = sorted(terms, key=lambda k: k['long_name'])
+
+        feedback_types = [(t['name'], t['long_name'],) for t in sorted_terms]
+
+        return feedback_types
+
     def _build_actions_dropdown(self, question_types):
         items = [
             (NONE_COMMAND, '---------'),
@@ -238,6 +243,7 @@ class ViewAndEditTableTab(object):
         gender_options = self._get_gender_options(items, **kwargs)
         enumerator_options = self._get_enumerator_options(items, **kwargs)
         source_options = self._get_source_options(items, **kwargs)
+        feedback_type_options = self._get_feedback_type_options()
 
         table = ItemTable(
             items,
@@ -264,6 +270,7 @@ class ViewAndEditTableTab(object):
             'source': kwargs.get('source'),
             'actions': actions,
             'category_options': category_options,
+            'feedback_type_options': feedback_type_options,
             'locations': location_options,
             'gender': gender_options,
             'enumerator': enumerator_options,

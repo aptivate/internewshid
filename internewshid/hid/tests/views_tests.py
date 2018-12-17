@@ -538,6 +538,56 @@ def test_table_items_filtered_by_tags():
 
 
 @pytest.mark.django_db
+def test_table_items_filtered_by_feedback_type():
+    rumour_1 = transport.items.create({
+        'body': "Rumour 1",
+    })
+
+    rumour_2 = transport.items.create({
+        'body': "Rumour 2",
+    })
+
+    concern = transport.items.create({
+        'body': "Concern",
+    })
+
+    uncategorised = transport.items.create({
+        'body': "Message in no category",
+    })
+
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+
+    rumour_term = TermFactory(name='rumour', taxonomy=taxonomy)
+    transport.items.add_terms(
+        rumour_1['id'], rumour_term.taxonomy.slug, rumour_term.name)
+    transport.items.add_terms(
+        rumour_2['id'], rumour_term.taxonomy.slug, rumour_term.name)
+
+    concern_term = TermFactory(name='concern', taxonomy=taxonomy)
+    transport.items.add_terms(
+        concern['id'], concern_term.taxonomy.slug, concern_term.name)
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}},
+                        GET={'feedback_type': 'rumour'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['feedback_type']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert rumour_1['id'] in ids
+    assert rumour_2['id'] in ids
+    assert concern['id'] not in ids
+    assert uncategorised['id'] not in ids
+
+
+@pytest.mark.django_db
 def test_dynamic_filters_read_from_tab_instance():
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
@@ -574,3 +624,29 @@ def test_category_options_in_context_data(item_type_taxonomy):
     expected_options = [(t.name, t.name) for t in terms]
 
     assert context_data['category_options'] == tuple(expected_options)
+
+
+@pytest.mark.django_db
+def test_feedback_type_options_in_context_data():
+    taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
+
+    TermFactory(name='rumor', long_name='Rumor', taxonomy=taxonomy)
+    TermFactory(name='concern', long_name='Concern', taxonomy=taxonomy)
+    TermFactory(name='question', long_name='Question', taxonomy=taxonomy)
+
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=[])
+
+    expected_options = [
+        ('concern', 'Concern', ),
+        ('question', 'Question', ),
+        ('rumor', 'Rumor', ),
+    ]
+
+    assert context_data['feedback_type_options'] == expected_options

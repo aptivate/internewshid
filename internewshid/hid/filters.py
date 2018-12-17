@@ -46,14 +46,26 @@ class GenderFilter(object):
 
 class AgeRangeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        from_age = query_dict.get('from_age', None)
-        to_age = query_dict.get('to_age', None)
+        from_age = self.get_int_value(query_dict, 'from_age')
+        to_age = self.get_int_value(query_dict, 'to_age')
 
         if from_age is not None and to_age is not None:
             filters.update(
                 from_age=from_age,
                 to_age=to_age
             )
+
+    def get_int_value(self, query_dict, name):
+        value = query_dict.get(name, None)
+
+        if value is None:
+            return None
+
+        try:
+            return int(value)
+
+        except ValueError:
+            return None
 
 
 class EnumeratorFilter(object):
@@ -68,3 +80,13 @@ class SourceFilter(object):
         source = query_dict.get('source', None)
         if source is not None:
             filters.update(source=source)
+
+
+class FeedbackTypeFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        feedback_type = query_dict.get('feedback_type', None)
+
+        if feedback_type:
+            filters.setdefault('terms', []).append(
+                'item-types:{}'.format(feedback_type)
+            )
