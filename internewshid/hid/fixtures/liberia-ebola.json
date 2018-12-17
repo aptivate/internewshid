@@ -14,5 +14,14 @@
         },
         "model": "chn_spreadsheet.sheetprofile",
         "pk": 2
+    },
+    {
+        "fields": {
+            "long_name": "Rumor",
+            "name": "rumor",
+            "taxonomy": 2
+        },
+        "model": "taxonomies.term",
+        "pk": 30
     }
 ]
