@@ -162,11 +162,6 @@ def test_render_feedback_type_passes_context_to_template(mock_loader):
     record = mock.Mock()
     table.render_feedback_type(record, value)
 
-    context = {
-        'feedback_types': 'Concern, Rumour',
-        'record': record,
-    }
-
     args, kwargs = mock_template.render.call_args
 
     assert args[0]['record'] == record
