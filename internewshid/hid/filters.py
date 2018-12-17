@@ -68,3 +68,13 @@ class SourceFilter(object):
         source = query_dict.get('source', None)
         if source is not None:
             filters.update(source=source)
+
+
+class FeedbackTypeFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        feedback_type = query_dict.get('feedback_type', None)
+
+        if feedback_type:
+            filters.setdefault('terms', []).append(
+                'item-types:{}'.format(feedback_type)
+            )
