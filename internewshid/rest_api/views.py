@@ -13,8 +13,8 @@ from data_layer.models import Item
 from taxonomies.models import Taxonomy, Term
 
 from .serializers import (
-    ItemSerializer, LocationCoverageSerializer, TaxonomySerializer,
-    TermItemCountSerializer, TermSerializer
+    ItemExportSerializer, ItemSerializer, LocationCoverageSerializer,
+    TaxonomySerializer, TermItemCountSerializer, TermSerializer
 )
 
 
@@ -240,5 +240,18 @@ class LocationCoverageView(PandasView):
     def get(self, *args, **kwargs):
         response = super(LocationCoverageView, self).get(*args, **kwargs)
         filename = 'attachment;filename={}'.format('location-coverage.csv')
+        response['Content-Disposition'] = filename
+        return response
+
+
+class ItemExportView(PandasView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Item.objects.all()
+    serializer_class = ItemExportSerializer
+
+    def get(self, *args, **kwargs):
+        response = super(ItemExportView, self).get(*args, **kwargs)
+        filename = 'attachment;filename={}'.format('item-export.csv')
         response['Content-Disposition'] = filename
         return response
