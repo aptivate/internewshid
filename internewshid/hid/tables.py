@@ -14,78 +14,77 @@ class NamedCheckBoxColumn(tables.CheckBoxColumn):
 
 class ItemTable(tables.Table):
     class Meta:
-        attrs = {'class': 'table table-hover table-striped'}
+        attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
         template_name = 'hid/table.html'
         order_by = ('-created',)
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
         verbose_name=_('Select'),
-        attrs={'td': {'class': 'col-md-1'}}
+        attrs={'th': {'id': 'header-select'}}
     )
-
     created = tables.columns.TemplateColumn(
         template_name='hid/created_column.html',
         verbose_name=_('Imported'),
-        attrs={'td': {'class': 'col-md-1'}}
+        attrs={'th': {'id': 'header-imported'}}
     )
     timestamp = tables.columns.TemplateColumn(
         template_name='hid/timestamp_column.html',
         verbose_name=_('Created'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-created'}}
     )
     body = tables.TemplateColumn(
         template_name='hid/body_column.html',
         verbose_name=_('Feedback'),
-        attrs={'td': {'class': 'col-md-3'}}
+        attrs={'th': {'id': 'header-feedback'}}
     )
     translation = tables.TemplateColumn(
         template_name='hid/translation_column.html',
         verbose_name=_('Translation'),
-        attrs={'td': {'class': 'col-md-3'}}
+        attrs={'th': {'id': 'header-translation'}}
     )
     category = tables.TemplateColumn(
         verbose_name=_('Theme'),
         template_name='hid/categories_column.html',
         accessor='terms',
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-theme'}}
     )
     tags = tables.TemplateColumn(
         verbose_name=_('Tags'),
         template_name='hid/tags_column.html',
         accessor='terms',
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-tag'}}
     )
     feedback_type = tables.TemplateColumn(
         template_name='hid/feedback_type_column.html',
-        verbose_name=_('Feedback type'),
+        verbose_name=_('Type'),
         accessor='terms',
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-type', 'title': 'Feedback type'}}
     )
     gender = tables.TemplateColumn(
         template_name='hid/gender_column.html',
         verbose_name=_('Gender'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-gender'}}
     )
     age = tables.TemplateColumn(
         template_name='hid/age_column.html',
         verbose_name=_('Age'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-age'}}
     )
     location = tables.TemplateColumn(
         template_name='hid/location_column.html',
         verbose_name=_('Location'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-location'}}
     )
     enumerator = tables.TemplateColumn(
         template_name='hid/enumerator_column.html',
         verbose_name=_('Enumerator'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-enumerator'}}
     )
     source = tables.TemplateColumn(
         template_name='hid/source_column.html',
         verbose_name=_('Source'),
-        attrs={'td': {'class': 'col-md-2'}}
+        attrs={'th': {'id': 'header-source'}}
     )
 
     def __init__(self, *args, **kwargs):
