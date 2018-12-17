@@ -209,7 +209,7 @@ class ViewAndEditTableTab(object):
         ]
 
         if len(question_types) > 0:
-            items.append((REMOVE_QTYPE_COMMAND, _('Remove Question Type')),)
+            items.append((REMOVE_QTYPE_COMMAND, _('Remove Feedback Type')),)
 
         actions = [
             self._build_action_dropdown_group(
@@ -221,7 +221,7 @@ class ViewAndEditTableTab(object):
         if len(question_types) > 0:
             actions.append(
                 self._build_action_dropdown_group(
-                    label=_('Set question type'),
+                    label=_('Set feedback type'),
                     items=question_types,
                     prefix=ADD_CATEGORY_PREFIX
                 )
