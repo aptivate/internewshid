@@ -15,6 +15,10 @@ class ItemFactory(DjangoModelFactory):
 
     body = fuzzy.FuzzyText()
     translation = fuzzy.FuzzyText()
+    age = fuzzy.FuzzyText()
+    gender = fuzzy.FuzzyText()
+    enumerator = fuzzy.FuzzyText()
+    source = fuzzy.FuzzyText()
     location = fuzzy.FuzzyText()
     timestamp = fuzzy.FuzzyDateTime(
         timezone.now() + timedelta(days=-365)

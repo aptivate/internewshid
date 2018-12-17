@@ -3,7 +3,8 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from .views import (
-    ItemViewSet, LocationCoverageView, TaxonomyViewSet, TermViewSet
+    ItemExportView, ItemViewSet, LocationCoverageView, TaxonomyViewSet,
+    TermViewSet
 )
 
 router = routers.SimpleRouter()
@@ -26,5 +27,10 @@ urlpatterns = [
         r'location-coverage/$',
         LocationCoverageView.as_view(),
         name='location-coverage'
+    ),
+    url(
+        r'item-export/$',
+        ItemExportView.as_view(),
+        name='item-export'
     ),
 ] + router.urls

@@ -114,3 +114,25 @@ class LocationCoverageSerializer(ItemSerializer):
             'terms',
             'timestamp',
         )
+
+
+class ItemExportSerializer(ItemSerializer):
+    terms = LocationCoverageTermSerializer(many=True)
+
+    # https://github.com/wq/django-rest-pandas#date-formatting
+    timestamp = serializers.DateField(format=None)
+
+    class Meta:
+        model = Item
+        fields = (
+            'age',
+            'body',
+            'enumerator',
+            'gender',
+            'location',
+            'network_provider',
+            'source',
+            'terms',
+            'timestamp',
+            'translation',
+        )
