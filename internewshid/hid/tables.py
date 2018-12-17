@@ -56,6 +56,12 @@ class ItemTable(tables.Table):
         accessor='terms',
         attrs={'td': {'class': 'col-md-2'}}
     )
+    feedback_type = tables.TemplateColumn(
+        template_name='hid/feedback_type_column.html',
+        verbose_name=_('Feedback type'),
+        accessor='terms',
+        attrs={'td': {'class': 'col-md-2'}}
+    )
     gender = tables.TemplateColumn(
         template_name='hid/gender_column.html',
         verbose_name=_('Gender'),
@@ -79,13 +85,6 @@ class ItemTable(tables.Table):
     source = tables.TemplateColumn(
         template_name='hid/source_column.html',
         verbose_name=_('Source'),
-        attrs={'td': {'class': 'col-md-2'}}
-    )
-
-    feedback_type = tables.TemplateColumn(
-        template_name='hid/feedback_type_column.html',
-        verbose_name=_('Feedback type'),
-        accessor='terms',
         attrs={'td': {'class': 'col-md-2'}}
     )
 
