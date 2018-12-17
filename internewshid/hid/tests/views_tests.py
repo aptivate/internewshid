@@ -491,6 +491,38 @@ def test_table_items_filtered_by_age_range():
 
 
 @pytest.mark.django_db
+def test_blank_age_filters_ignored():
+    item_1 = transport.items.create({
+        'body': "Item 1",
+        'age': '37',
+    })
+
+    item_2 = transport.items.create({
+        'body': "Item 1",
+        'age': '36',
+    })
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
+        'from_age': '',
+        'to_age': '',
+    })
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['age_range']
+    )
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert item_1['id'] in ids
+    assert item_2['id'] in ids
+
+
+@pytest.mark.django_db
 def test_table_items_filtered_by_tags():
     tags = TaxonomyFactory(name="Tags", slug="tags")
     not_tags = TaxonomyFactory(name="Not tags")

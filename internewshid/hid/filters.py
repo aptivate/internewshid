@@ -46,8 +46,15 @@ class GenderFilter(object):
 
 class AgeRangeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        from_age = query_dict.get('from_age', None)
-        to_age = query_dict.get('to_age', None)
+        try:
+            from_age = int(query_dict.get('from_age', None))
+        except ValueError:
+            from_age = None
+
+        try:
+            to_age = int(query_dict.get('to_age', None))
+        except ValueError:
+            to_age = None
 
         if from_age is not None and to_age is not None:
             filters.update(

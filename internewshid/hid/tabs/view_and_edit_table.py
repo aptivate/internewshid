@@ -88,10 +88,6 @@ class ViewAndEditTableTab(object):
         if genders and genders == 'All Genders':
             filters.pop('gender')
 
-        ages = filters.get('age')
-        if ages and ages == 'All Ages':
-            filters.pop('age')
-
         enumerators = filters.get('enumerator')
         if enumerators and enumerators == 'All Enumerators':
             filters.pop('enumerator')
