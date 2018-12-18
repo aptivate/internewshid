@@ -31,7 +31,13 @@ COLUMN_LIST = [
 
 @pytest.fixture
 def importer():
-    return Importer()
+    importer = Importer()
+
+    importer.profile = {
+        'columns': [d.copy() for d in COLUMN_LIST]
+    }
+
+    return importer
 
 
 @pytest.mark.django_db
@@ -67,7 +73,7 @@ def test_get_columns_map(importer):
         },
     }
 
-    result = importer.get_columns_map(COLUMN_LIST)
+    result = importer.get_columns_map()
 
     assert result == expected_result
 
@@ -102,8 +108,12 @@ def _make_columns_row(column_list):
 
 
 def test_order_columns_with_no_first_row_returns_original_order(importer):
+    importer.profile['skip_header'] = False
+
     expected = _make_columns_row(COLUMN_LIST)
-    ordered = importer.order_columns(COLUMN_LIST)
+
+    ordered = importer.order_columns()
+
     assert ordered == expected
 
 
@@ -112,7 +122,9 @@ def test_order_columns_with_first_row_return_first_row_order(importer):
 
     first_row = ['Message', 'Province']
 
-    ordered = importer.order_columns(COLUMN_LIST, first_row)
+    importer.profile['skip_header'] = True
+    ordered = importer.order_columns(first_row)
+
     assert ordered == [cleaned[1], cleaned[0]]
 
 
@@ -120,7 +132,7 @@ def test_order_columns_ignores_extra_columns_in_first_row(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
     first_row = ['Message', 'Province', 'None', 'None', 'None']
 
-    ordered = importer.order_columns(COLUMN_LIST, first_row)
+    ordered = importer.order_columns(first_row)
 
     assert ordered == [cleaned[1], cleaned[0]]
 
@@ -207,24 +219,26 @@ def test_normalize_row_differences(importer):
     assert result == [5, 'London', '1.1.2015']
 
 
-def __test_process_rows_without_or_with_header(importer, with_header):
+def test_process_rows_with_header(importer):
     def _rows_generator():
         rows = [
             ('Province', 'Message'),
             ('London', 'Short message'),
             ('Cambridge', 'What?'),
         ]
-        if not with_header:
-            rows = rows[1:]
+
         for row in rows:
             yield row
 
     columns = [d.copy() for d in COLUMN_LIST]
     columns[0]['type'] = 'text'
-    rows = _rows_generator()
 
-    objects = importer.process_rows(rows, columns, {'item-types': 'question'},
-                                    with_header)
+    importer.profile['columns'] = columns
+    importer.profile['skip_header'] = True
+    importer.profile['taxonomies'] = {'item-types': 'question'}
+
+    rows = _rows_generator()
+    objects = importer.process_rows(rows)
 
     assert objects[0]['message.location'] == 'London'
     assert objects[0]['message.content'] == 'Short message'
@@ -233,11 +247,29 @@ def __test_process_rows_without_or_with_header(importer, with_header):
 
 
 def test_process_rows_without_header(importer):
-    __test_process_rows_without_or_with_header(importer, False)
+    def _rows_generator():
+        rows = [
+            ('London', 'Short message'),
+            ('Cambridge', 'What?'),
+        ]
 
+        for row in rows:
+            yield row
 
-def test_process_rows_with_header(importer):
-    __test_process_rows_without_or_with_header(importer, True)
+    columns = [d.copy() for d in COLUMN_LIST]
+    columns[0]['type'] = 'text'
+    rows = _rows_generator()
+
+    importer.profile['columns'] = columns
+    importer.profile['skip_header'] = False
+    importer.profile['taxonomies'] = {'item-types': 'question'}
+
+    objects = importer.process_rows(rows)
+
+    assert objects[0]['message.location'] == 'London'
+    assert objects[0]['message.content'] == 'Short message'
+    assert objects[1]['message.location'] == 'Cambridge'
+    assert objects[1]['message.content'] == 'What?'
 
 
 def test_process_rows_displays_line_number_on_error(importer):
@@ -255,10 +287,12 @@ def test_process_rows_displays_line_number_on_error(importer):
     columns[0]['type'] = 'location'
     rows = _rows_generator()
 
-    with_header = True
+    importer.profile['columns'] = columns
+    importer.profile['skip_header'] = True
+    importer.profile['taxonomies'] = {'item-types': 'question'}
+
     with pytest.raises(SheetImportException) as excinfo:
-        importer.process_rows(rows, columns, {'item-types': 'question'},
-                              with_header)
+        importer.process_rows(rows)
 
     assert str(excinfo.value) == _(u"Unknown data type 'location' in row 2 ")
     assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
@@ -299,21 +333,24 @@ def test_process_rows_ignores_empty_lines(importer):
     columns = [d.copy() for d in column_list]
     rows = _rows_generator()
 
-    with_header = True
+    importer.profile['columns'] = columns
+    importer.profile['skip_header'] = True
+    importer.profile['taxonomies'] = {'item-types': 'question'}
 
-    objects = importer.process_rows(rows, columns, {'item-types': 'question'},
-                                    with_header)
+    objects = importer.process_rows(rows)
 
     expected_objects = [
         {
             'location': 'London',
             'body': 'Short message',
-            'terms': [{'name': 'question', 'taxonomy': 'item-types'}]
+            'terms': [{'name': 'question', 'taxonomy': 'item-types'}],
+            '_row_number': 2,
         },
         {
             'location': 'Cambridge',
             'body': 'What?',
-            'terms': [{'name': 'question', 'taxonomy': 'item-types'}]
+            'terms': [{'name': 'question', 'taxonomy': 'item-types'}],
+            '_row_number': 7,
         },
     ]
 
@@ -342,3 +379,43 @@ def test_save_rows_creates_item_with_term(importer):
 
     assert counts_per_item['question'] == 1
     assert counts_per_item['rumor'] == 0
+
+
+@pytest.mark.django_db
+def test_save_rows_handles_exception(importer):
+    invalid_enumerator = "Yakub=Aara smart card no point in Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum soyi ensaf takito aarari Thor Sara nohoito"
+
+    objects = [
+        {
+            'body': "Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'enumerator': invalid_enumerator,
+            'terms': [],
+            '_row_number': 29,
+        }
+    ]
+
+    importer.profile['columns'] = [
+        {
+            'name': 'Ennumerator',
+            'type': 'text',
+            'field': 'enumerator',
+        },
+    ]
+
+    with pytest.raises(SheetImportException) as excinfo:
+        importer.save_rows(objects)
+
+    assert str(excinfo.value) == (
+        "There was a problem with row 29 of the spreadsheet:\n"
+        "Column: 'Ennumerator'\n"
+        "Error (max_length): 'Ensure this field has no more "
+        "than 200 characters.'\n\n"
+        "Value: Yakub=Aara smart card no point in "
+        "Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli "
+        "bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart "
+        "card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi "
+        "goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor "
+        "hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum "
+        "soyi ensaf takito aarari Thor Sara nohoito"
+    )

@@ -102,7 +102,7 @@ ul.nav.nav-pills:after{
     font-size: @font-size-medium;
 }
 .dropdown-menu {
-	z-index: 10;
+	z-index: @zindex-upload-dropdown;
 
   & > li > a:hover,
   & > li > a:focus {
@@ -670,4 +670,12 @@ ul.nav.nav-pills:after{
 
 label{
     font-size: small;
+}
+
+.alert-dismissable {
+    > .close {
+        top: 0;
+        right: 0;
+        opacity: 1;
+    }
 }
