@@ -78,7 +78,12 @@
                 {% if messages %}
                     <ul class="list-unstyled">
                         {% for message in messages %}
-                        <li{% if message.tags %} class="alert {{ message.tags }} {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}"{% endif %}>{{ message }}</li>
+                        <li{% if message.tags %} class="alert alert-dismissable {{ message.tags }} {% if message.tags == "error" %}bg-danger{% else %}bg-success{% endif %}"{% endif %}>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          {{ message|linebreaksbr }}
+                        </li>
                         {% endfor %}
                     </ul>
                    {% endif %}

@@ -36,8 +36,8 @@
             max-width: 10em;
         }
         // add space between when two or more input boxes are adjacent
-        .form-control + .form-control{ 
-            margin-left: 1.5%; 
+        .form-control + .form-control{
+            margin-left: 1.5%;
             flex-wrap: nowrap;
         }
 
@@ -163,10 +163,10 @@ thead{
                 content: '\f0aa';
             }
         }
-        /* set column widths 
+        /* set column widths
         Definitions could be set in the admin for flexibility in deployments
         */
-        
+
         &#header-select{width: 6em}
         &#header-imported{}
         &#header-created{width: 10em}
@@ -181,7 +181,7 @@ thead{
         &#header-enumerator{width: 9em}
         &#header-source{width: 6%}
     }
-        
+
 }
 
 tbody {
@@ -285,7 +285,7 @@ td.created, td.timestamp {
 .messages-box {
   margin: 0 -30px;
   position: relative;
-    z-index: 10;
+    z-index: @zindex-messages;
 }
 
 @media(max-width:@screen-sm){

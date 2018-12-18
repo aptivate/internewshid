@@ -2,6 +2,7 @@ import datetime
 import sys
 from decimal import Decimal
 
+from django.utils import six
 from django.utils.timezone import is_naive
 from django.utils.translation import ugettext as _
 
@@ -10,6 +11,7 @@ import pytz
 from openpyxl import load_workbook
 
 import transport
+from transport.exceptions import TransportException
 
 from .models import SheetProfile
 
@@ -19,6 +21,8 @@ class SheetImportException(Exception):
 
 
 class Importer(object):
+    def __init__(self):
+        self.profile = None
 
     def get_profile(self, label):
         try:
@@ -29,11 +33,11 @@ class Importer(object):
 
         return sheet_profile.profile
 
-    def get_columns_map(self, col_list):
+    def get_columns_map(self):
         '''This function assumes that column names are unique for spreadsheet.
         If they are not, then you already have a problem.'''
 
-        return {column['name']: column for column in col_list}
+        return {column['name']: column for column in self.profile['columns']}
 
     def get_rows_iterator(self, spreadsheet, file_format):
         if file_format == 'excel':
@@ -50,10 +54,12 @@ class Importer(object):
 
         return rows
 
-    def order_columns(self, profile_columns, first_row=None):
+    def order_columns(self, first_row=None):
+        profile_columns = self.profile['columns']
+
         columns = []
         if first_row:
-            col_map = self.get_columns_map(profile_columns)
+            col_map = self.get_columns_map()
 
             for label in first_row[:len(col_map)]:
                 try:
@@ -77,11 +83,14 @@ class Importer(object):
         # Unify difference between CSV and openpyxl cells
         return [getattr(v, 'value', v) for v in raw_row]
 
-    def process_rows(self, rows, profile_columns, meta_data, skip_header=False):
+    def process_rows(self, rows):
+        skip_header = self.profile.get('skip_header', False)
+        meta_data = self.profile.get('taxonomies')
+
         # If there is no header (skip_header=False), then use profile's order of
         # columns, otherwise use header line to check mapping and define order
         first_row = self.normalize_row(rows.next()) if skip_header else None
-        columns = self.order_columns(profile_columns, first_row)
+        columns = self.order_columns(first_row)
 
         objects = []
         for i, row in enumerate(rows, 2 if first_row else 1):
@@ -90,7 +99,7 @@ class Importer(object):
 
                 if any(values):
                     item = self.process_row(values, columns)
-
+                    item['_row_number'] = i
                     for taxonomy, term in meta_data.iteritems():
                         self._append_term_to_item(item, taxonomy, term)
 
@@ -124,25 +133,54 @@ class Importer(object):
 
     def save_rows(self, objects):
         for obj in objects:
+            row = obj.pop('_row_number', '')
             terms = obj.pop('terms')
-            item = transport.items.create(obj)
-            for term in terms:
-                transport.items.add_terms(
-                    item['id'], term['taxonomy'], term['name'])
+            try:
+                item = transport.items.create(obj)
+                for term in terms:
+                    transport.items.add_terms(
+                        item['id'], term['taxonomy'], term['name'])
+            except TransportException as exc_inst:
+                message = self._get_spreadsheet_error_message(row, exc_inst)
+
+                raise SheetImportException(message)
 
         return len(objects)
 
-    def store_spreadsheet(self, label, fobject):
-        profile = self.get_profile(label)
+    def _get_spreadsheet_error_message(self, row, exc_inst):
+        status_code = exc_inst.message.pop('status_code')
+        item = exc_inst.message.pop('item')
 
-        file_format = profile.get('format')
-        skip_header = profile.get('skip_header', False)
-        meta_data = profile.get('taxonomies')
+        messages = []
+
+        field_to_column_map = self._get_field_to_column_map()
+
+        for field, errors in exc_inst.message.iteritems():
+            for error in errors:
+                messages.append(
+                    _("Column: '{0}'\nError ({1}): '{2}'\n\nValue: {3}").format(
+                        field_to_column_map.get(field),
+                        getattr(error, 'code', ''),
+                        six.text_type(error),
+                        item.get(field, '')
+                    )
+                )
+
+        return _("There was a problem with row {0} of the spreadsheet:\n{1}").format(
+            row, '\n'.join(messages)
+        )
+
+    def _get_field_to_column_map(self):
+        return {column['field']: column['name'] for column in self.profile['columns']}
+
+    def store_spreadsheet(self, label, fobject):
+        self.profile = self.get_profile(label)
+
+        file_format = self.profile.get('format')
 
         rows = self.get_rows_iterator(fobject, file_format)
 
-        items = self.process_rows(rows, profile['columns'], meta_data,
-                                  skip_header)
+        items = self.process_rows(rows)
 
         return self.save_rows(items)
 
