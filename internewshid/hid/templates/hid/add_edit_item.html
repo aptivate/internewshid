@@ -4,102 +4,100 @@
 {% load widget_tweaks %}
 
 {% block maincontent %}
-    <div class="col-xs-12">
-        <form id="single-item-form" role="form" method="POST">
-            {% csrf_token %}
-            {{ form.id }}
-            {{ form.next }}
-            <div class="panel panel-gray">
-               <div class="panel-body">
-                   Editing ID {{ item.id }}
-                   <div class="row">
+<div class="container-fluid">
+    <form id="single-item-form" role="form" method="POST">
+        {% csrf_token %}
+        {{ form.id }}
+        {{ form.next }}
+        <div class="panel panel-gray panel-rounded">
+            <div class="panel-body">
+                <div class="item-attributes">
+                   
+                    {% if form.category %}
+                    <div class="item-category form-group input-group {% if form.category.errors %}has-error{% endif %}">
+                        <label class="control-label">
+                            {% trans "Theme" %}
+                            {% if form.category.errors %}
+                            <span class='help-block'>({{ form.category.errors|join:", " }})</span>
+                            {% endif %}
+                        </label>
+                        {{ form.category|add_class:'form-control' }}
+                    </div>
+                    {% endif %}
 
-                    {% if form.body %}
-                        <div class="col-xs-12 col-md-4 input-group form-group item-original-text {% if form.body.errors %}has-error{% endif %}">
+                    {% if form.feedback_type %}
+                    <div class="item-feedback-type form-group input-group {% if form.feedback_type.errors %}has-error{% endif %}">
+                        <label class="control-label" for="feedback_type.name">
+                            {% trans "Type" %}
+                            {% if form.feedback_type.errors %} <span class='help-block'>({{ form.feedback_type.errors|join:", " }})</span> {% endif %}
+                        </label>
+                        <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type.name">
+                            {% for choice in form.feedback_type.field.choices %}
+                            {% if form.initial.feedback_type == choice.0 %}
+                            <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% else %}
+                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    {% if form.tags %}
+                    <div class="item-tags form-group input-group {% if form.tags.errors %}has-error{% endif %}">
+                        <label class="control-label">
+                            {% trans "Tags" %}
+                            {% if form.tags.errors %}
+                            <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
+                            {% endif %}
+                        </label>
+                        {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
+                    </div>
+                    {% endif %}
+
+                    <div class="item-apply form-group input-group">
+                        {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-md btn-border" %}
+                        {% if update %}
+                        {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-md btn-success" %}
+                        {% else %}
+                        {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="btn btn-md btn-success" %}
+                        {% endif %}
+                    </div>
+
+                </div>
+                <div class="item-content">
+                    <div class="item-source-wrapper">
+                        {% if form.body %}
+                        <div class="item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
-                               {% trans "Feedback" %}
-                                {{ item_type_label }}
+                                {% trans "Feedback" %}
                                 <span class="item-id">{{ item.id }}</span>
                                 {% if form.body.errors %}
-                                    <span class='help-block'>({{ form.body.errors|join:", " }})</span>
+                                <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
                             </label>
                             {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
                         </div>
-                    {% endif %}
-
-                    {% if form.translation %}
-                        <div class="col-xs-12 col-md-4 input-group form-group item-translation-text {% if form.translation.errors %}has-error{% endif %}">
-                              <label>
-                                 {% trans "Translation" %}
-                                  {% if form.translation.errors %}
-                                      <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
-                                  {% endif %}
-                              </label>
-                              {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
-                        </div>
-                    {% endif %}
-
-                        <div class="col-xs-12 col-md-3 input-group form-group item-attributes-text">
-
-                            {% if form.category %}
-                            <div class="form-group pull-left input-group item-category {% if form.category.errors %}has-error{% endif %}">
-                               <label>
-                                     {{ item_type_label}} {% trans "type" %}
-                                    {% if form.category.errors %}
-                                        <span class='help-block'>({{ form.category.errors|join:", " }})</span>
-                                    {% endif %}
-                                </label>
-                                {{ form.category|add_class:'form-control' }}
-                            </div>
-                            {% endif %}
-
-                            {% if form.feedback_type %}
-                            <div class="form-group pull-left input-group item-feedback-type {% if form.feedback_type.errors %}has-error{% endif %}">
-                               <label>
-                                    {% trans "Feedback Type" %}
-                                    {% if form.feedback_type.errors %} <span class='help-block'>({{ form.feedback_type.errors|join:", " }})</span> {% endif %}
-                                </label>
-                                <select name="{{ form.feedback_type.name }}" class="form-control">
-                                  {% for choice in form.feedback_type.field.choices %}
-                                    {% if form.initial.feedback_type == choice.0 %}
-                                      <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                    {% else %}
-                                      <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                    {% endif %}
-                                  {% endfor %}
-                                </select>
-                            </div>
-                            {% endif %}
-
-                            {% if form.tags %}
-                            <div class="form-group input-group item-tags {% if form.tags.errors %}has-error{% endif %}">
-                                 <label>
-                                      {% trans "Tags" %}
-                                      {% if form.tags.errors %}
-                                          <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
-                                      {% endif %}
-                                </label>
-                              {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
-                            </div>
-                            {% endif %}
-
-                            <div class="form-group input-group item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
+                        {% endif %}
+                        
+                        <div class="item-source-meta">
+                            
+                            <div class="item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
                                 <label>
-                                {% trans "Reported date" %}
-                                {% if form.timestamp.errors %}
+                                    {% trans "Reported date" %}
+                                    {% if form.timestamp.errors %}
                                     <span class='help-block'>({{ form.timestamp.errors|join:", " }})</span>
-                                {% endif %}
+                                    {% endif %}
                                 </label>
                                 {{ form.timestamp|add_class:'form-control'|attr:"placeholder:yyyy-mm-dd"|attr:"aria-describedby:basic-addon1" }}
                             </div>
 
                             {% if form.region %}
-                            <div class="form-group input-group item-region {% if form.region.errors %}has-error{% endif %}">
+                            <div class="item-region {% if form.region.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Region" %}
                                     {% if form.region.errors %}
-                                        <span class='help-block'>({{ form.region.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.region.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 <div class="selectContainer">
@@ -109,11 +107,11 @@
                             {% endif %}
 
                             {% if form.location %}
-                            <div class="form-group input-group item-location {% if form.location.errors %}has-error{% endif %}">
+                            <div class="item-location {% if form.location.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Location" %}
                                     {% if form.location.errors %}
-                                        <span class='help-block'>({{ form.location.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.location.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 {{ form.location|add_class:'form-control'|attr:"Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
@@ -121,11 +119,11 @@
                             {% endif %}
 
                             {% if form.gender %}
-                            <div class="form-group input-group item-gender {% if form.gender.errors %}has-error{% endif %}">
+                            <div class="item-gender {% if form.gender.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Gender" %}
                                     {% if form.gender.errors %}
-                                        <span class='help-block'>({{ form.gender.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.gender.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 {{ form.gender|add_class:'form-control'|attr:"Gender"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
@@ -133,11 +131,11 @@
                             {% endif %}
 
                             {% if form.age %}
-                            <div class="form-group input-group item-age {% if form.age.errors %}has-error{% endif %}">
+                            <div class="item-age {% if form.age.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Age" %}
                                     {% if form.age.errors %}
-                                        <span class='help-block'>({{ form.age.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.age.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 {{ form.age|add_class:'form-control'|attr:"Age"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
@@ -145,11 +143,11 @@
                             {% endif %}
 
                             {% if form.enumerator %}
-                            <div class="form-group input-group item-enumerator {% if form.enumerator.errors %}has-error{% endif %}">
+                            <div class="item-enumerator {% if form.enumerator.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Enumerator" %}
                                     {% if form.enumerator.errors %}
-                                        <span class='help-block'>({{ form.enumerator.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.enumerator.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 {{ form.enumerator|add_class:'form-control'|attr:"Enumerator"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
@@ -157,40 +155,38 @@
                             {% endif %}
 
                             {% if form.source %}
-                            <div class="form-group input-group item-source {% if form.source.errors %}has-error{% endif %}">
+                            <div class="item-source {% if form.source.errors %}has-error{% endif %}">
                                 <label>
                                     {% trans "Source" %}
                                     {% if form.source.errors %}
-                                        <span class='help-block'>({{ form.source.errors|join:", " }})</span>
+                                    <span class='help-block'>({{ form.source.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
                                 {{ form.source|add_class:'form-control'|attr:"Source"|attr:"rows:3"|attr:"cols:3"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
-
-                        </div>
-                   </div>
-
-                    <div class="row">
-
-                        <div class="col-xs-12 col-md-4 form-group pull-right">
-                           {% if update %}
-                            {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-lg btn-success" %}
-                            {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-lg btn-border" %}
-                            {% else %}
-                            {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="btn btn-lg btn-success" %}
-                                    {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-lg btn-border" %}
-                                    {% endif %}
                         </div>
 
-                        <div class="col-xs-12 col-md-8 form-group pull-left">
-                            {% bootstrap_button "Delete" button_type="submit" name="action" value="delete" button_class="btn btn-danger" %}
-                        </div>
-
-                        </div>
                     </div>
+
+                    {% if form.translation %}
+                    <div class="item-translation-text {% if form.translation.errors %}has-error{% endif %}">
+                        <label>
+                            {% trans "Translation" %}
+                            {% if form.translation.errors %}
+                            <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                            {% endif %}
+                        </label>
+                        {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
+                    </div>
+                    {% endif %}
                 </div>
-                </div>
-        </form>
-    </div>
+
+                {% bootstrap_button "Delete feedback" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
+                
+            </div>
+        </div>
+</div>
+</form>
+</div>
 {% endblock maincontent %}
