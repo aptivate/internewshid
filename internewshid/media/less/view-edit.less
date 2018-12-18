@@ -283,25 +283,27 @@ td.created, td.timestamp {
 }
 
 .messages-box {
-  margin: 0 -30px;
-  position: relative;
-    z-index: @zindex-messages;
+  	margin: 0 -30px;
+	position: fixed;
+	z-index: @zindex-messages;
+	top: 0;
+	width: 100%;
+    
+    ul{
+       color:#fff;
+        li {
+            text-align: center;
+        }
+    }
 }
 
 @media(max-width:@screen-sm){
   .messages-box {
-  margin-top:0;
-  min-height:0;
+      margin-top:0;
+      min-height:0;
   }
 }
 
-.messages-box > ul {
-  color:#fff;
-}
-
-.messages-box > ul > li {
-  padding:5px 10px;
-}
 
 
 //circle navigation
@@ -505,14 +507,14 @@ tbody select option{
             .form-control{
                 font-size: 12px;
                 height: auto;
-                background-color: inherit;
+                background-color: rgba(255,255,255,0.7);
                 border: none;
                 padding: 0;
                 box-shadow: none;
-                margin-bottom: 5px;
+                margin: 0 5px 10px;
                 &:focus,
                 &:hover{
-                    background-color: rgba(255,255,255,0.3);
+                    background-color: #fff;
                 }
             }
         }

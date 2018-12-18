@@ -358,10 +358,21 @@ ul.nav.nav-pills:after{
 .main-content > .dashboard{
     margin-top: 1em;
 }
-//Project info
 
-.project-info {
-    float:left;
+// Footer
+
+footer{
+    clear: both;
+    display: flex;
+    justify-content: space-between;
+    font-size: small;
+    color: #fff;
+    .project-info,
+    .site-info{
+        a{
+            color: #fff;
+        }
+    }
 }
 
 @media(max-width:@screen-sm){
@@ -373,25 +384,6 @@ ul.nav.nav-pills:after{
     padding-top: @padding-small-vertical;
   }
 }
-
-.project-info > a {
-  color:white;
-}
-
-//Site info
-
-.site-info {
-  float:right;
-  > a {
-    color:white;
-  }
-}
-
-@media(max-width:@screen-sm){
-  .site-info {
-  }
-}
-
 
 
 // Buttons

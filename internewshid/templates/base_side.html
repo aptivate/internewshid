@@ -45,6 +45,19 @@
         {% if request.user.is_authenticated %}
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+             Export data <span class="fa fa-caret-down"> </span>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="{% url "item-export" %}">{% trans "All Feedback (CSV)" %}</a></li>
+                <li><a href="{% url "location-coverage" %}">{% trans "Location data (CSV)" %}</a></li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        {% endif %}
+        
+        {% if request.user.is_authenticated %}
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              Settings  <span class="fa fa-caret-down"> </span>
             </a>
             <ul class="dropdown-menu dropdown-user">
@@ -68,7 +81,7 @@
             <div class="col-lg-12">
                 <div class="row messages-box">
                     <div class="spinner">
-                        <span>loading...</span>
+                        <span>Loading &#133;</span>
                       <div class="rect1"></div>
                       <div class="rect2"></div>
                       <div class="rect3"></div>
@@ -92,14 +105,14 @@
                     {% block maincontent %}
                     {% endblock maincontent %}
                 </div>
-                <div class="footer row">
+                <footer role="contentinfo">
                     <div class="project-info">
-                        <a href="http://www.internews.org" title="a project of Internews">{% trans "a project of Internews" %}</a>
+                        <a href="http://www.internews.org" title="A project of Internews">{% trans "A project of Internews" %}</a>
                     </div>
                     <div class="site-info">
-                        developed by <a href="http://www.aptivate.org" title="Aptivate website">Aptivate</a>
+                        Developed by <a href="http://www.aptivate.org" title="Aptivate website" rel="author">Aptivate</a>
                     </div>
-                </div>
+                </footer>
             </div>
         </div>
     </div>
