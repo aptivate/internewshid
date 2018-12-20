@@ -3,7 +3,7 @@
  * connections where loading can take time */
 
 jQuery(function(){
-    jQuery('button:not(.navbar-toggle), .btn').click(function() {
+    jQuery('button:not(.navbar-toggle,.close), .btn').click(function() {
         jQuery('.spinner').toggleClass('active');
     });
 });
