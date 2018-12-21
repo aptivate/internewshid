@@ -53,7 +53,7 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     ))
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db  # noqa
 def test_items_cannot_be_imported_twice(importer, django_db_setup):
     file_path = path.join(TEST_DIR, 'master_kobo_single_item.xlsx')
     (num_saved, num_skipped) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
