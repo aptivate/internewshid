@@ -408,7 +408,7 @@ def test_save_rows_handles_exception(importer):
 
     assert str(excinfo.value) == (
         "There was a problem with row 29 of the spreadsheet:\n"
-        "Column: 'Ennumerator'\n"
+        "Column: 'Ennumerator' (enumerator)\n"
         "Error (max_length): 'Ensure this field has no more "
         "than 200 characters.'\n\n"
         "Value: Yakub=Aara smart card no point in "
@@ -419,3 +419,46 @@ def test_save_rows_handles_exception(importer):
         "hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum "
         "soyi ensaf takito aarari Thor Sara nohoito"
     )
+
+
+@pytest.mark.django_db
+def test_duplicate_records_not_imported(importer):
+    objects = [
+        {
+            'body': "Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'enumerator': 'Mohammed',
+            'terms': [],
+            '_row_number': 1,
+        }
+    ]
+
+    num_saved = importer.save_rows(objects)
+    assert num_saved == 1
+
+    objects = [
+        # This one should be ignored the second time around
+        {
+            'body': "Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'enumerator': 'Mohammed',
+            'terms': [],
+            '_row_number': 1,
+        },
+        # and this one should be imported
+        {
+            'body': "Another bit of Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'enumerator': 'Mohammed',
+            'terms': [],
+            '_row_number': 2,
+        }
+    ]
+
+    num_saved = importer.save_rows(objects)
+
+    assert num_saved == 1
+
+    items = transport.items.list()
+
+    assert len(items) == 2

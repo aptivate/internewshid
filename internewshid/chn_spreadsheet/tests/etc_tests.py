@@ -23,7 +23,7 @@ def test_etc_items_imported(importer, django_db_setup):
     assert len(transport.items.list()) == 0
 
     file_path = path.join(TEST_DIR, 'sample_etc.xlsx')
-    num_saved = importer.store_spreadsheet('etc', open(file_path, 'rb'))
+    (num_saved, _) = importer.store_spreadsheet('etc', open(file_path, 'rb'))
 
     assert num_saved > 0
 
@@ -33,9 +33,6 @@ def test_etc_items_imported(importer, django_db_setup):
 
     assert items[0]['location'] == 'Camp 1E'
     assert isinstance(items[0]['timestamp'], datetime.datetime)
-
-    for item in items:
-        transport.items.create(item)
 
     tags = []
     for term in items[0]['terms']:

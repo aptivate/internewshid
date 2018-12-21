@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from datetime import datetime
+
 import pytest
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
@@ -13,6 +15,9 @@ from .taxonomy_and_term_create_tests import create_taxonomy
 
 
 def update_item(id, **kwargs):
+    if 'timestamp' not in kwargs:
+        kwargs['timestamp'] = datetime.now()
+
     url = '/items/%d' % id  # This doesn't seem to matter if id is absent?
     request = APIRequestFactory().put(url, kwargs)
     view = ItemViewSet.as_view(actions={'put': 'update'})
@@ -25,10 +30,14 @@ def update_item(id, **kwargs):
 
 @pytest.mark.django_db
 def test_item_fields_can_be_updated():
-    old_data = {'body': 'That the government is using this Ebola as a business to inrich few governmemt official',
-                'network_provider': '8737 (Lonestar)'}
-    new_data = {'body': 'That the government is using this Ebola as a business to inrich few government official',
-                'network_provider': '8737 (CellCom)'}
+    old_data = {
+        'body': 'That the government is using this Ebola as a business to inrich few governmemt official',
+        'network_provider': '8737 (Lonestar)'
+    }
+    new_data = {
+        'body': 'That the government is using this Ebola as a business to inrich few government official',
+        'network_provider': '8737 (CellCom)',
+    }
 
     response = create_item(**old_data)
     id = response.data['id']

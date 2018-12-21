@@ -11,7 +11,7 @@ import pytz
 from openpyxl import load_workbook
 
 import transport
-from transport.exceptions import TransportException
+from transport.exceptions import ItemNotUniqueException, TransportException
 
 from .models import SheetProfile
 
@@ -132,6 +132,8 @@ class Importer(object):
         return {'taxonomy': taxonomy, 'name': name}
 
     def save_rows(self, objects):
+        num_saved = 0
+
         for obj in objects:
             row = obj.pop('_row_number', '')
             terms = obj.pop('terms')
@@ -140,12 +142,18 @@ class Importer(object):
                 for term in terms:
                     transport.items.add_terms(
                         item['id'], term['taxonomy'], term['name'])
+            except ItemNotUniqueException:
+                pass
+
             except TransportException as exc_inst:
                 message = self._get_spreadsheet_error_message(row, exc_inst)
 
                 raise SheetImportException(message)
 
-        return len(objects)
+            else:
+                num_saved += 1
+
+        return num_saved
 
     def _get_spreadsheet_error_message(self, row, exc_inst):
         status_code = exc_inst.message.pop('status_code')
@@ -158,8 +166,9 @@ class Importer(object):
         for field, errors in exc_inst.message.iteritems():
             for error in errors:
                 messages.append(
-                    _("Column: '{0}'\nError ({1}): '{2}'\n\nValue: {3}").format(
+                    _("Column: '{0}' ({1})\nError ({2}): '{3}'\n\nValue: {4}").format(
                         field_to_column_map.get(field),
+                        field,
                         getattr(error, 'code', ''),
                         six.text_type(error),
                         item.get(field, '')
@@ -182,7 +191,9 @@ class Importer(object):
 
         items = self.process_rows(rows)
 
-        return self.save_rows(items)
+        num_saved = self.save_rows(items)
+
+        return (num_saved, len(items) - num_saved)
 
 
 class CellConverter(object):

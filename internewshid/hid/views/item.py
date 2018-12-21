@@ -241,6 +241,11 @@ class AddEditItemView(FormView):
                     item_id,
                 )
                 message_code = messages.SUCCESS
+        except transport.exceptions.ItemNotUniqueException as e:
+            message = _("This record could not be saved because the body and "
+                        "timestamp clashed with an existing record")
+            message_code = messages.ERROR
+
         except transport.exceptions.TransportException as e:
             message = e.message.get('detail')
             if message is None:

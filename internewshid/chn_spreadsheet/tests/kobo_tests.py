@@ -24,7 +24,7 @@ def test_kobo_items_imported(importer, django_db_setup):
     assert len(transport.items.list()) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
-    num_saved = importer.store_spreadsheet('kobo', open(file_path, 'rb'))
+    (num_saved, _) = importer.store_spreadsheet('kobo', open(file_path, 'rb'))
 
     assert num_saved > 0
 
@@ -36,9 +36,6 @@ def test_kobo_items_imported(importer, django_db_setup):
     assert items[0]['translation'] == ''
     assert items[0]['location'] == 'Camp 4'
     assert isinstance(items[0]['timestamp'], datetime.datetime)
-
-    for item in items:
-        transport.items.create(item)
 
     tags = []
     for term in items[0]['terms']:
@@ -62,10 +59,3 @@ def test_kobo_empty_body_is_allowed(importer):
     assert with_empty_body_item['body'] == ''
 
     assert Item.objects.count() == 3
-
-    for item in items:
-        transport.items.create(with_empty_body_item)
-
-    item = Item.objects.last()
-
-    assert item.body == ''

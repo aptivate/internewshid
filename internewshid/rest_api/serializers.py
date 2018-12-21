@@ -1,9 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-from rest_framework import serializers
+from rest_framework import serializers, validators
 
 from data_layer.models import Item
 from taxonomies.models import Taxonomy, Term
+
+from .fields import IgnoreMicrosecondsDateTimeField
 
 
 class TaxonomySerializer(serializers.ModelSerializer):
@@ -67,7 +69,14 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = (
             '__all__'
         )
+        validators = [
+            validators.UniqueTogetherValidator(
+                queryset=Item.objects.all(),
+                fields=('body', 'timestamp')
+            )
+        ]
 
+    timestamp = IgnoreMicrosecondsDateTimeField()
     terms = TermSerializer(many=True, required=False)
 
     def create(self, validated_data):

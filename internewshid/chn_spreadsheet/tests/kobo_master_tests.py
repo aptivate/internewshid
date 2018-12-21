@@ -23,7 +23,7 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     assert len(transport.items.list()) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo_master.xlsx')
-    num_saved = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
+    (num_saved, _) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
 
     assert num_saved > 0
 
@@ -40,9 +40,6 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     assert items[0]['source'] == 'sample source'
     assert isinstance(items[0]['timestamp'], datetime.datetime)
 
-    for item in items:
-        transport.items.create(item)
-
     tags = []
     for item in items:
         for term in item['terms']:
@@ -54,3 +51,17 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     assert all(tag in tags for tag in (
         'sample tag',
     ))
+
+
+@pytest.mark.django_db
+def test_items_cannot_be_imported_twice(importer, django_db_setup):
+    file_path = path.join(TEST_DIR, 'master_kobo_single_item.xlsx')
+    (num_saved, num_skipped) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
+
+    assert num_saved == 1
+    assert num_skipped == 0
+
+    (num_saved, num_skipped) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
+
+    assert num_saved == 0
+    assert num_skipped == 1
