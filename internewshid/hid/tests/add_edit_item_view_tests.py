@@ -81,9 +81,24 @@ def view(item, item_type):
 
 
 @pytest.fixture
-def form(view, item):
+def new_form(view):
     form = view.form_class('question')
-    form.cleaned_data = item
+    form.cleaned_data = {
+        'id': 0,
+    }
+
+    form.cleaned_data['next'] = '/'
+
+    return form
+
+
+@pytest.fixture
+def update_form(view):
+    form = view.form_class('question')
+    form.cleaned_data = {
+        'id': view.item['id'],
+        'timestamp': view.item['timestamp'],
+    }
     form.cleaned_data['next'] = '/'
 
     return form
@@ -644,23 +659,43 @@ def test_item_can_be_deleted_with_post_request(item):
 
 
 @pytest.mark.django_db
-def test_item_can_be_updated(view, form):
+def test_item_can_be_updated(view, update_form):
     new_text = "What is the cause of Ebola?"
-    form.cleaned_data['body'] = new_text,
+    update_form.cleaned_data['body'] = new_text,
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
 
     assert item['body'] == new_text
 
 
 @pytest.mark.django_db
-def test_item_category_can_be_updated(view, form, item_type_taxonomy):
+def test_new_item_cannot_have_duplicate_body_and_timestamp(view, new_form):
+    other_item = transport.items.create(
+        {
+            'body': 'What is the cause of Ebola?',
+        }
+    )
+
+    new_form.cleaned_data['body'] = other_item['body']
+    new_form.cleaned_data['timestamp'] = other_item['timestamp']
+
+    view.form_valid(new_form)
+
+    assert_message(
+        view.request,
+        messages.ERROR,
+        "This record could not be saved because the body and timestamp clashed with an existing record"
+    )
+
+
+@pytest.mark.django_db
+def test_item_category_can_be_updated(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola updates')
 
-    form.cleaned_data['category'] = 'Ebola updates',
+    update_form.cleaned_data['category'] = 'Ebola updates',
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
@@ -669,15 +704,15 @@ def test_item_category_can_be_updated(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_category_can_be_unset(view, form, item_type_taxonomy):
+def test_item_category_can_be_unset(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     transport.items.add_terms(view.item['id'], item_type_taxonomy.slug,
                               'Ebola origins')
 
-    form.cleaned_data['category'] = ''
+    update_form.cleaned_data['category'] = ''
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
@@ -686,16 +721,16 @@ def test_item_category_can_be_unset(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_updated(view, form):
+def test_item_feedback_type_can_be_updated(view, update_form):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern')
     TermFactory(taxonomy=taxonomy, name='rumour')
 
     transport.items.add_terms(view.item['id'], 'item-types', 'rumour')
 
-    form.cleaned_data['feedback_type'] = 'concern',
+    update_form.cleaned_data['feedback_type'] = 'concern',
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     assert_no_messages(view.request, messages.ERROR)
 
     item = transport.items.get(view.item['id'])
@@ -710,15 +745,15 @@ def test_item_feedback_type_can_be_updated(view, form):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_unset(view, form, item_type_taxonomy):
+def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern')
 
     transport.items.add_terms(view.item['id'], 'item-types', 'concern')
 
-    form.cleaned_data['feedback_type'] = ''
+    update_form.cleaned_data['feedback_type'] = ''
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
@@ -732,12 +767,12 @@ def test_item_feedback_type_can_be_unset(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_category_not_required(view, form, item_type_taxonomy):
+def test_item_category_not_required(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
-    form.cleaned_data['category'] = ''
+    update_form.cleaned_data['category'] = ''
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
 
     terms = {t['taxonomy']: t['name'] for t in item['terms']}
@@ -746,13 +781,13 @@ def test_item_category_not_required(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_update_logs_message_and_redirects(view, form, item_type_taxonomy):
+def test_item_update_logs_message_and_redirects(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     view.item_type['long_name'] = 'Question'
 
-    response = view.form_valid(form)
-    assert response.url == form.cleaned_data['next']
+    response = view.form_valid(update_form)
+    assert response.url == update_form.cleaned_data['next']
 
     assert_message(view.request,
                    messages.SUCCESS,
@@ -760,12 +795,12 @@ def test_item_update_logs_message_and_redirects(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_update_transport_exception_logs_message(view, form):
+def test_item_update_transport_exception_logs_message(view, update_form):
     # This could happen if someone else deletes the item when the
     # form is open
     transport.items.delete(view.item['id'])
 
-    view.form_valid(form)
+    view.form_valid(update_form)
 
     assert_message(view.request,
                    messages.ERROR,
@@ -773,12 +808,12 @@ def test_item_update_transport_exception_logs_message(view, form):
 
 
 @pytest.mark.django_db
-def test_item_term_update_transport_exception_logs_message(view, form,
+def test_item_term_update_transport_exception_logs_message(view, update_form,
                                                            item_type_taxonomy):
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
-    form.cleaned_data['category'] = "A category that doesn't exist"
-    view.form_valid(form)
+    update_form.cleaned_data['category'] = "A category that doesn't exist"
+    view.form_valid(update_form)
 
     assert_message(view.request,
                    messages.ERROR,
@@ -786,17 +821,17 @@ def test_item_term_update_transport_exception_logs_message(view, form,
 
 
 @pytest.mark.django_db
-def test_item_term_delete_transport_exception_logs_message(view, form,
+def test_item_term_delete_transport_exception_logs_message(view, update_form,
                                                            item_type_taxonomy):
     # This shouldn't be possible from the form but we may get other
     # TransportException errors
-    form.cleaned_data['category'] = ''
+    update_form.cleaned_data['category'] = ''
 
     # Not sure if this is good practice
     old_category = ITEM_TYPE_CATEGORY['all']
     ITEM_TYPE_CATEGORY['all'] = 'unknown-slug'
 
-    view.form_valid(form)
+    view.form_valid(update_form)
 
     ITEM_TYPE_CATEGORY['all'] = old_category
 
@@ -806,7 +841,7 @@ def test_item_term_delete_transport_exception_logs_message(view, form,
 
 
 @pytest.mark.django_db
-def test_item_can_be_deleted(view, form):
+def test_item_can_be_deleted(view):
     view._delete_item()
 
     assert_message(view.request,
@@ -820,11 +855,11 @@ def test_item_can_be_deleted(view, form):
 
 
 @pytest.mark.django_db
-def test_free_tags_created_on_item_update(view, form, item_type_taxonomy):
+def test_free_tags_created_on_item_update(view, update_form, item_type_taxonomy):
     # Deliberate spaces to be stripped
-    form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
+    update_form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     assert_no_messages(view.request, messages.ERROR)
 
     item = transport.items.get(view.item['id'])
@@ -839,12 +874,12 @@ def test_free_tags_created_on_item_update(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_existing_tag_deleted_on_item_update(view, form, item_type_taxonomy):
+def test_existing_tag_deleted_on_item_update(view, update_form, item_type_taxonomy):
     transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
-    form.cleaned_data['tags'] = 'Monrovia'
+    update_form.cleaned_data['tags'] = 'Monrovia'
 
-    view.form_valid(form)
+    view.form_valid(update_form)
     assert_no_messages(view.request, messages.ERROR)
 
     item = transport.items.get(view.item['id'])
@@ -855,11 +890,12 @@ def test_existing_tag_deleted_on_item_update(view, form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_free_tags_created_for_new_item(add_view, form):
-    form.cleaned_data['tags'] = 'Monrovia,Important,age 35-40'
-    form.cleaned_data['id'] = 0
+def test_free_tags_created_for_new_item(add_view, new_form):
+    new_form.cleaned_data['tags'] = 'Monrovia,Important,age 35-40'
+    new_form.cleaned_data['body'] = 'Message'
+    new_form.cleaned_data['timestamp'] = datetime.now()
 
-    add_view.form_valid(form)
+    add_view.form_valid(new_form)
     assert_no_messages(add_view.request, messages.ERROR)
 
     item = transport.items.get(add_view.item['id'])
@@ -874,10 +910,11 @@ def test_free_tags_created_for_new_item(add_view, form):
 
 
 @pytest.mark.django_db
-def test_data_origin_created_for_new_item(add_view, form):
-    form.cleaned_data['id'] = 0
+def test_data_origin_created_for_new_item(add_view, new_form):
+    new_form.cleaned_data['body'] = 'Message'
+    new_form.cleaned_data['timestamp'] = datetime.now()
 
-    add_view.form_valid(form)
+    add_view.form_valid(new_form)
     assert_no_messages(add_view.request, messages.ERROR)
 
     item = transport.items.get(add_view.item['id'])
@@ -890,14 +927,15 @@ def test_data_origin_created_for_new_item(add_view, form):
 
 
 @pytest.mark.django_db
-def test_feedback_type_for_new_item(add_view, form):
+def test_feedback_type_for_new_item(add_view, new_form):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='rumour', long_name='Rumour')
 
-    form.cleaned_data['id'] = 0
-    form.cleaned_data['feedback_type'] = 'rumour'
+    new_form.cleaned_data['feedback_type'] = 'rumour'
+    new_form.cleaned_data['body'] = 'Message'
+    new_form.cleaned_data['timestamp'] = datetime.now()
 
-    add_view.form_valid(form)
+    add_view.form_valid(new_form)
     assert_no_messages(add_view.request, messages.ERROR)
 
     item = transport.items.get(add_view.item['id'])

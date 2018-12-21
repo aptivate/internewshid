@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.utils.translation import ungettext
+from django.utils.translation import gettext, ungettext
 from django.views.generic import FormView
 
 from chn_spreadsheet.importer import Importer, SheetImportException
@@ -22,12 +22,24 @@ class UploadSpreadsheetView(FormView):
 
         try:
             importer = Importer()
-            saved = importer.store_spreadsheet(source, uploaded_file)
-            msg = ungettext("Upload successful! %d entry has been added.",
-                            "Upload successful! %d entries have been added.",
-                            saved) % saved
+            (saved, skipped) = importer.store_spreadsheet(
+                source, uploaded_file
+            )
+            all_messages = [
+                gettext("Upload successful!"),
+                ungettext("%d entry has been added.",
+                          "%d entries have been added.",
+                          saved) % saved
+            ]
 
-            messages.success(self.request, msg)
+            if skipped > 0:
+                all_messages.append(
+                    ungettext("%d duplicate entry was skipped.",
+                              "%d duplicate entries were skipped.",
+                              skipped) % skipped
+                )
+
+            messages.success(self.request, ' '.join(all_messages))
         except SheetImportException as exc:
             msg = exc.message
             messages.error(self.request, msg)

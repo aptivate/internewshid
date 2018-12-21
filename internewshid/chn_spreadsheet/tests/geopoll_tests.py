@@ -26,7 +26,7 @@ def test_items_imported(importer):
     file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
     f = open(file_path, 'rb')
 
-    num_saved = importer.store_spreadsheet('geopoll', f)
+    (num_saved, _) = importer.store_spreadsheet('geopoll', f)
     assert num_saved > 0
 
     items = transport.items.list()

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.utils.dateparse import parse_datetime
 
 from rest_framework import status
@@ -5,7 +7,7 @@ from rest_framework.test import APIRequestFactory
 
 from rest_api.views import ItemViewSet
 
-from .exceptions import TransportException
+from .exceptions import ItemNotUniqueException, TransportException
 
 request_factory = APIRequestFactory()
 
@@ -59,15 +61,23 @@ def get(id):
 
 def create(item):
     """ Create an Item from the given dict """
+
+    if 'timestamp' not in item:
+        item['timestamp'] = datetime.now()
+
     view = get_view({'post': 'create'})
     request = request_factory.post("", item)
     response = view(request)
     if status.is_success(response.status_code):
         return response.data
-    else:
-        response.data['status_code'] = response.status_code
-        response.data['item'] = item
-        raise TransportException(response.data)
+
+    response.data['status_code'] = response.status_code
+    response.data['item'] = item
+
+    if _item_not_unique(response):
+        raise ItemNotUniqueException(response.data)
+
+    raise TransportException(response.data)
 
 
 def update(id, item):
@@ -77,9 +87,28 @@ def update(id, item):
     response = view(request, pk=id)
     if status.is_success(response.status_code):
         return response.data
-    else:
-        response.data['status_code'] = response.status_code
-        raise TransportException(response.data)
+
+    response.data['status_code'] = response.status_code
+    response.data['item'] = item
+
+    if _item_not_unique(response):
+        raise ItemNotUniqueException(response.data)
+
+    raise TransportException(response.data)
+
+
+def _item_not_unique(response):
+    if response.status_code != status.HTTP_400_BAD_REQUEST:
+        return False
+
+    if 'non_field_errors' not in response.data:
+        return False
+
+    for error in response.data['non_field_errors']:
+        if error.code == 'unique':
+            return True
+
+    return False
 
 
 def delete(id):

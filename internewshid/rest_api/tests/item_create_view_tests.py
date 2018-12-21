@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import datetime
+
 from django.utils import timezone
 
 import pytest
@@ -10,6 +12,9 @@ from rest_api.views import ItemViewSet
 
 
 def create_item(**kwargs):
+    if 'timestamp' not in kwargs:
+        kwargs['timestamp'] = datetime.datetime.now()
+
     request = APIRequestFactory().post('/items', kwargs)
     view = ItemViewSet.as_view(actions={'post': 'create'})
     response = view(request)

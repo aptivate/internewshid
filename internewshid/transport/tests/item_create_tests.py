@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from datetime import datetime
+
 from django.utils import timezone
 
 import pytest
@@ -23,3 +25,15 @@ def test_create_item_creates_item(now):
     assert 'id' in response
     new_count = len(items.list())
     assert new_count > old_count
+
+
+@pytest.mark.django_db
+def test_timestamp_ignores_microseconds():
+    timestamp = datetime(year=2018, month=12, day=21, hour=13, minute=59,
+                         second=1, microsecond=123)
+
+    item = {'body': "Text", 'timestamp': timestamp}
+
+    response = items.create(item)
+
+    assert response['timestamp'] == '2018-12-21T13:59:01Z'

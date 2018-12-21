@@ -459,7 +459,7 @@ def test_table_items_filtered_by_age_range():
     })
 
     in_range_2 = transport.items.create({
-        'body': "In range item 1",
+        'body': "In range item 2",
         'age': '36',
     })
 
