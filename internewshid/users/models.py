@@ -54,7 +54,7 @@ class UserManager(BaseUserManager):
 # Models
 class User(AbstractBaseUser, PermissionsMixin):
     # Account info
-    business_email = EmailField(unique=True, verbose_name='Email')
+    business_email = EmailField(max_length=190, unique=True, verbose_name='Email')
     is_staff = BooleanField(
         verbose_name='staff status',
         default=False,

@@ -1,8 +1,16 @@
 from django.db import models
 from django.dispatch.dispatcher import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from taxonomies.exceptions import TermException
 from taxonomies.models import Term
+
+from constance.backends.database import DatabaseBackend
+
+try:
+    from picklefield import PickledObjectField
+except ImportError:
+    raise ImproperlyConfigured('Could not import django-picklefield.')
 
 
 class DataLayerModel(models.Model):
@@ -27,12 +35,12 @@ class Message(DataLayerModel):
     translation = models.TextField(blank=True)
     timestamp = models.DateTimeField(null=True)
     terms = models.ManyToManyField(Term, related_name="items")
-    network_provider = models.CharField(max_length=200, blank=True)
+    network_provider = models.CharField(max_length=190, blank=True)
     location = models.CharField(max_length=100, blank=True)
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
-    enumerator = models.CharField(max_length=200, blank=True)
-    source = models.CharField(max_length=200, blank=True)
+    enumerator = models.CharField(max_length=190, blank=True)
+    source = models.CharField(max_length=190, blank=True)
 
     def apply_terms(self, terms):
         """ Add or replace values of term.taxonomy for current Item
@@ -93,3 +101,22 @@ def terms_signal_handler(sender, **kwargs):
 
     for item in items:
         item.note_external_modification()
+
+
+class CustomConstance(models.Model):
+    key = models.CharField(max_length=190, unique=True)
+    value = PickledObjectField()
+
+    class Meta:
+        verbose_name = _('constance')
+        verbose_name_plural = _('constances')
+        db_table = 'constance_config'
+
+    def __unicode__(self):
+        return self.key
+
+
+class CustomConstanceBackend(DatabaseBackend):
+    def __init__(self, *args, **kwargs):
+        super(CustomConstanceBackend, self).__init__(*args, **kwargs)
+        self._model = CustomConstance

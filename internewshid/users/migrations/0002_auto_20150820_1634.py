@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='business_email',
-            field=models.EmailField(default='user@example.com', unique=True, max_length=254),
+            field=models.EmailField(default='user@example.com', unique=True, max_length=190),
             preserve_default=False,
         ),
         migrations.AddField(

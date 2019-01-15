@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='network_provider',
-            field=models.CharField(max_length=200, blank=True),
+            field=models.CharField(max_length=190, blank=True),
         ),
     ]

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='term',
             name='name',
-            field=models.CharField(help_text='Tag or Category Name', max_length=250, verbose_name='Name', db_index=True),
+            field=models.CharField(help_text='Tag or Category Name', max_length=190, verbose_name='Name', db_index=True),
         ),
         migrations.AlterUniqueTogether(
             name='term',

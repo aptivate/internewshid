@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='ennumerator',
-            field=models.CharField(blank=True, max_length=200),
+            field=models.CharField(blank=True, max_length=190),
         ),
         migrations.AddField(
             model_name='message',
@@ -30,6 +30,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='source',
-            field=models.CharField(blank=True, max_length=200),
+            field=models.CharField(blank=True, max_length=190),
         ),
     ]

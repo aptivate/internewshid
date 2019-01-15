@@ -7,14 +7,14 @@ class Taxonomy(models.Model):
 
     name = models.CharField(
         verbose_name=_('Name'),
-        max_length=250,
+        max_length=190,
         help_text=_('Taxonomy Name'),
         unique=True,
         db_index=True,
     )
     slug = models.SlugField(
         verbose_name=_('Slug'),
-        max_length=250,
+        max_length=190,
         unique=True,  # Should be true already
         db_index=True,  # Should be true by implication
         # https://docs.djangoproject.com/en/1.8/ref/models/fields/#slugfield
@@ -107,7 +107,7 @@ class Term(models.Model):
 
     name = models.CharField(
         verbose_name=_('Name'),
-        max_length=250,
+        max_length=190,
         help_text=_('Tag or Category Name'),
         db_index=True,
     )

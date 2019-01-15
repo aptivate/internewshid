@@ -87,7 +87,6 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'bootstrap3',
     'constance',
-    'constance.backends.database',
     'rest_framework',
     'django_tables2',
     'djangojs',
@@ -188,7 +187,12 @@ LOGGING = {
     }
 }
 
-CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+# We use a custom back-end to avoid a hard character limit on
+# the utf8mb4 encoding/collation whereby the constance model
+# must be overriden. We set the max_length to 190 instead of 255.
+# See https://github.com/jazzband/django-constance/issues/121
+CONSTANCE_BACKEND = 'data_layer.models.CustomConstanceBackend'
+
 CONSTANCE_CONFIG = {
     'CONTEXT_LOCATION': ("Cox's Bazaar, Bangladesh",
                          'Location of dashboard deployment'),
