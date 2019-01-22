@@ -322,7 +322,7 @@
             "key": "ITEM_TYPE_CATEGORY",
             "value": "gAJYLAAAAHsiYWxsIjogImJhbmdsYWRlc2gtcmVmdWdlZS1jcmlzaXMtc2VjdG9ycyJ9cQEu"
         },
-        "model": "database.constance",
+        "model": "data_layer.customconstance",
         "pk": 1
     },
     {
