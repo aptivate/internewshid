@@ -410,7 +410,7 @@ def test_save_rows_handles_exception(importer):
         "There was a problem with row 29 of the spreadsheet:\n"
         "Column: 'Ennumerator' (enumerator)\n"
         "Error (max_length): 'Ensure this field has no more "
-        "than 200 characters.'\n\n"
+        "than 190 characters.'\n\n"
         "Value: Yakub=Aara smart card no point in "
         "Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli "
         "bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart "
