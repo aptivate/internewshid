@@ -254,7 +254,7 @@ class ViewAndEditTableTab(object):
         )
 
         table.paginate(
-            per_page=kwargs.get('per_page', 25),
+            per_page=kwargs.get('per_page', 50),
             page=request.GET.get('page', 1)
         )
 
