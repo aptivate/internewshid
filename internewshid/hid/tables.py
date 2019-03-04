@@ -16,7 +16,7 @@ class ItemTable(tables.Table):
     class Meta:
         attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
         template_name = 'hid/table.html'
-        order_by = ('-created',)
+        order_by = ('-timestamp',)
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
