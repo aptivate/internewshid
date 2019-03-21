@@ -33,7 +33,7 @@ MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = 'donotreply@internewshid.aptivate.org'
 SERVER_EMAIL = 'server@internewshid.aptivate.org'
 
-TIME_ZONE = 'Europe/London'
+TIME_ZONE = 'Asia/Dhaka'
 
 LANGUAGE_CODE = 'en'
 
