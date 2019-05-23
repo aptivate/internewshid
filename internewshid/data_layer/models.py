@@ -42,7 +42,7 @@ class Message(DataLayerModel):
     age = models.CharField(max_length=100, blank=True)
     enumerator = models.CharField(max_length=190, blank=True)
     source = models.CharField(max_length=190, blank=True)
-    internal_id = models.CharField(max_length=80, blank=True)
+    external_id = models.CharField(max_length=80, blank=True)
 
     def apply_terms(self, terms):
         """ Add or replace values of term.taxonomy for current Item
