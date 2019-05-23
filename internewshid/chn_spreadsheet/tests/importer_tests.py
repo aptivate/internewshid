@@ -137,6 +137,15 @@ def test_order_columns_ignores_extra_columns_in_first_row(importer):
     assert ordered == [cleaned[1], cleaned[0]]
 
 
+def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
+    first_row = ['Province', None]
+
+    ordered = importer.order_columns(first_row)
+
+    assert len(ordered) == 1
+    assert ordered[0]['name'] == 'Province'
+
+
 def test_get_fields_and_types(importer):
     fields, types = importer.get_fields_and_types(COLUMN_LIST)
     expected_types = ['location', 'text']
