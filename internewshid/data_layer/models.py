@@ -1,3 +1,4 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
