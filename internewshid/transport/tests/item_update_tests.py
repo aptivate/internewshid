@@ -2,6 +2,8 @@ from __future__ import absolute_import, unicode_literals
 
 import datetime
 
+from django.utils.dateparse import parse_datetime
+
 import pytest
 
 from transport import items
@@ -65,4 +67,5 @@ def test_timestamp_ignores_microseconds():
 
     response = items.update(item['id'], data)
 
-    assert response['timestamp'] == '2018-12-21T13:59:01Z'
+    parsed = parse_datetime(response['timestamp'])
+    assert parsed.microsecond == 0
