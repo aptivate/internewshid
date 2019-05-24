@@ -37,16 +37,6 @@ def test_kobo_items_imported(importer, django_db_setup):
     assert items[0]['location'] == 'Camp 4'
     assert isinstance(items[0]['timestamp'], datetime.datetime)
 
-    tags = []
-    for term in items[0]['terms']:
-        if term['taxonomy'] == 'tags':
-            tags.append(term['name'])
-
-    assert len(tags) > 0
-    assert all(tag in tags for tag in (
-        'female',
-    ))
-
 
 @pytest.mark.django_db  # noqa
 def test_kobo_empty_body_is_allowed(importer):

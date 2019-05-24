@@ -137,7 +137,7 @@ class Importer(object):
 
         for obj in objects:
             row = obj.pop('_row_number', '')
-            terms = obj.pop('terms')
+            terms = obj.pop('terms', [])
             try:
                 item = transport.items.create(obj)
                 for term in terms:

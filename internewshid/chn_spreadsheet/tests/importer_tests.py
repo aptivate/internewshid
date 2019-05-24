@@ -471,3 +471,19 @@ def test_duplicate_records_not_imported(importer):
     items = transport.items.list()
 
     assert len(items) == 2
+
+
+@pytest.mark.django_db
+def test_can_save_rows_without_terms(importer):
+    objects = [
+        {
+            'body': "Text",
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'enumerator': 'Mohammed',
+            '_row_number': 1,
+        }
+    ]
+
+    num_saved = importer.save_rows(objects)
+
+    assert num_saved == 1
