@@ -86,6 +86,11 @@ class ItemTable(tables.Table):
         verbose_name=_('Source'),
         attrs={'th': {'id': 'header-source'}}
     )
+    external_id = tables.TemplateColumn(
+        template_name='hid/external_id_column.html',
+        verbose_name=_('ID'),
+        attrs={'th': {'id': 'header-external-id'}}
+    )
 
     def __init__(self, *args, **kwargs):
         self.categories = kwargs.pop('categories', [])
