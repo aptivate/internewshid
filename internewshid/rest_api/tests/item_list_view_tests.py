@@ -228,6 +228,31 @@ def test_empty_term_filter_ignored():
 
 
 @pytest.mark.django_db
+def test_filter_by_external_id_fragment():
+    create_item(
+        body='Matching 1',
+        external_id='08a28ec8-0c27-4cc7-9e2c-c27e04a28787')
+    create_item(
+        body='Matching 2',
+        external_id='932e3597-247d-4cc7-b16a-05d3a71c6d9c'
+    )
+    create_item(
+        body='Not matching',
+        external_id='d1ddf585-9d0e-4b64-bc6f-e4c30a24c3c0'
+    )
+
+    payload = get(
+        data={
+            'external_id_pattern': '4cc7',
+        }
+    ).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == 'Matching 1'
+    assert payload[1]['body'] == 'Matching 2'
+
+
+@pytest.mark.django_db
 def test_item_listed_with_associated_terms():
     # TODO: Refactor to use the REST API when we can add
     # multiple terms to an item
