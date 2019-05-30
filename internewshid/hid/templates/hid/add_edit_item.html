@@ -71,7 +71,7 @@
                         <div class="item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
                                 {% trans "Feedback" %}
-                                <span class="item-id">{{ item.id }} ({{ item.external_id }})</span>
+                                <span class="item-id">{{ item.id }}{% if item.external_id %} ({{ item.external_id }}){% endif %}</span>
                                 {% if form.body.errors %}
                                 <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
