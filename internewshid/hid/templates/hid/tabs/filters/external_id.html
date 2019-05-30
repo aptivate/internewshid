@@ -1,0 +1,5 @@
+{% load i18n %}
+<div class="filter-tags form-group input-group">
+  <label class="control-label" for="external-id-filter">{% trans "ID" %}</label>
+  <input id="external-id-filter" type="text" placeholder="All IDs" name="external_id_pattern" class="form-control" value="{{ request.GET.external_id_pattern }}">
+</div>

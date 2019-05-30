@@ -11,6 +11,7 @@ class HidAppConfig(AppConfig):
             AgeRangeFilter,
             CategoryFilter,
             EnumeratorFilter,
+            ExternalIdFilter,
             FeedbackTypeFilter,
             GenderFilter,
             LocationFilter,
@@ -33,6 +34,7 @@ class HidAppConfig(AppConfig):
         register_filter('source', SourceFilter())
         register_filter('tags', TagsFilter())
         register_filter('feedback_type', FeedbackTypeFilter())
+        register_filter('external_id', ExternalIdFilter())
 
         register_tab('view-and-edit-table', ViewAndEditTableTab())
 
