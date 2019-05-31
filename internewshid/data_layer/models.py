@@ -27,6 +27,11 @@ class DataLayerModel(models.Model):
 
 
 class Message(DataLayerModel):
+    class Meta:
+        permissions = (
+            ('can_change_message_body', "Can change feedback"),
+        )
+
     # FIXME(lukem): We're thinking that this can be named 'source' or
     # `original` or something like that since it more closely resembles our
     # current thinking and since we're adding the new `translation` field,
