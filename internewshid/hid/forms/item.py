@@ -48,7 +48,11 @@ class AddEditItemForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        feedback_disabled = kwargs.pop('feedback_disabled', False)
+
         super(AddEditItemForm, self).__init__(*args, **kwargs)
+
+        self.fields['body'].disabled = feedback_disabled
 
         self._maybe_add_category_field()
         self._maybe_add_feedback_type_field()
