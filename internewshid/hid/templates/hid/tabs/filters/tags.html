@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="filter-tags form-group input-group">
+<div class="filter-tags input-group">
   <label class="control-label" for="tags-selector">{% trans "Tags" %}</label>
-  <input type="text" placeholder="All Tags" name="tags" class="form-control" value="{{ request.GET.tags }}">
+  <input type="text" placeholder="All Tags" name="tags" class="form-control" id="tags-selector" value="{{ request.GET.tags }}">
 </div>

@@ -1,8 +1,8 @@
   {% load i18n %}
-  <div class="filter-feedback-type form-group input-group">
-      <label class="control-label" for="feedback-type-selector">{% trans "Feedback type" %}</label>
+  <div class="filter-feedback-type input-group">
+      <label class="control-label" for="feedback-type-selector">{% trans "Type" %}</label>
       <select id="feedback-type-selector" name="feedback_type" class="form-control">
-        <option value="" selected="selected">All Feedback Types</option>
+        <option value="" selected="selected">All Types</option>
         {% for option in feedback_type_options %}
           <option value="{{ option.0 }}"{% if option.0 == request.GET.feedback_type %} selected="selected"{% endif %}>{{ option.1 }}</option>
         {% endfor %}
