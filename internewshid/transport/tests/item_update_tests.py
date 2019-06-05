@@ -2,9 +2,9 @@ from __future__ import absolute_import, unicode_literals
 
 import datetime
 
-import pytest
-
 from django.utils.dateparse import parse_datetime
+
+import pytest
 
 from transport import items
 
