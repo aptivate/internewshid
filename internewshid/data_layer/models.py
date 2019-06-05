@@ -1,11 +1,12 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from constance.backends.database import DatabaseBackend
+
 from taxonomies.exceptions import TermException
 from taxonomies.models import Term
-
-from constance.backends.database import DatabaseBackend
 
 try:
     from picklefield import PickledObjectField
