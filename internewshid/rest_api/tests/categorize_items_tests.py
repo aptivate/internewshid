@@ -7,42 +7,6 @@ from rest_framework.test import APIRequestFactory
 from data_layer.models import Item
 
 from ..views import ItemViewSet
-from .item_create_view_tests import create_item
-from .taxonomy_and_term_create_tests import add_term, create_taxonomy
-
-
-@pytest.fixture
-def category():
-    response = create_taxonomy(name="Test Ebola Questions")
-    assert status.is_success(response.status_code), response.data
-
-    return response.data
-
-
-def term_for(taxonomy, name):
-    """ Create, and return a Term in the given taxonomy """
-    response = add_term(
-        taxonomy=taxonomy['slug'],
-        name=name,
-    )
-    assert status.is_success(response.status_code), response.data
-
-    return response.data
-
-
-@pytest.fixture
-def term(category):
-    return term_for(category, 'Vaccine')
-
-
-@pytest.fixture
-def second_term(category):
-    return term_for(category, 'Timescales')
-
-
-@pytest.fixture
-def item():
-    return create_item(body="Text").data
 
 
 def categorize_item(item, term):

@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.template import loader, Template, Context, TemplateDoesNotExist
-
+from django.template import Context, Template, TemplateDoesNotExist, loader
 
 DEFAULT_FROM = settings.EMAIL_BOT_ADDRESS
 

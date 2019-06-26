@@ -8,7 +8,7 @@ from rest_framework.test import APIRequestFactory
 
 from rest_api.views import ItemViewSet
 
-from .categorize_items_tests import categorize_item, term_for
+from .categorize_items_tests import categorize_item
 from .item_create_view_tests import create_item
 from .item_list_view_tests import get as list_items
 from .taxonomy_and_term_create_tests import create_taxonomy
@@ -51,13 +51,11 @@ def test_item_fields_can_be_updated():
 
 
 @pytest.mark.django_db
-def test_item_terms_not_affected_by_update():
+def test_item_terms_not_affected_by_update(term):
     item = create_item(body='What is the cuse of Ebola?').data
     id = item['id']
 
-    questions_category = create_taxonomy(name="Test Ebola Questions").data
-
-    categorize_item(item, term_for(questions_category, 'Vaccine'))
+    categorize_item(item, term)
 
     [item] = list_items().data
     terms = item['terms']
@@ -72,16 +70,15 @@ def test_item_terms_not_affected_by_update():
 
 @pytest.mark.django_db
 @pytest.mark.xfail
-def test_item_terms_can_be_updated():
+def test_item_terms_can_be_updated(vaccine_term, monrovia_term):
     item = create_item(body='What is the cuse of Ebola?').data
     id = item['id']
 
     questions_category = create_taxonomy(name="Test Ebola Questions").data
-    regions_category = create_taxonomy(name="Test Regions").data
     types_category = create_taxonomy(name="Test Item Types").data
 
-    categorize_item(item, term_for(questions_category, 'Vaccine'))
-    categorize_item(item, term_for(regions_category, 'Monrovia'))
+    categorize_item(item, vaccine_term)
+    categorize_item(item, monrovia_term)
 
     [item] = list_items().data
     terms = item['terms']
