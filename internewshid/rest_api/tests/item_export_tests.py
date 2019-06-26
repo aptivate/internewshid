@@ -32,6 +32,7 @@ def test_item_exporter(client):
         'age',
         'body',
         'enumerator',
+        'external_id',
         'gender',
         'location',
         'network_provider',
