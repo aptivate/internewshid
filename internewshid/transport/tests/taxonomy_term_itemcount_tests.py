@@ -18,7 +18,6 @@ def time_now():
     )
 
 
-@pytest.fixture
 def item_data(**kwargs):
     item = kwargs
     item['body'] = "What is the cuse of ebola?"
@@ -38,12 +37,11 @@ def questions_term(questions_category):
 
 
 @pytest.mark.django_db
-def test_term_itemcount_returns_terms_and_counts(item_data,
-                                                 questions_category,
+def test_term_itemcount_returns_terms_and_counts(questions_category,
                                                  questions_term):
 
     # This is tested more comprehensively in the API tests
-    transport.items.add_terms(item_data['id'],
+    transport.items.add_terms(item_data()['id'],
                               questions_category.slug,
                               questions_term.name)
 
@@ -54,7 +52,7 @@ def test_term_itemcount_returns_terms_and_counts(item_data,
 
 
 @pytest.mark.django_db
-def test_itemcount_fails_if_taxonomy_does_not_exist(item_data):
+def test_itemcount_fails_if_taxonomy_does_not_exist():
     with pytest.raises(TransportException) as excinfo:
         transport.taxonomies.term_itemcount(
             slug='a-taxonomy-that-does-not-exist')

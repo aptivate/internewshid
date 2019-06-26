@@ -81,27 +81,27 @@ def test_filter_by_term():
 def test_filter_by_date_range():
     create_item(
         body="Too old item",
-        timestamp='2018-10-25 23:59:59'
+        timestamp='2018-10-25 23:59:59+0000'
     )
 
     create_item(
         body="In range item 1",
-        timestamp='2018-10-26 00:00:00'
+        timestamp='2018-10-26 00:00:00+0000'
     )
 
     create_item(
         body="In range item 2",
-        timestamp='2018-10-27 00:00:00'
+        timestamp='2018-10-27 00:00:00+0000'
     )
 
     create_item(
         body="Too new item",
-        timestamp='2018-10-27 00:00:01'
+        timestamp='2018-10-27 00:00:01+0000'
     )
 
     payload = get(data={
-        'start_time': '2018-10-26 00:00:00',
-        'end_time': '2018-10-27 00:00:00'
+        'start_time': '2018-10-26 00:00:00+0000',
+        'end_time': '2018-10-27 00:00:00+0000'
     }).data
 
     assert len(payload) == 2

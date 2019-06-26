@@ -405,29 +405,29 @@ def test_table_items_filtered_by_item_type_and_default_filter(
 def test_table_items_filtered_by_date_range():
     too_old = transport.items.create({
         'body': "Too old item",
-        'timestamp': '2018-10-25 23:59:59'
+        'timestamp': '2018-10-25 23:59:59+0000'
     })
 
     in_range_1 = transport.items.create({
         'body': "In range item 1",
-        'timestamp': '2018-10-26 00:00:00'
+        'timestamp': '2018-10-26 00:00:00+0000'
     })
 
     in_range_2 = transport.items.create({
         'body': "In range item 1",
-        'timestamp': '2018-10-27 00:00:00'
+        'timestamp': '2018-10-27 00:00:00+0000'
     })
 
     too_new = transport.items.create({
         'body': "Too new item",
-        'timestamp': '2018-10-27 00:00:01'
+        'timestamp': '2018-10-27 00:00:01+0000'
     })
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
     request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'start_time': '2018-10-26',
-        'end_time': '2018-10-27',
+        'start_time': '2018-10-26 00:00:00+0000',
+        'end_time': '2018-10-27 00:00:00+0000',
     })
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(

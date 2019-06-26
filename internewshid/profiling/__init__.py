@@ -1,8 +1,9 @@
 import hotshot
 import os
-import time
-import settings
 import tempfile
+import time
+
+import settings
 
 try:
     PROFILE_LOG_BASE = settings.PROFILE_LOG_BASE
