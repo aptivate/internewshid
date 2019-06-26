@@ -18,15 +18,15 @@ def remove_categories_from_item(_item, taxonomy):
 
 
 @pytest.mark.django_db  # noqa
-def test_all_item_categories_can_be_deleted(item, term):
-    categorize_item(item, term)
+def test_all_item_categories_can_be_deleted(item, vaccine_term):
+    categorize_item(item, vaccine_term)
 
     # TODO: use the API for this
     [item_orm] = Item.objects.all()
     terms = item_orm.terms.all()
     assert len(terms) == 1
 
-    response = remove_categories_from_item(item, term['taxonomy'])
+    response = remove_categories_from_item(item, vaccine_term['taxonomy'])
     assert status.is_success(response.status_code), response.data
 
     terms = item_orm.terms.all()
@@ -34,19 +34,19 @@ def test_all_item_categories_can_be_deleted(item, term):
 
 
 @pytest.mark.django_db  # noqa
-def test_error_when_deleting_terms_from_non_existent_item(item, term):
-    categorize_item(item, term)
+def test_error_when_deleting_terms_from_non_existent_item(item, vaccine_term):
+    categorize_item(item, vaccine_term)
     delete_item(item['id'])
 
-    response = remove_categories_from_item(item, term['taxonomy'])
+    response = remove_categories_from_item(item, vaccine_term['taxonomy'])
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.data['detail'] == "Message matching query does not exist."
 
 
 @pytest.mark.django_db  # noqa
-def test_error_when_taxonomy_does_not_exist(item, term):
-    categorize_item(item, term)
+def test_error_when_taxonomy_does_not_exist(item, vaccine_term):
+    categorize_item(item, vaccine_term)
     response = remove_categories_from_item(item, 'provinces-of-liberia')
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST

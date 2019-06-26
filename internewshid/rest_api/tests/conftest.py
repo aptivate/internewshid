@@ -4,7 +4,9 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from ..views import ItemViewSet, TaxonomyViewSet, TermViewSet
+from taxonomies.tests.factories import TaxonomyFactory
+
+from ..views import ItemViewSet, TermViewSet
 
 
 def create_item(**kwargs):
@@ -37,20 +39,10 @@ def add_term(**kwargs):
     return response
 
 
-def create_taxonomy(**kwargs):
-    request = APIRequestFactory().put("", kwargs)
-    view = TaxonomyViewSet.as_view(actions={'put': 'create'})
-
-    response = view(request)
-    assert status.is_success(response.status_code), response.data
-
-    return response
-
-
 def term_for(taxonomy, name):
     """ Create, and return a Term in the given taxonomy """
     response = add_term(
-        taxonomy=taxonomy['slug'],
+        taxonomy=taxonomy.slug,
         name=name,
     )
     assert status.is_success(response.status_code), response.data
@@ -60,15 +52,14 @@ def term_for(taxonomy, name):
 
 @pytest.fixture
 def category():
-    response = create_taxonomy(name="Test Ebola Questions")
-    assert status.is_success(response.status_code), response.data
+    taxonomy = TaxonomyFactory(name="Test Ebola Questions")
 
-    return response.data
+    return taxonomy
 
 
 @pytest.fixture
 def vaccine_term():
-    category = create_taxonomy(name="Test Ebola Questions").data
+    category = TaxonomyFactory(name="Test Ebola Questions")
 
     return term_for(category, 'Vaccine')
 
@@ -80,6 +71,6 @@ def timescales_term(category):
 
 @pytest.fixture
 def monrovia_term():
-    category = create_taxonomy(name="Test Regions").data
+    category = TaxonomyFactory(name="Test Regions")
 
     return term_for(category, 'Vaccine')

@@ -51,11 +51,11 @@ def test_item_fields_can_be_updated():
 
 
 @pytest.mark.django_db
-def test_item_terms_not_affected_by_update(term):
+def test_item_terms_not_affected_by_update(vaccine_term):
     item = create_item(body='What is the cuse of Ebola?').data
     id = item['id']
 
-    categorize_item(item, term)
+    categorize_item(item, vaccine_term)
 
     [item] = list_items().data
     terms = item['terms']

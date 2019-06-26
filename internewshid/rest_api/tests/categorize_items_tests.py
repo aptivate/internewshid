@@ -16,27 +16,27 @@ def categorize_item(item, term):
 
 
 @pytest.mark.django_db
-def test_item_can_haz_category(term, item):
+def test_item_can_haz_category(vaccine_term, item):
     # Associate category with the item
-    categorize_item(item, term)
+    categorize_item(item, vaccine_term)
 
     # Fetch the item
     # TODO: use the API for this
     [item_orm] = Item.objects.all()
     # See the category
     [term_orm] = item_orm.terms.all()
-    assert term_orm.name == term['name']
+    assert term_orm.name == vaccine_term['name']
 
 
 # TODO test for terms with the same name in different taxonomies
 
 @pytest.mark.django_db
-def test_categorize_item_returns_the_categorized_item(term, item):
-    result = categorize_item(item, term).data
+def test_categorize_item_returns_the_categorized_item(vaccine_term, item):
+    result = categorize_item(item, vaccine_term).data
 
     assert result['id'] == item['id']
     terms = result['terms']
-    assert term in terms
+    assert vaccine_term in terms
 
 
 @pytest.mark.django_db
@@ -54,7 +54,7 @@ def test_categorize_item_fails_gracefully_if_taxonomy_not_found(item):
 def test_categorize_item_fails_gracefully_if_term_not_found(item, category):
     response = categorize_item(
         item,
-        {'taxonomy': category['slug'], 'name': 'unknown-term'},
+        {'taxonomy': category.slug, 'name': 'unknown-term'},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -62,16 +62,17 @@ def test_categorize_item_fails_gracefully_if_term_not_found(item, category):
 
 
 @pytest.mark.django_db
-def test_categorize_item_fails_gracefully_if_item_not_found(term, item):
+def test_categorize_item_fails_gracefully_if_item_not_found(vaccine_term, item):
     unknown_item_id = 6  # I am not a prisoner
-    response = categorize_item({'id': unknown_item_id}, term)
+    response = categorize_item({'id': unknown_item_id}, vaccine_term)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.data['detail'] == "Message matching query does not exist."
 
 
 @pytest.mark.django_db
-def test_only_one_category_per_item_per_taxonomy(item, term, second_term):
+def test_only_one_category_per_item_per_taxonomy(item, vaccine_term,
+                                                 timescales_term):
     """
         At the time of writing, all taxonomies are categories
         so there's no need yet to test that the taxonomy is a
@@ -80,11 +81,11 @@ def test_only_one_category_per_item_per_taxonomy(item, term, second_term):
         all to their own file. They should set the cardinality constraint
         on the Taxonmy object to optional for these tests.
     """
-    categorize_item(item, term)
-    categorize_item(item, second_term)
+    categorize_item(item, vaccine_term)
+    categorize_item(item, timescales_term)
 
     # TODO: use the API for this
     [item_orm] = Item.objects.all()
     terms = item_orm.terms.all()
     assert len(terms) == 1
-    assert terms[0].name == second_term['name']
+    assert terms[0].name == timescales_term['name']
