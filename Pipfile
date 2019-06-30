@@ -31,6 +31,7 @@ python-dateutil = "*"
 pytz = "*"
 rest-pandas = "*"
 pymysql = "*"
+django-debug-toolbar-template-timings = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

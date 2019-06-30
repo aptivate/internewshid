@@ -81,27 +81,27 @@ def test_filter_by_term():
 def test_filter_by_date_range():
     create_item(
         body="Too old item",
-        timestamp='2018-10-25 23:59:59'
+        timestamp='2018-10-25 23:59:59+0000'
     )
 
     create_item(
         body="In range item 1",
-        timestamp='2018-10-26 00:00:00'
+        timestamp='2018-10-26 00:00:00+0000'
     )
 
     create_item(
         body="In range item 2",
-        timestamp='2018-10-27 00:00:00'
+        timestamp='2018-10-27 00:00:00+0000'
     )
 
     create_item(
         body="Too new item",
-        timestamp='2018-10-27 00:00:01'
+        timestamp='2018-10-27 00:00:01+0000'
     )
 
     payload = get(data={
-        'start_time': '2018-10-26 00:00:00',
-        'end_time': '2018-10-27 00:00:00'
+        'start_time': '2018-10-26 00:00:00+0000',
+        'end_time': '2018-10-27 00:00:00+0000'
     }).data
 
     assert len(payload) == 2
@@ -225,6 +225,31 @@ def test_empty_term_filter_ignored():
     assert len(payload) == 2
     assert payload[0]['body'] == item1['body']
     assert payload[1]['body'] == item2['body']
+
+
+@pytest.mark.django_db
+def test_filter_by_external_id_fragment():
+    create_item(
+        body='Matching 1',
+        external_id='08a28ec8-0c27-4cc7-9e2c-c27e04a28787')
+    create_item(
+        body='Matching 2',
+        external_id='932e3597-247d-4cc7-b16a-05d3a71c6d9c'
+    )
+    create_item(
+        body='Not matching',
+        external_id='d1ddf585-9d0e-4b64-bc6f-e4c30a24c3c0'
+    )
+
+    payload = get(
+        data={
+            'external_id_pattern': '4cc7',
+        }
+    ).data
+
+    assert len(payload) == 2
+    assert payload[0]['body'] == 'Matching 1'
+    assert payload[1]['body'] == 'Matching 2'
 
 
 @pytest.mark.django_db

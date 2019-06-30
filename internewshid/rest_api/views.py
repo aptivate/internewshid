@@ -99,6 +99,11 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if start_time is not None and end_time is not None:
             items = items.filter(timestamp__range=[start_time, end_time])
 
+        external_id_pattern = self.request.query_params.get(
+            'external_id_pattern', None)
+        if external_id_pattern is not None:
+            items = items.filter(external_id__contains=external_id_pattern)
+
         return items
 
     @action(methods=['post'], detail=True)

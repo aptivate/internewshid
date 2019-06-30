@@ -6,7 +6,6 @@ from django.core.management import call_command
 import pytest
 
 import transport
-from importer_tests import importer  # noqa
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')

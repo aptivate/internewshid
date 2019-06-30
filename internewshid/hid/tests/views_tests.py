@@ -405,29 +405,29 @@ def test_table_items_filtered_by_item_type_and_default_filter(
 def test_table_items_filtered_by_date_range():
     too_old = transport.items.create({
         'body': "Too old item",
-        'timestamp': '2018-10-25 23:59:59'
+        'timestamp': '2018-10-25 23:59:59+0000'
     })
 
     in_range_1 = transport.items.create({
         'body': "In range item 1",
-        'timestamp': '2018-10-26 00:00:00'
+        'timestamp': '2018-10-26 00:00:00+0000'
     })
 
     in_range_2 = transport.items.create({
         'body': "In range item 1",
-        'timestamp': '2018-10-27 00:00:00'
+        'timestamp': '2018-10-27 00:00:00+0000'
     })
 
     too_new = transport.items.create({
         'body': "Too new item",
-        'timestamp': '2018-10-27 00:00:01'
+        'timestamp': '2018-10-27 00:00:01+0000'
     })
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
     request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'start_time': '2018-10-26',
-        'end_time': '2018-10-27',
+        'start_time': '2018-10-26 00:00:00+0000',
+        'end_time': '2018-10-27 00:00:00+0000',
     })
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
@@ -585,6 +585,42 @@ def test_table_items_filtered_by_feedback_type():
     assert rumour_2['id'] in ids
     assert concern['id'] not in ids
     assert uncategorised['id'] not in ids
+
+
+@pytest.mark.django_db
+def test_table_items_filtered_by_external_id():
+    matching_1 = transport.items.create({
+        'body': 'Matching 1',
+        'external_id': '08a28ec8-0c27-4cc7-9e2c-c27e04a28787',
+    })
+
+    matching_2 = transport.items.create({
+        'body': 'Matching 2',
+        'external_id': '932e3597-247d-4cc7-b16a-05d3a71c6d9c',
+    })
+
+    not_matching = transport.items.create({
+        'body': 'Not matching',
+        'external_id': 'd1ddf585-9d0e-4b64-bc6f-e4c30a24c3c0',
+    })
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}},
+                        GET={'external_id_pattern': '4cc7'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['external_id']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert matching_1['id'] in ids
+    assert matching_2['id'] in ids
+    assert not_matching['id'] not in ids
 
 
 @pytest.mark.django_db

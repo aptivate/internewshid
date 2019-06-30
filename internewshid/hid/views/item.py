@@ -192,7 +192,21 @@ class AddEditItemView(FormView):
         if form_class is None:
             form_class = self.form_class
 
-        return form_class(**self.get_form_kwargs())
+        kwargs = self.get_form_kwargs()
+
+        kwargs['feedback_disabled'] = self._feedback_disabled()
+
+        return form_class(**kwargs)
+
+    def _feedback_disabled(self):
+        if not hasattr(self.request, 'user'):
+            # only when testing?
+            return False
+
+        if self.request.user.has_perm('data_layer.can_change_message_body'):
+            return False
+
+        return True
 
     def get_context_data(self, **kwargs):
         """ Get the form's context data

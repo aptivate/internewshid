@@ -1,17 +1,8 @@
 from .activation import (  # noqa
-    ResetPassword,
-    change_password,
-    ActivationEmailsView,
-    SendActivationEmailView,
+    ActivationEmailsView, ResetPassword, SendActivationEmailView,
+    change_password
 )
-
 from .contact_info import (  # noqa
-    AddContact,
-    ListContacts,
-    ListContactsExport,
-    UpdateContactBase,
-    UpdateContact,
-    UpdatePersonalInfo,
-    DeleteContact,
-    get_permission
+    AddContact, DeleteContact, ListContacts, ListContactsExport, UpdateContact,
+    UpdateContactBase, UpdatePersonalInfo, get_permission
 )

@@ -62,12 +62,13 @@ class Importer(object):
             col_map = self.get_columns_map()
 
             for label in first_row[:len(col_map)]:
-                try:
-                    stripped_label = label.strip()
-                    columns.append(col_map[stripped_label])
-                except Exception:
-                    error_msg = _('Unknown column: %s') % label
-                    raise SheetImportException(error_msg)
+                if label is not None:
+                    try:
+                        stripped_label = label.strip()
+                        columns.append(col_map[stripped_label])
+                    except Exception:
+                        error_msg = _('Unknown column: %s') % label
+                        raise SheetImportException(error_msg)
         else:
             columns = [d.copy() for d in profile_columns]
 
@@ -136,7 +137,7 @@ class Importer(object):
 
         for obj in objects:
             row = obj.pop('_row_number', '')
-            terms = obj.pop('terms')
+            terms = obj.pop('terms', [])
             try:
                 item = transport.items.create(obj)
                 for term in terms:

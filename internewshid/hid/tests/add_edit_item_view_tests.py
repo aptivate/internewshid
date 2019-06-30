@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 import pytest
-from mock import patch
+from mock import Mock, patch
 
 import transport
 from hid.constants import ITEM_TYPE_CATEGORY
@@ -1004,3 +1004,45 @@ def test_form_initial_values_include_feedback_type(generic_item):
 
         initial = view.get_initial()
         assert initial['feedback_type'] == 'concern'
+
+
+@pytest.mark.django_db
+def test_feedback_disabled_if_user_does_not_have_permission(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+
+        view = get_view_for_request(AddEditItemView, 'edit-item',
+                                    kwargs={'item_id': 1})
+
+        user = Mock()
+        user.has_perm.return_value = False
+
+        view.request.user = user
+
+        response = view.get(view.request, *view.args, **view.kwargs)
+        user.has_perm.assert_called_with('data_layer.can_change_message_body')
+
+        form = response.context_data['form']
+
+        assert form.fields['body'].disabled is True
+
+
+@pytest.mark.django_db
+def test_feedback_enabled_if_user_has_permission(generic_item):
+    with patch('hid.views.item.transport.items.get') as get_item:
+        get_item.return_value = generic_item
+
+        view = get_view_for_request(AddEditItemView, 'edit-item',
+                                    kwargs={'item_id': 1})
+
+        user = Mock()
+        user.has_perm.return_value = True
+
+        view.request.user = user
+
+        response = view.get(view.request, *view.args, **view.kwargs)
+        user.has_perm.assert_called_with('data_layer.can_change_message_body')
+
+        form = response.context_data['form']
+
+        assert form.fields['body'].disabled is False

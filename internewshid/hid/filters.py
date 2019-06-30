@@ -90,3 +90,11 @@ class FeedbackTypeFilter(object):
             filters.setdefault('terms', []).append(
                 'item-types:{}'.format(feedback_type)
             )
+
+
+class ExternalIdFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        pattern = query_dict.get('external_id_pattern', None)
+
+        if pattern:
+            filters.update(external_id_pattern=pattern)
