@@ -30,11 +30,11 @@ def test_location_coverage(client):
     taxonomy = Taxonomy.objects.create(name='topicbaz')
     item1 = Item.objects.create(location='locationfoo', timestamp=NOW)
 
-    term = Term.objects.create(taxonomy=taxonomy, long_name='termbar')
+    term = Term.objects.create(taxonomy=taxonomy, name='termbar')
     item1.terms.add(term)
     item1.save()
 
-    item2 = Item.objects.create()
+    Item.objects.create()
 
     response = client.get(reverse('location-coverage'))
 
