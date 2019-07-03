@@ -38,17 +38,6 @@ class TermSerializer(serializers.ModelSerializer):
     )
 
 
-class LocationCoverageTermSerializer(TermSerializer):
-    class Meta:
-        model = Term
-        fields = (
-            'long_name',
-        )
-
-    def to_representation(self, instance):
-        return instance.long_name
-
-
 class TermItemCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Term
@@ -61,6 +50,17 @@ class TermItemCountSerializer(serializers.ModelSerializer):
     count = serializers.IntegerField(
         read_only=True
     )
+
+
+class TermExportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Term
+        fields = (
+            'name',
+        )
+
+    def to_representation(self, instance):
+        return instance.name
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -111,7 +111,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class LocationCoverageSerializer(ItemSerializer):
-    terms = LocationCoverageTermSerializer(many=True)
+    terms = TermExportSerializer(many=True)
 
     # https://github.com/wq/django-rest-pandas#date-formatting
     timestamp = serializers.DateField(format=None)
@@ -126,7 +126,7 @@ class LocationCoverageSerializer(ItemSerializer):
 
 
 class ItemExportSerializer(ItemSerializer):
-    terms = LocationCoverageTermSerializer(many=True)
+    terms = TermExportSerializer(many=True)
 
     # https://github.com/wq/django-rest-pandas#date-formatting
     timestamp = serializers.DateField(format=None)
