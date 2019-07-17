@@ -470,7 +470,7 @@ def test_duplicate_records_not_imported(importer):
 
     items = transport.items.list()
 
-    assert len(items) == 2
+    assert len(items['results']) == 2
 
 
 @pytest.mark.django_db

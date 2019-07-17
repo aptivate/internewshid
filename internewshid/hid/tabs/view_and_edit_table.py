@@ -76,7 +76,7 @@ class ViewAndEditTableTab(object):
                     a dictionary of filters that is passed
                     on to the transport API.
             Returns:
-                QuerySet: The items to list on the page
+                dict: The items to list on the page
         """
         filters = self._get_filters(request, **kwargs)
 
@@ -95,6 +95,15 @@ class ViewAndEditTableTab(object):
         source = filters.get('source')
         if source and source == 'All Sources':
             filters.pop('source')
+
+        limit = kwargs.get('per_page', 100)
+        filters['limit'] = limit
+
+        page = int(request.GET.get('page', 1)) - 1
+        filters['offset'] = limit * page
+
+        sort = request.GET.get('sort', '-timestamp'),
+        filters['ordering'] = sort
 
         return transport_items.list(**filters)
 
@@ -236,7 +245,8 @@ class ViewAndEditTableTab(object):
 
     def get_context_data(self, tab_instance, request, **kwargs):
         filters = kwargs.get('filters', {})
-        items = self._get_items(request, **kwargs)
+        response = self._get_items(request, **kwargs)
+        items = response['results']
 
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
@@ -245,17 +255,17 @@ class ViewAndEditTableTab(object):
         source_options = self._get_source_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
 
+        per_page = int(kwargs.get('per_page', 100))
+        page_number = int(request.GET.get('page', 1))
+        total_items = int(response['count'])
+
         table = ItemTable(
             items,
+            total_items=total_items,
+            per_page=per_page,
+            page_number=page_number,
             categories=category_options,
-            exclude=self._get_columns_to_exclude(**kwargs),
-            orderable=True,
-            order_by=request.GET.get('sort', None),
-        )
-
-        table.paginate(
-            per_page=kwargs.get('per_page', 100),
-            page=request.GET.get('page', 1)
+            exclude=self._get_columns_to_exclude(**kwargs)
         )
 
         actions = self._build_actions_dropdown(category_options)

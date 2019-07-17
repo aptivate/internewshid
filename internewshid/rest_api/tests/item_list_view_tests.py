@@ -105,8 +105,10 @@ def test_filter_by_date_range():
     }).data
 
     assert len(payload) == 2
-    assert payload[0]['body'] == "In range item 1"
-    assert payload[1]['body'] == "In range item 2"
+
+    # default ordering is timestamp desc
+    assert payload[0]['body'] == "In range item 2"
+    assert payload[1]['body'] == "In range item 1"
 
 
 @pytest.mark.django_db
@@ -267,3 +269,63 @@ def test_item_listed_with_associated_terms():
     assert len(nested_terms) == 3
     term_names = [term.name for term in terms]
     assert all(t['name'] in term_names for t in nested_terms)
+
+
+@pytest.mark.django_db
+def test_ordering_by_default_is_timestamp_desc():
+    create_item(
+        body="item 1",
+        timestamp='2018-10-25 23:59:59+0000'
+    )
+
+    create_item(
+        body="item 2",
+        timestamp='2018-10-26 00:00:00+0000'
+    )
+
+    create_item(
+        body="item 3",
+        timestamp='2018-10-27 00:00:00+0000'
+    )
+
+    create_item(
+        body="item 4",
+        timestamp='2018-10-27 00:00:01+0000'
+    )
+
+    payload = get(data={}).data
+
+    assert payload[0]['body'] == "item 4"
+    assert payload[1]['body'] == "item 3"
+    assert payload[2]['body'] == "item 2"
+    assert payload[3]['body'] == "item 1"
+
+
+@pytest.mark.django_db
+def test_ordering_by_body():
+    create_item(
+        body="item 1",
+        timestamp='2018-10-25 23:59:59+0000'
+    )
+
+    create_item(
+        body="item 2",
+        timestamp='2018-10-26 00:00:00+0000'
+    )
+
+    create_item(
+        body="item 3",
+        timestamp='2018-10-27 00:00:00+0000'
+    )
+
+    create_item(
+        body="item 4",
+        timestamp='2018-10-27 00:00:01+0000'
+    )
+
+    payload = get(data={'ordering': 'body'}).data
+
+    assert payload[0]['body'] == "item 1"
+    assert payload[1]['body'] == "item 2"
+    assert payload[2]['body'] == "item 3"
+    assert payload[3]['body'] == "item 4"

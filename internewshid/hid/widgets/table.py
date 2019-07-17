@@ -23,17 +23,13 @@ class TableWidget(object):
         title = kwargs.get('title', '(no title)')
         filters = kwargs.get('filters', {})
         count = kwargs.get('count', 10)
-        order_by = kwargs.get('order_by', None)
+        order_by = kwargs.get('order_by', '-timestamp')
 
-        # Fetch items. Eventually sorting & limiting
-        # number of items will be sorted by the API.
-        items = transport.items.list(**filters)
-        if order_by:
-            if order_by.startswith('-'):
-                items.sort(key=lambda e: e[order_by[1:]], reverse=True)
-            else:
-                items.sort(key=lambda e: e[order_by])
-        items = items[0:count]
+        filters['limit'] = count
+        filters['ordering'] = order_by
+
+        response = transport.items.list(**filters)
+        items = response['results']
 
         # Prepare table object
         table = ItemTable(

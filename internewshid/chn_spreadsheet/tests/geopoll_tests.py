@@ -20,7 +20,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_items_imported(importer):
-    assert len(transport.items.list()) == 0
+    assert len(transport.items.list()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_geopoll.xlsx')
     f = open(file_path, 'rb')
@@ -28,7 +28,7 @@ def test_items_imported(importer):
     (num_saved, _) = importer.store_spreadsheet('geopoll', f)
     assert num_saved > 0
 
-    items = transport.items.list()
+    items = transport.items.list()['results']
     assert len(items) == num_saved
 
     assert items[0]['body'] == "What  is  the  cuse  of  ebola?"
