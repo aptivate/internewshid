@@ -33,15 +33,22 @@ def list(**kwargs):
     to filter the Items.
     """
     # FIXME: currently only body exact filtering is supported
+
+    # We want to return a paginated response always.
+    # If limit hasn't been set we need to set it to something.
+    # Otherwise the response will be a list of objects. The
+    # alternative is to set PAGE_SIZE in the settings
+    kwargs.setdefault('limit', 1000)
+
     view = get_view({'get': 'list'})
     request = request_factory.get("", kwargs)
 
-    items = view(request).data
+    response = view(request).data
 
-    for item in items:
+    for item in response['results']:
         item.update(_parse_date_fields(item))
 
-    return items
+    return response
 
 
 def get(id):

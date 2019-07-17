@@ -20,31 +20,31 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_kobo_items_imported(importer, django_db_setup):
-    assert len(transport.items.list()) == 0
+    assert len(transport.items.list()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
     (num_saved, _) = importer.store_spreadsheet('kobo', open(file_path, 'rb'))
 
     assert num_saved > 0
 
-    items = transport.items.list()
+    items = transport.items.list()['results']
 
     assert len(items) == num_saved
 
-    assert items[0]['body'] == 'the community members want more food.'
-    assert items[0]['translation'] == ''
-    assert items[0]['location'] == 'Camp 4'
-    assert isinstance(items[0]['timestamp'], datetime.datetime)
+    # default ordering is by timestamp desc
+    assert items[2]['body'] == 'the community members want more food.'
+    assert items[2]['translation'] == ''
+    assert items[2]['location'] == 'Camp 4'
+    assert isinstance(items[2]['timestamp'], datetime.datetime)
 
 
 @pytest.mark.django_db  # noqa
 def test_kobo_empty_body_is_allowed(importer):
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
     importer.store_spreadsheet('kobo', open(file_path, 'rb'))
-    items = transport.items.list()
+    items = transport.items.list(external_id_pattern='e057')['results']
 
-    with_empty_body_item = items[1]
-
-    assert with_empty_body_item['body'] == ''
+    assert len(items) == 1
+    assert items[0]['body'] == ''
 
     assert Item.objects.count() == 3

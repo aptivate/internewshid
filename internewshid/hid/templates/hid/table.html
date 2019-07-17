@@ -2,28 +2,10 @@
 {% load django_tables2 %}
 {% load i18n %}
 
-{% block pagination.previous %}
-                    <li class="previous">
-                        <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}">
-                            <span aria-hidden="true">&lt;</span>
-                            {% trans 'Previous page' %}
-                        </a>
-                        {% endblock pagination.previous %}
-
-{% block pagination.next %}
-                <li class="next">
-                    <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}">
-                        {% trans 'Next page' %}
-                        <span aria-hidden="true">&gt;</span>
-                    </a>
-                </li>
-{% endblock pagination.next %}
-
-
 {% block pagination %}
 <div class="pagination-wrapper">
-{% if table.page %}
-{% with total=table.page.paginator.count count=table.page.object_list|length start_index=table.page.start_index end_index=table.page.end_index %}
+{% if table.has_pages %}
+{% with total=table.total_items start_index=table.start_index end_index=table.end_index %}
 {% if total == 1 %}
     {% trans "result" as results %}
 {% else %}
@@ -34,7 +16,49 @@
 
 {% endif %}
 <div class="box pagination-pages">
-{{ block.super }}
+        {% if table.has_pages and table.num_pages > 1 %}
+        <nav aria-label="Table navigation">
+            <ul class="pagination">
+            {% if table.has_previous %}
+                {% block pagination.previous %}
+                    <li class="previous">
+                        <a href="{% querystring table.prefixed_page_field=table.previous_page_number %}">
+                            <span aria-hidden="true">&lt;</span>
+                            {% trans 'Previous page' %}
+                        </a>
+                    </li>
+                {% endblock pagination.previous %}
+            {% endif %}
+            {% if table.has_previous or table.has_next %}
+                {% block pagination.range %}
+                    {% for p in table.page_range %}
+                        <li {% if p == table.page_number %}class="active"{% endif %}>
+                            {% if p == '...' %}
+                                <a href="#">{{ p }}</a>
+                            {% else %}
+                                <a href="{% querystring table.prefixed_page_field=p %}">
+                                    {{ p }}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endblock pagination.range %}
+            {% endif %}
+
+            {% if table.has_next %}
+                {% block pagination.next %}
+                <li class="next">
+                    <a href="{% querystring table.prefixed_page_field=table.next_page_number %}">
+                        {% trans 'Next page' %}
+                        <span aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
+                {% endblock pagination.next %}
+            {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
 </div>
 <div class="box pagination-selector">
 <span>&nbsp;</span>
