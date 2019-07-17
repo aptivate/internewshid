@@ -19,25 +19,26 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_kobo_master_items_imported(importer, django_db_setup):
-    assert len(transport.items.list()) == 0
+    assert len(transport.items.list()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo_master.xlsx')
     (num_saved, _) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
 
     assert num_saved > 0
 
-    items = transport.items.list()
+    # Default ordering is timestamp desc
+    items = transport.items.list()['results']
 
     assert len(items) == num_saved
 
-    assert items[0]['body'] == 'sample feedback'
-    assert items[0]['translation'] == 'sample translation'
-    assert items[0]['gender'] == 'male'
-    assert items[0]['age'] == '41'
-    assert items[0]['location'] == 'Camp 1W'
-    assert items[0]['enumerator'] == 'osman'
-    assert items[0]['source'] == 'sample source'
-    assert isinstance(items[0]['timestamp'], datetime.datetime)
+    assert items[1]['body'] == 'sample feedback'
+    assert items[1]['translation'] == 'sample translation'
+    assert items[1]['gender'] == 'male'
+    assert items[1]['age'] == '41'
+    assert items[1]['location'] == 'Camp 1W'
+    assert items[1]['enumerator'] == 'osman'
+    assert items[1]['source'] == 'sample source'
+    assert isinstance(items[1]['timestamp'], datetime.datetime)
 
     tags = []
     for item in items:

@@ -166,3 +166,52 @@ def test_render_feedback_type_passes_context_to_template(mock_loader):
 
     assert args[0]['record'] == record
     assert args[0]['feedback_types'] == 'Concern, Rumour'
+
+
+def test_total_items_is_count_of_items_if_none():
+    table = ItemTable(['one', 'two', 'three'])
+
+    assert table.total_items == 3
+
+
+def test_total_items_is_set_from_kwarg():
+    table = ItemTable(['one', 'two', 'three'],
+                      total_items=10)
+
+    assert table.total_items == 10
+
+
+def test_page_range_for_first_of_few_pages():
+    table = ItemTable(['one', 'two', 'three'],
+                      per_page=3,
+                      page_number=1,
+                      total_items=10)
+
+    assert table.page_range == [1, 2, 3]
+
+
+def test_page_range_for_first_of_lots_of_pages():
+    table = ItemTable(['one', 'two', 'three'],
+                      per_page=3,
+                      page_number=1,
+                      total_items=100)
+
+    assert table.page_range == [1, 2, 3, 4, '...', 33]
+
+
+def test_page_range_for_middle_of_lots_of_pages():
+    table = ItemTable(['one', 'two', 'three'],
+                      per_page=3,
+                      page_number=15,
+                      total_items=100)
+
+    assert table.page_range == [1, '...', 14, 15, '...', 33]
+
+
+def test_page_range_for_last_of_lots_of_pages():
+    table = ItemTable(['one', 'two', 'three'],
+                      per_page=3,
+                      page_number=33,
+                      total_items=100)
+
+    assert table.page_range == [1, '...', 30, 31, 32, 33]

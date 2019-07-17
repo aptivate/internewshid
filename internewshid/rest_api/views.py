@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from rest_framework import status, viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
@@ -20,6 +21,7 @@ from .serializers import (
 
 class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     serializer_class = ItemSerializer
+    pagination_class = LimitOffsetPagination
     filter_fields = (
         'created',
         'body',
@@ -103,6 +105,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             'external_id_pattern', None)
         if external_id_pattern is not None:
             items = items.filter(external_id__contains=external_id_pattern)
+
+        ordering = self.request.query_params.get('ordering', '-timestamp')
+        items = items.order_by(ordering)
 
         return items
 

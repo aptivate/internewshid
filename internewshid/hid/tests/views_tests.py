@@ -73,7 +73,7 @@ def request_item():
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
-    [item] = list(transport.items.list())
+    [item] = list(transport.items.list()['results'])
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {
@@ -90,7 +90,7 @@ def request_item():
 def check_item_was_deleted(request):
     assert check_message(request, u"1 item deleted.") is True
 
-    items = list(transport.items.list())
+    items = list(transport.items.list()['results'])
     assert len(list(items)) == 0
 
 
@@ -113,7 +113,7 @@ def test_process_items_removes_question_type(item_type_taxonomy):
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
-    [item] = list(transport.items.list())
+    [item] = list(transport.items.list()['results'])
 
     term_to_delete = TermFactory(name='term to be deleted',
                                  taxonomy=item_type_taxonomy)
@@ -135,7 +135,7 @@ def test_process_items_removes_question_type(item_type_taxonomy):
     request = fix_messages(request)
     view_and_edit_table_form_process_items(request)
 
-    [item] = list(transport.items.list())
+    [item] = list(transport.items.list()['results'])
 
     term_names = [t['name'] for t in item['terms']]
 
@@ -686,3 +686,62 @@ def test_feedback_type_options_in_context_data():
     ]
 
     assert context_data['feedback_type_options'] == expected_options
+
+
+@pytest.mark.django_db
+def test_items_sorted_by_timestamp_desc_by_default():
+    transport.items.create({
+        'body': "item 4",
+        'timestamp': '2018-10-27 00:00:01+0000'
+    })
+
+    transport.items.create({
+        'body': "item 1",
+        'timestamp': '2018-10-25 23:59:59+0000'
+    })
+
+    transport.items.create({
+        'body': "item 3",
+        'timestamp': '2018-10-27 00:00:00+0000'
+    })
+
+    transport.items.create({
+        'body': "item 2",
+        'timestamp': '2018-10-26 00:00:00+0000'
+    })
+
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    tab = ViewAndEditTableTab()
+
+    response = tab._get_items(request)
+
+    items = response['results']
+
+    assert items[0]['body'] == 'item 4'
+    assert items[1]['body'] == 'item 3'
+    assert items[2]['body'] == 'item 2'
+    assert items[3]['body'] == 'item 1'
+
+
+@pytest.mark.django_db
+def test_items_paginated():
+    for i in range(10):
+        transport.items.create({
+            'body': "item {}".format(i),
+        })
+
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
+        'page': '2',
+    })
+    tab = ViewAndEditTableTab()
+
+    response = tab._get_items(request, per_page='3', ordering='body')
+    assert response['count'] == 10
+
+    items = response['results']
+
+    assert len(items) == 3
+
+    assert items[0]['body'] == 'item 3'
+    assert items[1]['body'] == 'item 4'
+    assert items[2]['body'] == 'item 5'
