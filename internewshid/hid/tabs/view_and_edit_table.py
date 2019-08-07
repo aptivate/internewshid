@@ -14,6 +14,7 @@ from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
+from hid.data import PreSortedTableListData
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
@@ -246,7 +247,7 @@ class ViewAndEditTableTab(object):
     def get_context_data(self, tab_instance, request, **kwargs):
         filters = kwargs.get('filters', {})
         response = self._get_items(request, **kwargs)
-        items = response['results']
+        items = PreSortedTableListData(response['results'])
 
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
@@ -265,7 +266,9 @@ class ViewAndEditTableTab(object):
             per_page=per_page,
             page_number=page_number,
             categories=category_options,
-            exclude=self._get_columns_to_exclude(**kwargs)
+            exclude=self._get_columns_to_exclude(**kwargs),
+            orderable=True,
+            order_by=request.GET.get('sort', None),
         )
 
         actions = self._build_actions_dropdown(category_options)
@@ -357,7 +360,7 @@ def _get_view_and_edit_form_request_parameters(params):
         if name == 'action':
             value = [action]
         elif name.endswith(placement):
-            name = name[0:len(name)-len(placement)-1]
+            name = name[0:len(name) - len(placement) - 1]
         new_params.setlist(name, value)
     if 'action' not in new_params:
         new_params['action'] = 'none'
