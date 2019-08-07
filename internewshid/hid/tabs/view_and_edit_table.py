@@ -9,12 +9,12 @@ from django.utils.translation import ungettext
 
 from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
+from hid.data import PreSortedTableListData
 from hid.tables import ItemTable
 from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
-from hid.data import PreSortedTableListData
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
