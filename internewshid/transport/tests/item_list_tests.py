@@ -10,13 +10,13 @@ from data_layer.tests.factories import ItemFactory
 
 @pytest.mark.django_db
 def test_list_items_exists():
-    assert transport.items.list()['results'] == []
+    assert transport.items.list_items()['results'] == []
 
 
 @pytest.mark.django_db
 def test_list_items_returns_items():
     item = ItemFactory(body="test")
-    items = transport.items.list()['results']
+    items = transport.items.list_items()['results']
     assert len(items) == 1
     [item] = items
     assert item['body'] == 'test'
@@ -26,7 +26,7 @@ def test_list_items_returns_items():
 def test_list_items_filters_by_body():
     ItemFactory(body="one")
     ItemFactory(body="two")
-    items = transport.items.list(body='one')['results']
+    items = transport.items.list_items(body='one')['results']
     assert len(items) == 1
     [item] = items
     assert item['body'] == 'one'
@@ -35,7 +35,7 @@ def test_list_items_filters_by_body():
 @pytest.mark.django_db
 def test_date_fields_are_converted_to_datetimes():
     stored_item = ItemFactory()
-    retrieved_items = transport.items.list()['results']
+    retrieved_items = transport.items.list_items()['results']
     [retrieved_item] = retrieved_items
     date_fields = ('timestamp', 'created', 'last_modified')
     for date_field in date_fields:
@@ -45,6 +45,6 @@ def test_date_fields_are_converted_to_datetimes():
 @pytest.mark.django_db
 def test_null_date_field_not_converted_to_datetime():
     ItemFactory(timestamp=None)
-    retrieved_items = transport.items.list()['results']
+    retrieved_items = transport.items.list_items()['results']
     [retrieved_item] = retrieved_items
     assert retrieved_item['timestamp'] is None

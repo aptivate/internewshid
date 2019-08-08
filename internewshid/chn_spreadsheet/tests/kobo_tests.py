@@ -20,14 +20,14 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_kobo_items_imported(importer, django_db_setup):
-    assert len(transport.items.list()['results']) == 0
+    assert len(transport.items.list_items()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
     (num_saved, _) = importer.store_spreadsheet('kobo', open(file_path, 'rb'))
 
     assert num_saved > 0
 
-    items = transport.items.list()['results']
+    items = transport.items.list_items()['results']
 
     assert len(items) == num_saved
 
@@ -42,7 +42,7 @@ def test_kobo_items_imported(importer, django_db_setup):
 def test_kobo_empty_body_is_allowed(importer):
     file_path = path.join(TEST_DIR, 'sample_kobo.xlsx')
     importer.store_spreadsheet('kobo', open(file_path, 'rb'))
-    items = transport.items.list(external_id_pattern='e057')['results']
+    items = transport.items.list_items(external_id_pattern='e057')['results']
 
     assert len(items) == 1
     assert items[0]['body'] == ''

@@ -28,7 +28,7 @@ class TableWidget(object):
         filters['limit'] = count
         filters['ordering'] = order_by
 
-        response = transport.items.list(**filters)
+        response = transport.items.list_items(**filters)
         items = response['results']
 
         # Prepare table object

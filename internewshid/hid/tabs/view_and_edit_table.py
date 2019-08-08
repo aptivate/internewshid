@@ -15,6 +15,7 @@ from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
+from data_layer.models import Item
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'
@@ -106,7 +107,7 @@ class ViewAndEditTableTab(object):
         sort = request.GET.get('sort', '-timestamp'),
         filters['ordering'] = sort
 
-        return transport_items.list(**filters)
+        return transport_items.list_items(**filters)
 
     def _get_filters(self, request, **kwargs):
         filters = kwargs.pop('filters', {})
@@ -181,31 +182,19 @@ class ViewAndEditTableTab(object):
         return tuple((t['name'], t['name']) for t in all_terms)
 
     def _get_location_options(self, items_list, **kwargs):
-        locations = list(set(filter(None, [
-            item['location'] for item in items_list
-        ])))
-        locations.sort()
+        locations = transport_items.list_options('location')
         return {'items': locations}
 
     def _get_gender_options(self, items_list, **kwargs):
-        genders = list(set(filter(None, [
-            item['gender'] for item in items_list
-        ])))
-        genders.sort()
+        genders = transport_items.list_options('gender')
         return {'items': genders}
 
     def _get_enumerator_options(self, items_list, **kwargs):
-        enumerators = list(set(filter(None, [
-            item['enumerator'] for item in items_list
-        ])))
-        enumerators.sort()
+        enumerators = transport_items.list_options('enumerator')
         return {'items': enumerators}
 
     def _get_source_options(self, items_list, **kwargs):
-        sources = list(set(filter(None, [
-            item['source'] for item in items_list
-        ])))
-        sources.sort()
+        sources = transport_items.list_options('source')
         return {'items': sources}
 
     def _get_feedback_type_options(self):
