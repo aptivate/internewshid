@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
+from data_layer.models import Item
 from hid.assets import require_assets
 from hid.constants import ITEM_TYPE_CATEGORY
 from hid.data import PreSortedTableListData
@@ -15,7 +16,6 @@ from tabbed_page.filter_pool import get_filter
 from transport import items as transport_items
 from transport import terms as transport_terms
 from transport.exceptions import TransportException
-from data_layer.models import Item
 
 ADD_CATEGORY_PREFIX = 'add-category-'
 DELETE_COMMAND = 'delete'

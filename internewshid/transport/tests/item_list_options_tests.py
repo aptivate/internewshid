@@ -1,8 +1,8 @@
+import pytest
 from django_dynamic_fixture import G
 
 from data_layer.models import Item
 from transport.items import list_options
-import pytest
 
 
 @pytest.mark.django_db
