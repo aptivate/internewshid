@@ -19,6 +19,11 @@ from .serializers import (
 )
 
 
+class OptionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
+
 class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
     serializer_class = ItemSerializer
     pagination_class = LimitOffsetPagination

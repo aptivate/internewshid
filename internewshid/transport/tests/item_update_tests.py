@@ -21,9 +21,9 @@ def test_update_item_updates_item():
     response = items.update(id, data)
 
     # TODO: Update to use items.get() when ready
-    assert len(items.list(body="Text")['results']) == 0
+    assert len(items.list_items(body="Text")['results']) == 0
 
-    [updated_item] = items.list(body="Updated text")['results']
+    [updated_item] = items.list_items(body="Updated text")['results']
 
     assert updated_item['id'] == id
 

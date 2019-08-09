@@ -53,7 +53,7 @@ def test_add_categories_adds_term_to_item(term, item):
     request = fix_messages(request)
     _add_items_categories(request, category_list)
 
-    [item_data] = transport.items.list()['results']
+    [item_data] = transport.items.list_items()['results']
     [term_data] = item_data['terms']
     assert term_data['name'] == term.name
     assert term_data['taxonomy'] == term.taxonomy.slug
@@ -76,7 +76,7 @@ def test_add_items_categories_adds_term_to_items(terms, items):
     ]
     _add_items_categories(request, category_map)
 
-    fetched_items = transport.items.list()['results']
+    fetched_items = transport.items.list_items()['results']
     found = 0
     for item in fetched_items:
         if item['id'] in expected:
@@ -100,5 +100,5 @@ def test_add_items_categories_removes_term_from_item(term, item):
     request = fix_messages(request)
     _add_items_categories(request, category_list)
 
-    [item_data] = transport.items.list()['results']
+    [item_data] = transport.items.list_items()['results']
     assert len(item_data['terms']) == 0

@@ -1,11 +1,12 @@
 from datetime import datetime
 
+from django.utils.datastructures import OrderedSet
 from django.utils.dateparse import parse_datetime
 
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from rest_api.views import ItemViewSet
+from rest_api.views import ItemViewSet, OptionViewSet
 
 from .exceptions import ItemNotUniqueException, TransportException
 
@@ -17,7 +18,7 @@ def get_view(actions):
 
 
 def _parse_date_fields(item):
-    date_fields = ('created', 'timestamp', 'last_modified', )
+    date_fields = ('created', 'timestamp', 'last_modified',)
     item_dict = dict(item)
     for date_field in date_fields:
         value = item_dict[date_field]
@@ -26,7 +27,7 @@ def _parse_date_fields(item):
     return item_dict
 
 
-def list(**kwargs):
+def list_items(**kwargs):
     """ Return a list of Items
 
     If keyword arguments are given, they are used
@@ -49,6 +50,18 @@ def list(**kwargs):
         item.update(_parse_date_fields(item))
 
     return response
+
+
+def list_options(field):
+    view = OptionViewSet.as_view(actions={'get': 'list'})
+    request = request_factory.get("", {'fields': field})
+
+    response = view(request).data
+    results = list(OrderedSet(filter(
+        lambda x: x is not None and x != '',
+        [item[field] for item in response]
+    )))
+    return results
 
 
 def get(id):

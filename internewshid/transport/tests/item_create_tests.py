@@ -19,12 +19,12 @@ def now():
 @pytest.mark.django_db
 def test_create_item_creates_item(now):
     item = {'body': "Text", 'timestamp': now}
-    old_count = len(items.list()['results'])
+    old_count = len(items.list_items()['results'])
 
     response = items.create(item)
 
     assert 'id' in response
-    new_count = len(items.list()['results'])
+    new_count = len(items.list_items()['results'])
     assert new_count > old_count
 
 

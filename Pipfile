@@ -32,6 +32,7 @@ pytz = "*"
 rest-pandas = "*"
 pymysql = "*"
 django-debug-toolbar-template-timings = "*"
+drf-dynamic-fields = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
@@ -48,3 +49,4 @@ pytest-env = "*"
 pytest-pythonpath = "*"
 werkzeug = "*"
 pydocstyle = "==3.0.0"
+django-dynamic-fixture = "*"
