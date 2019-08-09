@@ -11,7 +11,7 @@ python_version = "2.7"
 "django-tables2" = "==2.0.6"
 "django.js" = {editable = true,git = "https://git@github.com/aptivate/django.js.git",ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19"}
 "linecache2" = "*"
-Django = "==1.11.22"
+Django = ">1.11.22,<2.0"
 Pillow = "*"
 cssmin = "*"
 django-assets = "*"
