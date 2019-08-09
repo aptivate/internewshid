@@ -493,3 +493,32 @@ def test_can_save_rows_without_terms(importer):
     num_saved = importer.save_rows(objects)
 
     assert num_saved == 1
+
+
+def test_terms_in_row_split_on_comma(importer):
+    row = [
+        'Tag 1, Tag 2',
+    ]
+
+    columns = [
+        {
+            'name': 'Tags',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'tags',
+        }
+    ]
+
+    converted = importer.process_row(row, columns)
+    assert converted == {
+        'terms': [
+            {
+                'name': 'Tag 1',
+                'taxonomy': 'tags',
+            },
+            {
+                'name': 'Tag 2',
+                'taxonomy': 'tags',
+            },
+        ]
+    }
