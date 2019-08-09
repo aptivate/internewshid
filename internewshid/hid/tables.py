@@ -8,27 +8,30 @@ from hid.constants import ITEM_TYPE_CATEGORY
 
 
 class NamedCheckBoxColumn(tables.CheckBoxColumn):
+
     @property
     def header(self):
         return self.verbose_name
 
 
 class ItemTable(tables.Table):
+
     class Meta:
         attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
         template_name = 'hid/table.html'
+        order_by = '-timestamp'
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
         verbose_name=_('Select'),
         attrs={'th': {'id': 'header-select'}}
     )
-    created = tables.columns.TemplateColumn(
+    created = tables.TemplateColumn(
         template_name='hid/created_column.html',
         verbose_name=_('Imported'),
         attrs={'th': {'id': 'header-imported'}}
     )
-    timestamp = tables.columns.TemplateColumn(
+    timestamp = tables.TemplateColumn(
         template_name='hid/timestamp_column.html',
         verbose_name=_('Created'),
         attrs={'th': {'id': 'header-created'}}
@@ -124,6 +127,7 @@ class ItemTable(tables.Table):
             self.page_range = self.get_page_range()
 
         self.categories = kwargs.pop('categories', [])
+
         super(ItemTable, self).__init__(items, *args, **kwargs)
 
     def get_page_range(self):
@@ -228,6 +232,6 @@ class ItemTable(tables.Table):
         values = []
         for name, value in params.items():
             if name.startswith(input_prefix + '-'):
-                row_id = int(name[len(input_prefix)+1:])
+                row_id = int(name[len(input_prefix) + 1:])
                 values.append((row_id, value))
         return values
