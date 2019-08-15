@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from django.utils.datastructures import OrderedSet
 from django.utils.dateparse import parse_datetime
 
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
-from rest_api.views import ItemViewSet, OptionViewSet
+from data_layer.models import Item
+from rest_api.views import ItemViewSet
 
 from .exceptions import ItemNotUniqueException, TransportException
 
@@ -53,14 +53,22 @@ def list_items(**kwargs):
 
 
 def list_options(field):
-    view = OptionViewSet.as_view(actions={'get': 'list'})
-    request = request_factory.get("", {'fields': field})
+    filter_1 = {
+        '{0}__isnull'.format(field): True,
+    }
+    filter_2 = {
+        '{0}__exact'.format(field): ''
+    }
 
-    response = view(request).data
-    results = list(OrderedSet(filter(
-        lambda x: x is not None and x != '',
-        [item[field] for item in response]
-    )))
+    query = Item.objects.exclude(**filter_1).exclude(**filter_2)
+
+    results = (
+        item for item in
+        query.distinct().values_list(field, flat=True).order_by(
+            field
+        )
+    )
+
     return results
 
 

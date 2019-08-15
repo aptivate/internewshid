@@ -32,7 +32,6 @@ pytz = "*"
 rest-pandas = "*"
 pymysql = "*"
 django-debug-toolbar-template-timings = "*"
-drf-dynamic-fields = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
