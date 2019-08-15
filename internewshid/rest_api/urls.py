@@ -3,8 +3,8 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from .views import (
-    ItemExportView, ItemViewSet, LocationCoverageView, OptionViewSet,
-    TaxonomyViewSet, TermViewSet
+    ItemExportView, ItemViewSet, LocationCoverageView, TaxonomyViewSet,
+    TermViewSet
 )
 
 router = routers.SimpleRouter()
@@ -12,11 +12,6 @@ router.register(
     r'items',
     ItemViewSet,
     base_name='item'  # TODO: remove when Message model renamed Item
-)
-router.register(
-    r'options',
-    OptionViewSet,
-    base_name='option'
 )
 router.register(
     r'taxonomies',

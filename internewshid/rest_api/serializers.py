@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-from drf_dynamic_fields import DynamicFieldsMixin
 from rest_framework import serializers, validators
 
 from data_layer.models import Item
@@ -66,7 +65,7 @@ class TermExportSerializer(serializers.ModelSerializer):
         return instance.name
 
 
-class ItemSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
