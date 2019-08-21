@@ -19,7 +19,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_kobo_master_items_imported(importer, django_db_setup):
-    assert len(transport.items.list()['results']) == 0
+    assert len(transport.items.list_items()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo_master.xlsx')
     (num_saved, _) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
@@ -27,7 +27,7 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     assert num_saved > 0
 
     # Default ordering is timestamp desc
-    items = transport.items.list()['results']
+    items = transport.items.list_items()['results']
 
     assert len(items) == num_saved
 

@@ -39,6 +39,7 @@ class TermSerializer(serializers.ModelSerializer):
 
 
 class TermItemCountSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Term
         fields = (
@@ -53,6 +54,7 @@ class TermItemCountSerializer(serializers.ModelSerializer):
 
 
 class TermExportSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Term
         fields = (
@@ -64,6 +66,7 @@ class TermExportSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Item
         fields = (

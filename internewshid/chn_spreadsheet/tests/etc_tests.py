@@ -19,14 +19,14 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 @pytest.mark.django_db  # noqa
 def test_etc_items_imported(importer, django_db_setup):
-    assert len(transport.items.list()['results']) == 0
+    assert len(transport.items.list_items()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_etc.xlsx')
     (num_saved, _) = importer.store_spreadsheet('etc', open(file_path, 'rb'))
 
     assert num_saved > 0
 
-    items = transport.items.list()['results']
+    items = transport.items.list_items()['results']
 
     assert len(items) == num_saved
 

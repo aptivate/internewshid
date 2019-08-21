@@ -5,6 +5,7 @@ from django.utils.dateparse import parse_datetime
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 
+from data_layer.models import Item
 from rest_api.views import ItemViewSet
 
 from .exceptions import ItemNotUniqueException, TransportException
@@ -17,7 +18,7 @@ def get_view(actions):
 
 
 def _parse_date_fields(item):
-    date_fields = ('created', 'timestamp', 'last_modified', )
+    date_fields = ('created', 'timestamp', 'last_modified',)
     item_dict = dict(item)
     for date_field in date_fields:
         value = item_dict[date_field]
@@ -26,7 +27,7 @@ def _parse_date_fields(item):
     return item_dict
 
 
-def list(**kwargs):
+def list_items(**kwargs):
     """ Return a list of Items
 
     If keyword arguments are given, they are used
@@ -49,6 +50,26 @@ def list(**kwargs):
         item.update(_parse_date_fields(item))
 
     return response
+
+
+def list_options(field):
+    filter_1 = {
+        '{0}__isnull'.format(field): True,
+    }
+    filter_2 = {
+        '{0}__exact'.format(field): ''
+    }
+
+    query = Item.objects.exclude(**filter_1).exclude(**filter_2)
+
+    results = (
+        item for item in
+        query.distinct().values_list(field, flat=True).order_by(
+            field
+        )
+    )
+
+    return results
 
 
 def get(id):

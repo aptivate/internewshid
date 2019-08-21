@@ -14,7 +14,6 @@ from ..importer import Importer, SheetImportException, SheetProfile
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
 
-
 COLUMN_LIST = [
     {
         'name': 'Province',
@@ -219,7 +218,9 @@ def test_process_row(importer):
 
 
 def test_normalize_row_differences(importer):
+
     class Cell(object):
+
         def __init__(self, value):
             self.value = value
 
@@ -229,6 +230,7 @@ def test_normalize_row_differences(importer):
 
 
 def test_process_rows_with_header(importer):
+
     def _rows_generator():
         rows = [
             ('Province', 'Message'),
@@ -256,6 +258,7 @@ def test_process_rows_with_header(importer):
 
 
 def test_process_rows_without_header(importer):
+
     def _rows_generator():
         rows = [
             ('London', 'Short message'),
@@ -282,6 +285,7 @@ def test_process_rows_without_header(importer):
 
 
 def test_process_rows_displays_line_number_on_error(importer):
+
     def _rows_generator():
         rows = [
             ('Province', 'Message'),
@@ -308,7 +312,9 @@ def test_process_rows_displays_line_number_on_error(importer):
 
 
 def test_process_rows_ignores_empty_lines(importer):
+
     class Cell(object):
+
         def __init__(self, value):
             self.value = value
 
@@ -468,7 +474,7 @@ def test_duplicate_records_not_imported(importer):
 
     assert num_saved == 1
 
-    items = transport.items.list()
+    items = transport.items.list_items()
 
     assert len(items['results']) == 2
 
@@ -487,3 +493,32 @@ def test_can_save_rows_without_terms(importer):
     num_saved = importer.save_rows(objects)
 
     assert num_saved == 1
+
+
+def test_terms_in_row_split_on_comma(importer):
+    row = [
+        'Tag 1, Tag 2',
+    ]
+
+    columns = [
+        {
+            'name': 'Tags',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'tags',
+        }
+    ]
+
+    converted = importer.process_row(row, columns)
+    assert converted == {
+        'terms': [
+            {
+                'name': 'Tag 1',
+                'taxonomy': 'tags',
+            },
+            {
+                'name': 'Tag 2',
+                'taxonomy': 'tags',
+            },
+        ]
+    }

@@ -73,7 +73,7 @@ def request_item():
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
-    [item] = list(transport.items.list()['results'])
+    [item] = list(transport.items.list_items()['results'])
 
     url = reverse('data-view-process')
     request = ReqFactory.post(url, {
@@ -90,7 +90,7 @@ def request_item():
 def check_item_was_deleted(request):
     assert check_message(request, u"1 item deleted.") is True
 
-    items = list(transport.items.list()['results'])
+    items = list(transport.items.list_items()['results'])
     assert len(list(items)) == 0
 
 
@@ -113,7 +113,7 @@ def test_process_items_removes_question_type(item_type_taxonomy):
     msg = {'body': "Message text"}
     transport.items.create(msg)
 
-    [item] = list(transport.items.list()['results'])
+    [item] = list(transport.items.list_items()['results'])
 
     term_to_delete = TermFactory(name='term to be deleted',
                                  taxonomy=item_type_taxonomy)
@@ -135,7 +135,7 @@ def test_process_items_removes_question_type(item_type_taxonomy):
     request = fix_messages(request)
     view_and_edit_table_form_process_items(request)
 
-    [item] = list(transport.items.list()['results'])
+    [item] = list(transport.items.list_items()['results'])
 
     term_names = [t['name'] for t in item['terms']]
 

@@ -21,6 +21,7 @@ class SheetImportException(Exception):
 
 
 class Importer(object):
+
     def __init__(self):
         self.profile = None
 
@@ -118,8 +119,10 @@ class Importer(object):
             converter = CellConverter(val, col)
 
             if col['type'] == 'taxonomy':
-                self._append_term_to_item(
-                    item, col['taxonomy'], converter.convert_value())
+                value = converter.convert_value()
+                for term in value.split(','):
+                    self._append_term_to_item(
+                        item, col['taxonomy'], term.strip())
             else:
                 converter.add_to(item)
 
@@ -198,6 +201,7 @@ class Importer(object):
 
 
 class CellConverter(object):
+
     def __init__(self, value, col_spec):
         self.value = value
         self.type = col_spec['type']
