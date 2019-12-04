@@ -108,8 +108,18 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         search = self.request.query_params.get('search', None)
         if search is not None:
-            items = items.filter(
-                Q(body__icontains=search) | Q(translation__icontains=search))
+            # Either the translation or body must match all the keywords
+            # Anything more sophisticated and we should use a search backend
+            words = search.split()
+            body_q = reduce(
+                lambda x, y: x & y, [Q(body__icontains=w) for w in words]
+            )
+            translation_q = reduce(
+                lambda x, y: x & y, [Q(translation__icontains=w)
+                                     for w in words]
+            )
+
+            items = items.filter(body_q | translation_q)
 
         ordering = self.request.query_params.get('ordering', '-timestamp')
         items = items.order_by(ordering)

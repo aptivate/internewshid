@@ -422,3 +422,66 @@ Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
     assert 'Latrine' in payload[0]['translation']
     assert 'LATRINE' in payload[1]['translation']
     assert 'latrines' in payload[2]['translation']
+
+
+@pytest.mark.django_db
+def test_filtering_a_message_must_match_all_keywords():
+    item_1 = create_item(
+        body="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, latrine consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, magna consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine magna',
+        }
+    ).data
+
+    assert len(payload) == 1
+
+    assert payload[0]['body'] == item_1.data['body']
+
+
+@pytest.mark.django_db
+def test_filtering_a_translation_must_match_all_keywords():
+    item_1 = create_item(
+        body="item 1",
+        translation="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="item 2",
+        translation="""Lorem ipsum dolor sit amet, latrine consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="item 3",
+        translation="""Lorem ipsum dolor sit amet, magna consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine magna',
+        }
+    ).data
+
+    assert len(payload) == 1
+
+    assert payload[0]['body'] == "item 1"
