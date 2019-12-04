@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.translation import ugettext as _
 
 from rest_framework import status, viewsets
@@ -108,7 +108,8 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         search = self.request.query_params.get('search', None)
         if search is not None:
-            items = items.filter(body__icontains=search)
+            items = items.filter(
+                Q(body__icontains=search) | Q(translation__icontains=search))
 
         ordering = self.request.query_params.get('ordering', '-timestamp')
         items = items.order_by(ordering)
