@@ -106,6 +106,10 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if external_id_pattern is not None:
             items = items.filter(external_id__contains=external_id_pattern)
 
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            items = items.filter(body__icontains=search)
+
         ordering = self.request.query_params.get('ordering', '-timestamp')
         items = items.order_by(ordering)
 
