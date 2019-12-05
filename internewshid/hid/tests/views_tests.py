@@ -624,6 +624,42 @@ def test_table_items_filtered_by_external_id():
 
 
 @pytest.mark.django_db
+def test_table_items_filtered_by_keywords():
+    matching_1 = transport.items.create({
+        'body': 'Latrine hurricane camp',
+        'translation': 'Translation 1',
+    })
+
+    matching_2 = transport.items.create({
+        'body': 'Body 2',
+        'translation': 'Camp food latrines',
+    })
+
+    not_matching = transport.items.create({
+        'body': 'Not matching',
+        'translation': 'Violence segregation food',
+    })
+
+    page = TabbedPageFactory()
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(session={'THREADED_FILTERS': {}},
+                        GET={'search': 'Latrine camp'})
+    tab = ViewAndEditTableTab()
+    context_data = tab.get_context_data(
+        tab_instance, request, categories=[],
+        dynamic_filters=['search']
+    )
+
+    table = context_data['table']
+
+    ids = [t['id'] for t in table.data.data]
+
+    assert matching_1['id'] in ids
+    assert matching_2['id'] in ids
+    assert not_matching['id'] not in ids
+
+
+@pytest.mark.django_db
 def test_dynamic_filters_read_from_tab_instance():
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)

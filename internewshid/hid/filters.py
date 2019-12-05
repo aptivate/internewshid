@@ -98,3 +98,11 @@ class ExternalIdFilter(object):
 
         if pattern:
             filters.update(external_id_pattern=pattern)
+
+
+class SearchFilter(object):
+    def apply(self, filters, query_dict, **kwargs):
+        search = query_dict.get('search', None)
+
+        if search:
+            filters.update(search=search)
