@@ -21,6 +21,10 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
+    sub_location = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     gender = forms.CharField(
         widget=forms.Textarea,
         required=False

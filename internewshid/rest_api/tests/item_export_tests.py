@@ -36,6 +36,7 @@ def test_item_exporter(client):
         'external_id',
         'gender',
         'location',
+        'sub_location',
         'network_provider',
         'source',
         'terms',

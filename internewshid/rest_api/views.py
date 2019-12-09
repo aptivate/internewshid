@@ -27,6 +27,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'body',
         'translation',
         'location',
+        'sub_location',
         'gender',
         'age',
         'enumerator',
@@ -77,6 +78,10 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         location = self.request.query_params.get('location', None)
         if location is not None:
             items = items.filter(location__icontains=location)
+
+        sub_location = self.request.query_params.get('sub_location', None)
+        if sub_location is not None:
+            items = items.filter(sub_location__icontains=sub_location)
 
         gender = self.request.query_params.get('gender', None)
         if gender is not None:

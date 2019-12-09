@@ -85,6 +85,10 @@ class ViewAndEditTableTab(object):
         if locations and locations == 'All Locations':
             filters.pop('location')
 
+        sub_locations = filters.get('sub_location')
+        if sub_locations and sub_locations == 'All Sub-Locations':
+            filters.pop('sub_location')
+
         genders = filters.get('gender')
         if genders and genders == 'All Genders':
             filters.pop('gender')
@@ -184,6 +188,10 @@ class ViewAndEditTableTab(object):
         locations = transport_items.list_options('location')
         return {'items': locations}
 
+    def _get_sub_location_options(self, items_list, **kwargs):
+        sub_locations = transport_items.list_options('sub_location')
+        return {'items': sub_locations}
+
     def _get_gender_options(self, items_list, **kwargs):
         genders = transport_items.list_options('gender')
         return {'items': genders}
@@ -239,6 +247,7 @@ class ViewAndEditTableTab(object):
 
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
+        sub_location_options = self._get_sub_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
         enumerator_options = self._get_enumerator_options(items, **kwargs)
         source_options = self._get_source_options(items, **kwargs)
@@ -273,6 +282,7 @@ class ViewAndEditTableTab(object):
             'category_options': category_options,
             'feedback_type_options': feedback_type_options,
             'locations': location_options,
+            'sub_locations': sub_location_options,
             'gender': gender_options,
             'enumerator': enumerator_options,
             'source_filters': source_options,

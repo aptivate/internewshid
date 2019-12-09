@@ -79,6 +79,11 @@ class ItemTable(tables.Table):
         verbose_name=_('Location'),
         attrs={'th': {'id': 'header-location'}}
     )
+    sub_location = tables.TemplateColumn(
+        template_name='hid/sub_location_column.html',
+        verbose_name=_('Sub-Location'),
+        attrs={'th': {'id': 'header-sub-location'}}
+    )
     enumerator = tables.TemplateColumn(
         template_name='hid/enumerator_column.html',
         verbose_name=_('Enumerator'),
