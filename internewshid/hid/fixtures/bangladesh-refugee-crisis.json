@@ -61,6 +61,16 @@
     },
     {
         "fields": {
+            "multiplicity": "optional",
+            "name": "Age Ranges",
+            "slug": "age-ranges",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 8
+    },
+    {
+        "fields": {
             "long_name": "Question",
             "name": "question",
             "taxonomy": 2
@@ -360,5 +370,77 @@
         },
         "model": "users.user",
         "pk": 1
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 420,
+        "fields": {
+            "name": "Under 10 yrs",
+            "taxonomy": 8,
+            "long_name": "Under 10 yrs"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 421,
+        "fields": {
+            "name": "Age 11-14 yrs",
+            "taxonomy": 8,
+            "long_name": "Age 11-14 yrs"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 422,
+        "fields": {
+            "name": "Age 15-18 yrs",
+            "taxonomy": 8,
+            "long_name": "Age 15-18 yrs"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 423,
+        "fields": {
+            "name": "Age 19-25",
+            "taxonomy": 8,
+            "long_name": "Age 19-25"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 424,
+        "fields": {
+            "name": "Age 26-35",
+            "taxonomy": 8,
+            "long_name": "Age 26-35"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 425,
+        "fields": {
+            "name": "Age 36-45",
+            "taxonomy": 8,
+            "long_name": "Age 36-45"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 426,
+        "fields": {
+            "name": "Age 46-60",
+            "taxonomy": 8,
+            "long_name": "Age 46-60"
+        }
+    },
+    {
+        "model": "taxonomies.term",
+        "pk": 427,
+        "fields": {
+            "name": "Over 60 years old",
+            "taxonomy": 8,
+            "long_name": "Over 60 years old"
+        }
     }
 ]
