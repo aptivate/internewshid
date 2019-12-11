@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.translation import ugettext as _
 
 from rest_framework import status, viewsets
@@ -105,6 +105,21 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             'external_id_pattern', None)
         if external_id_pattern is not None:
             items = items.filter(external_id__contains=external_id_pattern)
+
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            # Either the translation or body must match all the keywords
+            # Anything more sophisticated and we should use a search backend
+            words = search.split()
+            body_q = reduce(
+                lambda x, y: x & y, [Q(body__icontains=w) for w in words]
+            )
+            translation_q = reduce(
+                lambda x, y: x & y, [Q(translation__icontains=w)
+                                     for w in words]
+            )
+
+            items = items.filter(body_q | translation_q)
 
         ordering = self.request.query_params.get('ordering', '-timestamp')
         items = items.order_by(ordering)

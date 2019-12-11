@@ -15,6 +15,7 @@ class HidAppConfig(AppConfig):
             FeedbackTypeFilter,
             GenderFilter,
             LocationFilter,
+            SearchFilter,
             SourceFilter,
             TagsFilter,
             TimeRangeFilter,
@@ -35,6 +36,7 @@ class HidAppConfig(AppConfig):
         register_filter('tags', TagsFilter())
         register_filter('feedback_type', FeedbackTypeFilter())
         register_filter('external_id', ExternalIdFilter())
+        register_filter('search', SearchFilter())
 
         register_tab('view-and-edit-table', ViewAndEditTableTab())
 
