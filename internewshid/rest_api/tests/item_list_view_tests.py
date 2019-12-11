@@ -365,6 +365,7 @@ Mauris nec mauris vestibulum, laoreet mi ut, facilisis massa. Pellentesque
     payload = get(
         data={
             'search': 'latrine',
+            'ordering': 'body',
         }
     ).data
 
