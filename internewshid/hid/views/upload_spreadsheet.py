@@ -17,13 +17,13 @@ class UploadSpreadsheetView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        source = data['source']
+        collection_type = data['collection_type']
         uploaded_file = data['file']
 
         try:
             importer = Importer()
             (saved, skipped) = importer.store_spreadsheet(
-                source, uploaded_file
+                collection_type, uploaded_file
             )
             all_messages = [
                 gettext("Upload successful!"),

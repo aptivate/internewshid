@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="item-content">
-                    <div class="item-source-wrapper">
+                    <div class="item-collection-type-wrapper">
                         {% if form.body %}
                         <div class="item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
@@ -80,7 +80,7 @@
                         </div>
                         {% endif %}
 
-                        <div class="item-source-meta">
+                        <div class="item-collection-type-meta">
 
                             <div class="item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
                                 <label>
@@ -165,15 +165,15 @@
                             </div>
                             {% endif %}
 
-                            {% if form.source %}
-                            <div class="item-source {% if form.source.errors %}has-error{% endif %}">
+                            {% if form.collection_type %}
+                            <div class="item-collection-type {% if form.collection_type.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Source" %}
-                                    {% if form.source.errors %}
-                                    <span class='help-block'>({{ form.source.errors|join:", " }})</span>
+                                    {% trans "Collection Type" %}
+                                    {% if form.collection_type.errors %}
+                                    <span class='help-block'>({{ form.collection_type.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.source|add_class:'form-control'|attr:"Source"|attr:"rows:1"|attr:"cols:3"|attr:"style:resize:none;" }}
+                                {{ form.collection_type|add_class:'form-control'|attr:"Collection Type"|attr:"rows:1"|attr:"cols:3"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
                         </div>

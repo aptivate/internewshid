@@ -37,7 +37,7 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
-    source = forms.CharField(
+    collection_type = forms.CharField(
         widget=forms.Textarea,
         required=False
     )

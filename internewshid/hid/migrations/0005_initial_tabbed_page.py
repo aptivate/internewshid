@@ -35,7 +35,7 @@ def create_initial_view_and_edit_page(apps, schema_editor):
                 'columns': ['select_item', 'created', 'timestamp', 'body',
                             'category'],
                 'label': 'Questions',
-                'source': 'geopoll',
+                'collection_type': 'geopoll',
                 'categories': ['ebola-questions'],
                 'filters': {
                     'terms': ['item-types:question']
@@ -55,7 +55,7 @@ def create_initial_view_and_edit_page(apps, schema_editor):
                 'columns': ['select_item', 'created', 'timestamp', 'body',
                             'network_provider'],
                 'label': 'Rumors',
-                'source': 'rapidpro',
+                'collection_type': 'rapidpro',
                 'filters': {
                     'terms': ['item-types:rumor']
                 }

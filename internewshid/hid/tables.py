@@ -89,10 +89,10 @@ class ItemTable(tables.Table):
         verbose_name=_('Enumerator'),
         attrs={'th': {'id': 'header-enumerator'}}
     )
-    source = tables.TemplateColumn(
-        template_name='hid/source_column.html',
-        verbose_name=_('Source'),
-        attrs={'th': {'id': 'header-source'}}
+    collection_type = tables.TemplateColumn(
+        template_name='hid/collection_type_column.html',
+        verbose_name=_('Collection Type'),
+        attrs={'th': {'id': 'header-collection-type'}}
     )
     external_id = tables.TemplateColumn(
         template_name='hid/external_id_column.html',

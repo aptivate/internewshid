@@ -1,6 +1,6 @@
 {
     "name": "spreadsheet",
-    "sources": [
+    "collection_types": [
         {
             "label": "geopoll",
             "name": "Geopoll",

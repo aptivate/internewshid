@@ -47,7 +47,7 @@ class Message(DataLayerModel):
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
     enumerator = models.CharField(max_length=190, blank=True)
-    source = models.CharField(max_length=190, blank=True)
+    collection_type = models.CharField(max_length=190, blank=True)
     external_id = models.CharField(max_length=80, blank=True)
 
     def apply_terms(self, terms):
