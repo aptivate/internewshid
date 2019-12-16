@@ -97,6 +97,7 @@ class ItemTable(tables.Table):
     external_id = tables.TemplateColumn(
         template_name='hid/external_id_column.html',
         verbose_name=_('ID'),
+        visible=False,
         attrs={'th': {'id': 'header-external-id'}}
     )
 
