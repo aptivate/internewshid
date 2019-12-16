@@ -21,6 +21,11 @@ COLUMN_LIST = [
         'field': 'message.location',
     },
     {
+        'name': 'Sub-Province',
+        'type': 'location',
+        'field': 'message.sub_location',
+    },
+    {
         'name': 'Message',
         'type': 'text',
         'field': 'message.content',
@@ -64,6 +69,11 @@ def test_get_columns_map(importer):
             'type': 'location',
             'field': 'message.location',
             'name': 'Province',
+        },
+        'Sub-Province': {
+            'type': 'location',
+            'field': 'message.sub_location',
+            'name': 'Sub-Province',
         },
         'Message': {
             'type': 'text',
@@ -119,21 +129,21 @@ def test_order_columns_with_no_first_row_returns_original_order(importer):
 def test_order_columns_with_first_row_return_first_row_order(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
 
-    first_row = ['Message', 'Province']
+    first_row = ['Message', 'Province', 'Sub-Province']
 
     importer.profile['skip_header'] = True
     ordered = importer.order_columns(first_row)
 
-    assert ordered == [cleaned[1], cleaned[0]]
+    assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
 def test_order_columns_ignores_extra_columns_in_first_row(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
-    first_row = ['Message', 'Province', 'None', 'None', 'None']
+    first_row = ['Message', 'Province', 'Sub-Province', 'None', 'None', 'None']
 
     ordered = importer.order_columns(first_row)
 
-    assert ordered == [cleaned[1], cleaned[0]]
+    assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
 def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
@@ -147,8 +157,8 @@ def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
 
 def test_get_fields_and_types(importer):
     fields, types = importer.get_fields_and_types(COLUMN_LIST)
-    expected_types = ['location', 'text']
-    expected_fields = ['message.location', 'message.content']
+    expected_types = ['location', 'location', 'text']
+    expected_fields = ['message.location', 'message.sub_location', 'message.content']
 
     assert fields == expected_fields
     assert types == expected_types
@@ -261,8 +271,8 @@ def test_process_rows_without_header(importer):
 
     def _rows_generator():
         rows = [
-            ('London', 'Short message'),
-            ('Cambridge', 'What?'),
+            ('London', 'WithinLondon', 'Short message'),
+            ('Cambridge', 'WithinCambridge', 'What?'),
         ]
 
         for row in rows:
@@ -270,6 +280,7 @@ def test_process_rows_without_header(importer):
 
     columns = [d.copy() for d in COLUMN_LIST]
     columns[0]['type'] = 'text'
+    columns[1]['type'] = 'text'
     rows = _rows_generator()
 
     importer.profile['columns'] = columns
@@ -280,6 +291,7 @@ def test_process_rows_without_header(importer):
 
     assert objects[0]['message.location'] == 'London'
     assert objects[0]['message.content'] == 'Short message'
+
     assert objects[1]['message.location'] == 'Cambridge'
     assert objects[1]['message.content'] == 'What?'
 

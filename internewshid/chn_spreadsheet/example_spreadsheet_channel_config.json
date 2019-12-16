@@ -13,6 +13,11 @@
                     "field": "message.location"
                 },
                 {
+                    "name": "Sub-Province",
+                    "type": "text",
+                    "field": "message.sub_location"
+                },
+                {
                     "name": "CreatedDate",
                     "type": "date",
                     "field": "message.created"

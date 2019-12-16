@@ -118,6 +118,17 @@
                             </div>
                             {% endif %}
 
+                            {% if form.sub_location %}
+                                <label>
+                                    {% trans "Sub-Location" %}
+                                    {% if form.sub_location.errors %}
+                                    <span class='help-block'>({{ form.sub_location.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.sub_location|add_class:'form-control'|attr:"Sub-Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
                             {% if form.gender %}
                             <div class="item-gender {% if form.gender.errors %}has-error{% endif %}">
                                 <label>

@@ -143,6 +143,7 @@ class ItemExportSerializer(ItemSerializer):
             'external_id',
             'gender',
             'location',
+            'sub_location',
             'network_provider',
             'source',
             'terms',

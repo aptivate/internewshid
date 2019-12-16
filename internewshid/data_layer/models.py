@@ -43,6 +43,7 @@ class Message(DataLayerModel):
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=190, blank=True)
     location = models.CharField(max_length=100, blank=True)
+    sub_location = models.CharField(max_length=100, blank=True)
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
     enumerator = models.CharField(max_length=190, blank=True)
