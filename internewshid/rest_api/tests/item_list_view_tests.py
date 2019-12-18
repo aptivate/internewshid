@@ -135,7 +135,8 @@ def test_filter_by_age_range():
 
     payload = get(data={
         'from_age': '34',
-        'to_age': '37'
+        'to_age': '37',
+        'ordering': 'body',
     }).data
 
     assert len(payload) == 2
