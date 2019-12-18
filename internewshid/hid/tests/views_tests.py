@@ -760,7 +760,6 @@ def test_items_sorted_by_timestamp_desc_by_default():
 
 
 @pytest.mark.django_db
-@pytest.mark.skip(reason='Flaky test that needs to be fixed at some point')
 def test_items_paginated():
     for i in range(10):
         transport.items.create({
