@@ -95,7 +95,7 @@ A tabbed page has a `name` and one or more tab instances. These determine the pa
 The `Settings` are specified in a blob of JSON with the following format:
 ```
 {
-  "source":"kobo",
+  "collection_type":"kobo",
   "columns":[
     "select_item",
     "created",
@@ -115,7 +115,7 @@ The `Settings` are specified in a blob of JSON with the following format:
 }
 ```
 
-`source`
+`collection_type`
 : Matches the `SheetProfile` `label` above
 
 `columns`

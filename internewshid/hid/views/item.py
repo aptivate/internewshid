@@ -162,7 +162,7 @@ class AddEditItemView(FormView):
                 'gender': self.item.get('gender', ''),
                 'age': self.item.get('age', ''),
                 'enumerator': self.item.get('enumerator', ''),
-                'source': self.item.get('source', ''),
+                'collection_type': self.item.get('collection_type', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
                     'next',

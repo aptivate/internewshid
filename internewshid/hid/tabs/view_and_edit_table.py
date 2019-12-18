@@ -97,9 +97,9 @@ class ViewAndEditTableTab(object):
         if enumerators and enumerators == 'All Enumerators':
             filters.pop('enumerator')
 
-        source = filters.get('source')
-        if source and source == 'All Sources':
-            filters.pop('source')
+        collection_type = filters.get('collection_type')
+        if collection_type and collection_type == 'All Collection Types':
+            filters.pop('collection_type')
 
         limit = kwargs.get('per_page', 100)
         filters['limit'] = limit
@@ -200,9 +200,9 @@ class ViewAndEditTableTab(object):
         enumerators = transport_items.list_options('enumerator')
         return {'items': enumerators}
 
-    def _get_source_options(self, items_list, **kwargs):
-        sources = transport_items.list_options('source')
-        return {'items': sources}
+    def _get_collection_type_options(self, items_list, **kwargs):
+        collection_types = transport_items.list_options('collection_type')
+        return {'items': collection_types}
 
     def _get_feedback_type_options(self):
         terms = transport_terms.list(taxonomy='item-types')
@@ -250,7 +250,7 @@ class ViewAndEditTableTab(object):
         sub_location_options = self._get_sub_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
         enumerator_options = self._get_enumerator_options(items, **kwargs)
-        source_options = self._get_source_options(items, **kwargs)
+        collection_type_options = self._get_collection_type_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
 
         per_page = int(kwargs.get('per_page', 100))
@@ -277,7 +277,7 @@ class ViewAndEditTableTab(object):
             'add_button_for': self._get_item_type_filter(kwargs),
             'type_label': kwargs.get('label', '?'),
             'table': table,
-            'source': kwargs.get('source'),
+            'collection_type': kwargs.get('collection_type'),
             'actions': actions,
             'category_options': category_options,
             'feedback_type_options': feedback_type_options,
@@ -285,7 +285,7 @@ class ViewAndEditTableTab(object):
             'sub_locations': sub_location_options,
             'gender': gender_options,
             'enumerator': enumerator_options,
-            'source_filters': source_options,
+            'collection_type_filters': collection_type_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name

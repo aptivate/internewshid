@@ -37,7 +37,7 @@ def test_kobo_master_items_imported(importer, django_db_setup):
     assert items[1]['age'] == '41'
     assert items[1]['location'] == 'Camp 1W'
     assert items[1]['enumerator'] == 'osman'
-    assert items[1]['source'] == 'sample source'
+    assert items[1]['collection_type'] == 'sample collection type'
     assert isinstance(items[1]['timestamp'], datetime.datetime)
 
     tags = []

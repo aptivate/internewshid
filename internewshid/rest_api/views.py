@@ -31,7 +31,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'gender',
         'age',
         'enumerator',
-        'source',
+        'collection_type',
         'timestamp',
     )
 
@@ -97,9 +97,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if enumerator is not None:
             items = items.filter(enumerator__icontains=enumerator)
 
-        source = self.request.query_params.get('source', None)
-        if source is not None:
-            items = items.filter(source__icontains=source)
+        collection_type = self.request.query_params.get('collection_type', None)
+        if collection_type is not None:
+            items = items.filter(collection_type__icontains=collection_type)
 
         start_time = self.request.query_params.get('start_time', None)
         end_time = self.request.query_params.get('end_time', None)
