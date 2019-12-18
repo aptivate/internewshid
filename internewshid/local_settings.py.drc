@@ -1,0 +1,47 @@
+from __future__ import unicode_literals, absolute_import
+
+import private_settings
+import json
+
+from pymysql import install_as_MySQLdb
+
+DEBUG = False
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
+
+install_as_MySQLdb()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'internewshid',
+        'USER': 'internewshid',
+        'PASSWORD': private_settings.DB_PASSWORD,
+        'OPTIONS': {
+          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    }
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'lin-internewshid-drc.aptivate.org'
+
+# Country specific settings:
+
+TIME_ZONE = 'Africa/Kinshasa'
+LANGUAGE_CODE = 'en'
+LANGUAGES = [
+    ('en', 'English'),
+]
+
+CONSTANCE_CONFIG = {
+    'CONTEXT_LOCATION': ('DRC', 'Location of dashboard deployment'),
+    'DEFAULT_TABBED_PAGE_NAME': ('main', 'Name of default tabbed page'),
+    'DEFAULT_TAB_NAME': ('all', 'Name of default tab within page'),
+    'ITEM_TYPE_CATEGORY': (
+        json.dumps(
+            {'all': 'drc'}
+        ),
+        'Single taxonomy to use to categorise all types of item'),
+    'GLOBAL_DATA_SOURCE': ('kobo', 'Sheet profile to use when loading data from the main menu'),
+}
