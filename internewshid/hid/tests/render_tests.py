@@ -8,7 +8,7 @@ render_to_string_method = 'hid.templatetags.render_upload_form.render_to_string'
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_upload_form_collection_type_attribute_set(mock_render):
+def test_upload_form_source_attribute_set(mock_render):
     request = Mock()
     context = {'request': request}
     render_upload_form(context, 'rapidpro', None, None)
@@ -16,7 +16,7 @@ def test_upload_form_collection_type_attribute_set(mock_render):
     _, kwargs = mock_render.call_args
     form = kwargs['context']['upload_form']
 
-    assert form.initial.get('collection_type') == 'rapidpro'
+    assert form.initial.get('source') == 'rapidpro'
 
 
 @pytest.mark.django_db
@@ -34,7 +34,7 @@ def test_upload_form_next_url_attribute_set(mock_render):
 
 @pytest.mark.django_db
 @patch(render_to_string_method)
-def test_no_upload_form_when_collection_type_not_set(mock_render):
+def test_no_upload_form_when_source_not_set(mock_render):
     request = Mock()
     context = {'request': request}
     render_upload_form(context, None, None, None)

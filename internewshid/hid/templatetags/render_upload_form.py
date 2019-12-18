@@ -6,25 +6,25 @@ from hid.forms.upload import UploadForm
 register = template.Library()
 
 
-def build_upload_form(collection_type, next_url):
-    if collection_type is None:
+def build_upload_form(source, next_url):
+    if source is None:
         return None
 
     return UploadForm(
         auto_id=False,
         initial={
-            'collection_type': collection_type,
+            'source': source,
             'next': next_url,
         }
     )
 
 
 @register.simple_tag(takes_context=True)
-def render_upload_form(context, collection_type, next_url, type_label):
+def render_upload_form(context, source, next_url, type_label):
     request = context['request']
 
     context = {
-        'upload_form': build_upload_form(collection_type, next_url),
+        'upload_form': build_upload_form(source, next_url),
         'type_label': type_label
     }
 

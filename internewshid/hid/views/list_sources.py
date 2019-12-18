@@ -8,11 +8,11 @@ class ListSources(TemplateView):
 
     def get_sources(self):
         sources = []
-        for source, label in get_spreadsheet_choices():
+        for src, label in get_spreadsheet_choices():
             sources.append({
                 'name': label,
-                'src': source,
-                'form': UploadForm(initial={'source': source})
+                'src': src,
+                'form': UploadForm(initial={'source': src})
             })
         return sources
 
