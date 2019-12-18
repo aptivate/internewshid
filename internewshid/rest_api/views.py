@@ -75,6 +75,21 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
                 items = items.filter(terms__id=matches[0].id)
 
+        # Filter on any of these terms
+        terms_or = [t.split(':', 1) for t in self.request.query_params.getlist(
+            'terms_or', []
+        )]
+
+        if len(terms_or) > 0:
+            terms_or_q = reduce(
+                lambda x, y: x | y,
+                [(Q(taxonomy__slug=tx) & Q(name=tm))
+                 for (tx, tm) in terms_or]
+            )
+            matching_terms = Term.objects.filter(terms_or_q)
+
+            items = items.filter(terms__in=matching_terms)
+
         location = self.request.query_params.get('location', None)
         if location is not None:
             items = items.filter(location__icontains=location)

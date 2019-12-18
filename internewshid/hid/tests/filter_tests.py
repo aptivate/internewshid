@@ -1,30 +1,16 @@
+from django.http import QueryDict
+
 from ..filters import AgeRangeFilter
 
 
-def test_age_range_none_ignored():
+def test_age_range_adds_taxonomy_terms():
     filter = AgeRangeFilter()
 
     filters = {}
 
-    query_dict = {}
+    query_dict = QueryDict('age_range=Under 10 yrs&age_range=Age 11-14 yrs')
 
     filter.apply(filters, query_dict)
 
-    assert 'from_age' not in filters
-    assert 'to_age' not in filters
-
-
-def test_age_range_blank_ignored():
-    filter = AgeRangeFilter()
-
-    filters = {}
-
-    query_dict = {
-        'from_age': '',
-        'to_age': '',
-    }
-
-    filter.apply(filters, query_dict)
-
-    assert 'from_age' not in filters
-    assert 'to_age' not in filters
+    assert 'age-ranges:Under 10 yrs' in filters['terms_or']
+    assert 'age-ranges:Age 11-14 yrs' in filters['terms_or']

@@ -448,32 +448,51 @@ def test_table_items_filtered_by_date_range():
 
 @pytest.mark.django_db
 def test_table_items_filtered_by_age_range():
-    too_old = transport.items.create({
-        'body': "Too old item",
-        'age': '38'
-    })
-
-    in_range_1 = transport.items.create({
-        'body': "In range item 1",
-        'age': '37',
-    })
-
-    in_range_2 = transport.items.create({
-        'body': "In range item 2",
-        'age': '36',
-    })
+    age_ranges = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    under_10 = TermFactory(name='Under 10 yrs', taxonomy=age_ranges)
+    age_11_14 = TermFactory(name='Age 11-14 yrs', taxonomy=age_ranges)
+    age_15_18 = TermFactory(name='Age 15-18 yrs', taxonomy=age_ranges)
+    age_46_60 = TermFactory(name='Age 46-60', taxonomy=age_ranges)
 
     too_young = transport.items.create({
         'body': "Too young item",
-        'age': '35',
     })
+
+    transport.items.add_terms(
+        too_young['id'], age_ranges.slug, under_10.name
+    )
+
+    in_range_1 = transport.items.create({
+        'body': "In range item 1",
+    })
+
+    transport.items.add_terms(
+        in_range_1['id'], age_ranges.slug, age_11_14.name
+    )
+
+    in_range_2 = transport.items.create({
+        'body': "In range item 2",
+    })
+
+    transport.items.add_terms(
+        in_range_2['id'], age_ranges.slug, age_15_18.name
+    )
+
+    too_old = transport.items.create({
+        'body': "Too old item",
+    })
+
+    transport.items.add_terms(
+        too_old['id'], age_ranges.slug, age_46_60.name
+    )
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'from_age': '36',
-        'to_age': '37',
-    })
+    query_dict = QueryDict(
+        'age_range=Age 11-14 yrs&age_range=Age 15-18 yrs'
+    )
+
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=query_dict)
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
