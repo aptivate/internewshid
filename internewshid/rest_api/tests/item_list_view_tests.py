@@ -222,7 +222,12 @@ def test_empty_term_filter_ignored():
     categorize_item(item1, term)
 
     term_filter = '{}:'.format(taxonomy['slug'])
-    payload = get(data={'terms': [term_filter]}).data
+    payload = get(
+        data={
+            'terms': [term_filter],
+            'ordering': 'body',
+            }
+    ).data
 
     assert len(payload) == 2
     assert payload[0]['body'] == item1['body']

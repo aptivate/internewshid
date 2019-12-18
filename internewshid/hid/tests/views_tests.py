@@ -760,7 +760,6 @@ def test_items_sorted_by_timestamp_desc_by_default():
 
 
 @pytest.mark.django_db
-@pytest.mark.skip(reason='Flaky test that needs to be fixed at some point')
 def test_items_paginated():
     for i in range(10):
         transport.items.create({
@@ -769,10 +768,11 @@ def test_items_paginated():
 
     request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
         'page': '2',
+        'sort': 'body',
     })
     tab = ViewAndEditTableTab()
 
-    response = tab._get_items(request, per_page='3', ordering='body')
+    response = tab._get_items(request, per_page='3')
     assert response['count'] == 10
 
     items = response['results']
