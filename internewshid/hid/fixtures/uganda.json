@@ -1,0 +1,106 @@
+[
+    {
+        "fields": {
+            "name": "main"
+        },
+        "model": "dashboard.dashboard",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "column": 1,
+            "dashboard": 1,
+            "height": "tall",
+            "row": 1,
+            "settings": "{\"text\":\"<p>Some of these rumours are also being addressed in the Internews HIS narrowcast programme \\u2018Bala-Bura\\u2019 (played in listening groups throughout the camps) and the Internews HRSM radio programme \\u2018Talking Peace\\u2019 (every Monday 16.00h on Radio Naf).</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: 26-Sep-2018\"}",
+            "widget_type": "basic-text-widget",
+            "width": 4
+        },
+        "model": "dashboard.widgetinstance",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "column": 0,
+            "dashboard": 1,
+            "height": "tall",
+            "row": 1,
+            "settings": "{\"taxonomy\":\"uganda\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"2018-09-13\",\"end_time\":\"2018-09-20\"}],\"title\":\"All feedback (recent)\"}",
+            "widget_type": "term-count-chart",
+            "width": 8
+        },
+        "model": "dashboard.widgetinstance",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "column": 0,
+            "dashboard": 1,
+            "height": "tall",
+            "row": 2,
+            "settings": "{\"count\":25,\"order_by\":\"-timestamp\",\"filters\":{},\"title\":\"Recent Updates\"}",
+            "widget_type": "table-widget",
+            "width": 12
+        },
+        "model": "dashboard.widgetinstance",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "column": 0,
+            "dashboard": 1,
+            "height": "tall",
+            "row": 3,
+            "settings": "{\"taxonomy\":\"uganda\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"1970-01-01\",\"end_time\":\"2100-01-01\"}],\"title\":\"All feedback\"}",
+            "widget_type": "term-count-chart",
+            "width": 12
+        },
+        "model": "dashboard.widgetinstance",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "label": "kobo",
+            "profile": "{\"name\":\"Kobo\",\"format\":\"excel\",\"label\":\"kobo\",\"skip_header\":2,\"taxonomies\":{},\"columns\":[{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"start\",\"date_format\":\"%Y-%m-%dT%H: %M: %S.%f%z\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"end\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"username\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"What is the feedback or rumour?\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"date\"},{\"field\":\"gender\",\"type\":\"text\",\"name\":\"gender\"},{\"field\":\"age\",\"type\":\"text\",\"name\":\"Age\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"},{\"field\":\"enumerator\",\"type\":\"text\",\"name\":\"comment\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_id\"},{\"field\":\"external_id\",\"type\":\"text\",\"name\":\"_uuid\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_submission_time\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_validation_status\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_index\"}]}"
+        },
+        "model": "chn_spreadsheet.sheetprofile",
+        "pk": 3
+    },
+    {
+      "fields": {
+          "label": "etc",
+          "profile": "{\"name\":\"ETC\",\"format\":\"excel\",\"label\":\"etc\",\"skip_header\":1,\"taxonomies\":{},\"columns\":[{\"field\":\"taxonomy\",\"type\":\"text\",\"name\":\"Category\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"Issue\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Logged by\"},{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"Date\",\"date_format\":\"%Y-%m-%d\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Gender\",\"taxonomy\":\"tags\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Age\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"}]}"
+      },
+      "model": "chn_spreadsheet.sheetprofile",
+      "pk": 4
+    },
+    {"model": "chn_spreadsheet.sheetprofile", "pk": 5, "fields": {"label": "kobo_master", "profile": "{\"name\":\"(Redundant)\",\"format\":\"excel\",\"label\":\"kobo_master\",\"skip_header\":1,\"taxonomies\":{},\"columns\":[{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"Date\",\"date_format\":\"%Y-%m-%dT%H: %M: %S.%f%z\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"Feedback\"},{\"field\":\"translation\",\"type\":\"text\",\"name\":\"Translation\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"Theme\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Tags\",\"taxonomy\":\"tags\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"FB Category\"},{\"field\":\"gender\",\"type\":\"text\",\"name\":\"Gender\"},{\"field\":\"age\",\"type\":\"text\",\"name\":\"Age\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"},{\"field\":\"enumerator\",\"type\":\"text\",\"name\":\"Ennumerator\"},{\"field\":\"source\",\"type\":\"text\",\"name\":\"Source\"}]}"}},
+    {
+        "fields": {
+            "name": "main"
+        },
+        "model": "tabbed_page.tabbedpage",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "default": false,
+            "label": "Feedback",
+            "name": "feedback",
+            "page": 1,
+            "position": 2,
+            "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"timestamp\",\"body\",\"translation\",\"category\",\"tags\",\"feedback_type\",\"gender\",\"age\",\"location\",\"enumerator\",\"source\",\"external_id\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\",\"tags\",\"gender\",\"feedback_type\",\"age_range\",\"location\",\"enumerator\",\"source\",\"external_id\"],\"categories\":[\"uganda\"]}",
+            "tab_type": "view-and-edit-table"
+        },
+        "model": "tabbed_page.tabinstance",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "key": "ITEM_TYPE_CATEGORY",
+            "value": "gAJYLAAAAHsiYWxsIjogImJhbmdsYWRlc2gtcmVmdWdlZS1jcmlzaXMtc2VjdG9ycyJ9cQEu"
+        },
+        "model": "data_layer.customconstance",
+        "pk": 1
+    }
+]
