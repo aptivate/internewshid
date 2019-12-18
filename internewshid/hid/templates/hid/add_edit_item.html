@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="item-content">
-                    <div class="item-collection-type-wrapper">
+                    <div class="item-source-wrapper">
                         {% if form.body %}
                         <div class="item-original-text {% if form.body.errors %}has-error{% endif %}">
                             <label>
@@ -80,7 +80,7 @@
                         </div>
                         {% endif %}
 
-                        <div class="item-collection-type-meta">
+                        <div class="item-source-meta">
 
                             <div class="item-reported-date {% if form.timestamp.errors %}has-error{% endif %}">
                                 <label>
@@ -126,7 +126,6 @@
                                     {% endif %}
                                 </label>
                                 {{ form.sub_location|add_class:'form-control'|attr:"Sub-Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
-                            </div>
                             {% endif %}
 
                             {% if form.gender %}
