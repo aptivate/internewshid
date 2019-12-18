@@ -1,0 +1,12 @@
+{% if collection_type_filters.items %}
+  {% load i18n %}
+  <div class="filter-collection-type input-group">
+    <label class="control-label" for="collection-type-selector">{% trans "Collection Type" %}</label>
+    <select id="collection-type-selector" name="collection-type" class="form-control">
+    <option value="All Collection Types" selected="selected">All Collection Types</option>
+    {% for collection_type in collection_type_filters.items %}
+      <option value="{{ collection_type }}">{{ collection_type }}</option>
+    {% endfor %}
+    </select>
+  </div>
+{% endif %}

@@ -82,11 +82,11 @@ class EnumeratorFilter(object):
             filters.update(enumerator=enumerator)
 
 
-class SourceFilter(object):
+class CollectionTypeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        source = query_dict.get('source', None)
-        if source is not None:
-            filters.update(source=source)
+        collection_type = query_dict.get('collection_type', None)
+        if collection_type is not None:
+            filters.update(collection_type=collection_type)
 
 
 class FeedbackTypeFilter(object):

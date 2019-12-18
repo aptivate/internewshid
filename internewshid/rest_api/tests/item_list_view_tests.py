@@ -420,6 +420,7 @@ Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
     payload = get(
         data={
             'search': 'latrine',
+            'ordering': 'body',
         }
     ).data
 

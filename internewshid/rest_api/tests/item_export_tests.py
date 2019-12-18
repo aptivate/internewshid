@@ -38,7 +38,7 @@ def test_item_exporter(client):
         'location',
         'sub_location',
         'network_provider',
-        'source',
+        'collection_type',
         'terms',
         'timestamp',
         'translation',
