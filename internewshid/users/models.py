@@ -30,6 +30,7 @@ def get_picture_path(instance, filename):
 
 # Managers
 class UserManager(BaseUserManager):
+
     def _create_user(self, business_email=None, password=None,
                      is_active=True, is_staff=False, is_superuser=False,
                      **extra_fields):
@@ -60,12 +61,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='staff status',
         default=False,
         help_text=_("Designates whether the user can log into this admin "
-                   "site."))
+                    "site."))
     is_active = BooleanField(
         verbose_name='active',
         default=True,
         help_text=_("Designates whether this user should be treated as "
-                   "active. Unselect this instead of deleting accounts."))
+                    "active. Unselect this instead of deleting accounts."))
     date_joined = DateTimeField(default=timezone.now)
 
     # general contact information
@@ -82,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                         blank=True,
                         choices=COUNTRIES,
                         help_text=_("The country in which the contact is "
-                                   "currently working in"))
+                                    "currently working in"))
     nationality = CharField(max_length=64, blank=True, choices=NATIONALITIES)
 
     # Work

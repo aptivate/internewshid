@@ -40,7 +40,7 @@ class ResetPassword(FormView):
 
     def form_invalid(self, form):
         messages.error(self.request, _("Email could not be sent. Check if "
-                                      "provided email is correct."))
+                                       "provided email is correct."))
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -62,6 +62,7 @@ class ActivationEmailsView(RedirectView):
 
 
 class SendActivationEmailView(ActivationEmailsView):
+
     def get_redirect_url(self, **kwargs):
         return reverse("contact_update", args=[self.pk])
 
