@@ -92,15 +92,15 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id %s could not be found') %
-                 str(kwargs.get('item_id')))
+                (_('Item with id {} could not be found').format(
+                 str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type %s could not be found') %
-                 str(kwargs.get('item_type')))
+                (_('Item type {} could not be found').format(
+                 str(kwargs.get('item_type'))))
             )
         return super(AddEditItemView, self).get(request, *args, **kwargs)
 
@@ -122,15 +122,15 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id %s could not be found') %
-                 str(kwargs.get('item_id')))
+                (_('Item with id {} could not be found').format(
+                 str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type %s could not be found') %
-                 str(kwargs.get('item_type')))
+                (_('Item type {} could not be found').format(
+                 str(kwargs.get('item_type'))))
             )
 
         if 'cancel' in self.request.POST['action']:
@@ -405,7 +405,7 @@ class AddEditItemView(FormView):
         return self._response(
             self._get_next_url_for_delete(),
             messages.SUCCESS,
-            _("%s %d successfully deleted.") % (
+            _("{} {} successfully deleted.").format(
                 item_description,
                 id,
             )

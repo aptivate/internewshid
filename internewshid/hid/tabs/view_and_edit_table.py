@@ -390,7 +390,7 @@ def _handle_batch_action(request, batch_action, selected):
                           '')
         return
 
-    messages.error(request, _("Unknown batch action '%s'" % batch_action))
+    messages.error(request, _("Unknown batch action '{}'").format(batch_action))
 
 
 def _categorize_items(request, items, category):
@@ -450,9 +450,9 @@ def _delete_items(request, deleted):
     try:
         transport_items.bulk_delete(deleted)
         num_deleted = len(deleted)
-        msg = ungettext("%d item deleted.",
-                        "%d items deleted.",
-                        num_deleted) % num_deleted
+        msg = ungettext("{} item deleted.",
+                        "{} items deleted.",
+                        num_deleted).format(num_deleted)
         messages.success(request, msg)
     except Exception:
         msg = _("There was an error while deleting.")
@@ -484,12 +484,12 @@ def _add_items_categories(request, items):
         except TransportException:
             failed += 1
     if success > 0:
-        msg = ungettext("Updated %d item.",
-                        "Updated %d items.",
-                        len(items)) % len(items)
+        msg = ungettext("Updated {} item.",
+                        "Updated {} items.",
+                        len(items)).format(len(items))
         messages.success(request, msg)
     if failed > 0:
-        msg = ungettext("Failed to update %d item.",
-                        "Failed to update %d items.",
-                        len(items)) % len(items)
+        msg = ungettext("Failed to update {} item.",
+                        "Failed to update {} items.",
+                        len(items)).format(len(items))
         messages.success(request, msg)

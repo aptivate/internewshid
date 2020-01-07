@@ -125,12 +125,12 @@ class TermCountChartWidget(object):
             end_str = dateformat.format(end,
                                         settings.SHORT_DATETIME_FORMAT)
         if start_str == end_str:
-            return _('%(date)s') % {'date': start_str}
+            return '{date}'.format(**{'date': start_str})
         else:
-            return _('%(start)s - %(end)s') % {
+            return _('{start} - {end}').format(**{
                 'start': start_str,
                 'end': end_str
-            }
+            })
 
     def get_context_data(self, **kwargs):
         title = kwargs.get('title', _('(missing title)'))

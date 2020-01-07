@@ -7,7 +7,7 @@ from hid.assets import require_assets
 
 class DashboardView(TemplateView):
     """ View to display a named dashboard """
-    template_name = "dashboard/dashboard.html"
+    template_name = 'dashboard/dashboard.html'
 
     def get_context_data(self, **kwargs):
         """ Get the list of widgets for this dashboard, and organise them

@@ -27,7 +27,9 @@ def _get_rendering_details(context, tab_instance):
     try:
         template_name = tab.template_name
     except AttributeError:
-        return _get_error_details('Missing template for %s' % tab_instance.tab_type)
+        return _get_error_details('Missing template for {}'.format(
+            tab_instance.tab_type
+        ))
 
     if tab_instance.settings:
         settings = tab_instance.settings
