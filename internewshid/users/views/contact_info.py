@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.db.models import Q
-from django.utils.translation import ugettext as _
 from django.urls import reverse
+from django.utils.translation import ugettext as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin

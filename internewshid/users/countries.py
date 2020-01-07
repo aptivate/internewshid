@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext as _
+
 COUNTRIES = (
     (_("Member countries"), (
         ('BW', _(u"Botswana")),
