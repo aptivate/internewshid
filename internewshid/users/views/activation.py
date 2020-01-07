@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.views import password_change
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.views.generic import FormView, RedirectView
 
@@ -20,7 +21,7 @@ class ResetPassword(FormView):
     form_class = ContactPasswordResetForm
 
     def get_subject(self):
-        return "{0}: password recovery".format(settings.SITE_NAME)
+        return _("{0}: password recovery").format(settings.SITE_NAME)
 
     def form_valid(self, form):
         opts = {
@@ -32,14 +33,14 @@ class ResetPassword(FormView):
         }
         form.save(**opts)
         messages.success(
-            self.request, ('Reset password email was sent to this '
-                           'contact. Please check your mailbox for further '
-                           'instructions.'))
+            self.request, _("Reset password email was sent to this "
+                            "contact. Please check your mailbox for further "
+                            "instructions."))
         return HttpResponseRedirect(reverse('login'))
 
     def form_invalid(self, form):
-        messages.error(self.request, ('Email could not be sent. Check if '
-                                      'provided email is correct.'))
+        messages.error(self.request, _("Email could not be sent. Check if "
+                                      "provided email is correct."))
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -80,11 +81,11 @@ class SendActivationEmailView(ActivationEmailsView):
             }
             form.save(**opts)
             messages.success(request,
-                             'Activation email was sent to this contact.')
+                             _("Activation email was sent to this contact."))
         else:
             messages.error(request,
-                           'Email could not be sent. \
-                                   Check if business email is correct.')
+                           _("Email could not be sent. \
+                                   Check if business email is correct."))
 
     def send_emails(self, request, **kwargs):
         self.pk = int(kwargs['pk'])

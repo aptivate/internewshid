@@ -29,7 +29,7 @@ class Importer(object):
         try:
             sheet_profile = SheetProfile.objects.get(label=label)
         except SheetProfile.DoesNotExist:
-            error_msg = _('Misconfigured service. Source "%s" does not exist') % label
+            error_msg = _('Misconfigured service. Source "{}" does not exist').format(label)
             raise SheetImportException(error_msg)
 
         return sheet_profile.profile
@@ -50,7 +50,7 @@ class Importer(object):
                 raise SheetImportException(error_msg)
             rows = ws.rows
         else:
-            error_msg = _('Unsupported file format: %s') % file_format
+            error_msg = _('Unsupported file format: {}').format(file_format)
             raise SheetImportException(error_msg)
 
         return rows
@@ -68,7 +68,7 @@ class Importer(object):
                         stripped_label = label.strip()
                         columns.append(col_map[stripped_label])
                     except Exception:
-                        error_msg = _('Unknown column: %s') % label
+                        error_msg = _('Unknown column: {}').format(label)
                         raise SheetImportException(error_msg)
         else:
             columns = [d.copy() for d in profile_columns]
@@ -108,7 +108,7 @@ class Importer(object):
                     objects.append(item)
 
             except SheetImportException as e:
-                raise type(e), type(e)(str(e) + 'in row %d ' % i), sys.exc_info()[2]
+                raise type(e), type(e)(str(e) + 'in row {} '.format(i)), sys.exc_info()[2]
 
         return objects
 
@@ -223,11 +223,11 @@ class CellConverter(object):
         }
         if self.type not in converters:
             raise SheetImportException(
-                _(u"Unknown data type '%s' ") % (self.type))
+                _(u"Unknown data type '{}' ").format(self.type))
         try:
             return converters[self.type](self.value)
         except Exception as e:
-            message = _("%s: Can not process value '%s' of type '%s' ") % (str(e), self.value, self.type)
+            message = _("{}: Can not process value '{}' of type '{}' ").format(str(e), self.value, self.type)
             raise SheetImportException(message), None, sys.exc_info()[2]
 
     def convert_date(self):
@@ -247,8 +247,7 @@ class CellConverter(object):
     def parse_date(self):
         if self.date_format is None:
             raise SheetImportException(
-                _(u"Date format not specified for '%s' ") %
-                (self.field))
+                _(u"Date format not specified for '{}' ").format(self.field))
 
         try:
             date_time = datetime.datetime.strptime(self.value,
