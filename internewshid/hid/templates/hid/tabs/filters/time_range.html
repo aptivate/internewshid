@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="filter-dates input-group input-daterange">
-  <label class="control-label" for="date-start">Dates</label>
-  <input type="date" value="{{ filters.start_time }}" class="form-control" name="start_time" id="date-start" title="Start date" aria-label="Start date">
-  <input type="date" value="{{ filters.end_time }}" class="form-control" name="end_time" title="End date" aria-label="End date">
+  <label class="control-label" for="date-start">{% trans "Dates" %}</label>
+  <input type="date" value="{{ filters.start_time }}" class="form-control" name="start_time" id="date-start" title="{% trans "Start date" %}" aria-label="{% trans "Start date" %}">
+  <input type="date" value="{{ filters.end_time }}" class="form-control" name="end_time" title="{% trans "End date" %}" aria-label="{% trans "End date" %}">
 </div>

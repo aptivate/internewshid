@@ -1,3 +1,5 @@
+{% load i18n %}
+{% blocktrans %}
 Welcome and thank you for registering with the MIS
 
 Please activate your account by clicking on this link: {{ protocol }}://{{ site }}{{ link }}{% url "password_reset_confirm" uidb64=uid token=token %}
@@ -13,3 +15,4 @@ Kind regards,
 
 
 Please do not reply to this email as it is automatically generated. Any replies cannot be monitored.
+{% endblocktrans %}

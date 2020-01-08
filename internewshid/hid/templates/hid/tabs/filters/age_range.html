@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="filter-age input-group">
   <label class="control-label" for="age-start">{% trans "Ages" %}</label>
-  <input type="number" value="{{ filters.from_age }}" class="form-control" name="from_age" id="age-start" title="Min age" aria-label="Minimum age">
-  <input type="number" value="{{ filters.to_age }}" class="form-control" name="to_age" title="Max age" aria-label="Maximum age">
+  <input type="number" value="{{ filters.from_age }}" class="form-control" name="from_age" id="age-start" title="{% trans "Min age" %}" aria-label="{% trans "Minimum age" %}">
+  <input type="number" value="{{ filters.to_age }}" class="form-control" name="to_age" title="{% trans "Max age" %}" aria-label="{% trans "Maximum age" %}">
 </div>

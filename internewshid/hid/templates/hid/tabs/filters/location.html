@@ -3,7 +3,7 @@
   <div class="filter-location input-group">
       <label class="control-label" for="location-selector">{% trans "Location" %}</label>
       <select id="location-selector" name="location" class="form-control">
-        <option value="All Locations" selected="selected">All Locations</option>
+        <option value="All Locations" selected="selected">{% trans "All Locations" %}</option>
         {% for location in locations.items %}
           <option value="{{ location }}"{% if location == request.GET.location %} selected="selected"{% endif %}>{{ location }}</option>
         {% endfor %}

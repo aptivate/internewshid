@@ -51,7 +51,7 @@
                             <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
+                        {% blocktrans %}{{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}{% endblocktrans %}
                     </div>
                     {% endif %}
 
@@ -76,7 +76,7 @@
                                 <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
                             </label>
-                            {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
+                            {% blocktrans %}{{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}{% endblocktrans %}
                         </div>
                         {% endif %}
 
@@ -187,12 +187,12 @@
                             <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
+                        {% blocktrans %}{{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}{% endblocktrans %}
                     </div>
                     {% endif %}
                 </div>
 
-                {% bootstrap_button "Delete feedback" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
+                {% blocktrans %}{% bootstrap_button "Delete feedback" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}{% endblocktrans %}
 
             </div>
         </div>
