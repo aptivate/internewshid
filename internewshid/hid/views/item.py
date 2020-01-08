@@ -92,14 +92,14 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id {} could not be found').format(
+                (_('Item with id {0} could not be found').format(
                  str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type {} could not be found').format(
+                (_('Item type {0} could not be found').format(
                  str(kwargs.get('item_type'))))
             )
         return super(AddEditItemView, self).get(request, *args, **kwargs)
@@ -122,14 +122,14 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id {} could not be found').format(
+                (_('Item with id {0} could not be found').format(
                  str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type {} could not be found').format(
+                (_('Item type {0} could not be found').format(
                  str(kwargs.get('item_type'))))
             )
 
@@ -243,7 +243,7 @@ class AddEditItemView(FormView):
             if item_id == 0:
                 self.item = self._create_item(form, taxonomy)
                 item_description = self._get_item_description()
-                message = _("%s %d successfully created.") % (
+                message = _("{0} {1} successfully created.").format(
                     item_description,
                     self.item['id']
                 )
@@ -251,7 +251,7 @@ class AddEditItemView(FormView):
             else:
                 self._update_item(item_id, form)
                 item_description = self._get_item_description()
-                message = _("%s %d successfully updated.") % (
+                message = _("{0} {1} successfully updated.").format(
                     item_description,
                     item_id,
                 )
@@ -405,7 +405,7 @@ class AddEditItemView(FormView):
         return self._response(
             self._get_next_url_for_delete(),
             messages.SUCCESS,
-            _("{} {} successfully deleted.").format(
+            _("{0} {1} successfully deleted.").format(
                 item_description,
                 id,
             )

@@ -57,4 +57,4 @@ class WidgetInstance(models.Model):
     settings = JSONField(blank=True)
 
     def __unicode__(self):
-        return _("Instance of {}").format(self.widget_type)
+        return _("Instance of {0}").format(self.widget_type)

@@ -167,12 +167,12 @@ class ContactPasswordResetForm(PasswordResetForm):
             business_email__iexact=email)
         if not len(self.users_cache):
             raise ValidationError(
-                _("User with email '{}' not known").format(email)
+                _("User with email '{0}' not known").format(email)
             )
         if not any(user.is_active for user in self.users_cache):
             # none of the filtered users are active
             raise ValidationError(
-                _("User with email '{}' not known".format(email))
+                _("User with email '{0}' not known".format(email))
             )
         return email
 

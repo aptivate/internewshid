@@ -27,6 +27,7 @@ class DataLayerModel(models.Model):
 
 
 class Message(DataLayerModel):
+
     class Meta:
         permissions = (
             ('can_change_message_body', 'Can change feedback'),
@@ -73,7 +74,7 @@ class Message(DataLayerModel):
 
         if not taxonomy.is_multiple:
             if len(terms) > 1:
-                message = _("Taxonomy '{}' does not support multiple terms").format(taxonomy)
+                message = _("Taxonomy '{0}' does not support multiple terms").format(taxonomy)
                 raise TermException(message)
 
             self.delete_all_terms(taxonomy)
@@ -85,7 +86,7 @@ class Message(DataLayerModel):
             self.terms.remove(term)
 
     def __unicode__(self):
-        return u"{}: '{}' @{}".format(
+        return u"{0}: '{1}' @{2}".format(
             self.id,
             self.body,
             self.timestamp

@@ -5,7 +5,7 @@ class CategoryFilter(object):
 
         if category and categories:
             filters.setdefault('terms', []).append(
-                '{}:{}'.format(categories[0], category)
+                '{0}:{1}'.format(categories[0], category)
             )
 
 
@@ -14,7 +14,7 @@ class TagsFilter(object):
         tags = query_dict.get('tags', None)
         if tags is not None:
             filters.setdefault('terms', []).append(
-                'tags:{}'.format(tags)
+                'tags:{0}'.format(tags)
             )
 
 
@@ -95,7 +95,7 @@ class FeedbackTypeFilter(object):
 
         if feedback_type:
             filters.setdefault('terms', []).append(
-                'item-types:{}'.format(feedback_type)
+                'item-types:{0}'.format(feedback_type)
             )
 
 

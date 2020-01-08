@@ -58,7 +58,7 @@ def require_assets(*assets):
     global _assets
     for asset in assets:
         if asset not in _assets:
-            raise AssetMissing("Missing asset: {}".format(asset))
+            raise AssetMissing("Missing asset: {0}".format(asset))
 
 
 @contextmanager

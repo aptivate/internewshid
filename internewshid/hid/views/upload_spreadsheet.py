@@ -27,15 +27,15 @@ class UploadSpreadsheetView(FormView):
             )
             all_messages = [
                 gettext("Upload successful!"),
-                ungettext("{} entry has been added.",
-                          "{} entries have been added.",
+                ungettext("{0} entry has been added.",
+                          "{0} entries have been added.",
                           saved).format(saved)
             ]
 
             if skipped > 0:
                 all_messages.append(
-                    ungettext("{} duplicate entry was skipped.",
-                              "{} duplicate entries were skipped.",
+                    ungettext("{0} duplicate entry was skipped.",
+                              "{0} duplicate entries were skipped.",
                               skipped).format(skipped)
                 )
 

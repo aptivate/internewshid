@@ -19,7 +19,7 @@ def get_tab(name):
         return _pool[name]
     except KeyError:
         raise MissingTabError(
-            _("Tab named '{}' has not been registered").format(name)
+            _("Tab named '{0}' has not been registered").format(name)
         )
 
 
