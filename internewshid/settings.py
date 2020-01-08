@@ -32,7 +32,14 @@ SERVER_EMAIL = 'server@internewshid.aptivate.org'
 
 TIME_ZONE = 'Asia/Dhaka'
 
-LANGUAGE_CODE = 'en'
+try:
+    import language_settings
+except ImportError:
+    print("Can't import the `language_settings` symlink!")
+    import sys
+    sys.exit(1)
+
+LANGUAGE_CODE = language_settings.LANGUAGE_CODE
 
 LANGUAGES = [
     ('en', 'English'),
@@ -274,8 +281,6 @@ TEMPLATES = [
 ]
 
 CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
-
-import language_settings
 
 if DEBUG:
     INSTALLED_APPS += (
