@@ -37,6 +37,8 @@ _assets = [
     'hid/widgets/chart.js',
     'hid/js/spinner.js',
     'hid/js/automatic_file_upload.js',
+    'hid/js/enable_multiselect.js',
+    'js/bootstrap-multiselect.js',
     'js/bootstrap-tagsinput.js',
     'hid/js/select_all_checkbox.js'
 ]

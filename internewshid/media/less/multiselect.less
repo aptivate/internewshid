@@ -1,0 +1,46 @@
+// Styling for bootstrap-multiselect plugin
+// .multiselect.btn-default {
+//    border: 1px solid @input-border;
+//    border-radius: @input-border-radius;
+//    font-size: @font-size-small;
+//    padding: .1rem .5rem;
+//    color: @brand-primary;
+//    background-color: @input-bg;
+//    height: 3rem;
+//    width: auto;
+//    max-width: 11em;
+// }
+
+.multiselect-container {
+  border: 1px solid @input-border;
+  border-radius: @input-border-radius;
+  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+
+    > .multiselect-reset {
+        > .input-group {
+            width: auto;
+            > .btn-default {
+                padding: 5px 10px;
+                font-size: @font-size-small;
+                background-color: @brand-primary;
+                color: #fff;
+                border-radius: @border-radius-large;
+                border: solid 1px @brand-primary;
+            }
+        }
+    }
+}
+
+.filter-container .filters .multiselect-container .checkbox {
+    text-transform: initial;
+    font-weight: normal;
+    margin: 0 5px;
+    padding: 0;
+
+    input[type=checkbox] {
+        vertical-align:middle;
+        position: static;
+        margin-left: 0;
+    }
+}
