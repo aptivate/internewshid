@@ -16,13 +16,10 @@ warnings.filterwarnings(
 
 BASE_DIR = path.abspath(path.dirname(__file__))
 
-
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-
 SECRET_KEY = private_settings.SECRET_KEY
-
 
 ADMINS = (
     ('Aptivate internewshid team', 'internewshid-team@aptivate.org'),
@@ -39,6 +36,7 @@ LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
     ('en', 'English'),
+    ('fr', 'French'),
 ]
 
 SITE_ID = 1
@@ -276,6 +274,8 @@ TEMPLATES = [
 ]
 
 CSRF_FAILURE_VIEW = 'hid.views.csrf.csrf_failure'
+
+import language_settings
 
 if DEBUG:
     INSTALLED_APPS += (
