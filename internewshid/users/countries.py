@@ -268,7 +268,7 @@ COUNTRIES = (
         ('WF', _(u"Wallis and Futuna")),
         ('EH', _(u"Western Sahara")),
         ('YE', _(u"Yemen")),
-        ('AX', _(u"\xc3\x85land Islands")),
+        ('AX', _(r"\xc3\x85land Islands")),
     )),
 )
 

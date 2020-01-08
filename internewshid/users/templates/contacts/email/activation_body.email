@@ -2,7 +2,7 @@
 {% blocktrans %}
 Welcome and thank you for registering with the MIS
 
-Please activate your account by clicking on this link: {{ protocol }}://{{ site }}{{ link }}{% url "password_reset_confirm" uidb64=uid token=token %}
+Please activate your account by clicking on this link: {% endblocktrans %}{{ protocol }}://{{ site }}{{ link }}{% url "password_reset_confirm" uidb64=uid token=token %}{% blocktrans %}
 
 You will be asked to set a password.
 

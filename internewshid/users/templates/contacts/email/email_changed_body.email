@@ -1,3 +1,4 @@
+{% load i18n %}
 {% blocktrans %}
 This email is to confirm that you have changed the primary email address you have registered with MIS
 
