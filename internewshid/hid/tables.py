@@ -74,6 +74,12 @@ class ItemTable(tables.Table):
         verbose_name=_('Age'),
         attrs={'th': {'id': 'header-age'}}
     )
+    age_range = tables.TemplateColumn(
+        template_name='hid/age_range_column.html',
+        verbose_name=_('Age range'),
+        accessor='terms',
+        attrs={'th': {'id': 'header-age-range'}}
+    )
     location = tables.TemplateColumn(
         template_name='hid/location_column.html',
         verbose_name=_('Location'),
@@ -183,6 +189,21 @@ class ItemTable(tables.Table):
 
         context['record'] = record
         context['feedback_types'] = ', '.join(sorted(feedback_types))
+
+        return Template.render(context.flatten())
+
+    def render_age_range(self, record, value):
+        Template = loader.get_template('hid/age_range_column.html')
+
+        context = self.context
+
+        age_ranges = []
+        for term in value:
+            if term['taxonomy'] == 'age-ranges':
+                age_ranges.append(term['long_name'])
+
+        context['record'] = record
+        context['age_ranges'] = ', '.join(sorted(age_ranges))
 
         return Template.render(context.flatten())
 

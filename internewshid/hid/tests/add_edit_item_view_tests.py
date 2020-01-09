@@ -767,6 +767,43 @@ def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
+def test_item_age_range_can_be_updated(view, update_form):
+    taxonomy = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    TermFactory(taxonomy=taxonomy, name='Age 11-14 yrs')
+    TermFactory(taxonomy=taxonomy, name='Age 15-18 yrs')
+
+    transport.items.add_terms(view.item['id'], 'age-ranges', 'Age 11-14 yrs')
+
+    update_form.cleaned_data['age_range'] = 'Age 15-18 yrs',
+
+    view.form_valid(update_form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert terms['age-ranges'] == 'Age 15-18 yrs'
+
+
+@pytest.mark.django_db
+def test_item_age_range_can_be_unset(view, update_form, item_type_taxonomy):
+    taxonomy = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    TermFactory(taxonomy=taxonomy, name='Age 11-14 yrs')
+
+    transport.items.add_terms(view.item['id'], 'age-ranges', 'Age 11-14 yrs')
+
+    update_form.cleaned_data['age_range'] = ''
+
+    view.form_valid(update_form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'age-ranges' not in terms
+
+
+@pytest.mark.django_db
 def test_item_category_not_required(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 

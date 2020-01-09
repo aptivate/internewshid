@@ -140,15 +140,23 @@
                             </div>
                             {% endif %}
 
-                            {% if form.age %}
-                            <div class="item-age {% if form.age.errors %}has-error{% endif %}">
+                            {% if form.age_range %}
+                            <div class="item-age-range {% if form.age_range.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Age" %}
-                                    {% if form.age.errors %}
+                                    {% trans "Age range" %}
+                                    {% if form.age_range.errors %}
                                     <span class='help-block'>({{ form.age.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.age|add_class:'form-control'|attr:"Age"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                                <select name="{{ form.age_range.name }}" class="form-control" id="age_range.name">
+                                    {% for choice in form.age_range.field.choices %}
+                                    {% if form.initial.age_range == choice.0 %}
+                                    <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% else %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                             {% endif %}
 

@@ -168,6 +168,38 @@ def test_render_feedback_type_passes_context_to_template(mock_loader):
     assert args[0]['feedback_types'] == 'Concern, Rumour'
 
 
+@mock.patch('hid.tables.loader')
+def test_render_age_range_passes_context_to_template(mock_loader):
+    mock_template = mock.MagicMock()
+    mock_template.render = mock.MagicMock()
+    mock_loader.get_template = mock.MagicMock(
+        return_value=mock_template)
+
+    value = [
+        {
+            u'long_name': u'Age 11-14 yrs',
+            u'name': u'Age 11-14 yrs',
+            u'taxonomy': 'age-ranges',
+        },
+        {
+            u'long_name': u'Age 15-18 yrs',
+            u'name': u'Age 15-18 yrs',
+            u'taxonomy': 'age-ranges',
+        }
+    ]
+
+    table = ItemTable([])
+    table.context = Context()
+
+    record = mock.Mock()
+    table.render_age_range(record, value)
+
+    args, kwargs = mock_template.render.call_args
+
+    assert args[0]['record'] == record
+    assert args[0]['age_ranges'] == 'Age 11-14 yrs, Age 15-18 yrs'
+
+
 def test_total_items_is_count_of_items_if_none():
     table = ItemTable(['one', 'two', 'three'])
 

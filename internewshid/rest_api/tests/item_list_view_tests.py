@@ -236,6 +236,30 @@ def test_empty_term_filter_ignored():
 
 
 @pytest.mark.django_db
+def test_items_filtered_by_one_term_or_another():
+    items = [ItemFactory() for i in range(4)]
+    terms = [TermFactory() for i in range(2)]
+
+    items[1].terms.add(terms[0])
+    items[2].terms.add(terms[1])
+    items[3].terms.add(terms[0])
+    items[3].terms.add(terms[1])
+
+    term_filter = [
+        '{}:{}'.format(terms[0].taxonomy.slug, terms[0].name),
+        '{}:{}'.format(terms[1].taxonomy.slug, terms[1].name)
+    ]
+    results = get(data={'terms_or': term_filter}).data
+
+    ids = [r['id'] for r in results]
+
+    assert items[0].id not in ids
+    assert items[1].id in ids
+    assert items[2].id in ids
+    assert items[3].id in ids
+
+
+@pytest.mark.django_db
 def test_filter_by_external_id_fragment():
     create_item(
         body='Matching 1',
