@@ -4,7 +4,7 @@
   <select id="age-range-selector" class="form-control" name="age_range" multiple autocomplete="off">
 
     {% for option in age_range_options %}
-        <option value="{{ option.0 }}"{% if not selected_age_ranges or option.0 in selected_age_ranges %} selected="selected"{% endif %}>{{ option.1 }}</option>
+        <option value="{{ option.0 }}"{% if option.0 in selected_age_ranges %} selected="selected"{% endif %}>{{ option.1 }}</option>
     {% endfor %}
   </select>
 </div>
