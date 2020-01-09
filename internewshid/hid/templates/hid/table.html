@@ -11,7 +11,11 @@
 {% else %}
     {% trans "results" as results %}
 {% endif %}
-<div class="box pagination-label"><span>{% blocktrans %}Showing {{ start_index }} - {{ end_index }} of {{ total }} {{ results }}{% endblocktrans %}</span></div>
+{% if total < end_index %}
+  <div class="box pagination-label"><span>{% blocktrans %}Showing {{ total }} {{ results }}{% endblocktrans %}</span></div>
+{% else %}
+  <div class="box pagination-label"><span>{% blocktrans %}Showing {{ start_index }} - {{ end_index }} of {{ total }} {{ results }}{% endblocktrans %}</span></div>
+{% endif %}
 {% endwith %}
 
 {% endif %}
