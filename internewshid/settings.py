@@ -75,7 +75,7 @@ STATICFILES_FINDERS = (
     'django_assets.finders.AssetsFinder'
 )
 
-LOCALE_DIR = path.join(BASE_DIR, 'locale')
+LOCALE_DIR = path.join(BASE_DIR, '..', 'locale')
 if path.isdir(LOCALE_DIR):
     LOCALE_PATHS = (LOCALE_DIR,)
 

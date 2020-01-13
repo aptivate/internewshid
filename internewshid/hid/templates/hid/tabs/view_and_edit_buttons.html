@@ -13,7 +13,7 @@
         {% endfor %}
     </select>
     {% trans "Apply action" as apply_action %}
-    {% bootstrap_button apply_action button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-default btn-sm table-submit" %}{% endblocktrans %}
+    {% bootstrap_button apply_action button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-default btn-sm table-submit" %}
     {% if category_options %}
         <div class="pull-right">
         {% trans "Save changes" as save_changes %}

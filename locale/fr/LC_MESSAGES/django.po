@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-08 22:32+0600\n"
-"PO-Revision-Date: 2020-01-08 16:16+0000\n"
+"POT-Creation-Date: 2020-01-09 22:18+0600\n"
+"PO-Revision-Date: 2020-01-13 14:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -168,6 +168,7 @@ msgstr ""
 
 #: internewshid/hid/tables.py:41
 #: internewshid/hid/templates/hid/add_edit_item.html:73
+#: internewshid/templates/base_side.html:27
 msgid "Feedback"
 msgstr ""
 
@@ -289,13 +290,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: internewshid/hid/templates/hid/add_edit_item.html:54
-#, python-format
-msgid "%(form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput')s"
+msgid "placeholder:Type and hit return"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:59
+#: internewshid/users/templates/contacts/edit_contact.html:31
+#: internewshid/users/templates/contacts/edit_contact.html:35
+msgid "Cancel"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:61
+msgid "Update"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:63
+msgid "Create"
 msgstr ""
 
 #: internewshid/hid/templates/hid/add_edit_item.html:79
-#, python-format
-msgid "%(form.body|add_class:'form-control'|attr:\"placeholder:Type your original text here\")s"
+msgid "placeholder:Type your original text here"
 msgstr ""
 
 #: internewshid/hid/templates/hid/add_edit_item.html:87
@@ -309,8 +322,7 @@ msgid "Region"
 msgstr ""
 
 #: internewshid/hid/templates/hid/add_edit_item.html:190
-#, python-format
-msgid "%(form.translation|add_class:'form-control'|attr:\"placeholder:Type your translation text here\")s"
+msgid "placeholder:Type your translation text here"
 msgstr ""
 
 #: internewshid/hid/templates/hid/add_edit_item.html:195
@@ -672,6 +684,10 @@ msgstr ""
 
 #: internewshid/templates/base_side.html:14
 msgid "Toggle navigation"
+msgstr ""
+
+#: internewshid/templates/base_side.html:26
+msgid "Dashboard"
 msgstr ""
 
 #: internewshid/templates/base_side.html:34
@@ -1845,12 +1861,12 @@ msgstr ""
 msgid "Assoc. Prof"
 msgstr ""
 
-#: internewshid/users/forms.py:91
+#: internewshid/users/forms.py:89
 #, python-brace-format
 msgid "{0}: email change notification"
 msgstr ""
 
-#: internewshid/users/forms.py:174 internewshid/users/forms.py:179
+#: internewshid/users/forms.py:170 internewshid/users/forms.py:175
 #, python-brace-format
 msgid "User with email '{0}' not known"
 msgstr ""
@@ -1930,11 +1946,6 @@ msgstr ""
 #: internewshid/users/templates/contacts/edit_contact.html:27
 #: internewshid/users/templates/contacts/edit_contact.html:51
 msgid "Send invitation"
-msgstr ""
-
-#: internewshid/users/templates/contacts/edit_contact.html:31
-#: internewshid/users/templates/contacts/edit_contact.html:35
-msgid "Cancel"
 msgstr ""
 
 #: internewshid/users/templates/contacts/edit_contact.html:33
