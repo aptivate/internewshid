@@ -228,7 +228,7 @@ def test_get_category_options_orders_by_lowercase_name():
 def test_actions_includes_remove_question_type_option():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     term = TermFactory()
@@ -247,7 +247,7 @@ def test_actions_includes_remove_question_type_option():
 def test_actions_excludes_remove_question_type_option_for_no_categories():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -307,7 +307,7 @@ def test_view_and_edit_table_tab_sets_add_button_context():
     )
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     filters = {'terms': ['item-types:test-item-type']}
@@ -346,7 +346,9 @@ def test_table_items_filtered_by_item_type_category(item_type_taxonomy):
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={'category': 'WASH'})
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('category=WASH'))
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[item_type_taxonomy.slug],
@@ -387,7 +389,10 @@ def test_table_items_filtered_by_item_type_and_default_filter(
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={'category': 'WASH'})
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('category=WASH')
+    )
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[item_type_taxonomy.slug],
@@ -425,10 +430,11 @@ def test_table_items_filtered_by_date_range():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'start_time': '2018-10-26 00:00:00+0000',
-        'end_time': '2018-10-27 00:00:00+0000',
-    })
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict(('start_time=2018-10-26 00:00:00%2B0000'
+                       '&end_time=2018-10-27 00:00:00%2B0000'))
+    )
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
@@ -448,32 +454,51 @@ def test_table_items_filtered_by_date_range():
 
 @pytest.mark.django_db
 def test_table_items_filtered_by_age_range():
-    too_old = transport.items.create({
-        'body': "Too old item",
-        'age': '38'
-    })
-
-    in_range_1 = transport.items.create({
-        'body': "In range item 1",
-        'age': '37',
-    })
-
-    in_range_2 = transport.items.create({
-        'body': "In range item 2",
-        'age': '36',
-    })
+    age_ranges = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    under_10 = TermFactory(name='Under 10 yrs', taxonomy=age_ranges)
+    age_11_14 = TermFactory(name='Age 11-14 yrs', taxonomy=age_ranges)
+    age_15_18 = TermFactory(name='Age 15-18 yrs', taxonomy=age_ranges)
+    age_46_60 = TermFactory(name='Age 46-60', taxonomy=age_ranges)
 
     too_young = transport.items.create({
         'body': "Too young item",
-        'age': '35',
     })
+
+    transport.items.add_terms(
+        too_young['id'], age_ranges.slug, under_10.name
+    )
+
+    in_range_1 = transport.items.create({
+        'body': "In range item 1",
+    })
+
+    transport.items.add_terms(
+        in_range_1['id'], age_ranges.slug, age_11_14.name
+    )
+
+    in_range_2 = transport.items.create({
+        'body': "In range item 2",
+    })
+
+    transport.items.add_terms(
+        in_range_2['id'], age_ranges.slug, age_15_18.name
+    )
+
+    too_old = transport.items.create({
+        'body': "Too old item",
+    })
+
+    transport.items.add_terms(
+        too_old['id'], age_ranges.slug, age_46_60.name
+    )
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'from_age': '36',
-        'to_age': '37',
-    })
+    query_dict = QueryDict(
+        'age_range=Age 11-14 yrs&age_range=Age 15-18 yrs'
+    )
+
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=query_dict)
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
@@ -522,8 +547,10 @@ def test_table_items_filtered_by_tags():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}},
-                        GET={'tags': 'female'})
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('tags=female')
+    )
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request,
@@ -569,8 +596,10 @@ def test_table_items_filtered_by_feedback_type():
 
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}},
-                        GET={'feedback_type': 'rumour'})
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('feedback_type=rumour')
+    )
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
@@ -607,7 +636,7 @@ def test_table_items_filtered_by_external_id():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
     request = MagicMock(session={'THREADED_FILTERS': {}},
-                        GET={'external_id_pattern': '4cc7'})
+                        GET=QueryDict('external_id_pattern=4cc7'))
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
@@ -643,7 +672,7 @@ def test_table_items_filtered_by_keywords():
     page = TabbedPageFactory()
     tab_instance = TabInstanceFactory(page=page)
     request = MagicMock(session={'THREADED_FILTERS': {}},
-                        GET={'search': 'Latrine camp'})
+                        GET=QueryDict('search=Latrine camp'))
     tab = ViewAndEditTableTab()
     context_data = tab.get_context_data(
         tab_instance, request, categories=[],
@@ -663,7 +692,7 @@ def test_table_items_filtered_by_keywords():
 def test_dynamic_filters_read_from_tab_instance():
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -682,7 +711,7 @@ def test_category_options_in_context_data(item_type_taxonomy):
 
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -708,7 +737,7 @@ def test_feedback_type_options_in_context_data():
 
     page = TabbedPageFactory(name='main')
     tab_instance = TabInstanceFactory(page=page)
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     context_data = tab.get_context_data(tab_instance,
@@ -722,6 +751,40 @@ def test_feedback_type_options_in_context_data():
     ]
 
     assert context_data['feedback_type_options'] == expected_options
+
+
+@pytest.mark.xfail  # Fixture loading in kobo_tests.py interferes
+@pytest.mark.django_db
+def test_age_range_options_in_context_data():
+    age_ranges = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+
+    TermFactory(name='under-10', long_name='Under 10 yrs', taxonomy=age_ranges)
+    TermFactory(name='11-14', long_name='Age 11-14 yrs', taxonomy=age_ranges)
+    TermFactory(name='15-18', long_name='Age 15-18 yrs', taxonomy=age_ranges)
+
+    page = TabbedPageFactory(name='main')
+    tab_instance = TabInstanceFactory(page=page)
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('age_range=11-14&age_range=15-18')
+    )
+    tab = ViewAndEditTableTab()
+
+    context_data = tab.get_context_data(tab_instance,
+                                        request,
+                                        categories=[])
+
+    expected_options = [
+        ('under-10', 'Under 10 yrs', ),
+        ('11-14', 'Age 11-14 yrs', ),
+        ('15-18', 'Age 15-18 yrs', ),
+    ]
+
+    assert context_data['age_range_options'] == expected_options
+    assert context_data['selected_age_ranges'] == [
+        '11-14',
+        '15-18',
+    ]
 
 
 @pytest.mark.django_db
@@ -746,7 +809,7 @@ def test_items_sorted_by_timestamp_desc_by_default():
         'timestamp': '2018-10-26 00:00:00+0000'
     })
 
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={})
+    request = MagicMock(session={'THREADED_FILTERS': {}}, GET=QueryDict())
     tab = ViewAndEditTableTab()
 
     response = tab._get_items(request)
@@ -766,10 +829,10 @@ def test_items_paginated():
             'body': "item {}".format(i),
         })
 
-    request = MagicMock(session={'THREADED_FILTERS': {}}, GET={
-        'page': '2',
-        'sort': 'body',
-    })
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('page=2&sort=body')
+    )
     tab = ViewAndEditTableTab()
 
     response = tab._get_items(request, per_page='3')

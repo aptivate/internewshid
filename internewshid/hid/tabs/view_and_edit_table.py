@@ -213,6 +213,13 @@ class ViewAndEditTableTab(object):
 
         return feedback_types
 
+    def _get_age_range_options(self):
+        terms = transport_terms.list(taxonomy='age-ranges')
+
+        age_ranges = [(t['name'], t['long_name'],) for t in terms]
+
+        return age_ranges
+
     def _build_actions_dropdown(self, question_types):
         items = [
             (NONE_COMMAND, '---------'),
@@ -252,6 +259,8 @@ class ViewAndEditTableTab(object):
         enumerator_options = self._get_enumerator_options(items, **kwargs)
         collection_type_options = self._get_collection_type_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
+        age_range_options = self._get_age_range_options()
+        selected_age_ranges = request.GET.getlist('age_range')
 
         per_page = int(kwargs.get('per_page', 100))
         page_number = int(request.GET.get('page', 1))
@@ -272,6 +281,7 @@ class ViewAndEditTableTab(object):
 
         require_assets('hid/js/automatic_file_upload.js')
         require_assets('hid/js/select_all_checkbox.js')
+        require_assets('hid/js/enable_multiselect.js')
 
         return {
             'add_button_for': self._get_item_type_filter(kwargs),
@@ -281,6 +291,8 @@ class ViewAndEditTableTab(object):
             'actions': actions,
             'category_options': category_options,
             'feedback_type_options': feedback_type_options,
+            'age_range_options': age_range_options,
+            'selected_age_ranges': selected_age_ranges,
             'locations': location_options,
             'sub_locations': sub_location_options,
             'gender': gender_options,

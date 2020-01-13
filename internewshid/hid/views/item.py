@@ -160,7 +160,6 @@ class AddEditItemView(FormView):
                 'location': self.item.get('location', ''),
                 'sub_location': self.item.get('sub_location', ''),
                 'gender': self.item.get('gender', ''),
-                'age': self.item.get('age', ''),
                 'enumerator': self.item.get('enumerator', ''),
                 'collection_type': self.item.get('collection_type', ''),
                 'timestamp': self.item['timestamp'],
@@ -185,6 +184,9 @@ class AddEditItemView(FormView):
 
         if 'item-types' in self.item_terms:
             initial['feedback_type'] = self.item_terms['item-types'][0]['name']
+
+        if 'age-ranges' in self.item_terms:
+            initial['age_range'] = self.item_terms['item-types'][0]['name']
 
         return initial
 
@@ -277,6 +279,7 @@ class AddEditItemView(FormView):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
         feedback_type = data.pop('feedback_type', None)
+        age_range = data.pop('age_range', None)
         data.pop('id', None)
 
         tags = {}
@@ -288,7 +291,7 @@ class AddEditItemView(FormView):
             else:
                 regular_fields[field_name] = field_value
 
-        return category, tags, feedback_type, regular_fields
+        return category, tags, feedback_type, age_range, regular_fields
 
     def _add_tags(self, item_id, tags):
         for (taxonomy, value) in tags.iteritems():
@@ -310,8 +313,8 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        category, tags, feedback_type, regular_fields = self._separate_form_data(
-            form)
+        (category, tags, feedback_type, age_range,
+         regular_fields) = self._separate_form_data(form)
 
         transport.items.update(item_id, regular_fields)
 
@@ -330,6 +333,11 @@ class AddEditItemView(FormView):
         else:
             transport.items.delete_all_terms(item_id, 'item-types')
 
+        if age_range:
+            transport.items.add_terms(item_id, 'age-ranges', age_range)
+        else:
+            transport.items.delete_all_terms(item_id, 'age-ranges')
+
         self._add_tags(item_id, tags)
 
     def _create_item(self, form, taxonomy):
@@ -347,8 +355,8 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        category, tags, feedback_type, regular_fields = self._separate_form_data(
-            form)
+        (category, tags, feedback_type, age_range,
+         regular_fields) = self._separate_form_data(form)
 
         if not feedback_type:
             feedback_type = self.item_type['name']
@@ -368,6 +376,10 @@ class AddEditItemView(FormView):
 
         if taxonomy and category:
             transport.items.add_terms(created_item['id'], taxonomy, category)
+
+        if age_range:
+            transport.items.add_terms(created_item['id'], 'age-ranges',
+                                      age_range)
 
         self._add_tags(created_item['id'], tags)
 

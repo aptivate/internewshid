@@ -53,26 +53,12 @@ class GenderFilter(object):
 
 class AgeRangeFilter(object):
     def apply(self, filters, query_dict, **kwargs):
-        from_age = self.get_int_value(query_dict, 'from_age')
-        to_age = self.get_int_value(query_dict, 'to_age')
+        age_range_terms = []
 
-        if from_age is not None and to_age is not None:
-            filters.update(
-                from_age=from_age,
-                to_age=to_age
-            )
+        for age_range in query_dict.getlist('age_range', []):
+            age_range_terms.append('age-ranges:{}'.format(age_range))
 
-    def get_int_value(self, query_dict, name):
-        value = query_dict.get(name, None)
-
-        if value is None:
-            return None
-
-        try:
-            return int(value)
-
-        except ValueError:
-            return None
+        filters['terms_or'] = filters.get('terms_or', []) + age_range_terms
 
 
 class EnumeratorFilter(object):
