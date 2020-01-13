@@ -18,7 +18,7 @@ def get_filter(name):
     try:
         return _pool[name]
     except KeyError:
-        message = _("Filter named '{}' has not been registered").format(name)
+        message = _("Filter named '{0}' has not been registered").format(name)
 
         raise MissingFilterError(message)
 

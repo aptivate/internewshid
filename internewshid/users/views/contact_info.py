@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.translation import ugettext as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -110,8 +111,8 @@ class UpdateContact(PermissionRequiredMixin, UpdateContactBase):
     raise_exception = True
 
     def form_invalid(self, form):
-        messages.error(self.request, ('Contact data not valid, \
-                please check and try again.'))
+        messages.error(self.request, _("Contact data not valid, \
+                please check and try again."))
         return super(UpdateContact, self).form_invalid(form)
 
     def form_valid(self, form):

@@ -218,7 +218,7 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
         try:
             taxonomy = Taxonomy.objects.get(slug=slug)
         except Taxonomy.DoesNotExist:
-            message = _("Taxonomy with slug '%s' does not exist.") % (slug)
+            message = _("Taxonomy with slug '{0}' does not exist.").format(slug)
 
             data = {'detail': message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)

@@ -16,8 +16,8 @@ import mail
 from .models import User
 
 TITLES = (
-    'Dr', 'Hon', 'Mrs', 'Ms', 'Mr', 'Prof', 'His Excellency',
-    'Her Excellency', 'Rt.Hon', 'Assoc. Prof'
+    _("Dr"), _("Hon"), _("Mrs"), _("Ms"), _("Mr"), _("Prof"),
+    _("His Excellency"), _("Her Excellency"), _("Rt.Hon"), _("Assoc. Prof")
 )
 
 
@@ -86,7 +86,7 @@ class UpdateContactForm(AddContactForm):
     def notify_email_change(self,
                             old_address,
                             new_address,
-                            subject='{0}: email change notification'.format(settings.SITE_NAME),
+                            subject=_('{0}: email change notification').format(settings.SITE_NAME),
                             template_name='contacts/email/email_changed_body.email'):
         ctx = {
             'user': self.instance,
@@ -166,10 +166,14 @@ class ContactPasswordResetForm(PasswordResetForm):
         self.users_cache = UserModel._default_manager.filter(
             business_email__iexact=email)
         if not len(self.users_cache):
-            raise ValidationError(_("User with email '%s' not known" % email))
+            raise ValidationError(
+                _("User with email '{0}' not known").format(email)
+            )
         if not any(user.is_active for user in self.users_cache):
             # none of the filtered users are active
-            raise ValidationError(_("User with email '%s' not known" % email))
+            raise ValidationError(
+                _("User with email '{0}' not known".format(email))
+            )
         return email
 
     def save(self, subject,

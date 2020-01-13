@@ -51,16 +51,16 @@
                             <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
+                        {{ form.tags|add_class:'form-control'|attr:_('placeholder:Type and hit return')|attr:'data-role:tagsinput' }}
                     </div>
                     {% endif %}
 
                     <div class="item-apply form-group input-group">
-                        {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-md btn-border" %}
+                        {% bootstrap_button _("Cancel") button_type="submit" name="action" value="cancel" button_class="btn btn-md btn-border" %}
                         {% if update %}
-                        {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-md btn-success" %}
+                        {% bootstrap_button _("Update") button_type="submit" name="action" value="update" button_class="btn btn-md btn-success" %}
                         {% else %}
-                        {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="btn btn-md btn-success" %}
+                        {% bootstrap_button _("Create") button_type="submit" name="action" value="create" button_class="btn btn-md btn-success" %}
                         {% endif %}
                     </div>
 
@@ -76,7 +76,7 @@
                                 <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
                             </label>
-                            {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
+                            {{ form.body|add_class:'form-control'|attr:_("placeholder:Type your original text here") }}
                         </div>
                         {% endif %}
 
@@ -195,12 +195,12 @@
                             <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
+                        {{ form.translation|add_class:'form-control'|attr:_("placeholder:Type your translation text here") }}
                     </div>
                     {% endif %}
                 </div>
 
-                {% bootstrap_button "Delete feedback" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
+                {% bootstrap_button _("Delete feedback") button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
 
             </div>
         </div>

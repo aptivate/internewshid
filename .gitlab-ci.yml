@@ -12,6 +12,7 @@ variables:
 
 before_script:
   - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
+  - ln -srf internewshid/language_settings.py.english internewshid/language_settings.py
   - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
   - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
   - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less

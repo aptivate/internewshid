@@ -31,10 +31,10 @@
             <table class="pure-table">
                 <thead>
                     <tr>
-                        <th>Name of Funder</th>
-                        <th>Items Funded</th>
-                        <th>Amount of Funding</th>
-                        <th>Delete</th>
+                        <th>{% trans "Name of Funder" %}</th>
+                        <th>{% trans "Items Funded" %}</th>
+                        <th>{% trans "Amount of Funding% %}</th>
+                        <th>{% trans "Delete" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -134,7 +134,7 @@
 
     function createAddButton() {
         var btn = $('<p><button class="move-right pure-button" id="add-row">' +
-                    'Add a funder</button></p>');
+                    '{% trans "Add a funder" %}</button></p>');
         btn.on("click", function (e) {
             addRow();
             cancelEvent(e || window.event);

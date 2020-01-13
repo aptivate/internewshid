@@ -16,13 +16,10 @@ warnings.filterwarnings(
 
 BASE_DIR = path.abspath(path.dirname(__file__))
 
-
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-
 SECRET_KEY = private_settings.SECRET_KEY
-
 
 ADMINS = (
     ('Aptivate internewshid team', 'internewshid-team@aptivate.org'),
@@ -35,10 +32,18 @@ SERVER_EMAIL = 'server@internewshid.aptivate.org'
 
 TIME_ZONE = 'Asia/Dhaka'
 
-LANGUAGE_CODE = 'en'
+try:
+    import language_settings
+except ImportError:
+    print("Can't import the `language_settings` symlink!")
+    import sys
+    sys.exit(1)
+
+LANGUAGE_CODE = language_settings.LANGUAGE_CODE
 
 LANGUAGES = [
     ('en', 'English'),
+    ('fr', 'French'),
 ]
 
 SITE_ID = 1
@@ -70,7 +75,7 @@ STATICFILES_FINDERS = (
     'django_assets.finders.AssetsFinder'
 )
 
-LOCALE_DIR = path.join(BASE_DIR, 'locale')
+LOCALE_DIR = path.join(BASE_DIR, '..', 'locale')
 if path.isdir(LOCALE_DIR):
     LOCALE_PATHS = (LOCALE_DIR,)
 

@@ -124,7 +124,7 @@ class Term(models.Model):
     )
 
     def __unicode__(self):
-        return "{}:{}".format(
+        return "{0}:{1}".format(
             self.taxonomy.name,
             self.name
         )

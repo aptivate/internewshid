@@ -7,6 +7,7 @@ from django.db.models import (
     BooleanField, CharField, DateTimeField, EmailField, ImageField, TextField
 )
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from .countries import COUNTRIES, NATIONALITIES
 
@@ -29,12 +30,13 @@ def get_picture_path(instance, filename):
 
 # Managers
 class UserManager(BaseUserManager):
+
     def _create_user(self, business_email=None, password=None,
                      is_active=True, is_staff=False, is_superuser=False,
                      **extra_fields):
         now = timezone.now()
         if not business_email:
-            raise ValueError('The given business_email must be set')
+            raise ValueError(_('The given business_email must be set'))
         email = UserManager.normalize_email(business_email)
         user = self.model(business_email=email, is_staff=is_staff,
                           is_active=is_active, is_superuser=is_superuser,
@@ -58,13 +60,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = BooleanField(
         verbose_name='staff status',
         default=False,
-        help_text=('Designates whether the user can log into this admin '
-                   'site.'))
+        help_text=_("Designates whether the user can log into this admin "
+                    "site."))
     is_active = BooleanField(
         verbose_name='active',
         default=True,
-        help_text=('Designates whether this user should be treated as '
-                   'active. Unselect this instead of deleting accounts.'))
+        help_text=_("Designates whether this user should be treated as "
+                    "active. Unselect this instead of deleting accounts."))
     date_joined = DateTimeField(default=timezone.now)
 
     # general contact information
@@ -73,15 +75,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = CharField(max_length=50)
     gender = CharField(max_length=6, choices=GENDER_CHOICES)
     contact_type = CharField(max_length=32,
-                             verbose_name="Type of Contact")
+                             verbose_name=_("Type of Contact"))
     # Address
     home_address = TextField(blank=True)
     business_address = TextField(blank=True)
     country = CharField(max_length=64,
                         blank=True,
                         choices=COUNTRIES,
-                        help_text=('The country in which the contact is '
-                                   'currently working in'))
+                        help_text=_("The country in which the contact is "
+                                    "currently working in"))
     nationality = CharField(max_length=64, blank=True, choices=NATIONALITIES)
 
     # Work
@@ -95,18 +97,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     skype_id = CharField(max_length=32, blank=True)
     yahoo_messenger = CharField(max_length=32,
                                 blank=True,
-                                verbose_name='Yahoo Messenger')
-    msn_id = CharField(max_length=32, blank=True, verbose_name='MSN ID')
+                                verbose_name=_("Yahoo Messenger"))
+    msn_id = CharField(max_length=32, blank=True, verbose_name=_("MSN ID"))
 
     # Phones & fax
     home_tel = CharField(max_length=20,
                          blank=True,
-                         verbose_name="Home telephone")
+                         verbose_name=_("Home telephone"))
     business_tel = CharField(max_length=20,
                              blank=True,
-                             verbose_name="Business telephone")
+                             verbose_name=_("Business telephone"))
     mobile = CharField(max_length=20, blank=True)
-    fax = CharField(max_length=20, blank=True, verbose_name="Fax no")
+    fax = CharField(max_length=20, blank=True, verbose_name=_("Fax no"))
 
     # Misc
     notes = TextField(blank=True)

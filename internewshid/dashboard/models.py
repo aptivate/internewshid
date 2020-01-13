@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
 
@@ -34,26 +35,26 @@ class WidgetInstance(models.Model):
     column = models.PositiveIntegerField(
         default=0,
         validators=[
-            MaxValueValidator(11, 'column must be between 0 and 11')
+            MaxValueValidator(11, _("column must be between 0 and 11"))
         ]
     )
     width = models.PositiveIntegerField(
         default=12,
         validators=[
-            MinValueValidator(1, 'width must be between 1 and 12'),
-            MaxValueValidator(12, 'width must be between 1 and 12')
+            MinValueValidator(1, _("width must be between 1 and 12")),
+            MaxValueValidator(12, _("width must be between 1 and 12"))
         ]
     )
     height = models.CharField(
         max_length=6,
         default='medium',
         choices=(
-            ('small', 'Small'),
-            ('medium', 'Medium'),
-            ('tall', 'Tall')
+            ('small', _("Small")),
+            ('medium', _("Medium")),
+            ('tall', _("Tall"))
         )
     )
     settings = JSONField(blank=True)
 
     def __unicode__(self):
-        return "Instance of {}".format(self.widget_type)
+        return _("Instance of {0}").format(self.widget_type)
