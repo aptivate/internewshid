@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internews HID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-09 22:18+0600\n"
-"PO-Revision-Date: 2020-01-13 14:31+0000\n"
+"POT-Creation-Date: 2020-01-14 18:04+0600\n"
+"PO-Revision-Date: 2020-01-14 17:04+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -428,6 +428,14 @@ msgstr ""
 
 #: internewshid/hid/templates/hid/table.html:52
 msgid "Next page"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:12
+msgid "Apply filters"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:13
+msgid "Reset filters"
 msgstr ""
 
 #: internewshid/hid/templates/hid/tabs/filters/age_range.html:3
@@ -1874,45 +1882,57 @@ msgstr ""
 msgid "User with email '{0}' not known"
 msgstr ""
 
-#: internewshid/users/models.py:39
+#: internewshid/users/models.py:14
+msgid "Female"
+msgstr ""
+
+#: internewshid/users/models.py:15
+msgid "Male"
+msgstr ""
+
+#: internewshid/users/models.py:16
+msgid "Other"
+msgstr ""
+
+#: internewshid/users/models.py:40
 msgid "The given business_email must be set"
 msgstr ""
 
-#: internewshid/users/models.py:63
+#: internewshid/users/models.py:64
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: internewshid/users/models.py:68
+#: internewshid/users/models.py:69
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: internewshid/users/models.py:78
+#: internewshid/users/models.py:79
 msgid "Type of Contact"
 msgstr ""
 
-#: internewshid/users/models.py:85
+#: internewshid/users/models.py:86
 msgid "The country in which the contact is currently working in"
 msgstr ""
 
-#: internewshid/users/models.py:100
+#: internewshid/users/models.py:101
 msgid "Yahoo Messenger"
 msgstr ""
 
-#: internewshid/users/models.py:101
+#: internewshid/users/models.py:102
 msgid "MSN ID"
 msgstr ""
 
-#: internewshid/users/models.py:106
+#: internewshid/users/models.py:107
 msgid "Home telephone"
 msgstr ""
 
-#: internewshid/users/models.py:109
+#: internewshid/users/models.py:110
 msgid "Business telephone"
 msgstr ""
 
-#: internewshid/users/models.py:111
+#: internewshid/users/models.py:112
 msgid "Fax no"
 msgstr ""
 
