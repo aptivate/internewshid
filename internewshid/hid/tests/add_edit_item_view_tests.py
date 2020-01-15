@@ -634,7 +634,7 @@ def test_submitting_form_creates_an_item_with_a_category(item_type_taxonomy,
 @pytest.mark.django_db
 def test_item_can_be_deleted_with_post_request(item):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
-    TermFactory(taxonomy=taxonomy, name='concern')
+    TermFactory(taxonomy=taxonomy, name='concern', long_name='concern')
 
     transport.items.add_terms(item['id'], 'item-types', 'concern')
 
@@ -723,7 +723,7 @@ def test_item_category_can_be_unset(view, update_form, item_type_taxonomy):
 @pytest.mark.django_db
 def test_item_feedback_type_can_be_updated(view, update_form):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
-    TermFactory(taxonomy=taxonomy, name='concern')
+    TermFactory(taxonomy=taxonomy, name='concern', long_name='concern')
     TermFactory(taxonomy=taxonomy, name='rumour')
 
     transport.items.add_terms(view.item['id'], 'item-types', 'rumour')
