@@ -11,8 +11,9 @@ from django.utils.translation import ugettext as _
 
 from .countries import COUNTRIES, NATIONALITIES
 
-GENDER_CHOICES = (('female', 'Female'),
-                  ('male', 'Male'))
+GENDER_CHOICES = (('female', _('Female')),
+                  ('male', _('Male')),
+                  ('other', _('Other')))
 
 
 def get_user_fields(instance):

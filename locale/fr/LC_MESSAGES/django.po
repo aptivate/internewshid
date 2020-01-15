@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-09 22:18+0600\n"
-"PO-Revision-Date: 2020-01-13 14:30+0000\n"
+"POT-Creation-Date: 2020-01-14 18:04+0600\n"
+"PO-Revision-Date: 2020-01-14 12:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: internewshid/hid/tables.py:26
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 #: internewshid/hid/tables.py:31
 msgid "Imported"
@@ -164,18 +164,18 @@ msgstr ""
 
 #: internewshid/hid/tables.py:36
 msgid "Created"
-msgstr ""
+msgstr "Crée"
 
 #: internewshid/hid/tables.py:41
 #: internewshid/hid/templates/hid/add_edit_item.html:73
 #: internewshid/templates/base_side.html:27
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: internewshid/hid/tables.py:46
 #: internewshid/hid/templates/hid/add_edit_item.html:185
 msgid "Translation"
-msgstr ""
+msgstr "Traduction"
 
 #: internewshid/hid/tables.py:50
 #: internewshid/hid/templates/hid/add_edit_item.html:19
@@ -187,19 +187,19 @@ msgstr ""
 #: internewshid/hid/templates/hid/item.html:23
 #: internewshid/hid/templates/hid/tabs/filters/tags.html:3
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: internewshid/hid/tables.py:63
 #: internewshid/hid/templates/hid/add_edit_item.html:31
 #: internewshid/hid/templates/hid/tabs/filters/feedback_type.html:3
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: internewshid/hid/tables.py:69
 #: internewshid/hid/templates/hid/add_edit_item.html:134
 #: internewshid/hid/templates/hid/tabs/filters/gender.html:4
 msgid "Gender"
-msgstr ""
+msgstr "Sexe"
 
 #: internewshid/hid/tables.py:74
 #: internewshid/hid/templates/hid/add_edit_item.html:146
@@ -210,7 +210,7 @@ msgstr ""
 #: internewshid/hid/templates/hid/add_edit_item.html:112
 #: internewshid/hid/templates/hid/tabs/filters/location.html:4
 msgid "Location"
-msgstr ""
+msgstr "Lieu"
 
 #: internewshid/hid/tables.py:84
 #: internewshid/hid/templates/hid/add_edit_item.html:123
@@ -222,7 +222,7 @@ msgstr ""
 #: internewshid/hid/templates/hid/add_edit_item.html:158
 #: internewshid/hid/templates/hid/tabs/filters/enumerator.html:4
 msgid "Enumerator"
-msgstr ""
+msgstr "Recenseur"
 
 #: internewshid/hid/tables.py:94
 #: internewshid/hid/templates/hid/add_edit_item.html:170
@@ -233,7 +233,7 @@ msgstr ""
 #: internewshid/hid/tables.py:99
 #: internewshid/hid/templates/hid/tabs/filters/external_id.html:3
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: internewshid/hid/tabs/view_and_edit_table.py:219
 msgid "Delete Selected"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: internewshid/hid/templates/hid/sources.html:7
 msgid "Sources"
-msgstr ""
+msgstr "Source"
 
 #: internewshid/hid/templates/hid/sources.html:20
 msgid "View/Edit data"
@@ -427,9 +427,17 @@ msgstr ""
 msgid "Next page"
 msgstr ""
 
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:12
+msgid "Apply filters"
+msgstr "Appliquer les filtres"
+
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:13
+msgid "Reset filters"
+msgstr "Réinitialiser les filtres"
+
 #: internewshid/hid/templates/hid/tabs/filters/age_range.html:3
 msgid "Ages"
-msgstr ""
+msgstr "Ages"
 
 #: internewshid/hid/templates/hid/tabs/filters/age_range.html:4
 msgid "Min age"
@@ -449,11 +457,11 @@ msgstr ""
 
 #: internewshid/hid/templates/hid/tabs/filters/category.html:4
 msgid "Themes"
-msgstr ""
+msgstr "Thèmes"
 
 #: internewshid/hid/templates/hid/tabs/filters/category.html:6
 msgid "All Themes"
-msgstr ""
+msgstr "Tous les thèmes"
 
 #: internewshid/hid/templates/hid/tabs/filters/collection_type.html:6
 msgid "All Collection Types"
@@ -461,23 +469,23 @@ msgstr ""
 
 #: internewshid/hid/templates/hid/tabs/filters/enumerator.html:6
 msgid "All Enumerators"
-msgstr ""
+msgstr "Tous les recenseurs"
 
 #: internewshid/hid/templates/hid/tabs/filters/external_id.html:4
 msgid "All IDs"
-msgstr ""
+msgstr "Tous les IDs"
 
 #: internewshid/hid/templates/hid/tabs/filters/feedback_type.html:5
 msgid "All Types"
-msgstr ""
+msgstr "Tous les types"
 
 #: internewshid/hid/templates/hid/tabs/filters/gender.html:6
 msgid "All Genders"
-msgstr ""
+msgstr "Tous les sexes"
 
 #: internewshid/hid/templates/hid/tabs/filters/location.html:6
 msgid "All Locations"
-msgstr ""
+msgstr "Tous les lieux"
 
 #: internewshid/hid/templates/hid/tabs/filters/search.html:3
 #: internewshid/hid/templates/hid/tabs/filters/search.html:4
@@ -490,11 +498,11 @@ msgstr ""
 
 #: internewshid/hid/templates/hid/tabs/filters/tags.html:4
 msgid "All Tags"
-msgstr ""
+msgstr "Tous les tags"
 
 #: internewshid/hid/templates/hid/tabs/filters/time_range.html:3
 msgid "Dates"
-msgstr ""
+msgstr "Dates"
 
 #: internewshid/hid/templates/hid/tabs/filters/time_range.html:4
 msgid "Start date"
@@ -688,7 +696,7 @@ msgstr ""
 
 #: internewshid/templates/base_side.html:26
 msgid "Dashboard"
-msgstr ""
+msgstr "Tableau de bord"
 
 #: internewshid/templates/base_side.html:34
 msgid "data"
@@ -696,11 +704,11 @@ msgstr ""
 
 #: internewshid/templates/base_side.html:37
 msgid "Upload data"
-msgstr ""
+msgstr "Publier les données"
 
 #: internewshid/templates/base_side.html:48
 msgid "Export data"
-msgstr ""
+msgstr "Exporter les données"
 
 #: internewshid/templates/base_side.html:51
 msgid "All Feedback (CSV)"
@@ -712,7 +720,7 @@ msgstr ""
 
 #: internewshid/templates/base_side.html:61
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: internewshid/templates/base_side.html:64
 #, python-format
@@ -1871,45 +1879,57 @@ msgstr ""
 msgid "User with email '{0}' not known"
 msgstr ""
 
-#: internewshid/users/models.py:39
+#: internewshid/users/models.py:14
+msgid "Female"
+msgstr "Femme"
+
+#: internewshid/users/models.py:15
+msgid "Male"
+msgstr "Homme"
+
+#: internewshid/users/models.py:16
+msgid "Other"
+msgstr "Autre"
+
+#: internewshid/users/models.py:40
 msgid "The given business_email must be set"
 msgstr ""
 
-#: internewshid/users/models.py:63
+#: internewshid/users/models.py:64
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: internewshid/users/models.py:68
+#: internewshid/users/models.py:69
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: internewshid/users/models.py:78
+#: internewshid/users/models.py:79
 msgid "Type of Contact"
 msgstr ""
 
-#: internewshid/users/models.py:85
+#: internewshid/users/models.py:86
 msgid "The country in which the contact is currently working in"
 msgstr ""
 
-#: internewshid/users/models.py:100
+#: internewshid/users/models.py:101
 msgid "Yahoo Messenger"
 msgstr ""
 
-#: internewshid/users/models.py:101
+#: internewshid/users/models.py:102
 msgid "MSN ID"
 msgstr ""
 
-#: internewshid/users/models.py:106
+#: internewshid/users/models.py:107
 msgid "Home telephone"
 msgstr ""
 
-#: internewshid/users/models.py:109
+#: internewshid/users/models.py:110
 msgid "Business telephone"
 msgstr ""
 
-#: internewshid/users/models.py:111
+#: internewshid/users/models.py:112
 msgid "Fax no"
 msgstr ""
 
