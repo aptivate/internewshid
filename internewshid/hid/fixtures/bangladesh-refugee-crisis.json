@@ -293,7 +293,7 @@
     {
         "fields": {
             "label": "kobo",
-            "profile": "{\"name\":\"Kobo\",\"format\":\"excel\",\"label\":\"kobo\",\"skip_header\":2,\"taxonomies\":{},\"columns\":[{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"start\",\"date_format\":\"%Y-%m-%dT%H: %M: %S.%f%z\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"end\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"username\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"What is the feedback or rumour?\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"date\"},{\"field\":\"gender\",\"type\":\"text\",\"name\":\"gender\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"Age range\",\"taxonomy\":\"age-ranges\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"},{\"field\":\"sub_location\",\"type\":\"text\",\"name\":\"Sub-Location\"},{\"field\":\"enumerator\",\"type\":\"text\",\"name\":\"comment\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_id\"},{\"field\":\"external_id\",\"type\":\"text\",\"name\":\"_uuid\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_submission_time\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_validation_status\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_index\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"tags\",\"taxonomy\":\"tags\"}]}"
+            "profile": "{\"name\":\"Kobo\",\"format\":\"excel\",\"label\":\"kobo\",\"skip_header\":2,\"taxonomies\":{},\"columns\":[{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"start\",\"date_format\":\"%Y-%m-%dT%H: %M: %S.%f%z\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"end\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"username\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"What is the feedback or rumour?\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"date\"},{\"field\":\"gender\",\"type\":\"text\",\"name\":\"gender\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"age\",\"taxonomy\":\"age-ranges\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"},{\"field\":\"sub_location\",\"type\":\"text\",\"name\":\"Sub-Location\"},{\"field\":\"enumerator\",\"type\":\"text\",\"name\":\"comment\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_id\"},{\"field\":\"external_id\",\"type\":\"text\",\"name\":\"_uuid\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_submission_time\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_validation_status\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_index\"},{\"field\":\"terms\",\"type\":\"taxonomy\",\"name\":\"tags\",\"taxonomy\":\"tags\"}]}"
         },
         "model": "chn_spreadsheet.sheetprofile",
         "pk": 3
@@ -375,27 +375,27 @@
         "model": "taxonomies.term",
         "pk": 420,
         "fields": {
-            "name": "Under 10 yrs",
+            "name": "Under 10",
             "taxonomy": 8,
-            "long_name": "Under 10 yrs"
+            "long_name": "Under 10"
         }
     },
     {
         "model": "taxonomies.term",
         "pk": 421,
         "fields": {
-            "name": "Age 11-14 yrs",
+            "name": "Age 11-14",
             "taxonomy": 8,
-            "long_name": "Age 11-14 yrs"
+            "long_name": "Age 11-14"
         }
     },
     {
         "model": "taxonomies.term",
         "pk": 422,
         "fields": {
-            "name": "Age 15-18 yrs",
+            "name": "Age 15-18",
             "taxonomy": 8,
-            "long_name": "Age 15-18 yrs"
+            "long_name": "Age 15-18"
         }
     },
     {
