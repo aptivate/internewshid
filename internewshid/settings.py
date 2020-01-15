@@ -32,14 +32,7 @@ SERVER_EMAIL = 'server@internewshid.aptivate.org'
 
 TIME_ZONE = 'Asia/Dhaka'
 
-try:
-    import language_settings
-except ImportError:
-    print("Can't import the `language_settings` symlink!")
-    import sys
-    sys.exit(1)
-
-LANGUAGE_CODE = language_settings.LANGUAGE_CODE
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
     ('en', 'English'),

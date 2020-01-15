@@ -32,7 +32,9 @@ TIME_ZONE = 'Africa/Kampala'
 LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', 'English'),
+    ('fr', 'French'),
 ]
+
 
 CONSTANCE_CONFIG = {
     'CONTEXT_LOCATION': ('Uganda', 'Location of dashboard deployment'),

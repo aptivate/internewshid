@@ -1,1 +1,0 @@
-LANGUAGE_CODE = 'en'

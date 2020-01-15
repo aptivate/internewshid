@@ -24,3 +24,5 @@ DATABASES = {
 
 EMAIL_HOST = 'localhost'
 SITE_HOSTNAME = 'lin-internewshid-prod.aptivate.org'
+
+LANGUAGE_CODE = 'en'
