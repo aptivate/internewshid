@@ -1,6 +1,76 @@
 [
     {
         "fields": {
+            "multiplicity": "optional",
+            "name": "Item Types",
+            "slug": "item-types",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "multiplicity": "multiple",
+            "name": "Tags",
+            "slug": "tags",
+            "vocabulary": "open"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "multiplicity": "optional",
+            "name": "Data Origins",
+            "slug": "data-origins",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "multiplicity": "optional",
+            "name": "Countries",
+            "slug": "countries",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "multiplicity": "optional",
+            "name": "Contexts",
+            "slug": "contexts",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "multiplicity": "optional",
+            "name": "Bangladesh Refugee Crisis Sectors",
+            "slug": "bangladesh-refugee-crisis-sectors",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "multiplicity": "optional",
+            "name": "Age Ranges",
+            "slug": "age-ranges",
+            "vocabulary": "closed"
+        },
+        "model": "taxonomies.taxonomy",
+        "pk": 8
+    },
+    {
+        "fields": {
             "name": "main"
         },
         "model": "dashboard.dashboard",
