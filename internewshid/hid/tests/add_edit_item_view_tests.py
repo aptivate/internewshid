@@ -11,6 +11,7 @@ import pytest
 from mock import Mock, patch
 
 import transport
+from chn_spreadsheet.tests.conftest import taxonomies  # noqa
 from hid.constants import ITEM_TYPE_CATEGORY
 from taxonomies.models import Taxonomy
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
@@ -721,7 +722,7 @@ def test_item_category_can_be_unset(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_updated(view, update_form):
+def test_item_feedback_type_can_be_updated(view, update_form, taxonomies):  # noqa
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern', long_name='Concern')
     TermFactory(taxonomy=taxonomy, name='rumour')
@@ -745,7 +746,7 @@ def test_item_feedback_type_can_be_updated(view, update_form):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
+def test_item_feedback_type_can_be_unset(view, update_form, taxonomies):  # noqa
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern')
 
@@ -767,7 +768,7 @@ def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_age_range_can_be_updated(view, update_form):
+def test_item_age_range_can_be_updated(view, update_form, taxonomies):  # noqa
     taxonomy = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
     TermFactory(taxonomy=taxonomy, name='Age 11-14 yrs')
     TermFactory(taxonomy=taxonomy, name='Age 15-18 yrs')
@@ -818,7 +819,8 @@ def test_item_category_not_required(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_update_logs_message_and_redirects(view, update_form, item_type_taxonomy):
+def test_item_update_logs_message_and_redirects(view, update_form, taxonomies):  # noqa
+    item_type_taxonomy = Taxonomy.objects.get(name='Item Types')
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     view.item_type['long_name'] = 'Question'
@@ -892,7 +894,7 @@ def test_item_can_be_deleted(view):
 
 
 @pytest.mark.django_db
-def test_free_tags_created_on_item_update(view, update_form, item_type_taxonomy):
+def test_free_tags_created_on_item_update(view, update_form, taxonomies):  # noqa
     # Deliberate spaces to be stripped
     update_form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
@@ -911,7 +913,7 @@ def test_free_tags_created_on_item_update(view, update_form, item_type_taxonomy)
 
 
 @pytest.mark.django_db
-def test_existing_tag_deleted_on_item_update(view, update_form, item_type_taxonomy):
+def test_existing_tag_deleted_on_item_update(view, update_form, taxonomies):  # noqa
     transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
     update_form.cleaned_data['tags'] = 'Monrovia'
@@ -942,8 +944,8 @@ def test_free_tags_created_for_new_item(add_view, new_form):
     assert 'Important' in terms
     assert 'age 35-40' in terms
 
-    taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'tags' in taxonomies
+    taxonomy_list = [t['taxonomy'] for t in item['terms']]
+    assert 'tags' in taxonomy_list
 
 
 @pytest.mark.django_db
@@ -959,8 +961,8 @@ def test_data_origin_created_for_new_item(add_view, new_form):
     terms = [t['name'] for t in item['terms']]
     assert 'Form Entry' in terms
 
-    taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'data-origins' in taxonomies
+    taxonomy_list = [t['taxonomy'] for t in item['terms']]
+    assert 'data-origins' in taxonomy_list
 
 
 @pytest.mark.django_db

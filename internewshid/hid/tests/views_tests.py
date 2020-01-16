@@ -745,18 +745,18 @@ def test_feedback_type_options_in_context_data():
                                         categories=[])
 
     expected_options = [
-        ('concern', 'Concern', ),
-        ('question', 'Question', ),
-        ('rumor', 'Rumor', ),
+        ('concern', 'Concern',),
+        ('question', 'Question',),
+        ('rumor', 'Rumor',),
     ]
 
     assert context_data['feedback_type_options'] == expected_options
 
 
-@pytest.mark.xfail  # Fixture loading in kobo_tests.py interferes
 @pytest.mark.django_db
 def test_age_range_options_in_context_data():
     age_ranges = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    Term.objects.filter(taxonomy=age_ranges).delete()
 
     TermFactory(name='under-10', long_name='Under 10 yrs', taxonomy=age_ranges)
     TermFactory(name='11-14', long_name='Age 11-14 yrs', taxonomy=age_ranges)
@@ -775,9 +775,9 @@ def test_age_range_options_in_context_data():
                                         categories=[])
 
     expected_options = [
-        ('under-10', 'Under 10 yrs', ),
-        ('11-14', 'Age 11-14 yrs', ),
-        ('15-18', 'Age 15-18 yrs', ),
+        ('under-10', 'Under 10 yrs',),
+        ('11-14', 'Age 11-14 yrs',),
+        ('15-18', 'Age 15-18 yrs',),
     ]
 
     assert context_data['age_range_options'] == expected_options

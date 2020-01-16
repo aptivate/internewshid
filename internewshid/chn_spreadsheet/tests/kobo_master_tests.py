@@ -6,6 +6,7 @@ from django.core.management import call_command
 import pytest
 
 import transport
+from chn_spreadsheet.tests.conftest import taxonomies  # noqa
 
 TEST_BASE_DIR = path.abspath(path.dirname(__file__))
 TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
@@ -18,7 +19,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 
 @pytest.mark.django_db  # noqa
-def test_kobo_master_items_imported(importer, django_db_setup):
+def test_kobo_master_items_imported(importer, django_db_setup, taxonomies):  # noqa
     assert len(transport.items.list_items()['results']) == 0
 
     file_path = path.join(TEST_DIR, 'sample_kobo_master.xlsx')
@@ -54,7 +55,7 @@ def test_kobo_master_items_imported(importer, django_db_setup):
 
 
 @pytest.mark.django_db  # noqa
-def test_items_cannot_be_imported_twice(importer, django_db_setup):
+def test_items_cannot_be_imported_twice(importer, django_db_setup, taxonomies):  # noqa
     file_path = path.join(TEST_DIR, 'master_kobo_single_item.xlsx')
     (num_saved, num_skipped) = importer.store_spreadsheet('kobo_master', open(file_path, 'rb'))
 
