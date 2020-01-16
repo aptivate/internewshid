@@ -32,6 +32,7 @@ TIME_ZONE = 'Africa/Khartoum'
 LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', 'English'),
+    ('fr', 'French'),
 ]
 
 CONSTANCE_CONFIG = {
