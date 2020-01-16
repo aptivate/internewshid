@@ -34,6 +34,8 @@
     </div>
     {% endblock content %}
     {% block bootstrap3_extra_js %}
+        {# don't seem to be able to add this to the assets blob #}
+        <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
         {% assets "javascript_assets" %}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
