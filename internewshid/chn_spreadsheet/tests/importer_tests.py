@@ -8,6 +8,7 @@ import pytest
 import pytz
 
 import transport
+from transport.exceptions import TransportException
 
 from ..importer import Importer, SheetImportException, SheetProfile
 
@@ -534,3 +535,25 @@ def test_terms_in_row_split_on_comma(importer):
             },
         ]
     }
+
+
+def test_get_spreadsheet_error_message_works_without_item(importer):
+
+    class MockError(object):
+        code = 101
+
+        def __str__(self):
+            return "Unexpected error"
+
+    exc_inst = TransportException(
+        {'status_code': 404, 'message.content': [MockError()]}
+    )
+    expected_message = (
+        'There was a problem with row 1 of the spreadsheet:\n'
+        'Column: \'Message\' (message.content)\nError (101):'
+        ' \'Unexpected error\'\n\nValue: '
+    )
+
+    actual_message = importer._get_spreadsheet_error_message("1", exc_inst)
+
+    assert expected_message == actual_message

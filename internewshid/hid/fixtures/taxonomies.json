@@ -231,7 +231,6 @@
     "model": "taxonomies.term",
     "pk": 66
   },
-  ,
   {
     "model": "taxonomies.term",
     "pk": 420,
