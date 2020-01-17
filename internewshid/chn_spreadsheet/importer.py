@@ -165,7 +165,7 @@ class Importer(object):
         # be handled correctly here as 'item' won't exist
 
         status_code = exc_inst.message.pop('status_code')
-        item = exc_inst.message.pop('item')
+        item = exc_inst.message.pop('item') if 'item' in exc_inst.message else {}
 
         messages = []
 
