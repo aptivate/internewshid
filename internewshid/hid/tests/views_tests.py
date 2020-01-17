@@ -756,7 +756,6 @@ def test_feedback_type_options_in_context_data():
 @pytest.mark.django_db
 def test_age_range_options_in_context_data():
     age_ranges = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
-    Term.objects.filter(taxonomy=age_ranges).delete()
 
     TermFactory(name='under-10', long_name='Under 10 yrs', taxonomy=age_ranges)
     TermFactory(name='11-14', long_name='Age 11-14 yrs', taxonomy=age_ranges)
