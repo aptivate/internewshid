@@ -71,6 +71,16 @@
   },
   {
     "fields": {
+      "multiplicity": "optional",
+      "name": "drc",
+      "slug": "drc",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 9
+  },
+  {
+    "fields": {
       "long_name": "Question",
       "name": "question",
       "taxonomy": 2
