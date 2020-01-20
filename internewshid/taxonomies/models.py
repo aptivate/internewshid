@@ -124,9 +124,9 @@ class Term(models.Model):
     )
 
     def __unicode__(self):
-        return "{0}:{1}".format(
+        return u"{0}:{1}".format(
             self.taxonomy.name,
-            self.name
+            self.name,
         )
 
     # Custom Manager
