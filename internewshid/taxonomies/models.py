@@ -115,7 +115,8 @@ class Term(models.Model):
     taxonomy = models.ForeignKey(
         Taxonomy,
         verbose_name=_('Taxonomy'),
-        related_name="%(app_label)s_%(class)s_term"
+        related_name="%(app_label)s_%(class)s_term",
+        on_delete=models.CASCADE
     )
 
     long_name = models.TextField(

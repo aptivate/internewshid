@@ -29,7 +29,7 @@ class WidgetInstance(models.Model):
     and the position within that dashboard (row,
     column, width)
     """
-    dashboard = models.ForeignKey(Dashboard)
+    dashboard = models.ForeignKey(Dashboard, on_delete=models.CASCADE)
     widget_type = models.CharField(max_length=128)
     row = models.PositiveIntegerField(default=0)
     column = models.PositiveIntegerField(

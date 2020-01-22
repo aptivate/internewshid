@@ -16,7 +16,8 @@ class TabbedPage(models.Model):
 class TabInstance(models.Model):
     settings = JSONField(blank=True)
     tab_type = models.CharField(max_length=128)
-    page = models.ForeignKey(TabbedPage, related_name='tabs')
+    page = models.ForeignKey(TabbedPage, related_name='tabs',
+                             on_delete=models.CASCADE)
     name = models.SlugField(max_length=128, unique=False)
     default = models.BooleanField(default=False)
     position = models.PositiveIntegerField(default=0)
