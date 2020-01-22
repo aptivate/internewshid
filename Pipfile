@@ -17,7 +17,7 @@ cssmin = "*"
 django-assets = "*"
 django-braces = "*"
 django-constance = {extras = ["database"],version = "*"}
-django-filter = "==1.1.0"
+django-filter = "*"
 django-floppyforms = "*"
 django-form-utils = "*"
 django-spreadsheetresponsemixin = "*"
