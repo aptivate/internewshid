@@ -226,29 +226,72 @@ def update_recursive(dest, source):
             dest[k] = deepcopy(source[k])
 
 
-try:
-    import local_settings
-except ImportError:
-    print("Can't import the `local_settings` symlink!")
-    import sys
-    sys.exit(1)
-else:
-    import re
-    for attr in dir(local_settings):
-        match = re.search('^EXTRA_(\w+)', attr)  # noqa
-        if match:
-            name = match.group(1)
-            value = getattr(local_settings, attr)
-            try:
-                original = globals()[name]
-                if isinstance(original, collections.Mapping):
-                    update_recursive(original, value)
-                else:
-                    original += value
-            except KeyError:
-                globals()[name] = value
-        elif re.search('^[A-Z]', attr):
-            globals()[attr] = getattr(local_settings, attr)
+# try:
+#     import local_settings
+# except ImportError:
+#     print("Can't import the `local_settings` symlink!")
+#     import sys
+#     sys.exit(1)
+# else:
+#     import re
+#     for attr in dir(local_settings):
+#         match = re.search('^EXTRA_(\w+)', attr)  # noqa
+#         if match:
+#             name = match.group(1)
+#             value = getattr(local_settings, attr)
+#             try:
+#                 original = globals()[name]
+#                 if isinstance(original, collections.Mapping):
+#                     update_recursive(original, value)
+#                 else:
+#                     original += value
+#             except KeyError:
+#                 globals()[name] = value
+#         elif re.search('^[A-Z]', attr):
+#             globals()[attr] = getattr(local_settings, attr)
+
+from os import environ
+from private_settings import DB_PASSWORD
+
+DEBUG = True
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
+DJANGOJS_DEBUG = DEBUG
+
+# `MYSQL_DATABASE` and `MYSQL_ROOT_PASSWORD` are used for the CI
+# https://hub.docker.com/_/mysql/
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': environ.get('MYSQL_DATABASE', 'internewshid'),
+        'USER': environ.get('APTIVATE_CLI_MYSQL_USER', 'internewshid'),
+        'HOST': environ.get('APTIVATE_CLI_MYSQL_HOST', 'localhost'),
+        'PASSWORD': environ.get('MYSQL_ROOT_PASSWORD', DB_PASSWORD),
+        'OPTIONS': {
+          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
+    }
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'localhost:8000'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+INTERNAL_IPS = (
+  '127.0.0.1',
+)
+
+LANGUAGE_CODE = 'en'
+
 
 ALLOWED_HOSTS = [
     '*',
