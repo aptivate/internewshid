@@ -130,7 +130,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.first_name
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_full_name()
 
     @property

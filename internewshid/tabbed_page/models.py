@@ -9,7 +9,7 @@ class TabbedPage(models.Model):
         unique=True
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -23,7 +23,7 @@ class TabInstance(models.Model):
     position = models.PositiveIntegerField(default=0)
     label = models.CharField(max_length=128)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label
 
     class Meta:
