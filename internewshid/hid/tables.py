@@ -146,7 +146,7 @@ class ItemTable(tables.Table):
         page_range = getattr(settings, "DJANGO_TABLES2_PAGE_RANGE", 10)
 
         if self.num_pages <= page_range:
-            return range(1, self.num_pages + 1)
+            return [p for p in range(1, self.num_pages + 1)]
 
         range_start = self.page_number - int(page_range / 2)
         if range_start < 1:
