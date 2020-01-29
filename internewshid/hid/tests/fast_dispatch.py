@@ -100,11 +100,11 @@ class FastDispatchMixin(object):
 
         from django.conf import settings
 
-        if 'django.contrib.auth.middleware.AuthenticationMiddleware' in settings.MIDDLEWARE_CLASSES:
+        if 'django.contrib.auth.middleware.AuthenticationMiddleware' in settings.MIDDLEWARE:
             from django.contrib.auth.models import AnonymousUser
             request.user = getattr(self, 'user', AnonymousUser())
 
-        if 'django.middleware.locale.LocaleMiddleware' in settings.MIDDLEWARE_CLASSES:
+        if 'django.middleware.locale.LocaleMiddleware' in settings.MIDDLEWARE:
             request.LANGUAGE_CODE = settings.LANGUAGE_CODE
 
         # Resources filter plugin tests use this a lot.
