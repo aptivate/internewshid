@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.db.models import Count, Q
 from django.utils.translation import ugettext as _
 
