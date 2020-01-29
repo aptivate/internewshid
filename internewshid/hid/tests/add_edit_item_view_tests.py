@@ -488,7 +488,7 @@ def test_displaying_existing_item_returns_template_response(generic_item):
 
 def test_displaying_unknown_item_returns_redirect_response(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
-        get_item.side_effect = TransportException()
+        get_item.side_effect = TransportException({})
         get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
