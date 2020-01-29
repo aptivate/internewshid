@@ -108,7 +108,7 @@ class Importer(object):
                     objects.append(item)
 
             except SheetImportException as e:
-                raise type(e), type(e)(str(e) + 'in row {0} '.format(i)), sys.exc_info()[2]
+                raise type(e)(str(e) + 'in row {0} '.format(i)) from e
 
         return objects
 
@@ -232,7 +232,7 @@ class CellConverter(object):
             return converters[self.type](self.value)
         except Exception as e:
             message = _("{0}: Can not process value '{1}' of type '{2}' ").format(str(e), self.value, self.type)
-            raise SheetImportException(message), None, sys.exc_info()[2]
+            raise SheetImportException(message) from e
 
     def convert_date(self):
         if self.value is None:
