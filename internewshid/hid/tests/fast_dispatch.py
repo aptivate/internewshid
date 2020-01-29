@@ -316,9 +316,7 @@ class FastDispatchMixin(object):
                 response, text, count, status_code, msg_prefix, html
             )
         except AssertionError as e:
-            import sys
-            raise sys.exc_info()[0], "%s\n\nThe complete response was:\n%s" % \
-                (e, content), sys.exc_info()[2]
+            raise type(e)(f"The complete response was:{content}") from e
 
     def absolute_url_for_site(self, relative_url):
         """
