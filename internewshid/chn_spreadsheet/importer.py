@@ -91,7 +91,7 @@ class Importer(object):
 
         # If there is no header (skip_header=False), then use profile's order of
         # columns, otherwise use header line to check mapping and define order
-        first_row = self.normalize_row(rows.next()) if skip_header else None
+        first_row = self.normalize_row(next(rows)) if skip_header else None
         columns = self.order_columns(first_row)
 
         objects = []
