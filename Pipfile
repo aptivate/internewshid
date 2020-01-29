@@ -20,7 +20,6 @@ django-constance = {extras = ["database"],version = "*"}
 django-filter = "*"
 django-floppyforms = "*"
 django-form-utils = "*"
-django-spreadsheetresponsemixin = "*"
 django-widget-tweaks = "*"
 djangorestframework = "*"
 djangorestframework-bulk = "*"
