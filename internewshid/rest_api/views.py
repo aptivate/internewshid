@@ -153,14 +153,14 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         try:
             item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_404_NOT_FOUND)
 
         term_data = request.data
         try:
             taxonomy = Taxonomy.objects.get(slug=term_data['taxonomy'])
         except Taxonomy.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         terms = []
@@ -171,7 +171,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
                     name=term_name,
                 )
             except Term.DoesNotExist as e:
-                data = {'detail': e.message}
+                data = {'detail': str(e)}
                 return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
             terms.append(term)
@@ -188,7 +188,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         try:
             item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_404_NOT_FOUND)
 
         try:
