@@ -5,7 +5,7 @@ from django.utils import timezone
 import pytest
 from mock import MagicMock, patch
 
-from factories import ItemFactory
+from .factories import ItemFactory
 from taxonomies.exceptions import TermException
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 
