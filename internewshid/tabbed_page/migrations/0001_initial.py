@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tab',
             name='page',
-            field=models.ForeignKey(to='tabbed_page.TabbedPage'),
+            field=models.ForeignKey(to='tabbed_page.TabbedPage', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='tab',

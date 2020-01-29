@@ -29,6 +29,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='tabinstance',
             name='page',
-            field=models.ForeignKey(related_name='tabs', to='tabbed_page.TabbedPage'),
+            field=models.ForeignKey(related_name='tabs', to='tabbed_page.TabbedPage', on_delete=models.CASCADE),
         ),
     ]

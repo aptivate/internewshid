@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('default', models.BooleanField(default=False)),
                 ('position', models.PositiveIntegerField(default=0)),
                 ('label', models.CharField(max_length=128)),
-                ('page', models.ForeignKey(to='tabbed_page.TabbedPage')),
+                ('page', models.ForeignKey(to='tabbed_page.TabbedPage', on_delete=models.CASCADE)),
             ],
         ),
         migrations.AlterUniqueTogether(
