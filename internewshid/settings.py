@@ -225,6 +225,7 @@ def update_recursive(dest, source):
         else:
             dest[k] = deepcopy(source[k])
 
+# TODO: import local settings
 
 # try:
 #     import local_settings
@@ -250,8 +251,8 @@ def update_recursive(dest, source):
 #         elif re.search('^[A-Z]', attr):
 #             globals()[attr] = getattr(local_settings, attr)
 
-from os import environ
-from private_settings import DB_PASSWORD
+from os import environ  # noqa: E402
+from private_settings import DB_PASSWORD  # noqa: E402
 
 DEBUG = True
 ASSETS_DEBUG = DEBUG
