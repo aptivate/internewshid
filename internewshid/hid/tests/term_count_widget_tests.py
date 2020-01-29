@@ -172,7 +172,7 @@ class TestTermCountChartWidget(TestCase):
             counts = widget._fetch_counts('tax', 0, None, None, 'Others')
 
         self.assertEqual(
-            counts.items(),
+            list(counts.items()),
             [('aaa-long-name', 1000), ('zzz-long-name', 0)]
         )
 
@@ -206,7 +206,7 @@ class TestTermCountChartWidget(TestCase):
             counts = widget._fetch_counts('tax', 3, None, None, 'Others')
 
         self.assertEqual(
-            counts.items(),
+            list(counts.items()),
             [
                 ('long-name four', 30), ('long-name three', 20),
                 ('Others', 11)
