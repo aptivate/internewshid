@@ -267,7 +267,7 @@ class FastDispatchMixin(object):
     def stuff_session(self, dictionary):
         from django.conf import settings
         if settings.SESSION_ENGINE != 'django.contrib.sessions.backends.db':
-            print "Unknown session engine: %s Sessions won't work" % settings.SESSION_ENGINE
+            print(f"Unknown session engine: {settings.SESSION_ENGINE} Sessions won't work")
             return
         self.client.logout()
         from django.contrib.sessions.backends.db import SessionStore
