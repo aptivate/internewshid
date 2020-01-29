@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import collections
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.files import File
