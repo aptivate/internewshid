@@ -1,5 +1,4 @@
 import datetime
-import sys
 from decimal import Decimal
 
 from django.utils import six
@@ -102,7 +101,7 @@ class Importer(object):
                 if any(values):
                     item = self.process_row(values, columns)
                     item['_row_number'] = i
-                    for taxonomy, term in meta_data.iteritems():
+                    for taxonomy, term in meta_data.items():
                         self._append_term_to_item(item, taxonomy, term)
 
                     objects.append(item)
@@ -171,7 +170,7 @@ class Importer(object):
 
         field_to_column_map = self._get_field_to_column_map()
 
-        for field, errors in exc_inst.message.iteritems():
+        for field, errors in exc_inst.message.items():
             for error in errors:
                 messages.append(
                     _("Column: '{0}' ({1})\nError ({2}): '{3}'\n\nValue: {4}").format(

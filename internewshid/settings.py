@@ -219,7 +219,7 @@ REST_FRAMEWORK = {
 
 
 def update_recursive(dest, source):
-    for k, v in source.iteritems():
+    for k, v in source.items():
         if dest.get(k, None) and isinstance(v, collections.Mapping):
             update_recursive(dest[k], source[k])
         else:

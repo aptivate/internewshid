@@ -62,7 +62,7 @@ class FastDispatchMixin(object):
         request = handler(path, post_params)
 
         request.GET = request.GET.copy()
-        for key, value in get_params.iteritems():
+        for key, value in get_params.items():
             if hasattr(value, '__iter__'):
                 request.GET.setlist(key, value)
             else:
@@ -74,7 +74,7 @@ class FastDispatchMixin(object):
                 request.GET.setlist(key, [value])
 
         request.POST = request.POST.copy()
-        for key, value in post_params.iteritems():
+        for key, value in post_params.items():
             if isinstance(value, File):
                 request.FILES.setlist(key, [value])
             elif hasattr(value, '__iter__'):
@@ -87,7 +87,7 @@ class FastDispatchMixin(object):
                     )
                 request.POST.setlist(key, [value])
 
-        for key, value in file_params.iteritems():
+        for key, value in file_params.items():
             request.FILES.setlist(key, [value])
 
         # Make them immutable to catch abuses that otherwise would only
@@ -113,7 +113,7 @@ class FastDispatchMixin(object):
         self.request_hook(request)
 
         if request_extras is not None:
-            for key, value in request_extras.iteritems():
+            for key, value in request_extras.items():
                 setattr(request, key, value)
 
         return request
