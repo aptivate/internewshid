@@ -110,7 +110,7 @@ DATA_LAYER_APPS = (
 
 INSTALLED_APPS = DATA_LAYER_APPS + LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -325,7 +325,7 @@ if DEBUG:
         'template_timings_panel',
     )
 
-    MIDDLEWARE_CLASSES += (
+    MIDDLEWARE += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
