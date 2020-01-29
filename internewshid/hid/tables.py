@@ -125,7 +125,7 @@ class ItemTable(tables.Table):
             self.end_index = self.per_page * self.page_number
             self.start_index = 1 + self.end_index - self.per_page
 
-            self.num_pages = self.total_items / self.per_page
+            self.num_pages = self.total_items // self.per_page
 
             self.has_previous = self.page_number > 1
             if self.has_previous:
