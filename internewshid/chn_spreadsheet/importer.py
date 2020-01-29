@@ -163,7 +163,8 @@ class Importer(object):
         # (eg "Term matching query does not exist") will not
         # be handled correctly here as 'item' won't exist
 
-        item = exc_inst.message.pop('item') if 'item' in exc_inst.message else {}
+        exc_inst.message.pop('status_code', None)
+        item = exc_inst.message.pop('item', {})
 
         messages = []
 
