@@ -18,7 +18,7 @@ class SiteNeedsAuthenticationTests(FastDispatchMixin, TestCase):
 
         response.render()
 
-        self.assertIn('dashboard', response.content)
+        self.assertIn('dashboard', str(response.content))
 
     def test_logout_view_logs_user_out(self):
         self.user = User()
