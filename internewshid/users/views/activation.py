@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.views import password_change
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -42,11 +41,6 @@ class ResetPassword(FormView):
         messages.error(self.request, _("Email could not be sent. Check if "
                                        "provided email is correct."))
         return self.render_to_response(self.get_context_data(form=form))
-
-
-def change_password(request):
-    return password_change(request,
-                           post_change_redirect=reverse('personal_edit'))
 
 
 class ActivationEmailsView(RedirectView):

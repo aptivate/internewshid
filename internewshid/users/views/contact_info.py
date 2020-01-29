@@ -6,7 +6,6 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from django_tables2 import SingleTableMixin
-from spreadsheetresponsemixin.views import SpreadsheetResponseMixin
 
 from ..forms import (
     AddContactForm, DeleteContactForm, UpdateContactForm,
@@ -52,25 +51,6 @@ class ListContacts(LoginRequiredMixin, PermissionRequiredMixin,
                              Q(personal_email__icontains=query))
         else:
             return self.model.objects.all()
-
-
-class ListContactsExport(SpreadsheetResponseMixin, ListContacts):
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        fields = ('business_email', 'first_name', 'last_name', 'title',
-                  'personal_email', 'is_active', 'contact_type',
-                  'home_address')
-        list_format = kwargs.get('format')
-        if list_format == 'csv':
-            return self.render_csv_response(queryset=queryset,
-                                            fields=fields)
-        elif list_format == 'excel':
-            return self.render_excel_response(queryset=queryset,
-                                              fields=fields)
-        else:
-            return super(ListContactsExport, self).get(request,
-                                                       *args,
-                                                       **kwargs)
 
 
 class AddContact(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
