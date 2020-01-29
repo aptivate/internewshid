@@ -222,11 +222,11 @@ class FastDispatchMixin(object):
                 response.render()
 
             if isinstance(response.content, str):
-                content = unicode(response.content, 'utf-8')
+                content = str(response.content, 'utf-8')
             else:
                 content = response.content
 
-            msg_prefix = content + u"\n\n" + unicode(msg_prefix)
+            msg_prefix = content + u"\n\n" + str(msg_prefix)
 
         self.assertEqual(response.status_code, status_code,
                          msg_prefix + "Response didn't redirect as expected: Response"
