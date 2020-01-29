@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
 from .views import (
-    AddContact, DeleteContact, ListContacts,
-    SendActivationEmailView, UpdateContact, UpdatePersonalInfo
+    AddContact, DeleteContact, ListContacts, SendActivationEmailView,
+    UpdateContact, UpdatePersonalInfo
 )
 
 urlpatterns = [

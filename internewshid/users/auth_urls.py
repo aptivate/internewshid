@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth.views import (
-    LoginView, logout_then_login, PasswordResetConfirmView
+    LoginView, PasswordResetConfirmView, logout_then_login
 )
 
 from .views import ResetPassword

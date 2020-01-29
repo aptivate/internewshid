@@ -251,8 +251,9 @@ def update_recursive(dest, source):
 #         elif re.search('^[A-Z]', attr):
 #             globals()[attr] = getattr(local_settings, attr)
 
-from os import environ  # noqa: E402
-from private_settings import DB_PASSWORD  # noqa: E402
+
+from os import environ  # noqa
+from private_settings import DB_PASSWORD  # noqa
 
 DEBUG = True
 ASSETS_DEBUG = DEBUG
