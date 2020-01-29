@@ -238,7 +238,7 @@ class CellConverter(object):
         if self.value is None:
             return None
 
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str):
             date_time = self.parse_date()
         else:
             date_time = self.value

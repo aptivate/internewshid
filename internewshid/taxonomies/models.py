@@ -82,7 +82,7 @@ class TermManager(models.Manager):
             vocabulary is open - in this case the Term will be created
             ValueError if taxonomy is not one of the allowed types
         """
-        if isinstance(taxonomy, basestring):
+        if isinstance(taxonomy, str):
             taxonomy = Taxonomy.objects.get(slug=taxonomy)
         elif not isinstance(taxonomy, Taxonomy):
             raise ValueError(

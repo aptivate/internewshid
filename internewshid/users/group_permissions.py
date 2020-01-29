@@ -29,7 +29,7 @@ class GroupPermissions(object):
         self.log("Permissions for:")
         self.grouplist = []
         for group in grouplist:
-            assert isinstance(group, Group) or isinstance(group, basestring)
+            assert isinstance(group, Group) or isinstance(group, str)
             if not isinstance(group, Group):
                 (group, _) = Group.objects.get_or_create(name=group)
             self.grouplist.append(group)
@@ -108,7 +108,7 @@ class GroupPermissions(object):
         <app>.<perm> format for using with user.has_perm, etc.
         """
         p = cls.get_perm(permission) \
-            if isinstance(permission, basestring) else permission
+            if isinstance(permission, str) else permission
         return "{0}.{1}".format(p.content_type.app_label, p.codename)
 
     # ================================================================

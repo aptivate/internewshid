@@ -66,7 +66,7 @@ class FastDispatchMixin(object):
             if hasattr(value, '__iter__'):
                 request.GET.setlist(key, value)
             else:
-                if not isinstance(value, basestring):
+                if not isinstance(value, str):
                     raise Exception(
                         "GET and POST can only contain strings, "
                         "but %s = %s (%s)" % (key, value, value.__class__)
@@ -80,7 +80,7 @@ class FastDispatchMixin(object):
             elif hasattr(value, '__iter__'):
                 request.POST.setlist(key, value)
             else:
-                if not isinstance(value, basestring):
+                if not isinstance(value, str):
                     raise Exception(
                         "GET and POST can only contain strings, "
                         "but %s = %s (%s)" % (key, value, value.__class__)
