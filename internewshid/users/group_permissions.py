@@ -14,7 +14,7 @@ class GroupPermissions(object):
 
     def log(self, s):
         if self.verbose:
-            print s
+            print(s)
 
     @contextmanager
     def groups(self, *grouplist):
