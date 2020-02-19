@@ -8,17 +8,17 @@ from .fast_dispatch import FastDispatchMixin
 
 
 class SiteNeedsAuthenticationTests(FastDispatchMixin, TestCase):
-    def test_index_page_cant_be_accessed_when_not_logged_in(self):
+    def test_dashboard_cant_be_accessed_when_not_logged_in(self):
         response = self.fast_dispatch('dashboard')
         self.assertEqual(settings.LOGIN_URL + '?next=' + reverse('dashboard'), response['Location'])
 
-    def test_index_page_can_be_accessed_when_logged_in(self):
+    def test_dashboard_can_be_accessed_when_logged_in(self):
         self.user = User()
         response = self.fast_dispatch('dashboard')
 
         response.render()
 
-        self.assertIn('dashboard', str(response.content))
+        self.assertEqual(response.template_name, ['dashboard/dashboard.html'])
 
     def test_logout_view_logs_user_out(self):
         self.user = User()
