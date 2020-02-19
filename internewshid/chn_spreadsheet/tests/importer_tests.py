@@ -321,7 +321,6 @@ def test_process_rows_displays_line_number_on_error(importer):
         importer.process_rows(rows)
 
     assert str(excinfo.value) == _(u"Unknown data type 'location' in row 2 ")
-    assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
 
 def test_process_rows_ignores_empty_lines(importer):
