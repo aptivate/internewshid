@@ -188,7 +188,7 @@ class ContactPasswordResetForm(PasswordResetForm):
             ctx = {
                 'email': user.business_email,
                 'site': settings.SITE_HOSTNAME,
-                'uid': urlsafe_base64_encode(str(user.pk)),
+                'uid': urlsafe_base64_encode(bytes([user.pk])),
                 'user': user,
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
