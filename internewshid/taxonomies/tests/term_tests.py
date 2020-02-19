@@ -60,7 +60,7 @@ def test_unknown_term_by_taxonomy_throws_exception_if_not_open():
             name="a term that doesn't exist",
         )
 
-    assert excinfo.value.message == "Term matching query does not exist."
+    assert str(excinfo.value) == "Term matching query does not exist."
 
 
 @pytest.mark.django_db
