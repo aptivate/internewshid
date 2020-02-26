@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 import pytest
 import pytz
 
+from taxonomies.tests.factories import TaxonomyFactory
 import transport
 from transport.exceptions import TransportException
 
@@ -482,6 +483,39 @@ def test_save_rows_handles_missing_taxonomy(importer):
         "Taxonomy: age-ranges\n"
         "Name: 18-25\n"
     )
+
+
+@pytest.mark.django_db
+def test_save_rows_handles_missing_term(importer):
+    TaxonomyFactory(name='Age ranges', slug='age-ranges')
+
+    objects = [
+        {
+            'body': 'Text',
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'terms': [
+                {
+                    'name': '18-25',
+                    'taxonomy': 'age-ranges',
+                }
+            ],
+            '_row_number': 29,
+        }
+    ]
+
+    importer.profile['columns'] = [
+        {
+            'name': 'Age',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'age-ranges',
+        },
+    ]
+
+    with pytest.raises(SheetImportException) as excinfo:
+        importer.save_rows(objects)
+
+    assert "Term matching query does not exist" in str(excinfo.value)
 
 
 @pytest.mark.django_db
