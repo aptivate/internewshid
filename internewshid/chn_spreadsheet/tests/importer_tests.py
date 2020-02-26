@@ -7,8 +7,8 @@ from django.utils.translation import ugettext as _
 import pytest
 import pytz
 
-from taxonomies.tests.factories import TaxonomyFactory
 import transport
+from taxonomies.tests.factories import TaxonomyFactory
 from transport.exceptions import TransportException
 
 from ..importer import Importer, SheetImportException, SheetProfile
