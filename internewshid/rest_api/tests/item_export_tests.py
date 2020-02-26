@@ -67,8 +67,8 @@ def test_item_terms_exported(client):
 
     row = next(reader)
 
-    # TODO: Single quotes have appeared in Django 2.2 / Python 3 upgrade
-    # is this OK?
+    # Single quotes have appeared following Django 2.2 / Python 3 upgrade
+    # I think this is OK
     assert row['terms'] == (
         "['Translation OK', 'Block C8', 'Burma', 'WASH', 'GBV']"
     )
