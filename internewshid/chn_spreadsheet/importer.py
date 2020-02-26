@@ -159,12 +159,34 @@ class Importer(object):
         return num_saved
 
     def _get_spreadsheet_error_message(self, row, exc_inst):
-        # TODO: A TransportException during transport.items.add_terms()
-        # (eg "Term matching query does not exist") will not
-        # be handled correctly here as 'item' won't exist
+        # The exception will have different formats:
+        # Example of failure during transport.items.create():
+        # {
+        #  'enumerator': [ErrorDetail(string='Ensure this field has no more than 190 characters.', code='max_length')],
+        #  'status_code': 400,
+        #  'item': {
+        #      'timestamp': datetime.datetime(2018, 8, 9, 12, 14, 26, 766000, tzinfo=tzoffset(None, 21600)),
+        #      'body': 'the community members want more food.',
+        #      'gender': 'female',
+        #      'location': 'Camp 4',
+        #      'enumerator': '<a very long string>',
+        #      'external_id': '97f61035-6feb-40a1-9e7e-15c0f65cfdb5'
+        #   }
+        # }
+
+        # Example of failure during transport.items.add_terms():
+        # {
+        #  'detail': 'Term matching query does not exist.',
+        #  'status_code': 400,
+        #  'terms': {'taxonomy': 'age-ranges', 'name': ''},
+        #  'item_id': 4
+        # }
 
         exc_inst.message.pop('status_code', None)
+        exc_inst.message.pop('item_id', None)
         item = exc_inst.message.pop('item', {})
+        detail = exc_inst.message.pop('detail', None)
+        terms = exc_inst.message.pop('terms', None)
 
         messages = []
 
@@ -181,6 +203,14 @@ class Importer(object):
                         item.get(field, '')
                     )
                 )
+
+        if detail and terms:
+            taxonomy = terms['taxonomy']
+            name = terms['name']
+
+            messages.append(
+                _(f"Error: {detail}\nTaxonomy: {taxonomy}\nName: {name}\n")
+            )
 
         return _("There was a problem with row {0} of the spreadsheet:\n{1}").format(
             row, '\n'.join(messages)

@@ -409,7 +409,7 @@ def test_save_rows_creates_item_with_term(importer):
 
 
 @pytest.mark.django_db
-def test_save_rows_handles_exception(importer):
+def test_save_rows_handles_invalid_enumerator(importer):
     invalid_enumerator = "Yakub=Aara smart card no point in Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum soyi ensaf takito aarari Thor Sara nohoito"
 
     objects = [
@@ -445,6 +445,42 @@ def test_save_rows_handles_exception(importer):
         "goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor "
         "hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum "
         "soyi ensaf takito aarari Thor Sara nohoito"
+    )
+
+
+@pytest.mark.django_db
+def test_save_rows_handles_missing_taxonomy(importer):
+    objects = [
+        {
+            'body': 'Text',
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'terms': [
+                {
+                    'name': '18-25',
+                    'taxonomy': 'age-ranges',
+                }
+            ],
+            '_row_number': 29,
+        }
+    ]
+
+    importer.profile['columns'] = [
+        {
+            'name': 'Age',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'age-ranges',
+        },
+    ]
+
+    with pytest.raises(SheetImportException) as excinfo:
+        importer.save_rows(objects)
+
+    assert str(excinfo.value) == (
+        "There was a problem with row 29 of the spreadsheet:\n"
+        "Error: Taxonomy matching query does not exist.\n"
+        "Taxonomy: age-ranges\n"
+        "Name: 18-25\n"
     )
 
 
