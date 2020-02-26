@@ -2,13 +2,9 @@ from __future__ import unicode_literals, absolute_import
 
 import private_settings
 
-from pymysql import install_as_MySQLdb
-
 DEBUG = False
 ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = DEBUG
-
-install_as_MySQLdb()
 
 DATABASES = {
     'default': {
