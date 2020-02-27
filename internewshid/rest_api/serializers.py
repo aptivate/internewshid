@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from rest_framework import serializers, validators
 
 from data_layer.models import Item

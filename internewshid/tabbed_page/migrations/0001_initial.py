@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models, migrations
 import jsonfield.fields
 
@@ -33,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='tab',
             name='page',
-            field=models.ForeignKey(to='tabbed_page.TabbedPage'),
+            field=models.ForeignKey(to='tabbed_page.TabbedPage', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='tab',

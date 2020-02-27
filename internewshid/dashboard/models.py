@@ -16,7 +16,7 @@ class Dashboard(models.Model):
         unique=True
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -29,7 +29,7 @@ class WidgetInstance(models.Model):
     and the position within that dashboard (row,
     column, width)
     """
-    dashboard = models.ForeignKey(Dashboard)
+    dashboard = models.ForeignKey(Dashboard, on_delete=models.CASCADE)
     widget_type = models.CharField(max_length=128)
     row = models.PositiveIntegerField(default=0)
     column = models.PositiveIntegerField(
@@ -56,5 +56,5 @@ class WidgetInstance(models.Model):
     )
     settings = JSONField(blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return _("Instance of {0}").format(self.widget_type)

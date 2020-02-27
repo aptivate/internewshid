@@ -85,7 +85,7 @@ class Message(DataLayerModel):
         for term in self.terms.filter(taxonomy=taxonomy):
             self.terms.remove(term)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0}: '{1}' @{2}".format(
             self.id,
             self.body,
@@ -117,11 +117,12 @@ class CustomConstance(models.Model):
     value = PickledObjectField()
 
     class Meta:
+        managed = False
         verbose_name = _('constance')
         verbose_name_plural = _('constances')
         db_table = 'constance_config'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key
 
 

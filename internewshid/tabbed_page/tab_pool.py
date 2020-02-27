@@ -4,7 +4,8 @@ _pool = {}
 
 
 class MissingTabError(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message
 
 
 def register_tab(name, tab):

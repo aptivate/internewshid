@@ -19,5 +19,5 @@ class SheetProfile(models.Model):
     profile = JSONField(
         load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label

@@ -177,7 +177,7 @@ class AddEditItemView(FormView):
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
 
-        for taxonomy, terms in self.item_terms.iteritems():
+        for taxonomy, terms in self.item_terms.items():
             if taxonomy in self.tag_fields:
                 term_names = [t['name'] for t in terms]
                 initial[taxonomy] = self.tag_delimiter.join(term_names)
@@ -285,7 +285,7 @@ class AddEditItemView(FormView):
         tags = {}
         regular_fields = {}
 
-        for (field_name, field_value) in data.iteritems():
+        for (field_name, field_value) in data.items():
             if field_name in self.tag_fields:
                 tags[field_name] = field_value
             else:
@@ -294,7 +294,7 @@ class AddEditItemView(FormView):
         return category, tags, feedback_type, age_range, regular_fields
 
     def _add_tags(self, item_id, tags):
-        for (taxonomy, value) in tags.iteritems():
+        for (taxonomy, value) in tags.items():
             transport.items.delete_all_terms(item_id, taxonomy)
             term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 

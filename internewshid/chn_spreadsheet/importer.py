@@ -1,5 +1,4 @@
 import datetime
-import sys
 from decimal import Decimal
 
 from django.utils import six
@@ -91,7 +90,7 @@ class Importer(object):
 
         # If there is no header (skip_header=False), then use profile's order of
         # columns, otherwise use header line to check mapping and define order
-        first_row = self.normalize_row(rows.next()) if skip_header else None
+        first_row = self.normalize_row(next(rows)) if skip_header else None
         columns = self.order_columns(first_row)
 
         objects = []
@@ -102,13 +101,13 @@ class Importer(object):
                 if any(values):
                     item = self.process_row(values, columns)
                     item['_row_number'] = i
-                    for taxonomy, term in meta_data.iteritems():
+                    for taxonomy, term in meta_data.items():
                         self._append_term_to_item(item, taxonomy, term)
 
                     objects.append(item)
 
             except SheetImportException as e:
-                raise type(e), type(e)(str(e) + 'in row {0} '.format(i)), sys.exc_info()[2]
+                raise type(e)(str(e) + 'in row {0} '.format(i)) from e
 
         return objects
 
@@ -160,18 +159,40 @@ class Importer(object):
         return num_saved
 
     def _get_spreadsheet_error_message(self, row, exc_inst):
-        # TODO: A TransportException during transport.items.add_terms()
-        # (eg "Term matching query does not exist") will not
-        # be handled correctly here as 'item' won't exist
+        # The exception will have different formats:
+        # Example of failure during transport.items.create():
+        # {
+        #  'enumerator': [ErrorDetail(string='Ensure this field has no more than 190 characters.', code='max_length')],
+        #  'status_code': 400,
+        #  'item': {
+        #      'timestamp': datetime.datetime(2018, 8, 9, 12, 14, 26, 766000, tzinfo=tzoffset(None, 21600)),
+        #      'body': 'the community members want more food.',
+        #      'gender': 'female',
+        #      'location': 'Camp 4',
+        #      'enumerator': '<a very long string>',
+        #      'external_id': '97f61035-6feb-40a1-9e7e-15c0f65cfdb5'
+        #   }
+        # }
 
-        status_code = exc_inst.message.pop('status_code')
-        item = exc_inst.message.pop('item') if 'item' in exc_inst.message else {}
+        # Example of failure during transport.items.add_terms():
+        # {
+        #  'detail': 'Term matching query does not exist.',
+        #  'status_code': 400,
+        #  'terms': {'taxonomy': 'age-ranges', 'name': ''},
+        #  'item_id': 4
+        # }
+
+        exc_inst.message.pop('status_code', None)
+        exc_inst.message.pop('item_id', None)
+        item = exc_inst.message.pop('item', {})
+        detail = exc_inst.message.pop('detail', None)
+        terms = exc_inst.message.pop('terms', None)
 
         messages = []
 
         field_to_column_map = self._get_field_to_column_map()
 
-        for field, errors in exc_inst.message.iteritems():
+        for field, errors in exc_inst.message.items():
             for error in errors:
                 messages.append(
                     _("Column: '{0}' ({1})\nError ({2}): '{3}'\n\nValue: {4}").format(
@@ -182,6 +203,14 @@ class Importer(object):
                         item.get(field, '')
                     )
                 )
+
+        if detail and terms:
+            taxonomy = terms['taxonomy']
+            name = terms['name']
+
+            messages.append(
+                _(f"Error: {detail}\nTaxonomy: {taxonomy}\nName: {name}\n")
+            )
 
         return _("There was a problem with row {0} of the spreadsheet:\n{1}").format(
             row, '\n'.join(messages)
@@ -232,13 +261,13 @@ class CellConverter(object):
             return converters[self.type](self.value)
         except Exception as e:
             message = _("{0}: Can not process value '{1}' of type '{2}' ").format(str(e), self.value, self.type)
-            raise SheetImportException(message), None, sys.exc_info()[2]
+            raise SheetImportException(message) from e
 
     def convert_date(self):
         if self.value is None:
             return None
 
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str):
             date_time = self.parse_date()
         else:
             date_time = self.value

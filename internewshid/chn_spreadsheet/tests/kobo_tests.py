@@ -16,7 +16,7 @@ TEST_DIR = path.join(TEST_BASE_DIR, 'test_files')
 @pytest.fixture
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        call_command('loaddata', 'bangladesh-refugee-crisis.json')
+        call_command('loaddata', 'spreadsheet-profiles.json')
 
 
 @pytest.mark.django_db  # noqa

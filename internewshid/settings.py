@@ -1,7 +1,6 @@
-from __future__ import absolute_import, unicode_literals
-
 import collections
 import json
+import re
 import warnings
 from copy import deepcopy
 from os import path
@@ -110,7 +109,7 @@ DATA_LAYER_APPS = (
 
 INSTALLED_APPS = DATA_LAYER_APPS + LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -219,7 +218,7 @@ REST_FRAMEWORK = {
 
 
 def update_recursive(dest, source):
-    for k, v in source.iteritems():
+    for k, v in source.items():
         if dest.get(k, None) and isinstance(v, collections.Mapping):
             update_recursive(dest[k], source[k])
         else:
@@ -232,23 +231,22 @@ except ImportError:
     print("Can't import the `local_settings` symlink!")
     import sys
     sys.exit(1)
-else:
-    import re
-    for attr in dir(local_settings):
-        match = re.search('^EXTRA_(\w+)', attr)  # noqa
-        if match:
-            name = match.group(1)
-            value = getattr(local_settings, attr)
-            try:
-                original = globals()[name]
-                if isinstance(original, collections.Mapping):
-                    update_recursive(original, value)
-                else:
-                    original += value
-            except KeyError:
-                globals()[name] = value
-        elif re.search('^[A-Z]', attr):
-            globals()[attr] = getattr(local_settings, attr)
+
+for attr in dir(local_settings):
+    match = re.search('^EXTRA_(\w+)', attr)  # noqa
+    if match:
+        name = match.group(1)
+        value = getattr(local_settings, attr)
+        try:
+            original = globals()[name]
+            if isinstance(original, collections.Mapping):
+                update_recursive(original, value)
+            else:
+                original += value
+        except KeyError:
+            globals()[name] = value
+    elif re.search('^[A-Z]', attr):
+        globals()[attr] = getattr(local_settings, attr)
 
 ALLOWED_HOSTS = [
     '*',
@@ -282,7 +280,7 @@ if DEBUG:
         'template_timings_panel',
     )
 
-    MIDDLEWARE_CLASSES += (
+    MIDDLEWARE += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 

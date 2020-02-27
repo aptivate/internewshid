@@ -21,7 +21,7 @@ class UploadSpreadsheetView(FormView):
         uploaded_file = data['file']
 
         try:
-            importer = Importer()
+            importer = self.get_importer()
             (saved, skipped) = importer.store_spreadsheet(
                 source, uploaded_file
             )
@@ -41,7 +41,10 @@ class UploadSpreadsheetView(FormView):
 
             messages.success(self.request, ' '.join(all_messages))
         except SheetImportException as exc:
-            msg = exc.message
-            messages.error(self.request, msg)
+            messages.error(self.request, str(exc))
 
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_importer(self):
+        # allows us to provide a mock implementation in testing
+        return Importer()

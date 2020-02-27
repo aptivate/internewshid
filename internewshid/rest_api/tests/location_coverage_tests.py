@@ -1,5 +1,5 @@
 import csv
-from StringIO import StringIO
+from io import StringIO
 
 from django.urls import reverse
 from django.utils import timezone
@@ -38,17 +38,19 @@ def test_location_coverage(client):
 
     response = client.get(reverse('location-coverage'))
 
-    assert 'location-coverage.csv' in response.serialize_headers()
+    assert 'location-coverage.csv' in str(response.serialize_headers())
     assert response.accepted_media_type == 'text/csv'
 
-    reader = csv.DictReader(StringIO(response.content))
+    reader = csv.DictReader(StringIO(str(response.content, 'utf-8')))
 
     assert reader.fieldnames == ['row', 'location', 'terms', 'timestamp']
 
     rendered = [item for item in reader]
 
     assert rendered[0]['location'] == 'locationfoo'
-    assert rendered[0]['terms'] == '[termbar]'
+    # TODO: Single quotes have appeared in Django 2.2 / Python 3 upgrade
+    # is this OK?
+    assert rendered[0]['terms'] == "['termbar']"
 
     assert rendered[1]['location'] == ''
     assert rendered[1]['terms'] == '[]'

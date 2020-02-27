@@ -366,7 +366,7 @@ def _get_view_and_edit_form_request_parameters(params):
         action = action[0:len(action) - len(placement) - 1]
     else:
         placement = 'top'
-    for name, value in params.iterlists():
+    for name, value in iter(params.lists()):
         if name == 'action':
             value = [action]
         elif name.endswith(placement):

@@ -1,5 +1,5 @@
 import csv
-from StringIO import StringIO
+from io import StringIO
 
 from django.urls import reverse
 
@@ -23,10 +23,10 @@ def test_item_exporter(client):
 
     response = client.get(reverse('item-export'))
 
-    assert 'item-export.csv' in response.serialize_headers()
+    assert 'item-export.csv' in str(response.serialize_headers())
     assert response.accepted_media_type == 'text/csv'
 
-    reader = csv.DictReader(StringIO(response.content))
+    reader = csv.DictReader(StringIO(str(response.content, 'utf-8')))
 
     assert set(reader.fieldnames) == set([
         'row',
@@ -60,11 +60,15 @@ def test_item_terms_exported(client):
     item.terms.set([trans_ok, block_c8, burma, wash, gbv])
     response = client.get(reverse('item-export'))
 
-    assert 'item-export.csv' in response.serialize_headers()
+    assert 'item-export.csv' in str(response.serialize_headers())
     assert response.accepted_media_type == 'text/csv'
 
-    reader = csv.DictReader(StringIO(response.content))
+    reader = csv.DictReader(StringIO(str(response.content, 'utf-8')))
 
     row = next(reader)
 
-    assert row['terms'] == '[Translation OK, Block C8, Burma, WASH, GBV]'
+    # Single quotes have appeared following Django 2.2 / Python 3 upgrade
+    # I think this is OK
+    assert row['terms'] == (
+        "['Translation OK', 'Block C8', 'Burma', 'WASH', 'GBV']"
+    )

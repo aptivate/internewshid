@@ -11,7 +11,7 @@ router = routers.SimpleRouter()
 router.register(
     r'items',
     ItemViewSet,
-    base_name='item'  # TODO: remove when Message model renamed Item
+    basename='item'  # TODO: remove when Message model renamed Item
 )
 router.register(
     r'taxonomies',

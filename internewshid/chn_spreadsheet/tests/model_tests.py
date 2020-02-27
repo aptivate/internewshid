@@ -7,4 +7,4 @@ from ..models import SheetProfile
 def test_unicode_is_label():
     profile = SheetProfile.objects.create(label='Test')
 
-    assert unicode(profile) == 'Test'
+    assert str(profile) == 'Test'
