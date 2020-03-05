@@ -245,9 +245,9 @@
     "model": "taxonomies.term",
     "pk": 420,
     "fields": {
-        "name": "Under 10 yrs",
+        "name": "<11",
         "taxonomy": 8,
-        "long_name": "Moins de 10"
+        "long_name": "<11"
     }
   },
   {
@@ -308,9 +308,9 @@
     "model": "taxonomies.term",
     "pk": 427,
     "fields": {
-        "name": "Plus de 60",
+        "name": "60+",
         "taxonomy": 8,
-        "long_name": "Plus de 60"
+        "long_name": "60+"
     }
   }
 ]
