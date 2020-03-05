@@ -13,6 +13,7 @@ from hid.tabs.view_and_edit_table import (
     _get_view_and_edit_form_request_parameters,
     view_and_edit_table_form_process_items
 )
+from hid.views.item import AddEditItemView
 from tabbed_page.tests.factories import TabbedPageFactory, TabInstanceFactory
 from taxonomies.models import Taxonomy, Term
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
@@ -844,3 +845,16 @@ def test_items_paginated():
     assert items[0]['body'] == 'item 3'
     assert items[1]['body'] == 'item 4'
     assert items[2]['body'] == 'item 5'
+
+
+def test_getting_initial_age_ranges_handled_correctly():
+    view = AddEditItemView()
+    request = MagicMock(
+        session={'THREADED_FILTERS': {}},
+        GET=QueryDict('next=/')
+    )
+    view.item_terms = {'age-ranges': [{'name': '<11'}]}
+    view.item = MagicMock()
+    view.request = request
+    # If this test fails, there will be an error
+    view.get_initial()

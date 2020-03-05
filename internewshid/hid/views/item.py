@@ -186,7 +186,7 @@ class AddEditItemView(FormView):
             initial['feedback_type'] = self.item_terms['item-types'][0]['name']
 
         if 'age-ranges' in self.item_terms:
-            initial['age_range'] = self.item_terms['item-types'][0]['name']
+            initial['age_range'] = self.item_terms['age-ranges'][0]['name']
 
         return initial
 
