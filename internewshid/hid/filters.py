@@ -1,4 +1,5 @@
 class CategoryFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         category = query_dict.get('category', None)
         categories = kwargs.get('categories', None)
@@ -10,15 +11,18 @@ class CategoryFilter(object):
 
 
 class TagsFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         tags = query_dict.get('tags', None)
         if tags is not None:
-            filters.setdefault('terms', []).append(
-                'tags:{0}'.format(tags)
-            )
+            tag_list = tags.split(',')
+            filters.setdefault('terms', [])
+            for a_tag in tag_list:
+                filters['terms'].append(f'tags:{a_tag}')
 
 
 class TimeRangeFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         start_time = query_dict.get('start_time', None)
         end_time = query_dict.get('end_time', None)
@@ -31,6 +35,7 @@ class TimeRangeFilter(object):
 
 
 class LocationFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         location = query_dict.get('location', None)
         if location is not None:
@@ -38,6 +43,7 @@ class LocationFilter(object):
 
 
 class SubLocationFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         sub_location = query_dict.get('sub-location', None)
         if sub_location is not None:
@@ -45,6 +51,7 @@ class SubLocationFilter(object):
 
 
 class GenderFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         gender = query_dict.get('gender', None)
         if gender is not None:
@@ -52,6 +59,7 @@ class GenderFilter(object):
 
 
 class AgeRangeFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         age_range_terms = []
 
@@ -62,6 +70,7 @@ class AgeRangeFilter(object):
 
 
 class EnumeratorFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         enumerator = query_dict.get('enumerator', None)
         if enumerator is not None:
@@ -69,6 +78,7 @@ class EnumeratorFilter(object):
 
 
 class CollectionTypeFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         collection_type = query_dict.get('collection_type', None)
         if collection_type is not None:
@@ -76,6 +86,7 @@ class CollectionTypeFilter(object):
 
 
 class FeedbackTypeFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         feedback_type = query_dict.get('feedback_type', None)
 
@@ -86,6 +97,7 @@ class FeedbackTypeFilter(object):
 
 
 class ExternalIdFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         pattern = query_dict.get('external_id_pattern', None)
 
@@ -94,6 +106,7 @@ class ExternalIdFilter(object):
 
 
 class SearchFilter(object):
+
     def apply(self, filters, query_dict, **kwargs):
         search = query_dict.get('search', None)
 
