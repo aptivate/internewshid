@@ -18,6 +18,7 @@ class TagsFilter(object):
             tag_list = tags.split(',')
             filters.setdefault('terms', [])
             for a_tag in tag_list:
+                a_tag = a_tag.strip()
                 filters['terms'].append(f'tags:{a_tag}')
 
 
