@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models, migrations
 import jsonfield.fields
 
@@ -22,7 +20,7 @@ class Migration(migrations.Migration):
                 ('default', models.BooleanField(default=False)),
                 ('position', models.PositiveIntegerField(default=0)),
                 ('label', models.CharField(max_length=128)),
-                ('page', models.ForeignKey(to='tabbed_page.TabbedPage')),
+                ('page', models.ForeignKey(to='tabbed_page.TabbedPage', on_delete=models.CASCADE)),
             ],
         ),
         migrations.AlterUniqueTogether(

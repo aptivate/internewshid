@@ -1,0 +1,2185 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Internews HID\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-14 18:04+0600\n"
+"PO-Revision-Date: 2020-01-14 17:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../../internewshid\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: internewshid/chn_spreadsheet/importer.py:32
+#, python-brace-format
+msgid "Misconfigured service. Source \"{0}\" does not exist"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:49
+#: internewshid/chn_spreadsheet/tests/importer_tests.py:94
+msgid "Expected excel file. Received file in an unrecognized format."
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:53
+#, python-brace-format
+msgid "Unsupported file format: {0}"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:71
+#, python-brace-format
+msgid "Unknown column: {0}"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:173
+#, python-brace-format
+msgid ""
+"Column: '{0}' ({1})\n"
+"Error ({2}): '{3}'\n"
+"\n"
+"Value: {4}"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:182
+#, python-brace-format
+msgid ""
+"There was a problem with row {0} of the spreadsheet:\n"
+"{1}"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:226
+#, python-brace-format
+msgid "Unknown data type '{0}' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:230
+#, python-brace-format
+msgid "{0}: Can not process value '{1}' of type '{2}' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/importer.py:250
+#, python-brace-format
+msgid "Date format not specified for '{0}' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/cell_converter_tests.py:46
+msgid "Unknown data type 'location' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/cell_converter_tests.py:60
+msgid "'not_integer' of type 'integer' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/cell_converter_tests.py:77
+msgid "Date format not specified for 'created' "
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/importer_tests.py:63
+msgid "Misconfigured service. Source \"unknownlabel\" does not exist"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/importer_tests.py:98
+msgid "Unsupported file format: pdf"
+msgstr ""
+
+#: internewshid/chn_spreadsheet/tests/importer_tests.py:322
+msgid "Unknown data type 'location' in row 2 "
+msgstr ""
+
+#: internewshid/dashboard/models.py:38
+msgid "column must be between 0 and 11"
+msgstr ""
+
+#: internewshid/dashboard/models.py:44 internewshid/dashboard/models.py:45
+msgid "width must be between 1 and 12"
+msgstr ""
+
+#: internewshid/dashboard/models.py:52
+msgid "Small"
+msgstr ""
+
+#: internewshid/dashboard/models.py:53
+msgid "Medium"
+msgstr ""
+
+#: internewshid/dashboard/models.py:54
+msgid "Tall"
+msgstr ""
+
+#: internewshid/dashboard/models.py:60
+#, python-brace-format
+msgid "Instance of {0}"
+msgstr ""
+
+#: internewshid/dashboard/templates/dashboard/widget-error.html:5
+#: internewshid/tabbed_page/templates/tabbed_page/tab-error.html:5
+msgid "Error"
+msgstr ""
+
+#: internewshid/dashboard/templatetags/render_widget.py:36
+#, python-format
+msgid "Unknown widget type %(widget_type)s"
+msgstr ""
+
+#: internewshid/dashboard/templatetags/render_widget.py:48
+#, python-format
+msgid "Missing template for %(widget_type)s"
+msgstr ""
+
+#: internewshid/dashboard/templatetags/render_widget.py:67
+msgid "Widget error. See error logs."
+msgstr ""
+
+#: internewshid/data_layer/models.py:73
+msgid "Terms cannot be applied from different taxonomies"
+msgstr ""
+
+#: internewshid/data_layer/models.py:77
+#, python-brace-format
+msgid "Taxonomy '{0}' does not support multiple terms"
+msgstr ""
+
+#: internewshid/data_layer/models.py:120
+msgid "constance"
+msgstr ""
+
+#: internewshid/data_layer/models.py:121
+msgid "constances"
+msgstr ""
+
+#: internewshid/hid/tables.py:26
+msgid "Select"
+msgstr ""
+
+#: internewshid/hid/tables.py:31
+msgid "Imported"
+msgstr ""
+
+#: internewshid/hid/tables.py:36
+msgid "Created"
+msgstr ""
+
+#: internewshid/hid/tables.py:41
+#: internewshid/hid/templates/hid/add_edit_item.html:73
+#: internewshid/templates/base_side.html:27
+msgid "Feedback"
+msgstr ""
+
+#: internewshid/hid/tables.py:46
+#: internewshid/hid/templates/hid/add_edit_item.html:185
+msgid "Translation"
+msgstr ""
+
+#: internewshid/hid/tables.py:50
+#: internewshid/hid/templates/hid/add_edit_item.html:19
+msgid "Theme"
+msgstr ""
+
+#: internewshid/hid/tables.py:56
+#: internewshid/hid/templates/hid/add_edit_item.html:49
+#: internewshid/hid/templates/hid/item.html:23
+#: internewshid/hid/templates/hid/tabs/filters/tags.html:3
+msgid "Tags"
+msgstr ""
+
+#: internewshid/hid/tables.py:63
+#: internewshid/hid/templates/hid/add_edit_item.html:31
+#: internewshid/hid/templates/hid/tabs/filters/feedback_type.html:3
+msgid "Type"
+msgstr ""
+
+#: internewshid/hid/tables.py:69
+#: internewshid/hid/templates/hid/add_edit_item.html:134
+#: internewshid/hid/templates/hid/tabs/filters/gender.html:4
+msgid "Gender"
+msgstr ""
+
+#: internewshid/hid/tables.py:74
+#: internewshid/hid/templates/hid/add_edit_item.html:146
+msgid "Age"
+msgstr ""
+
+#: internewshid/hid/tables.py:79
+#: internewshid/hid/templates/hid/add_edit_item.html:112
+#: internewshid/hid/templates/hid/tabs/filters/location.html:4
+msgid "Location"
+msgstr ""
+
+#: internewshid/hid/tables.py:84
+#: internewshid/hid/templates/hid/add_edit_item.html:123
+#: internewshid/hid/templates/hid/tabs/filters/sub_location.html:4
+msgid "Sub-Location"
+msgstr ""
+
+#: internewshid/hid/tables.py:89
+#: internewshid/hid/templates/hid/add_edit_item.html:158
+#: internewshid/hid/templates/hid/tabs/filters/enumerator.html:4
+msgid "Enumerator"
+msgstr ""
+
+#: internewshid/hid/tables.py:94
+#: internewshid/hid/templates/hid/add_edit_item.html:170
+#: internewshid/hid/templates/hid/tabs/filters/collection_type.html:4
+msgid "Collection Type"
+msgstr ""
+
+#: internewshid/hid/tables.py:99
+#: internewshid/hid/templates/hid/tabs/filters/external_id.html:3
+msgid "ID"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:219
+msgid "Delete Selected"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:223
+msgid "Remove Feedback Type"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:227
+msgid "Actions"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:235
+msgid "Set feedback type"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:371
+msgid "Missing batch action"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:393
+#, python-brace-format
+msgid "Unknown batch action '{0}'"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:430
+msgid "Unknown action"
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:453
+#, python-brace-format
+msgid "{0} item deleted."
+msgid_plural "{0} items deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:458
+msgid "There was an error while deleting."
+msgstr ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:487
+#, python-brace-format
+msgid "Updated {0} item."
+msgid_plural "Updated {0} items."
+msgstr[0] ""
+msgstr[1] ""
+
+#: internewshid/hid/tabs/view_and_edit_table.py:492
+#, python-brace-format
+msgid "Failed to update {0} item."
+msgid_plural "Failed to update {0} items."
+msgstr[0] ""
+msgstr[1] ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:54
+msgid "placeholder:Type and hit return"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:59
+#: internewshid/users/templates/contacts/edit_contact.html:31
+#: internewshid/users/templates/contacts/edit_contact.html:35
+msgid "Cancel"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:61
+msgid "Update"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:63
+msgid "Create"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:79
+msgid "placeholder:Type your original text here"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:87
+#: internewshid/hid/templates/hid/item.html:29
+msgid "Reported date"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:98
+#: internewshid/hid/templates/hid/item.html:44
+msgid "Region"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:190
+msgid "placeholder:Type your translation text here"
+msgstr ""
+
+#: internewshid/hid/templates/hid/add_edit_item.html:195
+msgid "Delete feedback"
+msgstr ""
+
+#: internewshid/hid/templates/hid/body_column.html:6
+msgid "Missing Text"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:7
+msgid "View &amp; Edit: "
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:7
+#: internewshid/hid/templates/hid/item.html:19
+msgid "Question"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:15
+msgid "Added by "
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:15
+msgid "on "
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:15
+msgid "Updated by "
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:20
+msgid "Type your question text here"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:33
+msgid "Category"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:36
+msgid "Select Category"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:37
+msgid "Ebola ~ Origins"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:38
+msgid "Ebola ~ Measures"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:39
+msgid "Ebola ~ Updates"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:47
+msgid "Select region..."
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:48
+msgid "Region One"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:49
+msgid "Region Two"
+msgstr ""
+
+#: internewshid/hid/templates/hid/item.html:50
+msgid "Region Three"
+msgstr ""
+
+#: internewshid/hid/templates/hid/sources.html:7
+msgid "Sources"
+msgstr ""
+
+#: internewshid/hid/templates/hid/sources.html:20
+msgid "View/Edit data"
+msgstr ""
+
+#: internewshid/hid/templates/hid/sources.html:20
+msgid "View &amp; Edit data"
+msgstr ""
+
+#: internewshid/hid/templates/hid/table.html:10
+msgid "result"
+msgstr ""
+
+#: internewshid/hid/templates/hid/table.html:12
+msgid "results"
+msgstr ""
+
+#: internewshid/hid/templates/hid/table.html:14
+#, python-format
+msgid "Showing %(start_index)s - %(end_index)s of %(total)s %(results)s"
+msgstr ""
+
+#: internewshid/hid/templates/hid/table.html:27
+msgid "Previous page"
+msgstr ""
+
+#: internewshid/hid/templates/hid/table.html:52
+msgid "Next page"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:12
+msgid "Apply filters"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/dynamic_filters.html:13
+msgid "Reset filters"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/age_range.html:3
+msgid "Ages"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/age_range.html:4
+msgid "Min age"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/age_range.html:4
+msgid "Minimum age"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/age_range.html:5
+msgid "Max age"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/age_range.html:5
+msgid "Maximum age"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/category.html:4
+msgid "Themes"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/category.html:6
+msgid "All Themes"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/collection_type.html:6
+msgid "All Collection Types"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/enumerator.html:6
+msgid "All Enumerators"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/external_id.html:4
+msgid "All IDs"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/feedback_type.html:5
+msgid "All Types"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/gender.html:6
+msgid "All Genders"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/location.html:6
+msgid "All Locations"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/search.html:3
+#: internewshid/hid/templates/hid/tabs/filters/search.html:4
+msgid "Keywords"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/sub_location.html:6
+msgid "All Sub-Locations"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/tags.html:4
+msgid "All Tags"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/time_range.html:3
+msgid "Dates"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/time_range.html:4
+msgid "Start date"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/filters/time_range.html:5
+msgid "End date"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/view_and_edit_buttons.html:15
+msgid "Apply action"
+msgstr ""
+
+#: internewshid/hid/templates/hid/tabs/view_and_edit_buttons.html:19
+msgid "Save changes"
+msgstr ""
+
+#: internewshid/hid/templates/hid/upload.html:6
+msgid "Upload file"
+msgstr ""
+
+#: internewshid/hid/templates/hid/upload_form.html:13
+msgid "Upload"
+msgstr ""
+
+#: internewshid/hid/views/item.py:95 internewshid/hid/views/item.py:125
+#, python-brace-format
+msgid "Item with id {0} could not be found"
+msgstr ""
+
+#: internewshid/hid/views/item.py:102 internewshid/hid/views/item.py:132
+#, python-brace-format
+msgid "Item type {0} could not be found"
+msgstr ""
+
+#: internewshid/hid/views/item.py:140
+msgid "No action performed"
+msgstr ""
+
+#: internewshid/hid/views/item.py:246
+#, python-brace-format
+msgid "{0} {1} successfully created."
+msgstr ""
+
+#: internewshid/hid/views/item.py:254
+#, python-brace-format
+msgid "{0} {1} successfully updated."
+msgstr ""
+
+#: internewshid/hid/views/item.py:260
+msgid ""
+"This record could not be saved because the body and timestamp clashed with "
+"an existing record"
+msgstr ""
+
+#: internewshid/hid/views/item.py:381
+msgid ""
+"The form could not be submitted.Please correct the errors and submit it "
+"again."
+msgstr ""
+
+#: internewshid/hid/views/item.py:408
+#, python-brace-format
+msgid "{0} {1} successfully deleted."
+msgstr ""
+
+#: internewshid/hid/views/upload_spreadsheet.py:29
+msgid "Upload successful!"
+msgstr ""
+
+#: internewshid/hid/views/upload_spreadsheet.py:30
+#, python-brace-format
+msgid "{0} entry has been added."
+msgid_plural "{0} entries have been added."
+msgstr[0] ""
+msgstr[1] ""
+
+#: internewshid/hid/views/upload_spreadsheet.py:37
+#, python-brace-format
+msgid "{0} duplicate entry was skipped."
+msgid_plural "{0} duplicate entries were skipped."
+msgstr[0] ""
+msgstr[1] ""
+
+#: internewshid/hid/widgets/term_count_chart.py:130
+#, python-brace-format
+msgid "{start} - {end}"
+msgstr ""
+
+#: internewshid/hid/widgets/term_count_chart.py:136
+msgid "(missing title)"
+msgstr ""
+
+#: internewshid/rest_api/views.py:180
+#, python-format
+msgid "Taxonomy with slug '%s' does not exist."
+msgstr ""
+
+#: internewshid/rest_api/views.py:206
+#, python-brace-format
+msgid "Taxonomy with slug '{0}' does not exist."
+msgstr ""
+
+#: internewshid/tabbed_page/filter_pool.py:21
+#, python-brace-format
+msgid "Filter named '{0}' has not been registered"
+msgstr ""
+
+#: internewshid/tabbed_page/tab_pool.py:22
+#, python-brace-format
+msgid "Tab named '{0}' has not been registered"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:9 internewshid/taxonomies/models.py:109
+msgid "Name"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:11
+msgid "Taxonomy Name"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:16
+msgid "Slug"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:34
+msgid "Zero or One"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:35
+msgid "Zero or More"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:51
+msgid "Not modifiable by any user, system only"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:52
+msgid "Only admin users who have permission to define and edit taxonomies"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:53
+msgid "Any user who has permission to use taxonomies"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:111
+msgid "Tag or Category Name"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:117
+msgid "Taxonomy"
+msgstr ""
+
+#: internewshid/taxonomies/models.py:122
+msgid "Long Name"
+msgstr ""
+
+#: internewshid/templates/404.html:3
+msgid "Page not found"
+msgstr ""
+
+#: internewshid/templates/404.html:6
+msgid "The page you are looking for does not appear to exist on this site."
+msgstr ""
+
+#: internewshid/templates/500.html:4
+msgid "Server Error (500)"
+msgstr ""
+
+#: internewshid/templates/500.html:7
+msgid "Server Error <em>(500)</em>"
+msgstr ""
+
+#: internewshid/templates/500.html:8
+msgid ""
+"There's been an error. It's been reported to the site administrators via e-"
+"mail and should be fixed shortly. Thanks for your patience."
+msgstr ""
+
+#: internewshid/templates/base.html:9
+msgid "Internews HiD"
+msgstr ""
+
+#: internewshid/templates/base.html:10
+msgid "Internews - Humanitarian Information Dashboard for Internews"
+msgstr ""
+
+#: internewshid/templates/base_side.html:14
+msgid "Toggle navigation"
+msgstr ""
+
+#: internewshid/templates/base_side.html:26
+msgid "Dashboard"
+msgstr ""
+
+#: internewshid/templates/base_side.html:34
+msgid "data"
+msgstr ""
+
+#: internewshid/templates/base_side.html:37
+msgid "Upload data"
+msgstr ""
+
+#: internewshid/templates/base_side.html:48
+msgid "Export data"
+msgstr ""
+
+#: internewshid/templates/base_side.html:51
+msgid "All Feedback (CSV)"
+msgstr ""
+
+#: internewshid/templates/base_side.html:52
+msgid "Location data (CSV)"
+msgstr ""
+
+#: internewshid/templates/base_side.html:61
+msgid "Settings"
+msgstr ""
+
+#: internewshid/templates/base_side.html:64
+#, python-format
+msgid "Your Account %(request.user)s"
+msgstr ""
+
+#: internewshid/templates/base_side.html:65
+msgid "Administration"
+msgstr ""
+
+#: internewshid/templates/base_side.html:67
+msgid "Log out"
+msgstr ""
+
+#: internewshid/templates/base_side.html:95
+msgid "Close"
+msgstr ""
+
+#: internewshid/templates/base_side.html:110
+msgid "A project of Internews"
+msgstr ""
+
+#: internewshid/templates/base_side.html:113
+msgid ""
+"Developed by <a href=\"http://www.aptivate.org\" title=\"Aptivate website\" "
+"rel=\"author\">Aptivate</a>"
+msgstr ""
+
+#: internewshid/users/admin.py:17
+msgid "Personal info"
+msgstr ""
+
+#: internewshid/users/admin.py:18
+msgid "Permissions"
+msgstr ""
+
+#: internewshid/users/admin.py:20
+msgid "Important dates"
+msgstr ""
+
+#: internewshid/users/countries.py:4
+msgid "Member countries"
+msgstr ""
+
+#: internewshid/users/countries.py:5
+msgid "Botswana"
+msgstr ""
+
+#: internewshid/users/countries.py:6
+msgid "Burundi"
+msgstr ""
+
+#: internewshid/users/countries.py:7
+msgid "Congo - Kinshasa"
+msgstr ""
+
+#: internewshid/users/countries.py:8
+msgid "Ethiopia"
+msgstr ""
+
+#: internewshid/users/countries.py:9
+msgid "Kenya"
+msgstr ""
+
+#: internewshid/users/countries.py:10
+msgid "Lesotho"
+msgstr ""
+
+#: internewshid/users/countries.py:11
+msgid "Malawi"
+msgstr ""
+
+#: internewshid/users/countries.py:12
+msgid "Mozambique"
+msgstr ""
+
+#: internewshid/users/countries.py:13
+msgid "Namibia"
+msgstr ""
+
+#: internewshid/users/countries.py:14
+msgid "Rwanda"
+msgstr ""
+
+#: internewshid/users/countries.py:15
+msgid "South Africa"
+msgstr ""
+
+#: internewshid/users/countries.py:16
+msgid "Sudan"
+msgstr ""
+
+#: internewshid/users/countries.py:17
+msgid "South Sudan"
+msgstr ""
+
+#: internewshid/users/countries.py:18
+msgid "Swaziland"
+msgstr ""
+
+#: internewshid/users/countries.py:19
+msgid "Tanzania"
+msgstr ""
+
+#: internewshid/users/countries.py:20
+msgid "Uganda"
+msgstr ""
+
+#: internewshid/users/countries.py:21
+msgid "Zambia"
+msgstr ""
+
+#: internewshid/users/countries.py:22
+msgid "Zimbabwe"
+msgstr ""
+
+#: internewshid/users/countries.py:24
+msgid "Rest of the world"
+msgstr ""
+
+#: internewshid/users/countries.py:25
+msgid "Afghanistan"
+msgstr ""
+
+#: internewshid/users/countries.py:26
+msgid "Albania"
+msgstr ""
+
+#: internewshid/users/countries.py:27
+msgid "Algeria"
+msgstr ""
+
+#: internewshid/users/countries.py:28
+msgid "American Samoa"
+msgstr ""
+
+#: internewshid/users/countries.py:29
+msgid "Andorra"
+msgstr ""
+
+#: internewshid/users/countries.py:30
+msgid "Angola"
+msgstr ""
+
+#: internewshid/users/countries.py:31
+msgid "Anguilla"
+msgstr ""
+
+#: internewshid/users/countries.py:32
+msgid "Antarctica"
+msgstr ""
+
+#: internewshid/users/countries.py:33
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: internewshid/users/countries.py:34
+msgid "Argentina"
+msgstr ""
+
+#: internewshid/users/countries.py:35
+msgid "Armenia"
+msgstr ""
+
+#: internewshid/users/countries.py:36
+msgid "Aruba"
+msgstr ""
+
+#: internewshid/users/countries.py:37
+msgid "Australia"
+msgstr ""
+
+#: internewshid/users/countries.py:38
+msgid "Austria"
+msgstr ""
+
+#: internewshid/users/countries.py:39
+msgid "Azerbaijan"
+msgstr ""
+
+#: internewshid/users/countries.py:40
+msgid "Bahamas"
+msgstr ""
+
+#: internewshid/users/countries.py:41
+msgid "Bahrain"
+msgstr ""
+
+#: internewshid/users/countries.py:42
+msgid "Bangladesh"
+msgstr ""
+
+#: internewshid/users/countries.py:43
+msgid "Barbados"
+msgstr ""
+
+#: internewshid/users/countries.py:44
+msgid "Belarus"
+msgstr ""
+
+#: internewshid/users/countries.py:45
+msgid "Belgium"
+msgstr ""
+
+#: internewshid/users/countries.py:46
+msgid "Belize"
+msgstr ""
+
+#: internewshid/users/countries.py:47
+msgid "Benin"
+msgstr ""
+
+#: internewshid/users/countries.py:48
+msgid "Bermuda"
+msgstr ""
+
+#: internewshid/users/countries.py:49
+msgid "Bhutan"
+msgstr ""
+
+#: internewshid/users/countries.py:50
+msgid "Bolivia"
+msgstr ""
+
+#: internewshid/users/countries.py:51
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: internewshid/users/countries.py:52
+msgid "Bouvet Island"
+msgstr ""
+
+#: internewshid/users/countries.py:53
+msgid "Brazil"
+msgstr ""
+
+#: internewshid/users/countries.py:54
+msgid "British Antarctic Territory"
+msgstr ""
+
+#: internewshid/users/countries.py:55
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: internewshid/users/countries.py:56
+msgid "British Virgin Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:57
+msgid "Brunei"
+msgstr ""
+
+#: internewshid/users/countries.py:58
+msgid "Bulgaria"
+msgstr ""
+
+#: internewshid/users/countries.py:59
+msgid "Burkina Faso"
+msgstr ""
+
+#: internewshid/users/countries.py:60
+msgid "Cambodia"
+msgstr ""
+
+#: internewshid/users/countries.py:61
+msgid "Cameroon"
+msgstr ""
+
+#: internewshid/users/countries.py:62
+msgid "Canada"
+msgstr ""
+
+#: internewshid/users/countries.py:63
+msgid "Canton and Enderbury Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:64
+msgid "Cape Verde"
+msgstr ""
+
+#: internewshid/users/countries.py:65
+msgid "Cayman Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:66
+msgid "Central African Republic"
+msgstr ""
+
+#: internewshid/users/countries.py:67
+msgid "Chad"
+msgstr ""
+
+#: internewshid/users/countries.py:68
+msgid "Chile"
+msgstr ""
+
+#: internewshid/users/countries.py:69
+msgid "China"
+msgstr ""
+
+#: internewshid/users/countries.py:70
+msgid "Christmas Island"
+msgstr ""
+
+#: internewshid/users/countries.py:71
+msgid "Cocos [Keeling] Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:72
+msgid "Colombia"
+msgstr ""
+
+#: internewshid/users/countries.py:73
+msgid "Comoros"
+msgstr ""
+
+#: internewshid/users/countries.py:74
+msgid "Congo - Brazzaville"
+msgstr ""
+
+#: internewshid/users/countries.py:75
+msgid "Cook Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:76
+msgid "Costa Rica"
+msgstr ""
+
+#: internewshid/users/countries.py:77
+msgid "Croatia"
+msgstr ""
+
+#: internewshid/users/countries.py:78
+msgid "Cuba"
+msgstr ""
+
+#: internewshid/users/countries.py:79
+msgid "Cyprus"
+msgstr ""
+
+#: internewshid/users/countries.py:80
+msgid "Czech Republic"
+msgstr ""
+
+#: internewshid/users/countries.py:81
+msgid "CÃ´te dâIvoire"
+msgstr "Côte d'Ivoire"
+
+#: internewshid/users/countries.py:82
+msgid "Denmark"
+msgstr ""
+
+#: internewshid/users/countries.py:83
+msgid "Djibouti"
+msgstr ""
+
+#: internewshid/users/countries.py:84
+msgid "Dominica"
+msgstr ""
+
+#: internewshid/users/countries.py:85
+msgid "Dominican Republic"
+msgstr ""
+
+#: internewshid/users/countries.py:86
+msgid "Dronning Maud Land"
+msgstr ""
+
+#: internewshid/users/countries.py:87
+msgid "East Germany"
+msgstr ""
+
+#: internewshid/users/countries.py:88
+msgid "Ecuador"
+msgstr ""
+
+#: internewshid/users/countries.py:89
+msgid "Egypt"
+msgstr ""
+
+#: internewshid/users/countries.py:90
+msgid "El Salvador"
+msgstr ""
+
+#: internewshid/users/countries.py:91
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: internewshid/users/countries.py:92
+msgid "Eritrea"
+msgstr ""
+
+#: internewshid/users/countries.py:93
+msgid "Estonia"
+msgstr ""
+
+#: internewshid/users/countries.py:94
+msgid "Falkland Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:95
+msgid "Faroe Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:96
+msgid "Fiji"
+msgstr ""
+
+#: internewshid/users/countries.py:97
+msgid "Finland"
+msgstr ""
+
+#: internewshid/users/countries.py:98
+msgid "France"
+msgstr ""
+
+#: internewshid/users/countries.py:99
+msgid "French Guiana"
+msgstr ""
+
+#: internewshid/users/countries.py:100
+msgid "French Polynesia"
+msgstr ""
+
+#: internewshid/users/countries.py:101
+msgid "French Southern Territories"
+msgstr ""
+
+#: internewshid/users/countries.py:102
+msgid "French Southern and Antarctic Territories"
+msgstr ""
+
+#: internewshid/users/countries.py:103
+msgid "Gabon"
+msgstr ""
+
+#: internewshid/users/countries.py:104
+msgid "Gambia"
+msgstr ""
+
+#: internewshid/users/countries.py:105
+msgid "Georgia"
+msgstr ""
+
+#: internewshid/users/countries.py:106
+msgid "Germany"
+msgstr ""
+
+#: internewshid/users/countries.py:107
+msgid "Ghana"
+msgstr ""
+
+#: internewshid/users/countries.py:108
+msgid "Gibraltar"
+msgstr ""
+
+#: internewshid/users/countries.py:109
+msgid "Greece"
+msgstr ""
+
+#: internewshid/users/countries.py:110
+msgid "Greenland"
+msgstr ""
+
+#: internewshid/users/countries.py:111
+msgid "Grenada"
+msgstr ""
+
+#: internewshid/users/countries.py:112
+msgid "Guadeloupe"
+msgstr ""
+
+#: internewshid/users/countries.py:113
+msgid "Guam"
+msgstr ""
+
+#: internewshid/users/countries.py:114
+msgid "Guatemala"
+msgstr ""
+
+#: internewshid/users/countries.py:115
+msgid "Guernsey"
+msgstr ""
+
+#: internewshid/users/countries.py:116
+msgid "Guinea"
+msgstr ""
+
+#: internewshid/users/countries.py:117
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: internewshid/users/countries.py:118
+msgid "Guyana"
+msgstr ""
+
+#: internewshid/users/countries.py:119
+msgid "Haiti"
+msgstr ""
+
+#: internewshid/users/countries.py:120
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:121
+msgid "Honduras"
+msgstr ""
+
+#: internewshid/users/countries.py:122
+msgid "Hong Kong SAR China"
+msgstr ""
+
+#: internewshid/users/countries.py:123
+msgid "Hungary"
+msgstr ""
+
+#: internewshid/users/countries.py:124
+msgid "Iceland"
+msgstr ""
+
+#: internewshid/users/countries.py:125
+msgid "India"
+msgstr ""
+
+#: internewshid/users/countries.py:126
+msgid "Indonesia"
+msgstr ""
+
+#: internewshid/users/countries.py:127
+msgid "Iran"
+msgstr ""
+
+#: internewshid/users/countries.py:128
+msgid "Iraq"
+msgstr ""
+
+#: internewshid/users/countries.py:129
+msgid "Ireland"
+msgstr ""
+
+#: internewshid/users/countries.py:130
+msgid "Isle of Man"
+msgstr ""
+
+#: internewshid/users/countries.py:131
+msgid "Israel"
+msgstr ""
+
+#: internewshid/users/countries.py:132
+msgid "Italy"
+msgstr ""
+
+#: internewshid/users/countries.py:133
+msgid "Jamaica"
+msgstr ""
+
+#: internewshid/users/countries.py:134
+msgid "Japan"
+msgstr ""
+
+#: internewshid/users/countries.py:135
+msgid "Jersey"
+msgstr ""
+
+#: internewshid/users/countries.py:136
+msgid "Johnston Island"
+msgstr ""
+
+#: internewshid/users/countries.py:137
+msgid "Jordan"
+msgstr ""
+
+#: internewshid/users/countries.py:138
+msgid "Kazakhstan"
+msgstr ""
+
+#: internewshid/users/countries.py:139
+msgid "Kiribati"
+msgstr ""
+
+#: internewshid/users/countries.py:140
+msgid "Kuwait"
+msgstr ""
+
+#: internewshid/users/countries.py:141
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: internewshid/users/countries.py:142
+msgid "Laos"
+msgstr ""
+
+#: internewshid/users/countries.py:143
+msgid "Latvia"
+msgstr ""
+
+#: internewshid/users/countries.py:144
+msgid "Lebanon"
+msgstr ""
+
+#: internewshid/users/countries.py:145
+msgid "Liberia"
+msgstr ""
+
+#: internewshid/users/countries.py:146
+msgid "Libya"
+msgstr ""
+
+#: internewshid/users/countries.py:147
+msgid "Liechtenstein"
+msgstr ""
+
+#: internewshid/users/countries.py:148
+msgid "Lithuania"
+msgstr ""
+
+#: internewshid/users/countries.py:149
+msgid "Luxembourg"
+msgstr ""
+
+#: internewshid/users/countries.py:150
+msgid "Macau SAR China"
+msgstr ""
+
+#: internewshid/users/countries.py:151
+msgid "Macedonia"
+msgstr ""
+
+#: internewshid/users/countries.py:152
+msgid "Madagascar"
+msgstr ""
+
+#: internewshid/users/countries.py:153
+msgid "Malaysia"
+msgstr ""
+
+#: internewshid/users/countries.py:154
+msgid "Maldives"
+msgstr ""
+
+#: internewshid/users/countries.py:155
+msgid "Mali"
+msgstr ""
+
+#: internewshid/users/countries.py:156
+msgid "Malta"
+msgstr ""
+
+#: internewshid/users/countries.py:157
+msgid "Marshall Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:158
+msgid "Martinique"
+msgstr ""
+
+#: internewshid/users/countries.py:159
+msgid "Mauritania"
+msgstr ""
+
+#: internewshid/users/countries.py:160
+msgid "Mauritius"
+msgstr ""
+
+#: internewshid/users/countries.py:161
+msgid "Mayotte"
+msgstr ""
+
+#: internewshid/users/countries.py:162
+msgid "Metropolitan France"
+msgstr ""
+
+#: internewshid/users/countries.py:163
+msgid "Mexico"
+msgstr ""
+
+#: internewshid/users/countries.py:164
+msgid "Micronesia"
+msgstr ""
+
+#: internewshid/users/countries.py:165
+msgid "Midway Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:166
+msgid "Moldova"
+msgstr ""
+
+#: internewshid/users/countries.py:167
+msgid "Monaco"
+msgstr ""
+
+#: internewshid/users/countries.py:168
+msgid "Mongolia"
+msgstr ""
+
+#: internewshid/users/countries.py:169
+msgid "Montenegro"
+msgstr ""
+
+#: internewshid/users/countries.py:170
+msgid "Montserrat"
+msgstr ""
+
+#: internewshid/users/countries.py:171
+msgid "Morocco"
+msgstr ""
+
+#: internewshid/users/countries.py:172
+msgid "Myanmar [Burma]"
+msgstr ""
+
+#: internewshid/users/countries.py:173
+msgid "Nauru"
+msgstr ""
+
+#: internewshid/users/countries.py:174
+msgid "Nepal"
+msgstr ""
+
+#: internewshid/users/countries.py:175
+msgid "Netherlands"
+msgstr ""
+
+#: internewshid/users/countries.py:176
+msgid "Netherlands Antilles"
+msgstr ""
+
+#: internewshid/users/countries.py:177
+msgid "Neutral Zone"
+msgstr ""
+
+#: internewshid/users/countries.py:178
+msgid "New Caledonia"
+msgstr ""
+
+#: internewshid/users/countries.py:179
+msgid "New Zealand"
+msgstr ""
+
+#: internewshid/users/countries.py:180
+msgid "Nicaragua"
+msgstr ""
+
+#: internewshid/users/countries.py:181
+msgid "Niger"
+msgstr ""
+
+#: internewshid/users/countries.py:182
+msgid "Nigeria"
+msgstr ""
+
+#: internewshid/users/countries.py:183
+msgid "Niue"
+msgstr ""
+
+#: internewshid/users/countries.py:184
+msgid "Norfolk Island"
+msgstr ""
+
+#: internewshid/users/countries.py:185
+msgid "North Korea"
+msgstr ""
+
+#: internewshid/users/countries.py:186
+msgid "North Vietnam"
+msgstr ""
+
+#: internewshid/users/countries.py:187
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:188
+msgid "Norway"
+msgstr ""
+
+#: internewshid/users/countries.py:189
+msgid "Oman"
+msgstr ""
+
+#: internewshid/users/countries.py:190
+msgid "Pacific Islands Trust Territory"
+msgstr ""
+
+#: internewshid/users/countries.py:191
+msgid "Pakistan"
+msgstr ""
+
+#: internewshid/users/countries.py:192
+msgid "Palau"
+msgstr ""
+
+#: internewshid/users/countries.py:193
+msgid "Palestinian Territories"
+msgstr ""
+
+#: internewshid/users/countries.py:194
+msgid "Panama"
+msgstr ""
+
+#: internewshid/users/countries.py:195
+msgid "Panama Canal Zone"
+msgstr ""
+
+#: internewshid/users/countries.py:196
+msgid "Papua New Guinea"
+msgstr ""
+
+#: internewshid/users/countries.py:197
+msgid "Paraguay"
+msgstr ""
+
+#: internewshid/users/countries.py:198
+msgid "People's Democratic Republic of Yemen"
+msgstr ""
+
+#: internewshid/users/countries.py:199
+msgid "Peru"
+msgstr ""
+
+#: internewshid/users/countries.py:200
+msgid "Philippines"
+msgstr ""
+
+#: internewshid/users/countries.py:201
+msgid "Pitcairn Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:202
+msgid "Poland"
+msgstr ""
+
+#: internewshid/users/countries.py:203
+msgid "Portugal"
+msgstr ""
+
+#: internewshid/users/countries.py:204
+msgid "Puerto Rico"
+msgstr ""
+
+#: internewshid/users/countries.py:205
+msgid "Qatar"
+msgstr ""
+
+#: internewshid/users/countries.py:206
+msgid "Romania"
+msgstr ""
+
+#: internewshid/users/countries.py:207
+msgid "Russia"
+msgstr ""
+
+#: internewshid/users/countries.py:208
+msgid "RÃ©union"
+msgstr "Réunion"
+
+#: internewshid/users/countries.py:209
+msgid "Saint BarthÃ©lemy"
+msgstr "Saint Barthélemy"
+
+#: internewshid/users/countries.py:210
+msgid "Saint Helena"
+msgstr ""
+
+#: internewshid/users/countries.py:211
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: internewshid/users/countries.py:212
+msgid "Saint Lucia"
+msgstr ""
+
+#: internewshid/users/countries.py:213
+msgid "Saint Martin"
+msgstr ""
+
+#: internewshid/users/countries.py:214
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: internewshid/users/countries.py:215
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: internewshid/users/countries.py:216
+msgid "Samoa"
+msgstr ""
+
+#: internewshid/users/countries.py:217
+msgid "San Marino"
+msgstr ""
+
+#: internewshid/users/countries.py:218
+msgid "Saudi Arabia"
+msgstr ""
+
+#: internewshid/users/countries.py:219
+msgid "Senegal"
+msgstr ""
+
+#: internewshid/users/countries.py:220
+msgid "Serbia"
+msgstr ""
+
+#: internewshid/users/countries.py:221
+msgid "Serbia and Montenegro"
+msgstr ""
+
+#: internewshid/users/countries.py:222
+msgid "Seychelles"
+msgstr ""
+
+#: internewshid/users/countries.py:223
+msgid "Sierra Leone"
+msgstr ""
+
+#: internewshid/users/countries.py:224
+msgid "Singapore"
+msgstr ""
+
+#: internewshid/users/countries.py:225
+msgid "Slovakia"
+msgstr ""
+
+#: internewshid/users/countries.py:226
+msgid "Slovenia"
+msgstr ""
+
+#: internewshid/users/countries.py:227
+msgid "Solomon Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:228
+msgid "Somalia"
+msgstr ""
+
+#: internewshid/users/countries.py:229
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:230
+msgid "South Korea"
+msgstr ""
+
+#: internewshid/users/countries.py:231
+msgid "Spain"
+msgstr ""
+
+#: internewshid/users/countries.py:232
+msgid "Sri Lanka"
+msgstr ""
+
+#: internewshid/users/countries.py:233
+msgid "Suriname"
+msgstr ""
+
+#: internewshid/users/countries.py:234
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: internewshid/users/countries.py:235
+msgid "Sweden"
+msgstr ""
+
+#: internewshid/users/countries.py:236
+msgid "Switzerland"
+msgstr ""
+
+#: internewshid/users/countries.py:237
+msgid "Syria"
+msgstr ""
+
+#: internewshid/users/countries.py:238
+msgid "SÃ£o TomÃ© and PrÃ­ncipe"
+msgstr "São Tomé and Príncipe"
+
+#: internewshid/users/countries.py:239
+msgid "Taiwan"
+msgstr ""
+
+#: internewshid/users/countries.py:240
+msgid "Tajikistan"
+msgstr ""
+
+#: internewshid/users/countries.py:241
+msgid "Thailand"
+msgstr ""
+
+#: internewshid/users/countries.py:242
+msgid "Timor-Leste"
+msgstr ""
+
+#: internewshid/users/countries.py:243
+msgid "Togo"
+msgstr ""
+
+#: internewshid/users/countries.py:244
+msgid "Tokelau"
+msgstr ""
+
+#: internewshid/users/countries.py:245
+msgid "Tonga"
+msgstr ""
+
+#: internewshid/users/countries.py:246
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: internewshid/users/countries.py:247
+msgid "Tunisia"
+msgstr ""
+
+#: internewshid/users/countries.py:248
+msgid "Turkey"
+msgstr ""
+
+#: internewshid/users/countries.py:249
+msgid "Turkmenistan"
+msgstr ""
+
+#: internewshid/users/countries.py:250
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:251
+msgid "Tuvalu"
+msgstr ""
+
+#: internewshid/users/countries.py:252
+msgid "U.S. Minor Outlying Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:253
+msgid "U.S. Miscellaneous Pacific Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:254
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#: internewshid/users/countries.py:255
+msgid "Ukraine"
+msgstr ""
+
+#: internewshid/users/countries.py:256
+msgid "Union of Soviet Socialist Republics"
+msgstr ""
+
+#: internewshid/users/countries.py:257
+msgid "United Arab Emirates"
+msgstr ""
+
+#: internewshid/users/countries.py:258
+msgid "United Kingdom"
+msgstr ""
+
+#: internewshid/users/countries.py:259
+msgid "United States"
+msgstr ""
+
+#: internewshid/users/countries.py:260
+msgid "Unknown or Invalid Region"
+msgstr ""
+
+#: internewshid/users/countries.py:261
+msgid "Uruguay"
+msgstr ""
+
+#: internewshid/users/countries.py:262
+msgid "Uzbekistan"
+msgstr ""
+
+#: internewshid/users/countries.py:263
+msgid "Vanuatu"
+msgstr ""
+
+#: internewshid/users/countries.py:264
+msgid "Vatican City"
+msgstr ""
+
+#: internewshid/users/countries.py:265
+msgid "Venezuela"
+msgstr ""
+
+#: internewshid/users/countries.py:266
+msgid "Vietnam"
+msgstr ""
+
+#: internewshid/users/countries.py:267
+msgid "Wake Island"
+msgstr ""
+
+#: internewshid/users/countries.py:268
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: internewshid/users/countries.py:269
+msgid "Western Sahara"
+msgstr ""
+
+#: internewshid/users/countries.py:270
+msgid "Yemen"
+msgstr ""
+
+#: internewshid/users/countries.py:271
+msgid "\\xc3\\x85land Islands"
+msgstr "Åland Islands"
+
+#: internewshid/users/forms.py:19
+msgid "Dr"
+msgstr ""
+
+#: internewshid/users/forms.py:19
+msgid "Hon"
+msgstr ""
+
+#: internewshid/users/forms.py:19
+msgid "Mrs"
+msgstr ""
+
+#: internewshid/users/forms.py:19
+msgid "Ms"
+msgstr ""
+
+#: internewshid/users/forms.py:19
+msgid "Mr"
+msgstr ""
+
+#: internewshid/users/forms.py:19
+msgid "Prof"
+msgstr ""
+
+#: internewshid/users/forms.py:20
+msgid "His Excellency"
+msgstr ""
+
+#: internewshid/users/forms.py:20
+msgid "Her Excellency"
+msgstr ""
+
+#: internewshid/users/forms.py:20
+msgid "Rt.Hon"
+msgstr ""
+
+#: internewshid/users/forms.py:20
+msgid "Assoc. Prof"
+msgstr ""
+
+#: internewshid/users/forms.py:89
+#, python-brace-format
+msgid "{0}: email change notification"
+msgstr ""
+
+#: internewshid/users/forms.py:170 internewshid/users/forms.py:175
+#, python-brace-format
+msgid "User with email '{0}' not known"
+msgstr ""
+
+#: internewshid/users/models.py:14
+msgid "Female"
+msgstr ""
+
+#: internewshid/users/models.py:15
+msgid "Male"
+msgstr ""
+
+#: internewshid/users/models.py:16
+msgid "Other"
+msgstr ""
+
+#: internewshid/users/models.py:40
+msgid "The given business_email must be set"
+msgstr ""
+
+#: internewshid/users/models.py:64
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+
+#: internewshid/users/models.py:69
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: internewshid/users/models.py:79
+msgid "Type of Contact"
+msgstr ""
+
+#: internewshid/users/models.py:86
+msgid "The country in which the contact is currently working in"
+msgstr ""
+
+#: internewshid/users/models.py:101
+msgid "Yahoo Messenger"
+msgstr ""
+
+#: internewshid/users/models.py:102
+msgid "MSN ID"
+msgstr ""
+
+#: internewshid/users/models.py:107
+msgid "Home telephone"
+msgstr ""
+
+#: internewshid/users/models.py:110
+msgid "Business telephone"
+msgstr ""
+
+#: internewshid/users/models.py:112
+msgid "Fax no"
+msgstr ""
+
+#: internewshid/users/templates/contacts/delete_contact.html:4
+msgid "Delete a contact"
+msgstr ""
+
+#: internewshid/users/templates/contacts/delete_contact.html:7
+#, python-format
+msgid "Do you want to delete <span>%(first_name)s %(last_name)s</span>?"
+msgstr ""
+
+#: internewshid/users/templates/contacts/delete_contact.html:13
+msgid "Delete contact"
+msgstr ""
+
+#: internewshid/users/templates/contacts/delete_contact.html:14
+#: internewshid/users/templates/contacts/edit_student_contact.html:86
+msgid "Go back"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:7
+msgid "Update personal information"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:16
+msgid "Personal information"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:25
+msgid "Save contact"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:27
+#: internewshid/users/templates/contacts/edit_contact.html:51
+msgid "Send invitation"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:33
+msgid "Back to contact list"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:42
+#, python-format
+msgid "You can also <a href=\"%(delete_url)s\">delete this contact</a>."
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:50
+msgid "Account not claimed"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:52
+msgid "This will also save any changes to your contact form"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:59
+msgid "Also edit"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:60
+#: internewshid/users/templates/contacts/edit_student_contact.html:5
+#: internewshid/users/templates/contacts/edit_student_contact.html:10
+msgid "Student information"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_contact.html:65
+msgid "Change password"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_student_contact.html:34
+msgid "Name of Funder"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_student_contact.html:35
+msgid "Items Funded"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_student_contact.html:37
+msgid "Delete"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_student_contact.html:85
+msgid "Save student information"
+msgstr ""
+
+#: internewshid/users/templates/contacts/edit_student_contact.html:137
+msgid "Add a funder"
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/activation_body.email:2
+msgid ""
+"\n"
+"Welcome and thank you for registering with the MIS\n"
+"\n"
+"Please activate your account by clicking on this link: "
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/activation_body.email:5
+msgid ""
+"\n"
+"\n"
+"You will be asked to set a password.\n"
+"\n"
+"If you experience any problems, please contact ...\n"
+"\n"
+"Kind regards,\n"
+"\n"
+"    MIS Team\n"
+"\n"
+"\n"
+"\n"
+"Please do not reply to this email as it is automatically generated. Any "
+"replies cannot be monitored.\n"
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/email_changed_body.email:2
+#, python-format
+msgid ""
+"\n"
+"This email is to confirm that you have changed the primary email address you "
+"have registered with MIS\n"
+"\n"
+"Your old email was: %(old_email)s\n"
+"Your new email is: %(new_email)s\n"
+"\n"
+"You will need to use the new email address to log in.\n"
+"\n"
+"If you did not initiate this change, please either:\n"
+"\n"
+"    log in using the new email address and change your email and password; "
+"or contact ...\n"
+"\n"
+"Kind regards,\n"
+"\n"
+"    MIS Team\n"
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/password_reset_body.email:2
+msgid ""
+"\n"
+"This email is to confirm that you have changed your password.\n"
+"\n"
+"If you did not change your password, please contact ...\n"
+"\n"
+"Kind regards,\n"
+"\n"
+"    MIS System Team\n"
+"\n"
+"\n"
+"\n"
+"Please do not reply to this email as it is automatically generated. Any "
+"replies cannot be monitored.\n"
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/password_reset_request.email:2
+msgid ""
+"\n"
+"This email was sent because someone requested to change password for this "
+"account.\n"
+"\n"
+"You can change your password by following link: "
+msgstr ""
+
+#: internewshid/users/templates/contacts/email/password_reset_request.email:5
+msgid ""
+"\n"
+"\n"
+"If you did not ask to change your password, then please ignore this email.\n"
+"\n"
+"Kind regards,\n"
+"\n"
+"Internews HID Team\n"
+"\n"
+"\n"
+"\n"
+"Please do not reply to this email as it is automatically generated. Any "
+"replies cannot be monitored.\n"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:5
+#: internewshid/users/templates/contacts/list_contacts.html:9
+msgid "People"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:11
+msgid "Search by name or email"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:12
+msgid "Search"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:13
+msgid "Show all"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:15
+msgid "Add a contact"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:17
+msgid "Export as"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:17
+msgid "excel (xlsx)"
+msgstr ""
+
+#: internewshid/users/templates/contacts/list_contacts.html:17
+msgid "csv"
+msgstr ""
+
+#: internewshid/users/validators.py:11
+#, python-brace-format
+msgid "{0} is not a number"
+msgstr ""
+
+#: internewshid/users/validators.py:15
+#, python-brace-format
+msgid "{0} is not a number between 1900 and {1}"
+msgstr ""
+
+#: internewshid/users/views/activation.py:24
+#, python-brace-format
+msgid "{0}: password recovery"
+msgstr ""
+
+#: internewshid/users/views/activation.py:36
+msgid ""
+"Reset password email was sent to this contact. Please check your mailbox for "
+"further instructions."
+msgstr ""
+
+#: internewshid/users/views/activation.py:42
+msgid "Email could not be sent. Check if provided email is correct."
+msgstr ""
+
+#: internewshid/users/views/activation.py:85
+msgid "Activation email was sent to this contact."
+msgstr ""
+
+#: internewshid/users/views/activation.py:88
+msgid ""
+"Email could not be sent.                                    Check if "
+"business email is correct."
+msgstr ""
+
+#: internewshid/users/views/contact_info.py:114
+msgid "Contact data not valid,                 please check and try again."
+msgstr ""

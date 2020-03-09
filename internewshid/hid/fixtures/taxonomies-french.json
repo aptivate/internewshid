@@ -1,0 +1,316 @@
+[
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Item Types",
+      "slug": "item-types",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "multiplicity": "multiple",
+      "name": "Tags",
+      "slug": "tags",
+      "vocabulary": "open"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Data Origins",
+      "slug": "data-origins",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Countries",
+      "slug": "countries",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Contexts",
+      "slug": "contexts",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Bangladesh Refugee Crisis Sectors",
+      "slug": "bangladesh-refugee-crisis-sectors",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Age Ranges",
+      "slug": "age-ranges",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "drc",
+      "slug": "drc",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 9
+  },
+  {
+    "fields": {
+      "long_name": "Question",
+      "name": "question",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 29
+  },
+  {
+    "fields": {
+      "long_name": "Rumour",
+      "name": "rumour",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 30
+  },
+  {
+    "fields": {
+      "long_name": "Geopoll Spreadsheet",
+      "name": "Geopoll Spreadsheet",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 31
+  },
+  {
+    "fields": {
+      "long_name": "Rapidpro Spreadsheet",
+      "name": "Rapidpro Spreadsheet",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 32
+  },
+  {
+    "fields": {
+      "long_name": "Form Entry",
+      "name": "Form Entry",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 33
+  },
+  {
+    "fields": {
+      "long_name": "Liberia",
+      "name": "Liberia",
+      "taxonomy": 5
+    },
+    "model": "taxonomies.term",
+    "pk": 34
+  },
+  {
+    "fields": {
+      "long_name": "Ebola-Liberia",
+      "name": "Ebola-Liberia",
+      "taxonomy": 6
+    },
+    "model": "taxonomies.term",
+    "pk": 35
+  },
+  {
+    "fields": {
+      "long_name": "WASH",
+      "name": "WASH",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 54
+  },
+  {
+    "fields": {
+      "long_name": "Articles non alimentaires / Abri",
+      "name": "Articles non alimentaires / Abri",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 55
+  },
+  {
+    "fields": {
+      "long_name": "Santé",
+      "name": "Santé",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 56
+  },
+  {
+    "fields": {
+      "long_name": "Education",
+      "name": "Education",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 57
+  },
+  {
+    "fields": {
+      "long_name": "Nutrition",
+      "name": "Nutrition",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 58
+  },
+  {
+    "fields": {
+      "long_name": "Protection des enfants",
+      "name": "Protection des enfants",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 59
+  },
+  {
+    "fields": {
+      "long_name": "Sécurité alimentaire",
+      "name": "Sécurité alimentaire",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 60
+  },
+  {
+    "fields": {
+      "long_name": "Violence Sexuelle",
+      "name": "Violence Sexuelle",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 61
+  },
+  {
+    "fields": {
+      "long_name": "Gestion de site",
+      "name": "Gestion de site",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 62
+  },
+  {
+    "fields": {
+      "long_name": "Protection",
+      "name": "Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 63
+  },
+  {
+    "fields": {
+      "long_name": "Concern",
+      "name": "concern",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 66
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 420,
+    "fields": {
+        "name": "<11",
+        "taxonomy": 8,
+        "long_name": "<11"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 421,
+    "fields": {
+        "name": "11-14",
+        "taxonomy": 8,
+        "long_name": "11-14"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 422,
+    "fields": {
+        "name": "15-18",
+        "taxonomy": 8,
+        "long_name": "15-18"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 423,
+    "fields": {
+        "name": "19-25",
+        "taxonomy": 8,
+        "long_name": "19-25"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 424,
+    "fields": {
+        "name": "26-35",
+        "taxonomy": 8,
+        "long_name": "26-35"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 425,
+    "fields": {
+        "name": "36-45",
+        "taxonomy": 8,
+        "long_name": "36-45"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 426,
+    "fields": {
+        "name": "46-60",
+        "taxonomy": 8,
+        "long_name": "46-60"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 427,
+    "fields": {
+        "name": "60+",
+        "taxonomy": 8,
+        "long_name": "60+"
+    }
+  }
+]

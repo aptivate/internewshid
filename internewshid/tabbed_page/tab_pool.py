@@ -4,7 +4,8 @@ _pool = {}
 
 
 class MissingTabError(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message
 
 
 def register_tab(name, tab):
@@ -18,7 +19,9 @@ def get_tab(name):
     try:
         return _pool[name]
     except KeyError:
-        raise MissingTabError(_("Tab named '%s' has not been registered") % name)
+        raise MissingTabError(
+            _("Tab named '{0}' has not been registered").format(name)
+        )
 
 
 def clear_tabs():

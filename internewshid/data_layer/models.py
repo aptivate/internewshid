@@ -27,9 +27,10 @@ class DataLayerModel(models.Model):
 
 
 class Message(DataLayerModel):
+
     class Meta:
         permissions = (
-            ('can_change_message_body', "Can change feedback"),
+            ('can_change_message_body', 'Can change feedback'),
         )
 
     # FIXME(lukem): We're thinking that this can be named 'source' or
@@ -43,10 +44,11 @@ class Message(DataLayerModel):
     terms = models.ManyToManyField(Term, related_name="items")
     network_provider = models.CharField(max_length=190, blank=True)
     location = models.CharField(max_length=100, blank=True)
+    sub_location = models.CharField(max_length=100, blank=True)
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
     enumerator = models.CharField(max_length=190, blank=True)
-    source = models.CharField(max_length=190, blank=True)
+    collection_type = models.CharField(max_length=190, blank=True)
     external_id = models.CharField(max_length=80, blank=True)
 
     def apply_terms(self, terms):
@@ -68,11 +70,11 @@ class Message(DataLayerModel):
         taxonomy = terms[0].taxonomy
 
         if not all(t.taxonomy == taxonomy for t in terms):
-            raise TermException("Terms cannot be applied from different taxonomies")
+            raise TermException(_("Terms cannot be applied from different taxonomies"))
 
         if not taxonomy.is_multiple:
             if len(terms) > 1:
-                message = "Taxonomy '%s' does not support multiple terms" % taxonomy
+                message = _("Taxonomy '{0}' does not support multiple terms").format(taxonomy)
                 raise TermException(message)
 
             self.delete_all_terms(taxonomy)
@@ -83,8 +85,8 @@ class Message(DataLayerModel):
         for term in self.terms.filter(taxonomy=taxonomy):
             self.terms.remove(term)
 
-    def __unicode__(self):
-        return u"{}: '{}' @{}".format(
+    def __str__(self):
+        return u"{0}: '{1}' @{2}".format(
             self.id,
             self.body,
             self.timestamp
@@ -115,15 +117,17 @@ class CustomConstance(models.Model):
     value = PickledObjectField()
 
     class Meta:
+        managed = False
         verbose_name = _('constance')
         verbose_name_plural = _('constances')
         db_table = 'constance_config'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key
 
 
 class CustomConstanceBackend(DatabaseBackend):
+
     def __init__(self, *args, **kwargs):
         super(CustomConstanceBackend, self).__init__(*args, **kwargs)
         self._model = CustomConstance

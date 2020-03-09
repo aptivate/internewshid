@@ -1,6 +1,6 @@
 {
     "name": "spreadsheet",
-    "sources": [
+    "collection_types": [
         {
             "label": "geopoll",
             "name": "Geopoll",
@@ -11,6 +11,11 @@
                     "name": "Province",
                     "type": "text",
                     "field": "message.location"
+                },
+                {
+                    "name": "Sub-Province",
+                    "type": "text",
+                    "field": "message.sub_location"
                 },
                 {
                     "name": "CreatedDate",

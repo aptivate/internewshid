@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import pytest
 from rest_framework.test import APIRequestFactory
 
@@ -135,7 +133,8 @@ def test_filter_by_age_range():
 
     payload = get(data={
         'from_age': '34',
-        'to_age': '37'
+        'to_age': '37',
+        'ordering': 'body',
     }).data
 
     assert len(payload) == 2
@@ -222,11 +221,40 @@ def test_empty_term_filter_ignored():
     categorize_item(item1, term)
 
     term_filter = '{}:'.format(taxonomy['slug'])
-    payload = get(data={'terms': [term_filter]}).data
+    payload = get(
+        data={
+            'terms': [term_filter],
+            'ordering': 'body',
+            }
+    ).data
 
     assert len(payload) == 2
     assert payload[0]['body'] == item1['body']
     assert payload[1]['body'] == item2['body']
+
+
+@pytest.mark.django_db
+def test_items_filtered_by_one_term_or_another():
+    items = [ItemFactory() for i in range(4)]
+    terms = [TermFactory() for i in range(2)]
+
+    items[1].terms.add(terms[0])
+    items[2].terms.add(terms[1])
+    items[3].terms.add(terms[0])
+    items[3].terms.add(terms[1])
+
+    term_filter = [
+        '{}:{}'.format(terms[0].taxonomy.slug, terms[0].name),
+        '{}:{}'.format(terms[1].taxonomy.slug, terms[1].name)
+    ]
+    results = get(data={'terms_or': term_filter}).data
+
+    ids = [r['id'] for r in results]
+
+    assert items[0].id not in ids
+    assert items[1].id in ids
+    assert items[2].id in ids
+    assert items[3].id in ids
 
 
 @pytest.mark.django_db
@@ -329,3 +357,161 @@ def test_ordering_by_body():
     assert payload[1]['body'] == "item 2"
     assert payload[2]['body'] == "item 3"
     assert payload[3]['body'] == "item 4"
+
+
+@pytest.mark.django_db
+def test_filter_message_by_keyword():
+    create_item(
+        body="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Donec at justo sit amet ante LATRINE semper tempus. Suspendisse vulputate
+ urna nec."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Mauris nec mauris vestibulum, laoreet mi ut, facilisis massa. Pellentesque
+ quam tortor. latrines"""
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine',
+            'ordering': 'body',
+        }
+    ).data
+
+    assert len(payload) == 3
+
+    assert 'Latrine' in payload[0]['body']
+    assert 'LATRINE' in payload[1]['body']
+    assert 'latrines' in payload[2]['body']
+
+
+@pytest.mark.django_db
+def test_filter_translation_by_keyword():
+    create_item(
+        body="item 1",
+        translation="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="item 2",
+        translation="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="item 3",
+        translation="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    create_item(
+        body="item 4",
+        translation="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Donec at justo sit amet ante LATRINE semper tempus. Suspendisse vulputate
+ urna nec."""
+    )
+
+    create_item(
+        body="item 5",
+        translation="""Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Mauris nec mauris vestibulum, laoreet mi ut, facilisis massa.
+        Pellentesque quam tortor. latrines""",
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine',
+            'ordering': 'body',
+        }
+    ).data
+
+    assert len(payload) == 3
+
+    assert 'Latrine' in payload[0]['translation']
+    assert 'LATRINE' in payload[1]['translation']
+    assert 'latrines' in payload[2]['translation']
+
+
+@pytest.mark.django_db
+def test_filtering_a_message_must_match_all_keywords():
+    item_1 = create_item(
+        body="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, latrine consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="""Lorem ipsum dolor sit amet, magna consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine magna',
+        }
+    ).data
+
+    assert len(payload) == 1
+
+    assert payload[0]['body'] == item_1.data['body']
+
+
+@pytest.mark.django_db
+def test_filtering_a_translation_must_match_all_keywords():
+    item_1 = create_item(
+        body="item 1",
+        translation="""Latrine ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque vitae ipsum a magna rutrum facilisis. Fusce vitae dolor dolor.
+Nullam."""
+    )
+
+    create_item(
+        body="item 2",
+        translation="""Lorem ipsum dolor sit amet, latrine consectetur adipiscing elit.
+Suspendisse ut orci diam. Donec scelerisque id massa vitae laoreet. Ut sit."""
+    )
+
+    create_item(
+        body="item 3",
+        translation="""Lorem ipsum dolor sit amet, magna consectetur adipiscing elit.
+Pellentesque ac orci felis. Pellentesque hendrerit laoreet dolor nec euismod.
+ Fusce pretium."""
+    )
+
+    payload = get(
+        data={
+            'search': 'latrine magna',
+        }
+    ).data
+
+    assert len(payload) == 1
+
+    assert payload[0]['body'] == "item 1"

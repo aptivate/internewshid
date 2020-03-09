@@ -90,28 +90,28 @@ def test_list_options_for_enumerator_exclude_blank():
 
 
 @pytest.mark.django_db
-def test_list_options_for_source_retrieved_all_options():
+def test_list_options_for_collection_type_retrieved_all_options():
     items = G(Item, n=5)
-    expected_sources = [an_item.source for an_item in items]
-    actual_sources = list(list_options('source'))
-    assert expected_sources == actual_sources
+    expected_collection_types = [an_item.collection_type for an_item in items]
+    actual_collection_types = list(list_options('collection_type'))
+    assert expected_collection_types == actual_collection_types
 
 
 @pytest.mark.django_db
-def test_list_options_for_source_unique():
-    G(Item, source='Rojina Akter', n=2)
-    G(Item, source='Nur Ankis', n=2)
-    G(Item, source='Rashada')
-    expected_sources = ['Nur Ankis', 'Rashada', 'Rojina Akter']
-    actual_sources = list(list_options('source'))
-    assert expected_sources == actual_sources
+def test_list_options_for_collection_type_unique():
+    G(Item, collection_type='Rojina Akter', n=2)
+    G(Item, collection_type='Nur Ankis', n=2)
+    G(Item, collection_type='Rashada')
+    expected_collection_types = ['Nur Ankis', 'Rashada', 'Rojina Akter']
+    actual_collection_types = list(list_options('collection_type'))
+    assert expected_collection_types == actual_collection_types
 
 
 @pytest.mark.django_db
-def test_list_options_for_source_exclude_blank():
-    items = G(Item, source='', n=2)
-    items.extend(G(Item, source='Nur Ankis', n=2))
-    items.append(G(Item, source='Rashada'))
-    expected_sources = ['Nur Ankis', 'Rashada']
-    actual_sources = list(list_options('source'))
-    assert expected_sources == actual_sources
+def test_list_options_for_collection_type_exclude_blank():
+    items = G(Item, collection_type='', n=2)
+    items.extend(G(Item, collection_type='Nur Ankis', n=2))
+    items.append(G(Item, collection_type='Rashada'))
+    expected_collection_types = ['Nur Ankis', 'Rashada']
+    actual_collection_types = list(list_options('collection_type'))
+    assert expected_collection_types == actual_collection_types

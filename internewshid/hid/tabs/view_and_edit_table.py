@@ -85,6 +85,10 @@ class ViewAndEditTableTab(object):
         if locations and locations == 'All Locations':
             filters.pop('location')
 
+        sub_locations = filters.get('sub_location')
+        if sub_locations and sub_locations == 'All Sub-Locations':
+            filters.pop('sub_location')
+
         genders = filters.get('gender')
         if genders and genders == 'All Genders':
             filters.pop('gender')
@@ -93,9 +97,9 @@ class ViewAndEditTableTab(object):
         if enumerators and enumerators == 'All Enumerators':
             filters.pop('enumerator')
 
-        source = filters.get('source')
-        if source and source == 'All Sources':
-            filters.pop('source')
+        collection_type = filters.get('collection_type')
+        if collection_type and collection_type == 'All Collection Types':
+            filters.pop('collection_type')
 
         limit = kwargs.get('per_page', 100)
         filters['limit'] = limit
@@ -184,6 +188,10 @@ class ViewAndEditTableTab(object):
         locations = transport_items.list_options('location')
         return {'items': locations}
 
+    def _get_sub_location_options(self, items_list, **kwargs):
+        sub_locations = transport_items.list_options('sub_location')
+        return {'items': sub_locations}
+
     def _get_gender_options(self, items_list, **kwargs):
         genders = transport_items.list_options('gender')
         return {'items': genders}
@@ -192,9 +200,9 @@ class ViewAndEditTableTab(object):
         enumerators = transport_items.list_options('enumerator')
         return {'items': enumerators}
 
-    def _get_source_options(self, items_list, **kwargs):
-        sources = transport_items.list_options('source')
-        return {'items': sources}
+    def _get_collection_type_options(self, items_list, **kwargs):
+        collection_types = transport_items.list_options('collection_type')
+        return {'items': collection_types}
 
     def _get_feedback_type_options(self):
         terms = transport_terms.list(taxonomy='item-types')
@@ -204,6 +212,13 @@ class ViewAndEditTableTab(object):
         feedback_types = [(t['name'], t['long_name'],) for t in sorted_terms]
 
         return feedback_types
+
+    def _get_age_range_options(self):
+        terms = transport_terms.list(taxonomy='age-ranges')
+
+        age_ranges = [(t['name'], t['long_name'],) for t in terms]
+
+        return age_ranges
 
     def _build_actions_dropdown(self, question_types):
         items = [
@@ -239,10 +254,13 @@ class ViewAndEditTableTab(object):
 
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
+        sub_location_options = self._get_sub_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
         enumerator_options = self._get_enumerator_options(items, **kwargs)
-        source_options = self._get_source_options(items, **kwargs)
+        collection_type_options = self._get_collection_type_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
+        age_range_options = self._get_age_range_options()
+        selected_age_ranges = request.GET.getlist('age_range')
 
         per_page = int(kwargs.get('per_page', 100))
         page_number = int(request.GET.get('page', 1))
@@ -263,19 +281,23 @@ class ViewAndEditTableTab(object):
 
         require_assets('hid/js/automatic_file_upload.js')
         require_assets('hid/js/select_all_checkbox.js')
+        require_assets('hid/js/enable_multiselect.js')
 
         return {
             'add_button_for': self._get_item_type_filter(kwargs),
             'type_label': kwargs.get('label', '?'),
             'table': table,
-            'source': kwargs.get('source'),
+            'collection_type': kwargs.get('collection_type'),
             'actions': actions,
             'category_options': category_options,
             'feedback_type_options': feedback_type_options,
+            'age_range_options': age_range_options,
+            'selected_age_ranges': selected_age_ranges,
             'locations': location_options,
+            'sub_locations': sub_location_options,
             'gender': gender_options,
             'enumerator': enumerator_options,
-            'source_filters': source_options,
+            'collection_type_filters': collection_type_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,
                 'tab_name': tab_instance.name
@@ -344,7 +366,7 @@ def _get_view_and_edit_form_request_parameters(params):
         action = action[0:len(action) - len(placement) - 1]
     else:
         placement = 'top'
-    for name, value in params.iterlists():
+    for name, value in iter(params.lists()):
         if name == 'action':
             value = [action]
         elif name.endswith(placement):
@@ -380,7 +402,7 @@ def _handle_batch_action(request, batch_action, selected):
                           '')
         return
 
-    messages.error(request, _("Unknown batch action '%s'" % batch_action))
+    messages.error(request, _("Unknown batch action '{0}'").format(batch_action))
 
 
 def _categorize_items(request, items, category):
@@ -440,9 +462,9 @@ def _delete_items(request, deleted):
     try:
         transport_items.bulk_delete(deleted)
         num_deleted = len(deleted)
-        msg = ungettext("%d item deleted.",
-                        "%d items deleted.",
-                        num_deleted) % num_deleted
+        msg = ungettext("{0} item deleted.",
+                        "{0} items deleted.",
+                        num_deleted).format(num_deleted)
         messages.success(request, msg)
     except Exception:
         msg = _("There was an error while deleting.")
@@ -474,12 +496,12 @@ def _add_items_categories(request, items):
         except TransportException:
             failed += 1
     if success > 0:
-        msg = ungettext("Updated %d item.",
-                        "Updated %d items.",
-                        len(items)) % len(items)
+        msg = ungettext("Updated {0} item.",
+                        "Updated {0} items.",
+                        len(items)).format(len(items))
         messages.success(request, msg)
     if failed > 0:
-        msg = ungettext("Failed to update %d item.",
-                        "Failed to update %d items.",
-                        len(items)) % len(items)
+        msg = ungettext("Failed to update {0} item.",
+                        "Failed to update {0} items.",
+                        len(items)).format(len(items))
         messages.success(request, msg)

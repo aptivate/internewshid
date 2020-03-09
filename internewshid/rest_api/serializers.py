@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from rest_framework import serializers, validators
 
 from data_layer.models import Item
@@ -139,12 +137,13 @@ class ItemExportSerializer(ItemSerializer):
         fields = (
             'age',
             'body',
+            'collection_type',
             'enumerator',
             'external_id',
             'gender',
             'location',
             'network_provider',
-            'source',
+            'sub_location',
             'terms',
             'timestamp',
             'translation',

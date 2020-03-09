@@ -21,11 +21,11 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
-    gender = forms.CharField(
+    sub_location = forms.CharField(
         widget=forms.Textarea,
         required=False
     )
-    age = forms.CharField(
+    gender = forms.CharField(
         widget=forms.Textarea,
         required=False
     )
@@ -33,7 +33,7 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
-    source = forms.CharField(
+    collection_type = forms.CharField(
         widget=forms.Textarea,
         required=False
     )
@@ -56,6 +56,7 @@ class AddEditItemForm(forms.Form):
 
         self._maybe_add_category_field()
         self._maybe_add_feedback_type_field()
+        self._maybe_add_age_range_field()
 
     def _maybe_add_category_field(self):
         # This used to be more flexible in that we had partial
@@ -84,6 +85,19 @@ class AddEditItemForm(forms.Form):
 
     def _get_feedback_type_choices(self):
         return self._get_term_choices('item-types')
+
+    def _maybe_add_age_range_field(self):
+        choices = self._get_age_range_choices()
+
+        if choices is not None:
+            self.fields['age_range'] = forms.ChoiceField(
+                choices=choices,
+                required=False,
+                widget=forms.RadioSelect()
+            )
+
+    def _get_age_range_choices(self):
+        return self._get_term_choices('age-ranges')
 
     def _get_term_choices(self, taxonomy):
         terms = transport.terms.list(

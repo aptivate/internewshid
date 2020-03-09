@@ -12,10 +12,12 @@
             </optgroup>
         {% endfor %}
     </select>
-    {% bootstrap_button "Apply action" button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-default btn-sm table-submit" %}
+    {% trans "Apply action" as apply_action %}
+    {% bootstrap_button apply_action button_type="submit" name="action" value="batchupdate-"|add:button_placement button_class="btn btn-default btn-sm table-submit" %}
     {% if category_options %}
         <div class="pull-right">
-            {% bootstrap_button "Save changes" button_type="submit" name="action" value="save-"|add:button_placement button_class="btn btn-success btn-sm table-submit" %}
+        {% trans "Save changes" as save_changes %}
+        {% bootstrap_button save_changes button_type="submit" name="action" value="save-"|add:button_placement button_class="btn btn-success btn-sm table-submit" %}
         </div>
     {% endif %}
 </div>

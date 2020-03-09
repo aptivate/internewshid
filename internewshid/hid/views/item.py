@@ -92,15 +92,15 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id %s could not be found') %
-                 str(kwargs.get('item_id')))
+                (_('Item with id {0} could not be found').format(
+                 str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type %s could not be found') %
-                 str(kwargs.get('item_type')))
+                (_('Item type {0} could not be found').format(
+                 str(kwargs.get('item_type'))))
             )
         return super(AddEditItemView, self).get(request, *args, **kwargs)
 
@@ -122,15 +122,15 @@ class AddEditItemView(FormView):
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item with id %s could not be found') %
-                 str(kwargs.get('item_id')))
+                (_('Item with id {0} could not be found').format(
+                 str(kwargs.get('item_id'))))
             )
         except ItemTypeNotFound:
             return self._response(
                 self.request.GET.get('next', '/'),
                 messages.ERROR,
-                (_('Item type %s could not be found') %
-                 str(kwargs.get('item_type')))
+                (_('Item type {0} could not be found').format(
+                 str(kwargs.get('item_type'))))
             )
 
         if 'cancel' in self.request.POST['action']:
@@ -158,10 +158,10 @@ class AddEditItemView(FormView):
                 'body': self.item['body'],
                 'translation': self.item.get('translation', ''),
                 'location': self.item.get('location', ''),
+                'sub_location': self.item.get('sub_location', ''),
                 'gender': self.item.get('gender', ''),
-                'age': self.item.get('age', ''),
                 'enumerator': self.item.get('enumerator', ''),
-                'source': self.item.get('source', ''),
+                'collection_type': self.item.get('collection_type', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
                     'next',
@@ -177,13 +177,16 @@ class AddEditItemView(FormView):
                 and len(self.item_terms[taxonomy]) > 0):
             initial['category'] = self.item_terms[taxonomy][0]['name']
 
-        for taxonomy, terms in self.item_terms.iteritems():
+        for taxonomy, terms in self.item_terms.items():
             if taxonomy in self.tag_fields:
                 term_names = [t['name'] for t in terms]
                 initial[taxonomy] = self.tag_delimiter.join(term_names)
 
         if 'item-types' in self.item_terms:
             initial['feedback_type'] = self.item_terms['item-types'][0]['name']
+
+        if 'age-ranges' in self.item_terms:
+            initial['age_range'] = self.item_terms['age-ranges'][0]['name']
 
         return initial
 
@@ -242,7 +245,7 @@ class AddEditItemView(FormView):
             if item_id == 0:
                 self.item = self._create_item(form, taxonomy)
                 item_description = self._get_item_description()
-                message = _("%s %d successfully created.") % (
+                message = _("{0} {1} successfully created.").format(
                     item_description,
                     self.item['id']
                 )
@@ -250,7 +253,7 @@ class AddEditItemView(FormView):
             else:
                 self._update_item(item_id, form)
                 item_description = self._get_item_description()
-                message = _("%s %d successfully updated.") % (
+                message = _("{0} {1} successfully updated.").format(
                     item_description,
                     item_id,
                 )
@@ -276,21 +279,22 @@ class AddEditItemView(FormView):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
         feedback_type = data.pop('feedback_type', None)
+        age_range = data.pop('age_range', None)
         data.pop('id', None)
 
         tags = {}
         regular_fields = {}
 
-        for (field_name, field_value) in data.iteritems():
+        for (field_name, field_value) in data.items():
             if field_name in self.tag_fields:
                 tags[field_name] = field_value
             else:
                 regular_fields[field_name] = field_value
 
-        return category, tags, feedback_type, regular_fields
+        return category, tags, feedback_type, age_range, regular_fields
 
     def _add_tags(self, item_id, tags):
-        for (taxonomy, value) in tags.iteritems():
+        for (taxonomy, value) in tags.items():
             transport.items.delete_all_terms(item_id, taxonomy)
             term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 
@@ -309,8 +313,8 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        category, tags, feedback_type, regular_fields = self._separate_form_data(
-            form)
+        (category, tags, feedback_type, age_range,
+         regular_fields) = self._separate_form_data(form)
 
         transport.items.update(item_id, regular_fields)
 
@@ -329,6 +333,11 @@ class AddEditItemView(FormView):
         else:
             transport.items.delete_all_terms(item_id, 'item-types')
 
+        if age_range:
+            transport.items.add_terms(item_id, 'age-ranges', age_range)
+        else:
+            transport.items.delete_all_terms(item_id, 'age-ranges')
+
         self._add_tags(item_id, tags)
 
     def _create_item(self, form, taxonomy):
@@ -346,8 +355,8 @@ class AddEditItemView(FormView):
             Raises:
                 TransportException: On API errors
         """
-        category, tags, feedback_type, regular_fields = self._separate_form_data(
-            form)
+        (category, tags, feedback_type, age_range,
+         regular_fields) = self._separate_form_data(form)
 
         if not feedback_type:
             feedback_type = self.item_type['name']
@@ -367,6 +376,10 @@ class AddEditItemView(FormView):
 
         if taxonomy and category:
             transport.items.add_terms(created_item['id'], taxonomy, category)
+
+        if age_range:
+            transport.items.add_terms(created_item['id'], 'age-ranges',
+                                      age_range)
 
         self._add_tags(created_item['id'], tags)
 
@@ -404,7 +417,7 @@ class AddEditItemView(FormView):
         return self._response(
             self._get_next_url_for_delete(),
             messages.SUCCESS,
-            _("%s %d successfully deleted.") % (
+            _("{0} {1} successfully deleted.").format(
                 item_description,
                 id,
             )

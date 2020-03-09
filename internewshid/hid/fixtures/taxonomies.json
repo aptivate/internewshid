@@ -61,6 +61,16 @@
   },
   {
     "fields": {
+      "multiplicity": "optional",
+      "name": "Age Ranges",
+      "slug": "age-ranges",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 8
+  },
+  {
+    "fields": {
       "long_name": "Question",
       "name": "question",
       "taxonomy": 2
@@ -220,5 +230,77 @@
     },
     "model": "taxonomies.term",
     "pk": 66
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 420,
+    "fields": {
+        "name": "<11",
+        "taxonomy": 8,
+        "long_name": "<11"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 421,
+    "fields": {
+        "name": "11-14",
+        "taxonomy": 8,
+        "long_name": "11-14"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 422,
+    "fields": {
+        "name": "15-18",
+        "taxonomy": 8,
+        "long_name": "15-18"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 423,
+    "fields": {
+        "name": "19-25",
+        "taxonomy": 8,
+        "long_name": "19-25"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 424,
+    "fields": {
+        "name": "26-35",
+        "taxonomy": 8,
+        "long_name": "26-35"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 425,
+    "fields": {
+        "name": "36-45",
+        "taxonomy": 8,
+        "long_name": "36-45"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 426,
+    "fields": {
+        "name": "46-60",
+        "taxonomy": 8,
+        "long_name": "46-60"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 427,
+    "fields": {
+        "name": "60+",
+        "taxonomy": 8,
+        "long_name": "Over 60 years old"
+    }
   }
 ]

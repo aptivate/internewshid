@@ -1,0 +1,5 @@
+{% load i18n %}
+<div class="filter-search input-group">
+  <label class="control-label" for="search-filter">{% trans "Keywords" %}</label>
+  <input id="search-filter" type="text" placeholder="{% trans "Keywords" %}" name="search" class="form-control" value="{{ request.GET.search }}">
+</div>

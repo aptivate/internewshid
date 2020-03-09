@@ -8,6 +8,8 @@ import pytest
 import pytz
 
 import transport
+from taxonomies.tests.factories import TaxonomyFactory
+from transport.exceptions import TransportException
 
 from ..importer import Importer, SheetImportException, SheetProfile
 
@@ -19,6 +21,11 @@ COLUMN_LIST = [
         'name': 'Province',
         'type': 'location',
         'field': 'message.location',
+    },
+    {
+        'name': 'Sub-Province',
+        'type': 'location',
+        'field': 'message.sub_location',
     },
     {
         'name': 'Message',
@@ -64,6 +71,11 @@ def test_get_columns_map(importer):
             'type': 'location',
             'field': 'message.location',
             'name': 'Province',
+        },
+        'Sub-Province': {
+            'type': 'location',
+            'field': 'message.sub_location',
+            'name': 'Sub-Province',
         },
         'Message': {
             'type': 'text',
@@ -119,21 +131,21 @@ def test_order_columns_with_no_first_row_returns_original_order(importer):
 def test_order_columns_with_first_row_return_first_row_order(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
 
-    first_row = ['Message', 'Province']
+    first_row = ['Message', 'Province', 'Sub-Province']
 
     importer.profile['skip_header'] = True
     ordered = importer.order_columns(first_row)
 
-    assert ordered == [cleaned[1], cleaned[0]]
+    assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
 def test_order_columns_ignores_extra_columns_in_first_row(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
-    first_row = ['Message', 'Province', 'None', 'None', 'None']
+    first_row = ['Message', 'Province', 'Sub-Province', 'None', 'None', 'None']
 
     ordered = importer.order_columns(first_row)
 
-    assert ordered == [cleaned[1], cleaned[0]]
+    assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
 def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
@@ -147,8 +159,8 @@ def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
 
 def test_get_fields_and_types(importer):
     fields, types = importer.get_fields_and_types(COLUMN_LIST)
-    expected_types = ['location', 'text']
-    expected_fields = ['message.location', 'message.content']
+    expected_types = ['location', 'location', 'text']
+    expected_fields = ['message.location', 'message.sub_location', 'message.content']
 
     assert fields == expected_fields
     assert types == expected_types
@@ -261,8 +273,8 @@ def test_process_rows_without_header(importer):
 
     def _rows_generator():
         rows = [
-            ('London', 'Short message'),
-            ('Cambridge', 'What?'),
+            ('London', 'WithinLondon', 'Short message'),
+            ('Cambridge', 'WithinCambridge', 'What?'),
         ]
 
         for row in rows:
@@ -270,6 +282,7 @@ def test_process_rows_without_header(importer):
 
     columns = [d.copy() for d in COLUMN_LIST]
     columns[0]['type'] = 'text'
+    columns[1]['type'] = 'text'
     rows = _rows_generator()
 
     importer.profile['columns'] = columns
@@ -280,6 +293,7 @@ def test_process_rows_without_header(importer):
 
     assert objects[0]['message.location'] == 'London'
     assert objects[0]['message.content'] == 'Short message'
+
     assert objects[1]['message.location'] == 'Cambridge'
     assert objects[1]['message.content'] == 'What?'
 
@@ -308,7 +322,6 @@ def test_process_rows_displays_line_number_on_error(importer):
         importer.process_rows(rows)
 
     assert str(excinfo.value) == _(u"Unknown data type 'location' in row 2 ")
-    assert len(excinfo.traceback) > 2, "Was expecting traceback of more than 2 lines"
 
 
 def test_process_rows_ignores_empty_lines(importer):
@@ -397,7 +410,7 @@ def test_save_rows_creates_item_with_term(importer):
 
 
 @pytest.mark.django_db
-def test_save_rows_handles_exception(importer):
+def test_save_rows_handles_invalid_enumerator(importer):
     invalid_enumerator = "Yakub=Aara smart card no point in Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum soyi ensaf takito aarari Thor Sara nohoito"
 
     objects = [
@@ -434,6 +447,75 @@ def test_save_rows_handles_exception(importer):
         "hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum "
         "soyi ensaf takito aarari Thor Sara nohoito"
     )
+
+
+@pytest.mark.django_db
+def test_save_rows_handles_missing_taxonomy(importer):
+    objects = [
+        {
+            'body': 'Text',
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'terms': [
+                {
+                    'name': '18-25',
+                    'taxonomy': 'age-ranges',
+                }
+            ],
+            '_row_number': 29,
+        }
+    ]
+
+    importer.profile['columns'] = [
+        {
+            'name': 'Age',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'age-ranges',
+        },
+    ]
+
+    with pytest.raises(SheetImportException) as excinfo:
+        importer.save_rows(objects)
+
+    assert str(excinfo.value) == (
+        "There was a problem with row 29 of the spreadsheet:\n"
+        "Error: Taxonomy matching query does not exist.\n"
+        "Taxonomy: age-ranges\n"
+        "Name: 18-25\n"
+    )
+
+
+@pytest.mark.django_db
+def test_save_rows_handles_missing_term(importer):
+    TaxonomyFactory(name='Age ranges', slug='age-ranges')
+
+    objects = [
+        {
+            'body': 'Text',
+            'timestamp': datetime.datetime(2014, 7, 21),
+            'terms': [
+                {
+                    'name': '18-25',
+                    'taxonomy': 'age-ranges',
+                }
+            ],
+            '_row_number': 29,
+        }
+    ]
+
+    importer.profile['columns'] = [
+        {
+            'name': 'Age',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'age-ranges',
+        },
+    ]
+
+    with pytest.raises(SheetImportException) as excinfo:
+        importer.save_rows(objects)
+
+    assert "Term matching query does not exist" in str(excinfo.value)
 
 
 @pytest.mark.django_db
@@ -522,3 +604,25 @@ def test_terms_in_row_split_on_comma(importer):
             },
         ]
     }
+
+
+def test_get_spreadsheet_error_message_works_without_item(importer):
+
+    class MockError(object):
+        code = 101
+
+        def __str__(self):
+            return "Unexpected error"
+
+    exc_inst = TransportException(
+        {'status_code': 404, 'message.content': [MockError()]}
+    )
+    expected_message = (
+        'There was a problem with row 1 of the spreadsheet:\n'
+        'Column: \'Message\' (message.content)\nError (101):'
+        ' \'Unexpected error\'\n\nValue: '
+    )
+
+    actual_message = importer._get_spreadsheet_error_message("1", exc_inst)
+
+    assert expected_message == actual_message

@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.test import Client
 from django.urls import reverse
 from django.utils.six.moves.urllib.parse import urlsplit

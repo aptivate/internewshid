@@ -24,7 +24,7 @@ class Taxonomy(models.Model):
         self.slug = slugify(self.name)
         super(Taxonomy, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     # To do Categories, you use 'optional' and 'closed',
@@ -82,7 +82,7 @@ class TermManager(models.Manager):
             vocabulary is open - in this case the Term will be created
             ValueError if taxonomy is not one of the allowed types
         """
-        if isinstance(taxonomy, basestring):
+        if isinstance(taxonomy, str):
             taxonomy = Taxonomy.objects.get(slug=taxonomy)
         elif not isinstance(taxonomy, Taxonomy):
             raise ValueError(
@@ -115,7 +115,8 @@ class Term(models.Model):
     taxonomy = models.ForeignKey(
         Taxonomy,
         verbose_name=_('Taxonomy'),
-        related_name="%(app_label)s_%(class)s_term"
+        related_name="%(app_label)s_%(class)s_term",
+        on_delete=models.CASCADE
     )
 
     long_name = models.TextField(
@@ -123,10 +124,10 @@ class Term(models.Model):
         blank=True,
     )
 
-    def __unicode__(self):
-        return "{}:{}".format(
+    def __str__(self):
+        return u"{0}:{1}".format(
             self.taxonomy.name,
-            self.name
+            self.name,
         )
 
     # Custom Manager

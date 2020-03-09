@@ -74,20 +74,31 @@ class ItemTable(tables.Table):
         verbose_name=_('Age'),
         attrs={'th': {'id': 'header-age'}}
     )
+    age_range = tables.TemplateColumn(
+        template_name='hid/age_range_column.html',
+        verbose_name=_('Age range'),
+        accessor='terms',
+        attrs={'th': {'id': 'header-age-range'}}
+    )
     location = tables.TemplateColumn(
         template_name='hid/location_column.html',
         verbose_name=_('Location'),
         attrs={'th': {'id': 'header-location'}}
+    )
+    sub_location = tables.TemplateColumn(
+        template_name='hid/sub_location_column.html',
+        verbose_name=_('Sub-Location'),
+        attrs={'th': {'id': 'header-sub-location'}}
     )
     enumerator = tables.TemplateColumn(
         template_name='hid/enumerator_column.html',
         verbose_name=_('Enumerator'),
         attrs={'th': {'id': 'header-enumerator'}}
     )
-    source = tables.TemplateColumn(
-        template_name='hid/source_column.html',
-        verbose_name=_('Source'),
-        attrs={'th': {'id': 'header-source'}}
+    collection_type = tables.TemplateColumn(
+        template_name='hid/collection_type_column.html',
+        verbose_name=_('Collection Type'),
+        attrs={'th': {'id': 'header-collection-type'}}
     )
     external_id = tables.TemplateColumn(
         template_name='hid/external_id_column.html',
@@ -114,7 +125,7 @@ class ItemTable(tables.Table):
             self.end_index = self.per_page * self.page_number
             self.start_index = 1 + self.end_index - self.per_page
 
-            self.num_pages = self.total_items / self.per_page
+            self.num_pages = self.total_items // self.per_page
 
             self.has_previous = self.page_number > 1
             if self.has_previous:
@@ -135,7 +146,7 @@ class ItemTable(tables.Table):
         page_range = getattr(settings, "DJANGO_TABLES2_PAGE_RANGE", 10)
 
         if self.num_pages <= page_range:
-            return range(1, self.num_pages + 1)
+            return [p for p in range(1, self.num_pages + 1)]
 
         range_start = self.page_number - int(page_range / 2)
         if range_start < 1:
@@ -178,6 +189,21 @@ class ItemTable(tables.Table):
 
         context['record'] = record
         context['feedback_types'] = ', '.join(sorted(feedback_types))
+
+        return Template.render(context.flatten())
+
+    def render_age_range(self, record, value):
+        Template = loader.get_template('hid/age_range_column.html')
+
+        context = self.context
+
+        age_ranges = []
+        for term in value:
+            if term['taxonomy'] == 'age-ranges':
+                age_ranges.append(term['long_name'])
+
+        context['record'] = record
+        context['age_ranges'] = ', '.join(sorted(age_ranges))
 
         return Template.render(context.flatten())
 

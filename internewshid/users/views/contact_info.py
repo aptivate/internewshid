@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.translation import ugettext as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from django_tables2 import SingleTableMixin
-from spreadsheetresponsemixin.views import SpreadsheetResponseMixin
 
 from ..forms import (
     AddContactForm, DeleteContactForm, UpdateContactForm,
@@ -53,25 +53,6 @@ class ListContacts(LoginRequiredMixin, PermissionRequiredMixin,
             return self.model.objects.all()
 
 
-class ListContactsExport(SpreadsheetResponseMixin, ListContacts):
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        fields = ('business_email', 'first_name', 'last_name', 'title',
-                  'personal_email', 'is_active', 'contact_type',
-                  'home_address')
-        list_format = kwargs.get('format')
-        if list_format == 'csv':
-            return self.render_csv_response(queryset=queryset,
-                                            fields=fields)
-        elif list_format == 'excel':
-            return self.render_excel_response(queryset=queryset,
-                                              fields=fields)
-        else:
-            return super(ListContactsExport, self).get(request,
-                                                       *args,
-                                                       **kwargs)
-
-
 class AddContact(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = User
     form_class = AddContactForm
@@ -110,8 +91,8 @@ class UpdateContact(PermissionRequiredMixin, UpdateContactBase):
     raise_exception = True
 
     def form_invalid(self, form):
-        messages.error(self.request, ('Contact data not valid, \
-                please check and try again.'))
+        messages.error(self.request, _("Contact data not valid, \
+                please check and try again."))
         return super(UpdateContact, self).form_invalid(form)
 
     def form_valid(self, form):

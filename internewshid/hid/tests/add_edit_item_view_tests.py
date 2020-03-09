@@ -11,6 +11,7 @@ import pytest
 from mock import Mock, patch
 
 import transport
+from chn_spreadsheet.tests.conftest import taxonomies  # noqa
 from hid.constants import ITEM_TYPE_CATEGORY
 from taxonomies.models import Taxonomy
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
@@ -487,7 +488,7 @@ def test_displaying_existing_item_returns_template_response(generic_item):
 
 def test_displaying_unknown_item_returns_redirect_response(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
-        get_item.side_effect = TransportException()
+        get_item.side_effect = TransportException({})
         get_item.return_value = generic_item
         (view, response) = make_request(
             AddEditItemView,
@@ -554,7 +555,7 @@ def test_add_new_item_with_unknown_item_type_redirects():
 @pytest.mark.django_db
 def test_submitting_form_with_id_equal_0_creates_an_item(item_type):
     body = 'Hello, here is a new item'
-    the_time = datetime(2015, 06, 27, 0, 0)
+    the_time = datetime(2015, 6, 27, 0, 0)
     (view, response) = make_request(
         AddEditItemView,
         'add-item',
@@ -577,7 +578,7 @@ def test_submitting_form_with_id_equal_0_creates_an_item(item_type):
 @pytest.mark.django_db
 def test_submitting_form_creates_an_item_with_correct_fields(item_type):
     body = 'Hello, here is a new item'
-    the_time = datetime(2015, 06, 27, 0, 0)
+    the_time = datetime(2015, 6, 27, 0, 0)
     (view, response) = make_request(
         AddEditItemView,
         'add-item',
@@ -634,7 +635,7 @@ def test_submitting_form_creates_an_item_with_a_category(item_type_taxonomy,
 @pytest.mark.django_db
 def test_item_can_be_deleted_with_post_request(item):
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
-    TermFactory(taxonomy=taxonomy, name='concern')
+    TermFactory(taxonomy=taxonomy, name='concern', long_name='Concern')
 
     transport.items.add_terms(item['id'], 'item-types', 'concern')
 
@@ -721,9 +722,9 @@ def test_item_category_can_be_unset(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_updated(view, update_form):
+def test_item_feedback_type_can_be_updated(view, update_form, taxonomies):  # noqa
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
-    TermFactory(taxonomy=taxonomy, name='concern')
+    TermFactory(taxonomy=taxonomy, name='concern', long_name='Concern')
     TermFactory(taxonomy=taxonomy, name='rumour')
 
     transport.items.add_terms(view.item['id'], 'item-types', 'rumour')
@@ -745,7 +746,7 @@ def test_item_feedback_type_can_be_updated(view, update_form):
 
 
 @pytest.mark.django_db
-def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
+def test_item_feedback_type_can_be_unset(view, update_form, taxonomies):  # noqa
     taxonomy = TaxonomyFactory(name='Item Types', slug='item-types')
     TermFactory(taxonomy=taxonomy, name='concern')
 
@@ -767,6 +768,43 @@ def test_item_feedback_type_can_be_unset(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
+def test_item_age_range_can_be_updated(view, update_form, taxonomies):  # noqa
+    taxonomy = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    TermFactory(taxonomy=taxonomy, name='Age 11-14 yrs')
+    TermFactory(taxonomy=taxonomy, name='Age 15-18 yrs')
+
+    transport.items.add_terms(view.item['id'], 'age-ranges', 'Age 11-14 yrs')
+
+    update_form.cleaned_data['age_range'] = 'Age 15-18 yrs',
+
+    view.form_valid(update_form)
+    assert_no_messages(view.request, messages.ERROR)
+
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert terms['age-ranges'] == 'Age 15-18 yrs'
+
+
+@pytest.mark.django_db
+def test_item_age_range_can_be_unset(view, update_form, item_type_taxonomy):
+    taxonomy = TaxonomyFactory(name='Age Ranges', slug='age-ranges')
+    TermFactory(taxonomy=taxonomy, name='Age 11-14 yrs')
+
+    transport.items.add_terms(view.item['id'], 'age-ranges', 'Age 11-14 yrs')
+
+    update_form.cleaned_data['age_range'] = ''
+
+    view.form_valid(update_form)
+    item = transport.items.get(view.item['id'])
+
+    terms = {t['taxonomy']: t['name'] for t in item['terms']}
+
+    assert 'age-ranges' not in terms
+
+
+@pytest.mark.django_db
 def test_item_category_not_required(view, update_form, item_type_taxonomy):
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
@@ -781,7 +819,8 @@ def test_item_category_not_required(view, update_form, item_type_taxonomy):
 
 
 @pytest.mark.django_db
-def test_item_update_logs_message_and_redirects(view, update_form, item_type_taxonomy):
+def test_item_update_logs_message_and_redirects(view, update_form, taxonomies):  # noqa
+    item_type_taxonomy = Taxonomy.objects.get(name='Item Types')
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
     view.item_type['long_name'] = 'Question'
@@ -855,7 +894,7 @@ def test_item_can_be_deleted(view):
 
 
 @pytest.mark.django_db
-def test_free_tags_created_on_item_update(view, update_form, item_type_taxonomy):
+def test_free_tags_created_on_item_update(view, update_form, taxonomies):  # noqa
     # Deliberate spaces to be stripped
     update_form.cleaned_data['tags'] = 'Monrovia , Important ,age 35-40'
 
@@ -874,7 +913,7 @@ def test_free_tags_created_on_item_update(view, update_form, item_type_taxonomy)
 
 
 @pytest.mark.django_db
-def test_existing_tag_deleted_on_item_update(view, update_form, item_type_taxonomy):
+def test_existing_tag_deleted_on_item_update(view, update_form, taxonomies):  # noqa
     transport.items.add_terms(view.item['id'], 'tags', ['age 35-40'])
 
     update_form.cleaned_data['tags'] = 'Monrovia'
@@ -905,8 +944,8 @@ def test_free_tags_created_for_new_item(add_view, new_form):
     assert 'Important' in terms
     assert 'age 35-40' in terms
 
-    taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'tags' in taxonomies
+    taxonomy_list = [t['taxonomy'] for t in item['terms']]
+    assert 'tags' in taxonomy_list
 
 
 @pytest.mark.django_db
@@ -922,8 +961,8 @@ def test_data_origin_created_for_new_item(add_view, new_form):
     terms = [t['name'] for t in item['terms']]
     assert 'Form Entry' in terms
 
-    taxonomies = [t['taxonomy'] for t in item['terms']]
-    assert 'data-origins' in taxonomies
+    taxonomy_list = [t['taxonomy'] for t in item['terms']]
+    assert 'data-origins' in taxonomy_list
 
 
 @pytest.mark.django_db

@@ -1,0 +1,12 @@
+{% if sub_locations.items %}
+  {% load i18n %}
+  <div class="filter-sub-location input-group">
+      <label class="control-label" for="sub-location-selector">{% trans "Sub-Location" %}</label>
+      <select id="sub-location-selector" name="sub-location" class="form-control">
+        <option value="All Sub-Locations" selected="selected">{% trans "All Sub-Locations" %}</option>
+        {% for sub_location in sub_locations.items %}
+          <option value="{{ sub_location }}"{% if sub_location == request.GET.sub_location %} selected="selected"{% endif %}>{{ sub_location }}</option>
+        {% endfor %}
+      </select>
+  </div>
+{% endif %}

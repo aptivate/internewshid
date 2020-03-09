@@ -1,4 +1,6 @@
-from django.db.models import Count
+from functools import reduce
+
+from django.db.models import Count, Q
 from django.utils.translation import ugettext as _
 
 from rest_framework import status, viewsets
@@ -27,10 +29,11 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'body',
         'translation',
         'location',
+        'sub_location',
         'gender',
         'age',
         'enumerator',
-        'source',
+        'collection_type',
         'timestamp',
     )
 
@@ -74,9 +77,28 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
                 items = items.filter(terms__id=matches[0].id)
 
+        # Filter on any of these terms
+        terms_or = [t.split(':', 1) for t in self.request.query_params.getlist(
+            'terms_or', []
+        )]
+
+        if len(terms_or) > 0:
+            terms_or_q = reduce(
+                lambda x, y: x | y,
+                [(Q(taxonomy__slug=tx) & Q(name=tm))
+                 for (tx, tm) in terms_or]
+            )
+            matching_terms = Term.objects.filter(terms_or_q)
+
+            items = items.filter(terms__in=matching_terms)
+
         location = self.request.query_params.get('location', None)
         if location is not None:
             items = items.filter(location__icontains=location)
+
+        sub_location = self.request.query_params.get('sub_location', None)
+        if sub_location is not None:
+            items = items.filter(sub_location__icontains=sub_location)
 
         gender = self.request.query_params.get('gender', None)
         if gender is not None:
@@ -92,9 +114,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if enumerator is not None:
             items = items.filter(enumerator__icontains=enumerator)
 
-        source = self.request.query_params.get('source', None)
-        if source is not None:
-            items = items.filter(source__icontains=source)
+        collection_type = self.request.query_params.get('collection_type', None)
+        if collection_type is not None:
+            items = items.filter(collection_type__icontains=collection_type)
 
         start_time = self.request.query_params.get('start_time', None)
         end_time = self.request.query_params.get('end_time', None)
@@ -106,6 +128,21 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if external_id_pattern is not None:
             items = items.filter(external_id__contains=external_id_pattern)
 
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            # Either the translation or body must match all the keywords
+            # Anything more sophisticated and we should use a search backend
+            words = search.split()
+            body_q = reduce(
+                lambda x, y: x & y, [Q(body__icontains=w) for w in words]
+            )
+            translation_q = reduce(
+                lambda x, y: x & y, [Q(translation__icontains=w)
+                                     for w in words]
+            )
+
+            items = items.filter(body_q | translation_q)
+
         ordering = self.request.query_params.get('ordering', '-timestamp')
         items = items.order_by(ordering)
 
@@ -116,14 +153,14 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         try:
             item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_404_NOT_FOUND)
 
         term_data = request.data
         try:
             taxonomy = Taxonomy.objects.get(slug=term_data['taxonomy'])
         except Taxonomy.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         terms = []
@@ -134,7 +171,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
                     name=term_name,
                 )
             except Term.DoesNotExist as e:
-                data = {'detail': e.message}
+                data = {'detail': str(e)}
                 return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
             terms.append(term)
@@ -151,7 +188,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         try:
             item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist as e:
-            data = {'detail': e.message}
+            data = {'detail': str(e)}
             return Response(data, status=status.HTTP_404_NOT_FOUND)
 
         try:
@@ -183,7 +220,7 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
         try:
             taxonomy = Taxonomy.objects.get(slug=slug)
         except Taxonomy.DoesNotExist:
-            message = _("Taxonomy with slug '%s' does not exist.") % (slug)
+            message = _("Taxonomy with slug '{0}' does not exist.").format(slug)
 
             data = {'detail': message}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)

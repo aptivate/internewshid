@@ -37,6 +37,8 @@ _assets = [
     'hid/widgets/chart.js',
     'hid/js/spinner.js',
     'hid/js/automatic_file_upload.js',
+    'hid/js/enable_multiselect.js',
+    'js/bootstrap-multiselect.js',
     'js/bootstrap-tagsinput.js',
     'hid/js/select_all_checkbox.js'
 ]
@@ -58,7 +60,7 @@ def require_assets(*assets):
     global _assets
     for asset in assets:
         if asset not in _assets:
-            raise AssetMissing("Missing asset: {}".format(asset))
+            raise AssetMissing("Missing asset: {0}".format(asset))
 
 
 @contextmanager

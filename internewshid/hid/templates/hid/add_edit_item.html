@@ -51,16 +51,16 @@
                             <span class='help-block'>({{ form.tags.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.tags|add_class:'form-control'|attr:'placeholder:Type and hit return'|attr:'data-role:tagsinput' }}
+                        {{ form.tags|add_class:'form-control'|attr:_('placeholder:Type and hit return')|attr:'data-role:tagsinput' }}
                     </div>
                     {% endif %}
 
                     <div class="item-apply form-group input-group">
-                        {% bootstrap_button "Cancel" button_type="submit" name="action" value="cancel" button_class="btn btn-md btn-border" %}
+                        {% bootstrap_button _("Cancel") button_type="submit" name="action" value="cancel" button_class="btn btn-md btn-border" %}
                         {% if update %}
-                        {% bootstrap_button "Update" button_type="submit" name="action" value="update" button_class="btn btn-md btn-success" %}
+                        {% bootstrap_button _("Update") button_type="submit" name="action" value="update" button_class="btn btn-md btn-success" %}
                         {% else %}
-                        {% bootstrap_button "Create" button_type="submit" name="action" value="create" button_class="btn btn-md btn-success" %}
+                        {% bootstrap_button _("Create") button_type="submit" name="action" value="create" button_class="btn btn-md btn-success" %}
                         {% endif %}
                     </div>
 
@@ -76,7 +76,7 @@
                                 <span class='help-block'>({{ form.body.errors|join:", " }})</span>
                                 {% endif %}
                             </label>
-                            {{ form.body|add_class:'form-control'|attr:"placeholder:Type your original text here" }}
+                            {{ form.body|add_class:'form-control'|attr:_("placeholder:Type your original text here") }}
                         </div>
                         {% endif %}
 
@@ -118,6 +118,16 @@
                             </div>
                             {% endif %}
 
+                            {% if form.sub_location %}
+                                <label>
+                                    {% trans "Sub-Location" %}
+                                    {% if form.sub_location.errors %}
+                                    <span class='help-block'>({{ form.sub_location.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.sub_location|add_class:'form-control'|attr:"Sub-Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            {% endif %}
+
                             {% if form.gender %}
                             <div class="item-gender {% if form.gender.errors %}has-error{% endif %}">
                                 <label>
@@ -130,15 +140,23 @@
                             </div>
                             {% endif %}
 
-                            {% if form.age %}
-                            <div class="item-age {% if form.age.errors %}has-error{% endif %}">
+                            {% if form.age_range %}
+                            <div class="item-age-range {% if form.age_range.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Age" %}
-                                    {% if form.age.errors %}
+                                    {% trans "Age range" %}
+                                    {% if form.age_range.errors %}
                                     <span class='help-block'>({{ form.age.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.age|add_class:'form-control'|attr:"Age"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                                <select name="{{ form.age_range.name }}" class="form-control" id="age_range.name">
+                                    {% for choice in form.age_range.field.choices %}
+                                    {% if form.initial.age_range == choice.0 %}
+                                    <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% else %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                             {% endif %}
 
@@ -154,15 +172,15 @@
                             </div>
                             {% endif %}
 
-                            {% if form.source %}
-                            <div class="item-source {% if form.source.errors %}has-error{% endif %}">
+                            {% if form.collection_type %}
+                            <div class="item-collection-type {% if form.collection_type.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Source" %}
-                                    {% if form.source.errors %}
-                                    <span class='help-block'>({{ form.source.errors|join:", " }})</span>
+                                    {% trans "Collection Type" %}
+                                    {% if form.collection_type.errors %}
+                                    <span class='help-block'>({{ form.collection_type.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.source|add_class:'form-control'|attr:"Source"|attr:"rows:1"|attr:"cols:3"|attr:"style:resize:none;" }}
+                                {{ form.collection_type|add_class:'form-control'|attr:"Collection Type"|attr:"rows:1"|attr:"cols:3"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
                         </div>
@@ -177,12 +195,12 @@
                             <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
                             {% endif %}
                         </label>
-                        {{ form.translation|add_class:'form-control'|attr:"placeholder:Type your translation text here" }}
+                        {{ form.translation|add_class:'form-control'|attr:_("placeholder:Type your translation text here") }}
                     </div>
                     {% endif %}
                 </div>
 
-                {% bootstrap_button "Delete feedback" button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
+                {% bootstrap_button _("Delete feedback") button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
 
             </div>
         </div>

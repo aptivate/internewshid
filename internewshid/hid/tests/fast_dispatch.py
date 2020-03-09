@@ -1,7 +1,5 @@
-from __future__ import absolute_import, unicode_literals
-
 import collections
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.files import File
@@ -62,11 +60,11 @@ class FastDispatchMixin(object):
         request = handler(path, post_params)
 
         request.GET = request.GET.copy()
-        for key, value in get_params.iteritems():
+        for key, value in get_params.items():
             if hasattr(value, '__iter__'):
                 request.GET.setlist(key, value)
             else:
-                if not isinstance(value, basestring):
+                if not isinstance(value, str):
                     raise Exception(
                         "GET and POST can only contain strings, "
                         "but %s = %s (%s)" % (key, value, value.__class__)
@@ -74,20 +72,20 @@ class FastDispatchMixin(object):
                 request.GET.setlist(key, [value])
 
         request.POST = request.POST.copy()
-        for key, value in post_params.iteritems():
+        for key, value in post_params.items():
             if isinstance(value, File):
                 request.FILES.setlist(key, [value])
             elif hasattr(value, '__iter__'):
                 request.POST.setlist(key, value)
             else:
-                if not isinstance(value, basestring):
+                if not isinstance(value, str):
                     raise Exception(
                         "GET and POST can only contain strings, "
                         "but %s = %s (%s)" % (key, value, value.__class__)
                     )
                 request.POST.setlist(key, [value])
 
-        for key, value in file_params.iteritems():
+        for key, value in file_params.items():
             request.FILES.setlist(key, [value])
 
         # Make them immutable to catch abuses that otherwise would only
@@ -100,11 +98,11 @@ class FastDispatchMixin(object):
 
         from django.conf import settings
 
-        if 'django.contrib.auth.middleware.AuthenticationMiddleware' in settings.MIDDLEWARE_CLASSES:
+        if 'django.contrib.auth.middleware.AuthenticationMiddleware' in settings.MIDDLEWARE:
             from django.contrib.auth.models import AnonymousUser
             request.user = getattr(self, 'user', AnonymousUser())
 
-        if 'django.middleware.locale.LocaleMiddleware' in settings.MIDDLEWARE_CLASSES:
+        if 'django.middleware.locale.LocaleMiddleware' in settings.MIDDLEWARE:
             request.LANGUAGE_CODE = settings.LANGUAGE_CODE
 
         # Resources filter plugin tests use this a lot.
@@ -113,7 +111,7 @@ class FastDispatchMixin(object):
         self.request_hook(request)
 
         if request_extras is not None:
-            for key, value in request_extras.iteritems():
+            for key, value in request_extras.items():
                 setattr(request, key, value)
 
         return request
@@ -222,11 +220,11 @@ class FastDispatchMixin(object):
                 response.render()
 
             if isinstance(response.content, str):
-                content = unicode(response.content, 'utf-8')
+                content = str(response.content, 'utf-8')
             else:
                 content = response.content
 
-            msg_prefix = content + u"\n\n" + unicode(msg_prefix)
+            msg_prefix = content + u"\n\n" + str(msg_prefix)
 
         self.assertEqual(response.status_code, status_code,
                          msg_prefix + "Response didn't redirect as expected: Response"
@@ -267,7 +265,7 @@ class FastDispatchMixin(object):
     def stuff_session(self, dictionary):
         from django.conf import settings
         if settings.SESSION_ENGINE != 'django.contrib.sessions.backends.db':
-            print "Unknown session engine: %s Sessions won't work" % settings.SESSION_ENGINE
+            print(f"Unknown session engine: {settings.SESSION_ENGINE} Sessions won't work")
             return
         self.client.logout()
         from django.contrib.sessions.backends.db import SessionStore
@@ -316,9 +314,7 @@ class FastDispatchMixin(object):
                 response, text, count, status_code, msg_prefix, html
             )
         except AssertionError as e:
-            import sys
-            raise sys.exc_info()[0], "%s\n\nThe complete response was:\n%s" % \
-                (e, content), sys.exc_info()[2]
+            raise type(e)(f"The complete response was:{content}") from e
 
     def absolute_url_for_site(self, relative_url):
         """

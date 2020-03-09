@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import pytest
 
 from data_layer.tests.factories import ItemFactory

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models, migrations
 import jsonfield.fields
 import django.core.validators
@@ -28,7 +26,7 @@ class Migration(migrations.Migration):
                 ('column', models.PositiveIntegerField(default=0, validators=[django.core.validators.MaxValueValidator(11, b'column must be between 0 and 11')])),
                 ('width', models.PositiveIntegerField(default=12, validators=[django.core.validators.MinValueValidator(1, b'width must be between 1 and 12'), django.core.validators.MaxValueValidator(12, b'width must be between 1 and 12')])),
                 ('settings', jsonfield.fields.JSONField(blank=True)),
-                ('dashboard', models.ForeignKey(to='dashboard.Dashboard')),
+                ('dashboard', models.ForeignKey(to='dashboard.Dashboard', on_delete=models.CASCADE)),
             ],
         ),
     ]
