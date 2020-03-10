@@ -701,7 +701,7 @@ def test_potection_concern_creates_protection_concern_tag(importer):
     }
 
 
-def test_potection_concern_creates_protection_concern_tag(importer):
+def test_potection_concern_doesnt_create_protection_concern_tag_when_value_no(importer):  # noqa
     row = [
         'Short message',
         '5',
