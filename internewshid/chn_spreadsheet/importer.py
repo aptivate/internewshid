@@ -122,6 +122,11 @@ class Importer(object):
                 for term in value.split(','):
                     self._append_term_to_item(
                         item, col['taxonomy'], term.strip())
+            elif col['type'] == 'protection_concern':
+                value = converter.convert_value()
+                if value:
+                    self._append_term_to_item(
+                        item, 'tags', value.strip())
             else:
                 converter.add_to(item)
 
@@ -253,6 +258,7 @@ class CellConverter(object):
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x if x else '',
+            'protection_concern': lambda x: 'Protection Concern' if x.lower() == 'yes' else ''
         }
         if self.type not in converters:
             raise SheetImportException(

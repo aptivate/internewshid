@@ -626,3 +626,145 @@ def test_get_spreadsheet_error_message_works_without_item(importer):
     actual_message = importer._get_spreadsheet_error_message("1", exc_inst)
 
     assert expected_message == actual_message
+
+
+def test_potection_concern_creates_protection_concern_tag(importer):
+    row = [
+        'Short message',
+        '5',
+        '10.4',
+        '1.5.2015',
+        'Something else',
+        'Montserrado',
+        'Yes'
+    ]
+
+    number = decimal.Decimal('10.4')
+    date = pytz.utc.localize(datetime.datetime(2015, 5, 1))
+
+    columns = [
+        {
+            'name': 'Message',
+            'field': 'message',
+            'type': 'text'
+        },
+        {
+            'name': 'Age',
+            'field': 'age',
+            'type': 'integer'
+        },
+        {
+            'name': 'Cost',
+            'field': 'price',
+            'type': 'number'
+        },
+        {
+            'name': 'CreatedDate',
+            'field': 'created',
+            'type': 'date',
+            'date_format': '%d.%m.%Y'
+        },
+        {
+            'name': 'Province',
+            'field': 'province',
+            'type': 'ignore'
+        },
+        {
+            'name': 'Location',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'tags',
+        },
+        {
+            'name': 'Protection Concern',
+            'type': 'protection_concern',
+            'field': 'terms',
+        }
+    ]
+
+    converted = importer.process_row(row, columns)
+    assert converted == {
+        'message': 'Short message',
+        'age': 5,
+        'price': number,
+        'created': date,
+        'terms': [
+            {
+                'name': 'Montserrado',
+                'taxonomy': 'tags',
+            },
+            {
+                'name': 'Protection Concern',
+                'taxonomy': 'tags',
+            }
+        ]
+    }
+
+
+def test_potection_concern_creates_protection_concern_tag(importer):
+    row = [
+        'Short message',
+        '5',
+        '10.4',
+        '1.5.2015',
+        'Something else',
+        'Montserrado',
+        'No'
+    ]
+
+    number = decimal.Decimal('10.4')
+    date = pytz.utc.localize(datetime.datetime(2015, 5, 1))
+
+    columns = [
+        {
+            'name': 'Message',
+            'field': 'message',
+            'type': 'text'
+        },
+        {
+            'name': 'Age',
+            'field': 'age',
+            'type': 'integer'
+        },
+        {
+            'name': 'Cost',
+            'field': 'price',
+            'type': 'number'
+        },
+        {
+            'name': 'CreatedDate',
+            'field': 'created',
+            'type': 'date',
+            'date_format': '%d.%m.%Y'
+        },
+        {
+            'name': 'Province',
+            'field': 'province',
+            'type': 'ignore'
+        },
+        {
+            'name': 'Location',
+            'type': 'taxonomy',
+            'field': 'terms',
+            'taxonomy': 'tags',
+        },
+        {
+            'name': 'Protection Concern',
+            'type': 'protection_concern',
+            'field': 'terms',
+        }
+    ]
+
+    converted = importer.process_row(row, columns)
+    assert converted == {
+        'message': 'Short message',
+        'age': 5,
+        'price': number,
+        'created': date,
+        'terms': [
+            {
+                'name': 'Montserrado',
+                'taxonomy': 'tags',
+            }
+        ]
+    }
