@@ -253,9 +253,9 @@
     "model": "taxonomies.term",
     "pk": 422,
     "fields": {
-        "name": "Age 15-18 yrs",
+        "name": "15-18",
         "taxonomy": 8,
-        "long_name": "Age 15-18 yrs"
+        "long_name": "15-18"
     }
   },
   {
@@ -300,7 +300,7 @@
     "fields": {
         "name": "60+",
         "taxonomy": 8,
-        "long_name": "Over 60 years old"
+        "long_name": "60+"
     }
   }
 ]
