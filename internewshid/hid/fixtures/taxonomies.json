@@ -300,7 +300,7 @@
     "fields": {
         "name": "60+",
         "taxonomy": 8,
-        "long_name": "Over 60 years old"
+        "long_name": "60+"
     }
   }
 ]

@@ -1,25 +1,69 @@
 ---
 
-image: python:3.6
-
-services:
-  - mysql:5.7
-
 variables:
   DJANGO_SECRET_KEY: foobarbazbazbarfoo
   MYSQL_ROOT_PASSWORD: internewshid
   MYSQL_DATABASE: internewshid
 
-before_script:
-  - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
-  - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
-  - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
-  - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
-  - pip install pipenv && pipenv sync --dev
+cache:
+  paths:
+  - "$CI_PROJECT_DIR/.cache/pip"
+  - "$CI_PROJECT_DIR/.cache/pipenv"
 
-gitlab-ci:
+stages:
+  - sanity
+  - lint
+  - test
+
+
+code-sanity:
+  image: python:3.6
+  services:
+  - mysql:5.7
+  stage: sanity
+  before_script:
+    - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
+    - ln -srf internewshid/language_settings.py.english internewshid/language_settings.py
+    - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
+    - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
+    - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
+    - pip install pipenv && pipenv sync --dev
   script:
+    - pipenv run safety check --bare
     - pipenv run python manage.py check
+    - pipenv run python manage.py makemigrations --check
+    - pipenv run python manage.py migrate --noinput
+
+
+code-lint:
+  image: python:3.6
+  services:
+  - mysql:5.7
+  stage: lint
+  before_script:
+    - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
+    - ln -srf internewshid/language_settings.py.english internewshid/language_settings.py
+    - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
+    - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
+    - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
+    - pip install pipenv && pipenv sync --dev
+  script:
     - pipenv run pylava -o setup.cfg
     - pipenv run isort -q -rc -c -df -sp setup.cfg
+
+
+unit-test:
+  image: python:3.6
+  services:
+  - mysql:5.7
+  stage: test
+  before_script:
+    - ln -srf internewshid/local_settings.py.gitlab internewshid/local_settings.py
+    - ln -srf internewshid/language_settings.py.english internewshid/language_settings.py
+    - echo "SECRET_KEY = '$DJANGO_SECRET_KEY'" >> internewshid/private_settings.py
+    - echo "DB_PASSWORD = '$MYSQL_ROOT_PASSWORD'" >> internewshid/private_settings.py
+    - apt update && apt install -y default-libmysqlclient-dev python-pymysql python-mysqldb nodejs node-less
+    - pip install pipenv && pipenv sync --dev
+  script:
     - pipenv run pytest -v --cov
+

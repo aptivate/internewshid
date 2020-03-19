@@ -23,8 +23,9 @@ class ItemTable(tables.Table):
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
+        orderable=False,
         verbose_name=_('Select'),
-        attrs={'th': {'id': 'header-select'}}
+        attrs={'th': {'id': 'header-select', 'class': 'unorderable'}}
     )
     created = tables.TemplateColumn(
         template_name='hid/created_column.html',
@@ -48,21 +49,24 @@ class ItemTable(tables.Table):
     )
     category = tables.TemplateColumn(
         verbose_name=_('Theme'),
+        orderable=False,
         template_name='hid/categories_column.html',
         accessor='terms',
-        attrs={'th': {'id': 'header-theme'}}
+        attrs={'th': {'id': 'header-theme', 'class': 'unorderable'}}
     )
     tags = tables.TemplateColumn(
         verbose_name=_('Tags'),
+        orderable=False,
         template_name='hid/tags_column.html',
         accessor='terms',
-        attrs={'th': {'id': 'header-tag'}}
+        attrs={'th': {'id': 'header-tag', 'class': 'unorderable'}}
     )
     feedback_type = tables.TemplateColumn(
         template_name='hid/feedback_type_column.html',
+        orderable=False,
         verbose_name=_('Type'),
         accessor='terms',
-        attrs={'th': {'id': 'header-type', 'title': 'Feedback type'}}
+        attrs={'th': {'id': 'header-type', 'title': 'Feedback type', 'class': 'unorderable'}}
     )
     gender = tables.TemplateColumn(
         template_name='hid/gender_column.html',
@@ -76,9 +80,10 @@ class ItemTable(tables.Table):
     )
     age_range = tables.TemplateColumn(
         template_name='hid/age_range_column.html',
+        orderable=False,
         verbose_name=_('Age range'),
         accessor='terms',
-        attrs={'th': {'id': 'header-age-range'}}
+        attrs={'th': {'id': 'header-age-range', 'class': 'unorderable'}}
     )
     location = tables.TemplateColumn(
         template_name='hid/location_column.html',
