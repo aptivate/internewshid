@@ -160,15 +160,15 @@
                             </div>
                             {% endif %}
 
-                            {% if form.enumerator %}
-                            <div class="item-enumerator {% if form.enumerator.errors %}has-error{% endif %}">
+                            {% if form.contributor %}
+                            <div class="item-contributor {% if form.contributor.errors %}has-error{% endif %}">
                                 <label>
-                                    {% trans "Enumerator" %}
-                                    {% if form.enumerator.errors %}
-                                    <span class='help-block'>({{ form.enumerator.errors|join:", " }})</span>
+                                    {% trans "Contributor" %}
+                                    {% if form.contributor.errors %}
+                                    <span class='help-block'>({{ form.contributor.errors|join:", " }})</span>
                                     {% endif %}
                                 </label>
-                                {{ form.enumerator|add_class:'form-control'|attr:"Enumerator"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                                {{ form.contributor|add_class:'form-control'|attr:"Contributor"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
 

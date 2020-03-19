@@ -29,7 +29,7 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
-    enumerator = forms.CharField(
+    contributor = forms.CharField(
         widget=forms.Textarea,
         required=False
     )

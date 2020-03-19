@@ -138,7 +138,7 @@ class ItemExportSerializer(ItemSerializer):
             'age',
             'body',
             'collection_type',
-            'enumerator',
+            'contributor',
             'external_id',
             'gender',
             'location',

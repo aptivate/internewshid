@@ -70,12 +70,12 @@ class AgeRangeFilter(object):
         filters['terms_or'] = filters.get('terms_or', []) + age_range_terms
 
 
-class EnumeratorFilter(object):
+class ContributorFilter(object):
 
     def apply(self, filters, query_dict, **kwargs):
-        enumerator = query_dict.get('enumerator', None)
-        if enumerator is not None:
-            filters.update(enumerator=enumerator)
+        contributor = query_dict.get('contributor', None)
+        if contributor is not None:
+            filters.update(contributor=contributor)
 
 
 class CollectionTypeFilter(object):

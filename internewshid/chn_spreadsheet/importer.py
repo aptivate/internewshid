@@ -167,14 +167,14 @@ class Importer(object):
         # The exception will have different formats:
         # Example of failure during transport.items.create():
         # {
-        #  'enumerator': [ErrorDetail(string='Ensure this field has no more than 190 characters.', code='max_length')],
+        #  'contributor': [ErrorDetail(string='Ensure this field has no more than 190 characters.', code='max_length')],
         #  'status_code': 400,
         #  'item': {
         #      'timestamp': datetime.datetime(2018, 8, 9, 12, 14, 26, 766000, tzinfo=tzoffset(None, 21600)),
         #      'body': 'the community members want more food.',
         #      'gender': 'female',
         #      'location': 'Camp 4',
-        #      'enumerator': '<a very long string>',
+        #      'contributor': '<a very long string>',
         #      'external_id': '97f61035-6feb-40a1-9e7e-15c0f65cfdb5'
         #   }
         # }
