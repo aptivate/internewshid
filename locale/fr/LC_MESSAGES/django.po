@@ -220,8 +220,8 @@ msgstr ""
 
 #: internewshid/hid/tables.py:89
 #: internewshid/hid/templates/hid/add_edit_item.html:158
-#: internewshid/hid/templates/hid/tabs/filters/enumerator.html:4
-msgid "Enumerator"
+#: internewshid/hid/templates/hid/tabs/filters/contributor.html:4
+msgid "Contributor"
 msgstr "Recenseur"
 
 #: internewshid/hid/tables.py:94
@@ -467,8 +467,8 @@ msgstr "Tous les thèmes"
 msgid "All Collection Types"
 msgstr ""
 
-#: internewshid/hid/templates/hid/tabs/filters/enumerator.html:6
-msgid "All Enumerators"
+#: internewshid/hid/templates/hid/tabs/filters/contributor.html:6
+msgid "All Contributors"
 msgstr "Tous les recenseurs"
 
 #: internewshid/hid/templates/hid/tabs/filters/external_id.html:4

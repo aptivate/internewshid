@@ -32,7 +32,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'sub_location',
         'gender',
         'age',
-        'enumerator',
+        'contributor',
         'collection_type',
         'timestamp',
     )
@@ -110,9 +110,9 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         if from_age is not None and to_age is not None:
             items = items.filter(age__range=[from_age, to_age])
 
-        enumerator = self.request.query_params.get('enumerator', None)
-        if enumerator is not None:
-            items = items.filter(enumerator__icontains=enumerator)
+        contributor = self.request.query_params.get('contributor', None)
+        if contributor is not None:
+            items = items.filter(contributor__icontains=contributor)
 
         collection_type = self.request.query_params.get('collection_type', None)
         if collection_type is not None:

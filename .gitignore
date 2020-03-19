@@ -1,6 +1,7 @@
 .ansible
 *.pyc
 .coverage
+.idea
 .pytest_cache
 internewshid/local_settings.py
 internewshid/private_settings.py

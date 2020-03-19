@@ -93,9 +93,9 @@ class ViewAndEditTableTab(object):
         if genders and genders == 'All Genders':
             filters.pop('gender')
 
-        enumerators = filters.get('enumerator')
-        if enumerators and enumerators == 'All Enumerators':
-            filters.pop('enumerator')
+        contributors = filters.get('contributor')
+        if contributors and contributors == 'All Contributors':
+            filters.pop('contributor')
 
         collection_type = filters.get('collection_type')
         if collection_type and collection_type == 'All Collection Types':
@@ -196,9 +196,9 @@ class ViewAndEditTableTab(object):
         genders = transport_items.list_options('gender')
         return {'items': genders}
 
-    def _get_enumerator_options(self, items_list, **kwargs):
-        enumerators = transport_items.list_options('enumerator')
-        return {'items': enumerators}
+    def _get_contributor_options(self, items_list, **kwargs):
+        contributors = transport_items.list_options('contributor')
+        return {'items': contributors}
 
     def _get_collection_type_options(self, items_list, **kwargs):
         collection_types = transport_items.list_options('collection_type')
@@ -256,7 +256,7 @@ class ViewAndEditTableTab(object):
         location_options = self._get_location_options(items, **kwargs)
         sub_location_options = self._get_sub_location_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
-        enumerator_options = self._get_enumerator_options(items, **kwargs)
+        contributor_options = self._get_contributor_options(items, **kwargs)
         collection_type_options = self._get_collection_type_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
         age_range_options = self._get_age_range_options()
@@ -296,7 +296,7 @@ class ViewAndEditTableTab(object):
             'locations': location_options,
             'sub_locations': sub_location_options,
             'gender': gender_options,
-            'enumerator': enumerator_options,
+            'contributor': contributor_options,
             'collection_type_filters': collection_type_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,

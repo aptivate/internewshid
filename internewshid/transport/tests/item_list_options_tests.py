@@ -62,31 +62,31 @@ def test_list_options_for_location_exclude_blank():
 
 
 @pytest.mark.django_db
-def test_list_options_for_enumerator_retrieved_all_options():
+def test_list_options_for_contributor_retrieved_all_options():
     items = G(Item, n=5)
-    expected_enumerators = [an_item.enumerator for an_item in items]
-    actual_enumerators = list(list_options('enumerator'))
-    assert expected_enumerators == actual_enumerators
+    expected_contributors = [an_item.contributor for an_item in items]
+    actual_contributors = list(list_options('contributor'))
+    assert expected_contributors == actual_contributors
 
 
 @pytest.mark.django_db
-def test_list_options_for_enumerator_unique():
-    G(Item, enumerator='Rojina Akter', n=2)
-    G(Item, enumerator='Nur Ankis', n=2)
-    G(Item, enumerator='Rashada')
-    expected_enumerators = ['Nur Ankis', 'Rashada', 'Rojina Akter', ]
-    actual_enumerators = list(list_options('enumerator'))
-    assert expected_enumerators == actual_enumerators
+def test_list_options_for_contributor_unique():
+    G(Item, contributor='Rojina Akter', n=2)
+    G(Item, contributor='Nur Ankis', n=2)
+    G(Item, contributor='Rashada')
+    expected_contributors = ['Nur Ankis', 'Rashada', 'Rojina Akter', ]
+    actual_contributors = list(list_options('contributor'))
+    assert expected_contributors == actual_contributors
 
 
 @pytest.mark.django_db
-def test_list_options_for_enumerator_exclude_blank():
-    items = G(Item, enumerator='', n=2)
-    items.extend(G(Item, enumerator='Nur Ankis', n=2))
-    items.append(G(Item, enumerator='Rashada'))
-    expected_enumerators = ['Nur Ankis', 'Rashada']
-    actual_enumerators = list(list_options('enumerator'))
-    assert expected_enumerators == actual_enumerators
+def test_list_options_for_contributor_exclude_blank():
+    items = G(Item, contributor='', n=2)
+    items.extend(G(Item, contributor='Nur Ankis', n=2))
+    items.append(G(Item, contributor='Rashada'))
+    expected_contributors = ['Nur Ankis', 'Rashada']
+    actual_contributors = list(list_options('contributor'))
+    assert expected_contributors == actual_contributors
 
 
 @pytest.mark.django_db
