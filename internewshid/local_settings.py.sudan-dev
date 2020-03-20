@@ -1,0 +1,59 @@
+import json
+from os import environ
+
+from private_settings import DB_PASSWORD
+
+DEBUG = True
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
+DJANGOJS_DEBUG = DEBUG
+
+# `MYSQL_DATABASE` and `MYSQL_ROOT_PASSWORD` are used for the CI
+# https://hub.docker.com/_/mysql/
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': environ.get('MYSQL_DATABASE', 'internewshid'),
+        'USER': environ.get('APTIVATE_CLI_MYSQL_USER', 'internewshid'),
+        'HOST': environ.get('APTIVATE_CLI_MYSQL_HOST', 'localhost'),
+        'PASSWORD': environ.get('MYSQL_ROOT_PASSWORD', DB_PASSWORD),
+        'OPTIONS': {
+          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
+    }
+}
+
+CONSTANCE_CONFIG = {
+    'CONTEXT_LOCATION': ("South Sudan",
+                         'Location of dashboard deployment'),
+    'DEFAULT_TABBED_PAGE_NAME': ('main',
+                                 'Name of default tabbed page'),
+    'DEFAULT_TAB_NAME': ('all',
+                         'Name of default tab within page'),
+    'ITEM_TYPE_CATEGORY': (
+        json.dumps(
+            {'all': 'sudan'}
+        ),
+        'Single taxonomy to use to categorise all types of item'),
+    'GLOBAL_DATA_SOURCE': ('kobo',
+                           'Sheet profile to use when loading data from the main menu'),
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'localhost:8000'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+INTERNAL_IPS = (
+  '127.0.0.1',
+)
+
+LANGUAGE_CODE = 'en'

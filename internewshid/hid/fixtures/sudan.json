@@ -1,4 +1,5 @@
 [
+
     {
         "fields": {
             "name": "main"
@@ -71,7 +72,7 @@
         "pk": 6,
         "fields": {
             "label": "ssudan",
-            "profile": "{\"name\": \"South Sudan\", \"format\": \"excel\", \"label\": \"ssudan\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"start\", \"date_format\": \"%Y-%m-%dT%H: %M: %S.%f%z\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"end\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"Location\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"Sub-location\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Location Type\", \"taxonomy\": \"tags\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"Collection Type\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"Gender\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Age\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Date\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"Feedback Text\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Staff Name\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Cluster\", \"taxonomy\": \"bangladesh-refugee-crisis-sectors\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Camp Coordination and Camp Management (CCCM)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Education\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Emergency Shelter and NFI\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Food Security and Livelihoods (FSL)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Health\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Nutrition\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Protection\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Security\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Water Sanitation Hygiene (WASH)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Child Protection\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Gender Based Violence\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Housing, Land and Property\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Mine Action\"}, {\"field\": \"terms\", \"type\": \"protection_concern\", \"name\": \"\\u26a0  Is this a protection concern? \\u26a0\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"PROTECTION CONCERN\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Tags\", \"taxonomy\": \"tags\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"__version__\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_id\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_uuid\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_submission_time\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_validation_status\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_index\"}]}"
+            "profile": "{\"name\": \"South Sudan\", \"format\": \"excel\", \"label\": \"ssudan\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"start\", \"date_format\": \"%Y-%m-%dT%H: %M: %S.%f%z\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"end\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"Location\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"Sub-location\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Location Type\", \"taxonomy\": \"tags\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"Collection Type\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"Gender\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Age\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Date\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"Feedback Text\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Staff Name\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Cluster\", \"taxonomy\": \"sudan\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Camp Coordination and Camp Management (CCCM)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Education\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Emergency Shelter and NFI\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Food Security and Livelihoods (FSL)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Health\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Nutrition\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Protection\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Security\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Water Sanitation Hygiene (WASH)\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Child Protection\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Gender Based Violence\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Housing, Land and Property\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Cluster/Sub-Cluster Mine Action\"}, {\"field\": \"terms\", \"type\": \"protection_concern\", \"name\": \"\\u26a0  Is this a protection concern? \\u26a0\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"PROTECTION CONCERN\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Tags\", \"taxonomy\": \"tags\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"__version__\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_id\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_uuid\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_submission_time\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_validation_status\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_index\"}]}"
         }
     },
 
@@ -103,40 +104,389 @@
         "model": "data_layer.customconstance",
         "pk": 1
     },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Item Types",
+      "slug": "item-types",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "multiplicity": "multiple",
+      "name": "Tags",
+      "slug": "tags",
+      "vocabulary": "open"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Data Origins",
+      "slug": "data-origins",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Countries",
+      "slug": "countries",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Contexts",
+      "slug": "contexts",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "South Sudan",
+      "slug": "sudan",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "multiplicity": "optional",
+      "name": "Age Ranges",
+      "slug": "age-ranges",
+      "vocabulary": "closed"
+    },
+    "model": "taxonomies.taxonomy",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "long_name": "Question",
+      "name": "question",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 29
+  },
+  {
+    "fields": {
+      "long_name": "Rumour",
+      "name": "rumour",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 30
+  },
+  {
+    "fields": {
+      "long_name": "Geopoll Spreadsheet",
+      "name": "Geopoll Spreadsheet",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 31
+  },
+  {
+    "fields": {
+      "long_name": "Rapidpro Spreadsheet",
+      "name": "Rapidpro Spreadsheet",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 32
+  },
+  {
+    "fields": {
+      "long_name": "Form Entry",
+      "name": "Form Entry",
+      "taxonomy": 4
+    },
+    "model": "taxonomies.term",
+    "pk": 33
+  },
+  {
+    "fields": {
+      "long_name": "Liberia",
+      "name": "Liberia",
+      "taxonomy": 5
+    },
+    "model": "taxonomies.term",
+    "pk": 34
+  },
+  {
+    "fields": {
+      "long_name": "Ebola-Liberia",
+      "name": "Ebola-Liberia",
+      "taxonomy": 6
+    },
+    "model": "taxonomies.term",
+    "pk": 35
+  },
+  {
+    "fields": {
+      "long_name": "Water Sanitation Hygiene (WASH)",
+      "name": "Water Sanitation Hygiene (WASH)",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 54
+  },
+  {
+    "fields": {
+      "long_name": "NFI / Shelter",
+      "name": "NFI / Shelter",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 55
+  },
+  {
+    "fields": {
+      "long_name": "Health",
+      "name": "Health",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 56
+  },
+  {
+    "fields": {
+      "long_name": "Education",
+      "name": "Education",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 57
+  },
+  {
+    "fields": {
+      "long_name": "Nutrition",
+      "name": "Nutrition",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 58
+  },
+  {
+    "fields": {
+      "long_name": "Child Protection",
+      "name": "Child Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 59
+  },
+  {
+    "fields": {
+      "long_name": "Food Security",
+      "name": "Food Security",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 60
+  },
+  {
+    "fields": {
+      "long_name": "GBV",
+      "name": "GBV",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 61
+  },
+  {
+    "fields": {
+      "long_name": "Site Management",
+      "name": "Site Management",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 62
+  },
+  {
+    "fields": {
+      "long_name": "Protection",
+      "name": "Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 63
+  },
     {
-        "fields": {
-            "area_of_specialisation": "",
-            "business_address": "",
-            "business_email": "user@example.com",
-            "business_tel": "",
-            "contact_type": "",
-            "country": "",
-            "date_joined": "2018-10-10T12:17:49.867Z",
-            "fax": "",
-            "first_name": "User",
-            "gender": "",
-            "groups": [],
-            "home_address": "",
-            "home_tel": "",
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "job_title": "",
-            "last_login": "2018-10-18T13:48:12.398Z",
-            "last_name": "Example",
-            "mobile": "",
-            "msn_id": "",
-            "nationality": "",
-            "notes": "",
-            "password": "pbkdf2_sha256$36000$15tPyazbIfk8$NM0Ir7ZnK2ukElrteRhmtBW4Ga6Rn3fePQCw/ZOrYpA=",
-            "personal_email": "",
-            "picture": "",
-            "skype_id": "",
-            "title": "",
-            "user_permissions": [],
-            "yahoo_messenger": ""
-        },
-        "model": "users.user",
-        "pk": 1
+    "fields": {
+      "long_name": "Camp Coordination and Camp Management (CCCM)",
+      "name": "Camp Coordination and Camp Management (CCCM)",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 64
+  },
+  {
+    "fields": {
+      "long_name": "Camp Coordination and Camp Management (CCCM) Education Health",
+      "name": "Camp Coordination and Camp Management (CCCM) Education Health",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 65
+  },
+  {
+    "fields": {
+      "long_name": "Camp Coordination and Camp Management (CCCM) Protection",
+      "name": "Camp Coordination and Camp Management (CCCM) Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 73
+  },
+  {
+    "fields": {
+      "long_name": "Emergency Shelter and NFI",
+      "name": "Emergency Shelter and NFI",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 67
+  },
+  {
+    "fields": {
+      "long_name": "Food Security and Livelihoods (FSL)",
+      "name": "Food Security and Livelihoods (FSL)",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 68
+  },
+  {
+    "fields": {
+      "long_name": "Food Security and Livelihoods (FSL) Protection",
+      "name": "Food Security and Livelihoods (FSL) Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 69
+  },
+  {
+    "fields": {
+      "long_name": "Security",
+      "name": "Security",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 70
+  },
+  {
+    "fields": {
+      "long_name": "Sub-Cluster Child Protection",
+      "name": "Sub-Cluster Child Protection",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 71
+  },
+  {
+    "fields": {
+      "long_name": "Sub-Cluster Gender Based Violence",
+      "name": "Sub-Cluster Gender Based Violence",
+      "taxonomy": 7
+    },
+    "model": "taxonomies.term",
+    "pk": 72
+  },
+  {
+    "fields": {
+      "long_name": "Concern",
+      "name": "concern",
+      "taxonomy": 2
+    },
+    "model": "taxonomies.term",
+    "pk": 66
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 420,
+    "fields": {
+        "name": "<11",
+        "taxonomy": 8,
+        "long_name": "<11"
     }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 421,
+    "fields": {
+        "name": "11-14",
+        "taxonomy": 8,
+        "long_name": "11-14"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 422,
+    "fields": {
+        "name": "15-18",
+        "taxonomy": 8,
+        "long_name": "15-18"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 423,
+    "fields": {
+        "name": "19-25",
+        "taxonomy": 8,
+        "long_name": "19-25"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 424,
+    "fields": {
+        "name": "26-35",
+        "taxonomy": 8,
+        "long_name": "26-35"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 425,
+    "fields": {
+        "name": "36-45",
+        "taxonomy": 8,
+        "long_name": "36-45"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 426,
+    "fields": {
+        "name": "46-60",
+        "taxonomy": 8,
+        "long_name": "46-60"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 427,
+    "fields": {
+        "name": "60+",
+        "taxonomy": 8,
+        "long_name": "60+"
+    }
+  }
 ]

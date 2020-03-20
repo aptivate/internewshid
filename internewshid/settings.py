@@ -252,6 +252,7 @@ ALLOWED_HOSTS = [
     '*',
 ]
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
