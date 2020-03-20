@@ -102,5 +102,41 @@
         },
         "model": "data_layer.customconstance",
         "pk": 1
+    },
+    {
+        "fields": {
+            "area_of_specialisation": "",
+            "business_address": "",
+            "business_email": "user@example.com",
+            "business_tel": "",
+            "contact_type": "",
+            "country": "",
+            "date_joined": "2018-10-10T12:17:49.867Z",
+            "fax": "",
+            "first_name": "User",
+            "gender": "",
+            "groups": [],
+            "home_address": "",
+            "home_tel": "",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "job_title": "",
+            "last_login": "2018-10-18T13:48:12.398Z",
+            "last_name": "Example",
+            "mobile": "",
+            "msn_id": "",
+            "nationality": "",
+            "notes": "",
+            "password": "pbkdf2_sha256$36000$15tPyazbIfk8$NM0Ir7ZnK2ukElrteRhmtBW4Ga6Rn3fePQCw/ZOrYpA=",
+            "personal_email": "",
+            "picture": "",
+            "skype_id": "",
+            "title": "",
+            "user_permissions": [],
+            "yahoo_messenger": ""
+        },
+        "model": "users.user",
+        "pk": 1
     }
 ]
