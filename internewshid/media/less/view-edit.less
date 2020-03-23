@@ -140,13 +140,15 @@ table,
 }
 
 thead{
-    background-color: @brand-secondary;
+  background-color: @brand-secondary;
 	text-transform: uppercase;
 	font-size: 1rem;
 	th {
         border-bottom: 0!important;
         overflow: hidden;
         text-overflow: ellipsis;
+        resize: horizontal;
+        white-space: nowrap;
         &.orderable {
             .asc, .desc{
                 background-color: @brand-primary;
@@ -201,9 +203,6 @@ tbody {
 		text-overflow: ellipsis;
 		overflow: hidden;
         vertical-align: middle!important;
-        .select-item-id-checkbox{
-            text-align: center;
-        }
 	}
 }
 
