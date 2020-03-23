@@ -149,6 +149,11 @@ thead{
         text-overflow: ellipsis;
         resize: horizontal;
         white-space: nowrap;
+        position: sticky;
+        top: 0;
+        background-color: @brand-secondary;
+        z-index: @zindex-navbar-fixed;
+
         &.orderable {
             .asc, .desc{
                 background-color: @brand-primary;
@@ -292,7 +297,7 @@ td.created, td.timestamp {
 }
 
 .messages-box {
-  	margin: 0 -30px;
+  margin: 0 -30px;
 	position: fixed;
 	z-index: @zindex-messages;
 	top: 0;
