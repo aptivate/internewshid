@@ -211,12 +211,44 @@ tbody {
 	}
 }
 
+// Table row colours
 .table-striped > tbody > tr.selected.odd,
 .table-striped > tbody > tr.selected.even{
     background-color: #e3edf8;
     transition: background-color 0.25s ease;
     &:hover{
         background-color: darken(#e3edf8, 10%);
+    }
+}
+// Risk row colours
+// classes added by select_all_checkbox.js
+.table-striped > tbody > tr:hover{
+    &.risk1{
+        background-color: @risk-1-hover!important;
+    }
+    &.risk2{
+        background-color: @risk-2-hover!important;
+    }
+    &.risk3{
+        background-color: @risk-3-hover!important;
+    }
+    &.bad-data{
+        background-color: @bad-data-hover!important;
+    }
+
+}
+.table-striped > tbody > tr.selected{
+    &.risk1{
+        background-color: @risk-1-bg!important;
+    }
+    &.risk2{
+        background-color: @risk-2-bg!important;
+    }
+    &.risk3{
+        background-color: @risk-3-bg!important;
+    }
+    &.bad-data{
+        background-color: @bad-data-bg!important;
     }
 }
 
@@ -362,16 +394,18 @@ th.select_action {
   text-align:center;
 }
 
-
+// default select icons
 .select-item-id-checkbox {
+    > input[type="checkbox"] + label:hover > .fa-check-circle:before {
+        color: #262626;
+        }
+
    > input[type="checkbox"] + .fa-check-circle:before,
    > input[type="checkbox"] + label > .fa-check-circle:before {
        font-size:25px;
        content: "\f058";
        color:@gray;
-       &:hover{
-           color: red;
-       }
+       cursor: pointer;
    }
 
    > input[type="checkbox"]:checked + .fa-check-circle:before,
@@ -381,6 +415,53 @@ th.select_action {
 
    > input[type="checkbox"] {
      display:none;
+   }
+}
+
+.risk1 .select-item-id-checkbox {
+   > input[type="checkbox"] + .fa-check-circle:before,
+   > input[type="checkbox"] + label > .fa-check-circle:before {
+       color:@risk-1;
+       }
+
+   > input[type="checkbox"]:checked + .fa-check-circle:before,
+   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+       color:#fff;
+   }
+}
+
+.risk2 .select-item-id-checkbox {
+   > input[type="checkbox"] + .fa-check-circle:before,
+   > input[type="checkbox"] + label > .fa-check-circle:before {
+       color:@risk-2;
+       }
+
+   > input[type="checkbox"]:checked + .fa-check-circle:before,
+   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+       color:#fff;
+   }
+}
+.risk3 .select-item-id-checkbox {
+   > input[type="checkbox"] + .fa-check-circle:before,
+   > input[type="checkbox"] + label > .fa-check-circle:before {
+       color:@risk-3;
+       }
+
+   > input[type="checkbox"]:checked + .fa-check-circle:before,
+   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+       color:#fff;
+   }
+}
+
+.bad-data .select-item-id-checkbox {
+   > input[type="checkbox"] + .fa-check-circle:before,
+   > input[type="checkbox"] + label > .fa-check-circle:before {
+       color:@bad-data;
+       }
+
+   > input[type="checkbox"]:checked + .fa-check-circle:before,
+   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+       color:#fff;
    }
 }
 
