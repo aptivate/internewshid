@@ -25,6 +25,10 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
+    language = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     gender = forms.CharField(
         widget=forms.Textarea,
         required=False

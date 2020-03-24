@@ -15,6 +15,7 @@ class HidAppConfig(AppConfig):
             ExternalIdFilter,
             FeedbackTypeFilter,
             GenderFilter,
+            LanguageFilter,
             LocationFilter,
             SearchFilter,
             SubLocationFilter,
@@ -31,6 +32,7 @@ class HidAppConfig(AppConfig):
         register_filter('time_range', TimeRangeFilter())
         register_filter('location', LocationFilter())
         register_filter('sub_location', SubLocationFilter())
+        register_filter('language', LanguageFilter())
         register_filter('gender', GenderFilter())
         register_filter('age_range', AgeRangeFilter())
         register_filter('contributor', ContributorFilter())

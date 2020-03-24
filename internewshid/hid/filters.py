@@ -51,6 +51,14 @@ class SubLocationFilter(object):
             filters.update(sub_location=sub_location)
 
 
+class LanguageFilter(object):
+
+    def apply(self, filters, query_dict, **kwargs):
+        language = query_dict.get('language', None)
+        if language is not None:
+            filters.update(language=language)
+
+
 class GenderFilter(object):
 
     def apply(self, filters, query_dict, **kwargs):

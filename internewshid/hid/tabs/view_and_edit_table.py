@@ -89,6 +89,10 @@ class ViewAndEditTableTab(object):
         if sub_locations and sub_locations == 'All Sub-Locations':
             filters.pop('sub_location')
 
+        languages = filters.get('language')
+        if languages and languages == 'All Languages':
+            filters.pop('language')
+
         genders = filters.get('gender')
         if genders and genders == 'All Genders':
             filters.pop('gender')
@@ -192,6 +196,10 @@ class ViewAndEditTableTab(object):
         sub_locations = transport_items.list_options('sub_location')
         return {'items': sub_locations}
 
+    def _get_language_options(self, items_list, **kwargs):
+        languages = transport_items.list_options('language')
+        return {'items': languages}
+
     def _get_gender_options(self, items_list, **kwargs):
         genders = transport_items.list_options('gender')
         return {'items': genders}
@@ -255,6 +263,7 @@ class ViewAndEditTableTab(object):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
         sub_location_options = self._get_sub_location_options(items, **kwargs)
+        language_options = self._get_language_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
         contributor_options = self._get_contributor_options(items, **kwargs)
         collection_type_options = self._get_collection_type_options(items, **kwargs)
@@ -295,6 +304,7 @@ class ViewAndEditTableTab(object):
             'selected_age_ranges': selected_age_ranges,
             'locations': location_options,
             'sub_locations': sub_location_options,
+            'languages': language_options,
             'gender': gender_options,
             'contributor': contributor_options,
             'collection_type_filters': collection_type_options,

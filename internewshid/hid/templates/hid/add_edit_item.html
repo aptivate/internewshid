@@ -128,6 +128,18 @@
                                 {{ form.sub_location|add_class:'form-control'|attr:"Sub-Location"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
                             {% endif %}
 
+                            {% if form.language %}
+                            <div class="item-language {% if form.language.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Language" %}
+                                    {% if form.language.errors %}
+                                    <span class='help-block'>({{ form.language.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.language|add_class:'form-control'|attr:"Language"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
                             {% if form.gender %}
                             <div class="item-gender {% if form.gender.errors %}has-error{% endif %}">
                                 <label>
