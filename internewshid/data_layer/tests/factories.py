@@ -20,6 +20,7 @@ class ItemFactory(DjangoModelFactory):
     contributor = fuzzy.FuzzyText()
     collection_type = fuzzy.FuzzyText()
     location = fuzzy.FuzzyText()
+    language = fuzzy.FuzzyText()
     timestamp = fuzzy.FuzzyDateTime(
         timezone.now() + timedelta(days=-365)
     )
