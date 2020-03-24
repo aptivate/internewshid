@@ -95,6 +95,11 @@ class ItemTable(tables.Table):
         verbose_name=_('Sub-Location'),
         attrs={'th': {'id': 'header-sub-location'}}
     )
+    language = tables.TemplateColumn(
+        template_name='hid/language_column.html',
+        verbose_name=_('Language'),
+        attrs={'th': {'id': 'header-language'}}
+    )
     contributor = tables.TemplateColumn(
         template_name='hid/contributor_column.html',
         verbose_name=_('Contributor'),
