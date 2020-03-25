@@ -160,6 +160,7 @@ class AddEditItemView(FormView):
                 'location': self.item.get('location', ''),
                 'sub_location': self.item.get('sub_location', ''),
                 'language': self.item.get('language', ''),
+                'risk': self.item.get('risk', ''),
                 'gender': self.item.get('gender', ''),
                 'contributor': self.item.get('contributor', ''),
                 'collection_type': self.item.get('collection_type', ''),

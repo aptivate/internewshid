@@ -93,6 +93,10 @@ class ViewAndEditTableTab(object):
         if languages and languages == 'All Languages':
             filters.pop('language')
 
+        risks = filters.get('risk')
+        if risks and risks == 'All Risks':
+            filters.pop('risk')
+
         genders = filters.get('gender')
         if genders and genders == 'All Genders':
             filters.pop('gender')
@@ -200,6 +204,10 @@ class ViewAndEditTableTab(object):
         languages = transport_items.list_options('language')
         return {'items': languages}
 
+    def _get_risk_options(self, items_list, **kwargs):
+        risks = transport_items.list_options('risk')
+        return {'items': risks}
+
     def _get_gender_options(self, items_list, **kwargs):
         genders = transport_items.list_options('gender')
         return {'items': genders}
@@ -264,6 +272,7 @@ class ViewAndEditTableTab(object):
         location_options = self._get_location_options(items, **kwargs)
         sub_location_options = self._get_sub_location_options(items, **kwargs)
         language_options = self._get_language_options(items, **kwargs)
+        risk_options = self._get_risk_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
         contributor_options = self._get_contributor_options(items, **kwargs)
         collection_type_options = self._get_collection_type_options(items, **kwargs)
@@ -305,6 +314,7 @@ class ViewAndEditTableTab(object):
             'locations': location_options,
             'sub_locations': sub_location_options,
             'languages': language_options,
+            'risks': risk_options,
             'gender': gender_options,
             'contributor': contributor_options,
             'collection_type_filters': collection_type_options,

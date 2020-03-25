@@ -46,6 +46,7 @@ class Message(DataLayerModel):
     location = models.CharField(max_length=100, blank=True)
     sub_location = models.CharField(max_length=100, blank=True)
     language = models.CharField(max_length=190, blank=True)
+    risk = models.CharField(max_length=30, blank=True)
     gender = models.CharField(max_length=100, blank=True)
     age = models.CharField(max_length=100, blank=True)
     contributor = models.CharField(max_length=190, blank=True)

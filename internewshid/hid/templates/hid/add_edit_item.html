@@ -140,6 +140,18 @@
                             </div>
                             {% endif %}
 
+                            {% if form.risk %}
+                            <div class="item-risk {% if form.risk.errors %}has-error{% endif %}">
+                                <label>
+                                    {% trans "Risk" %}
+                                    {% if form.language.errors %}
+                                    <span class='help-block'>({{ form.risk.errors|join:", " }})</span>
+                                    {% endif %}
+                                </label>
+                                {{ form.risk|add_class:'form-control'|attr:"Risk"|attr:"rows:1"|attr:"cols:1"|attr:"style:resize:none;" }}
+                            </div>
+                            {% endif %}
+
                             {% if form.gender %}
                             <div class="item-gender {% if form.gender.errors %}has-error{% endif %}">
                                 <label>

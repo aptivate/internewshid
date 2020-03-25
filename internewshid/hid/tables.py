@@ -100,6 +100,11 @@ class ItemTable(tables.Table):
         verbose_name=_('Language'),
         attrs={'th': {'id': 'header-language'}}
     )
+    risk = tables.TemplateColumn(
+        template_name='hid/risk_column.html',
+        verbose_name=_('Risk'),
+        attrs={'th': {'id': 'header-risk'}}
+    )
     contributor = tables.TemplateColumn(
         template_name='hid/contributor_column.html',
         verbose_name=_('Contributor'),

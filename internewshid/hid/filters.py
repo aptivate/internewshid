@@ -59,6 +59,14 @@ class LanguageFilter(object):
             filters.update(language=language)
 
 
+class RiskFilter(object):
+
+    def apply(self, filters, query_dict, **kwargs):
+        risk = query_dict.get('risk', None)
+        if risk is not None:
+            filters.update(risk=risk)
+
+
 class GenderFilter(object):
 
     def apply(self, filters, query_dict, **kwargs):
