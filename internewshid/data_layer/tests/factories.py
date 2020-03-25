@@ -21,6 +21,7 @@ class ItemFactory(DjangoModelFactory):
     collection_type = fuzzy.FuzzyText()
     location = fuzzy.FuzzyText()
     language = fuzzy.FuzzyText()
+    risk = fuzzy.FuzzyText()
     timestamp = fuzzy.FuzzyDateTime(
         timezone.now() + timedelta(days=-365)
     )

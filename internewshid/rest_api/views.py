@@ -31,6 +31,7 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         'location',
         'sub_location',
         'language',
+        'risk',
         'gender',
         'age',
         'contributor',

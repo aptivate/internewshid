@@ -1,0 +1,12 @@
+{% if risks.items %}
+  {% load i18n %}
+  <div class="filter-risk input-group">
+      <label class="control-label" for="risk-selector">{% trans "Risk" %}</label>
+      <select id="location-selector" name="risk" class="form-control">
+        <option value="All Risks" selected="selected">{% trans "All Risks" %}</option>
+        {% for risk in risks.items %}
+          <option value="{{ risk }}"{% if risk == request.GET.risk %} selected="selected"{% endif %}>{{ risk }}</option>
+        {% endfor %}
+      </select>
+  </div>
+{% endif %}

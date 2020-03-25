@@ -37,6 +37,7 @@ def test_kobo_items_imported(importer, django_db_setup, taxonomies):  # noqa
     assert items[2]['translation'] == ''
     assert items[2]['location'] == 'Camp 4'
     assert items[2]['language'] == 'English'
+    assert items[2]['risk'] == '1'
     assert isinstance(items[2]['timestamp'], datetime.datetime)
 
 

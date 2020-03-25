@@ -29,6 +29,10 @@ class AddEditItemForm(forms.Form):
         widget=forms.Textarea,
         required=False
     )
+    risk = forms.CharField(
+        widget=forms.Textarea,
+        required=False
+    )
     gender = forms.CharField(
         widget=forms.Textarea,
         required=False
