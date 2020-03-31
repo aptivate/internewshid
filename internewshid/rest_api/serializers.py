@@ -1,6 +1,6 @@
 from rest_framework import serializers, validators
 
-from data_layer.models import Item
+from data_layer.models import Item, Value
 from taxonomies.models import Taxonomy, Term
 
 from .fields import IgnoreMicrosecondsDateTimeField
@@ -79,6 +79,10 @@ class ItemSerializer(serializers.ModelSerializer):
 
     timestamp = IgnoreMicrosecondsDateTimeField()
     terms = TermSerializer(many=True, required=False)
+    values = serializers.SerializerMethodField()
+
+    def get_values(self, item):
+        return {kv.key.key:kv.value for kv in item.values.all()}
 
     def create(self, validated_data):
         """ Create an item with nested metadata terms."""

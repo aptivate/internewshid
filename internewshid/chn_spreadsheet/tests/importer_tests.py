@@ -139,6 +139,7 @@ def test_order_columns_with_first_row_return_first_row_order(importer):
     assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
+@pytest.mark.skip("importing all columns")  #Now importing all missing columns as key value pairs
 def test_order_columns_ignores_extra_columns_in_first_row(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
     first_row = ['Message', 'Province', 'Sub-Province', 'None', 'None', 'None']
@@ -147,7 +148,7 @@ def test_order_columns_ignores_extra_columns_in_first_row(importer):
 
     assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
-
+@pytest.mark.skip("importing all columns")  #Now importing all missing columns as key value pairs
 def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
     first_row = ['Province', None]
 

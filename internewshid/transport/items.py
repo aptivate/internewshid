@@ -180,13 +180,27 @@ def add_terms(item_id, taxonomy_slug, names):
 
     if status.is_success(response.status_code):
         return response.data
-    else:
-        response.data['status_code'] = response.status_code
-        response.data['terms'] = terms
-        response.data['item_id'] = item_id
-        raise TransportException(response.data)
 
-    return response.data
+    response.data['status_code'] = response.status_code
+    response.data['terms'] = terms
+    response.data['item_id'] = item_id
+    raise TransportException(response.data)
+
+
+def add_keyvalue(item_id, key, value):
+    view = get_view({'post': 'add_keyvalue'})
+
+    keyvalue = {'key': key, 'value': value}
+    request = request_factory.post('', keyvalue)
+    response = view(request, item_pk=item_id)
+
+    if status.is_success(response.status_code):
+        return response.data
+
+    response.data['status_code'] = response.status_code
+    response.data['value'] = keyvalue
+    response.data['item_id'] = item_id
+    raise TransportException(response.data)
 
 
 def delete_all_terms(item_id, taxonomy_slug):

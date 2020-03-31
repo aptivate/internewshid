@@ -30,7 +30,6 @@ def test_kobo_keyvalue_imported(importer, django_db_setup, taxonomies):  # noqa
     assert num_saved > 0
 
     items = transport.items.list_items()['results']
-    pprint(items)
     assert len(items) == num_saved
 
     # default ordering is by timestamp desc
@@ -40,6 +39,8 @@ def test_kobo_keyvalue_imported(importer, django_db_setup, taxonomies):  # noqa
     assert items[2]['language'] == 'English'
     assert items[2]['risk'] == '1'
     assert items[2]['values']['KV1'] == 'one'
+    assert items[1]['values']['KV1'] == '2020-12-12 00:00:00'
+    assert items[0]['values']['KV1'] == '123'
     assert isinstance(items[2]['timestamp'], datetime.datetime)
 
 

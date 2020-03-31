@@ -135,6 +135,11 @@ class Importer(object):
                 if value:
                     self._append_term_to_item(
                         item, 'tags', value.strip())
+            elif col['type'] == 'keyvalue':
+                key, value = converter.convert_value()
+                if value:
+                    self._append_keyvalue_to_item(
+                        item, key, value)
             else:
                 converter.add_to(item)
 
@@ -146,6 +151,10 @@ class Importer(object):
         term = self._get_term_dict(taxonomy, name)
         item.setdefault('terms', []).append(term)
 
+    def _append_keyvalue_to_item(self, item, key, value):
+        keyvalue = {'key': key, 'value': value}
+        item.setdefault('keyvalues', []).append(keyvalue)
+
     def _get_term_dict(self, taxonomy, name):
         return {'taxonomy': taxonomy, 'name': name}
 
@@ -155,11 +164,15 @@ class Importer(object):
         for obj in objects:
             row = obj.pop('_row_number', '')
             terms = obj.pop('terms', [])
+            keyvalues = obj.pop('keyvalues', [])
             try:
                 item = transport.items.create(obj)
                 for term in terms:
                     transport.items.add_terms(
                         item['id'], term['taxonomy'], term['name'])
+                for keyvalue in keyvalues:
+                    transport.items.add_keyvalue(
+                        item['id'], keyvalue['key'], keyvalue['value'])
             except ItemNotUniqueException:
                 pass
 
@@ -254,6 +267,7 @@ class CellConverter(object):
         self.value = value
         self.type = col_spec['type']
         self.field = col_spec['field']
+        self.name = col_spec.get('name')
         self.date_format = col_spec.get('date_format', None)
 
     def add_to(self, object_dict):
@@ -268,7 +282,7 @@ class CellConverter(object):
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x if x else '',
-            'keyvalue': lambda x: x if x else '',
+            'keyvalue': lambda x: (self.name, x) if x else '',
             'protection_concern': lambda x: 'Protection Concern' if x.lower() == 'yes' else ''
         }
         if self.type not in converters:
