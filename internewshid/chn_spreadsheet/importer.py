@@ -1,4 +1,5 @@
 import datetime
+from collections import OrderedDict
 from decimal import Decimal
 
 from django.utils import six
@@ -61,14 +62,21 @@ class Importer(object):
         if first_row:
             col_map = self.get_columns_map()
 
-            for label in first_row[:len(col_map)]:
+            for label in first_row:
                 if label is not None:
+                    stripped_label = ''
                     try:
                         stripped_label = label.strip()
                         columns.append(col_map[stripped_label])
-                    except Exception:
-                        error_msg = _('Unknown column: {0}').format(label)
-                        raise SheetImportException(error_msg)
+                    except KeyError:
+                        #If the column isn't in the importer specification then save the data as a keyvalue.
+                        if stripped_label:
+                            col = OrderedDict([('field', 'values'), ('type', 'keyvalue'), ('name', stripped_label)])
+                            columns.append(col)
+
+                    except Exception as exception:
+                        #error_msg = _('Unknown column: {0}').format(label)
+                        raise SheetImportException(exception)
         else:
             columns = [d.copy() for d in profile_columns]
 
@@ -108,11 +116,11 @@ class Importer(object):
 
             except SheetImportException as e:
                 raise type(e)(str(e) + 'in row {0} '.format(i)) from e
-
         return objects
 
     def process_row(self, values, columns):
         item = {}
+
 
         for val, col in zip(values, columns):
             converter = CellConverter(val, col)
@@ -131,6 +139,8 @@ class Importer(object):
                 converter.add_to(item)
 
         return item
+
+
 
     def _append_term_to_item(self, item, taxonomy, name):
         term = self._get_term_dict(taxonomy, name)
@@ -258,6 +268,7 @@ class CellConverter(object):
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x if x else '',
+            'keyvalue': lambda x: x if x else '',
             'protection_concern': lambda x: 'Protection Concern' if x.lower() == 'yes' else ''
         }
         if self.type not in converters:
