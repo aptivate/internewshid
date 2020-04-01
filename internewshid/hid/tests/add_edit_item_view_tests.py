@@ -662,7 +662,7 @@ def test_item_can_be_deleted_with_post_request(item):
 @pytest.mark.django_db
 def test_item_can_be_updated(view, update_form):
     new_text = "What is the cause of Ebola?"
-    update_form.cleaned_data['body'] = new_text,
+    update_form.cleaned_data['body'] = new_text
 
     view.form_valid(update_form)
     item = transport.items.get(view.item['id'])

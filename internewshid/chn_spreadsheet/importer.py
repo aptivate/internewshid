@@ -1,4 +1,5 @@
 import datetime
+from collections import OrderedDict
 from decimal import Decimal
 
 from django.utils import six
@@ -61,14 +62,21 @@ class Importer(object):
         if first_row:
             col_map = self.get_columns_map()
 
-            for label in first_row[:len(col_map)]:
+            for label in first_row:
                 if label is not None:
+                    stripped_label = ''
                     try:
                         stripped_label = label.strip()
                         columns.append(col_map[stripped_label])
-                    except Exception:
-                        error_msg = _('Unknown column: {0}').format(label)
-                        raise SheetImportException(error_msg)
+                    except KeyError:
+                        # If the column isn't in the importer specification then save the data as a keyvalue.
+                        if stripped_label:
+                            col = OrderedDict([('field', 'values'), ('type', 'keyvalue'), ('name', stripped_label)])
+                            columns.append(col)
+
+                    except Exception as exception:
+                        # error_msg = _('Unknown column: {0}').format(label)
+                        raise SheetImportException(exception)
         else:
             columns = [d.copy() for d in profile_columns]
 
@@ -108,7 +116,6 @@ class Importer(object):
 
             except SheetImportException as e:
                 raise type(e)(str(e) + 'in row {0} '.format(i)) from e
-
         return objects
 
     def process_row(self, values, columns):
@@ -127,6 +134,11 @@ class Importer(object):
                 if value:
                     self._append_term_to_item(
                         item, 'tags', value.strip())
+            elif col['type'] == 'keyvalue':
+                key, value = converter.convert_value()
+                if value:
+                    self._append_keyvalue_to_item(
+                        item, key, value)
             else:
                 converter.add_to(item)
 
@@ -135,6 +147,10 @@ class Importer(object):
     def _append_term_to_item(self, item, taxonomy, name):
         term = self._get_term_dict(taxonomy, name)
         item.setdefault('terms', []).append(term)
+
+    def _append_keyvalue_to_item(self, item, key, value):
+        keyvalue = {'key': key, 'value': value}
+        item.setdefault('keyvalues', []).append(keyvalue)
 
     def _get_term_dict(self, taxonomy, name):
         return {'taxonomy': taxonomy, 'name': name}
@@ -145,11 +161,15 @@ class Importer(object):
         for obj in objects:
             row = obj.pop('_row_number', '')
             terms = obj.pop('terms', [])
+            keyvalues = obj.pop('keyvalues', [])
             try:
                 item = transport.items.create(obj)
                 for term in terms:
                     transport.items.add_terms(
                         item['id'], term['taxonomy'], term['name'])
+                for keyvalue in keyvalues:
+                    transport.items.add_keyvalue(
+                        item['id'], keyvalue['key'], keyvalue['value'])
             except ItemNotUniqueException:
                 pass
 
@@ -244,6 +264,7 @@ class CellConverter(object):
         self.value = value
         self.type = col_spec['type']
         self.field = col_spec['field']
+        self.name = col_spec.get('name')
         self.date_format = col_spec.get('date_format', None)
 
     def add_to(self, object_dict):
@@ -258,6 +279,7 @@ class CellConverter(object):
             'integer': lambda x: int(x),
             'number': lambda x: Decimal(x),
             'taxonomy': lambda x: x if x else '',
+            'keyvalue': lambda x: (self.name, x) if x else '',
             'protection_concern': lambda x: 'Protection Concern' if x.lower() == 'yes' else ''
         }
         if self.type not in converters:
