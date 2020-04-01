@@ -183,7 +183,6 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     @action(methods=['post'], detail=True)
     def add_keyvalue(self, request, item_pk):
         try:
@@ -198,7 +197,6 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
 
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
     @action(methods=['post'], detail=True)
     def delete_all_terms(self, request, item_pk):

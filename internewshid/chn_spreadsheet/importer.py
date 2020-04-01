@@ -69,13 +69,13 @@ class Importer(object):
                         stripped_label = label.strip()
                         columns.append(col_map[stripped_label])
                     except KeyError:
-                        #If the column isn't in the importer specification then save the data as a keyvalue.
+                        # If the column isn't in the importer specification then save the data as a keyvalue.
                         if stripped_label:
                             col = OrderedDict([('field', 'values'), ('type', 'keyvalue'), ('name', stripped_label)])
                             columns.append(col)
 
                     except Exception as exception:
-                        #error_msg = _('Unknown column: {0}').format(label)
+                        # error_msg = _('Unknown column: {0}').format(label)
                         raise SheetImportException(exception)
         else:
             columns = [d.copy() for d in profile_columns]
@@ -121,7 +121,6 @@ class Importer(object):
     def process_row(self, values, columns):
         item = {}
 
-
         for val, col in zip(values, columns):
             converter = CellConverter(val, col)
 
@@ -144,8 +143,6 @@ class Importer(object):
                 converter.add_to(item)
 
         return item
-
-
 
     def _append_term_to_item(self, item, taxonomy, name):
         term = self._get_term_dict(taxonomy, name)

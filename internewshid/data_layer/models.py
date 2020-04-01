@@ -13,6 +13,7 @@ try:
 except ImportError:
     raise ImproperlyConfigured('Could not import django-picklefield.')
 
+
 class Key(models.Model):
 
     key = models.CharField(

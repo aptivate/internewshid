@@ -111,7 +111,7 @@ def create(item):
 def update(id, item):
     """ Update an Item from the given dict """
     view = get_view({'put': 'update'})
-    request = request_factory.put("", item)
+    request = request_factory.put("", item, format='json')
     response = view(request, pk=id)
     if status.is_success(response.status_code):
         return response.data
