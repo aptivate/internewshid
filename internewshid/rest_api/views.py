@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework_bulk.mixins import BulkDestroyModelMixin
 from rest_pandas import PandasView
 
-from data_layer.models import Item
+from data_layer.models import Item, Key, Value
 from taxonomies.models import Taxonomy, Term
 
 from .serializers import (
@@ -179,6 +179,21 @@ class ItemViewSet(viewsets.ModelViewSet, BulkDestroyModelMixin):
             terms.append(term)
 
         item.apply_terms(terms)
+
+        serializer = ItemSerializer(item)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['post'], detail=True)
+    def add_keyvalue(self, request, item_pk):
+        try:
+            item = Item.objects.get(pk=item_pk)
+        except Item.DoesNotExist as e:
+            data = {'detail': str(e)}
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        keyvalue = request.data
+        key, _ = Key.objects.get_or_create(key=keyvalue['key'])
+        value = Value.objects.create(key=key, value=keyvalue['value'], message=item)
 
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
