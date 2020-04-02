@@ -4,11 +4,11 @@
 <form action="{% url "sources-upload" %}"
       method="post"
       enctype="multipart/form-data"
-      class="auto-upload-file nav navbar-form navbar-left text-center">
+      class="auto-upload-file nav navbar-form">
   {% csrf_token %}
   {% bootstrap_form upload_form show_label=False %}
   <li>
-    <a class="btn upload-button pull-left" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}">
+    <a class="btn upload-button pull-left btn-block" type="button" value="Upload" href="{% url "tabbed-page" name="main" tab_name="all" %}">
       <span class="fa fa-upload fa-fw"></span>
       {% blocktrans %}Upload{% endblocktrans %}
     </a>
