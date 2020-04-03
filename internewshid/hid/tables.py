@@ -21,7 +21,7 @@ class ItemTable(tables.Table):
         template_name = 'hid/table.html'
         order_by = '-timestamp'
         row_attrs = {
-            "class": lambda record: f"risk risk-{str(record['risk']).lower().replace(' ', '-')}" if (record['risk']) else ''
+            "class": lambda record: f"risk {str(record['risk']).lower().replace(' ', '-')}" if (record['risk']) else ''
         }
 
     select_item = tables.TemplateColumn(
