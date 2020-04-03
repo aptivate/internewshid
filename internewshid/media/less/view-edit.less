@@ -153,31 +153,38 @@ thead{
         top: 0;
         background-color: @brand-secondary;
         z-index: @zindex-navbar-fixed;
+        color: fade(#fff, 80%);
+        vertical-align: middle!important;
+        padding: 0;
 
         &.orderable {
-            .asc, .desc{
+            // ORDERED COLUMN HILITE
+            &.asc, &.desc{
                 background-color: @brand-primary;
+
+                a:after{
+                    font-family: 'fontawesome';
+                    margin-left: 5px;
+                    color: #fff;
+                }
             }
+            &.desc a:after{ content: '\f0ab';}
+            &.asc a:after{ content: '\f0aa';}
 
             a{
+                padding: @table-cell-padding;
                 color: #fff;
                 text-decoration: none!important;
+
+                &:hover, &:focus{
+                    background-color: fade(@brand-primary, 80%);
+                    color: #fff;
+                }
             }
-            &.desc a:after,
-            &.asc a:after{
-                font-family: 'fontawesome';
-                margin-left: 5px;
-                color: #fff;
-            }
-            &.desc a:after{
-                content: '\f0ab';
-            }
-            &.asc a:after{
-                content: '\f0aa';
-            }
-        }
-        &.unorderable {
-            color: #fff;
+
+
+
+
         }
         /* set column widths
         Definitions could be set in the admin for flexibility in deployments
