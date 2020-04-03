@@ -35,7 +35,7 @@ def test_kobo_keyvalue_imported(importer, django_db_setup, taxonomies):  # noqa
     assert items[4]['translation'] == ''
     assert items[4]['location'] == 'Camp 4'
     assert items[4]['language'] == 'English'
-    assert items[4]['risk'] == '1'
+    assert items[4]['risk'] == 'low risk'
     assert items[4]['values']['KV1'] == 'one'
     assert items[3]['values']['KV1'] == '2020-12-12 00:00:00'
     assert items[0]['values']['KV1'] == '123'
