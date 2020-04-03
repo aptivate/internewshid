@@ -223,6 +223,9 @@ class AddEditItemView(FormView):
 
         # Add item and form mode to the context
         context['item'] = self.item
+        # Stashing values in the context because of a naming clash with a method on self.item
+        # prevent us from referencing values directly in the template
+        context['keyvalues'] = self.item['values']
         context['update'] = self.item is not None
 
         # Add the type label to the context

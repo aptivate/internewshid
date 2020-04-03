@@ -12,7 +12,6 @@
         <div class="panel panel-gray panel-rounded">
             <div class="panel-body">
                 <div class="item-attributes">
-
                     {% if form.category %}
                     <div class="item-category form-group input-group {% if form.category.errors %}has-error{% endif %}">
                         <label class="control-label">
@@ -207,22 +206,32 @@
                                 {{ form.collection_type|add_class:'form-control'|attr:"Collection Type"|attr:"rows:1"|attr:"cols:3"|attr:"style:resize:none;" }}
                             </div>
                             {% endif %}
-                        </div>
 
-                    </div>
-
-                    {% if form.translation %}
-                    <div class="item-translation-text {% if form.translation.errors %}has-error{% endif %}">
-                        <label>
-                            {% trans "Translation" %}
-                            {% if form.translation.errors %}
-                            <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                            {% if keyvalues %}
+                            <div class="item-keyvalues">
+                                {% for kv in keyvalues.items %}
+                                    <div class="item-keyvalue item-keyvalue-{{ kv.0 }}">
+                                        <label for="item-keyvalue-{{ kv.0 }}">{{ kv.0 }}</label>
+                                        <input id="item-keyvalue-{{ kv.0 }}" class="item-keyvalue-value" value="{{ kv.1 }}" disabled/>
+                                    </div>
+                                {% endfor %}
+                            </div>
                             {% endif %}
-                        </label>
-                        {{ form.translation|add_class:'form-control'|attr:_("placeholder:Type your translation text here") }}
-                    </div>
-                    {% endif %}
+
+                        </div>
                 </div>
+
+                {% if form.translation %}
+                <div class="item-translation-text {% if form.translation.errors %}has-error{% endif %}">
+                    <label>
+                        {% trans "Translation" %}
+                        {% if form.translation.errors %}
+                        <span class='help-block'>({{ form.translation.errors|join:", " }})</span>
+                        {% endif %}
+                    </label>
+                    {{ form.translation|add_class:'form-control'|attr:_("placeholder:Type your translation text here") }}
+                </div>
+                {% endif %}
 
                 {% bootstrap_button _("Delete feedback") button_type="submit" name="action" value="delete" button_class="btn btn-danger btn-link" %}
 

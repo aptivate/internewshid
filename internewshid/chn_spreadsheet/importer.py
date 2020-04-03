@@ -135,10 +135,10 @@ class Importer(object):
                     self._append_term_to_item(
                         item, 'tags', value.strip())
             elif col['type'] == 'keyvalue':
-                key, value = converter.convert_value()
-                if value:
+                kv = converter.convert_value()
+                if kv:
                     self._append_keyvalue_to_item(
-                        item, key, value)
+                        item, kv[0], kv[1])
             else:
                 converter.add_to(item)
 
