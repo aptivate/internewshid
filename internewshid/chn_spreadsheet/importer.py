@@ -314,6 +314,7 @@ class CellConverter(object):
             date_time = datetime.datetime.strptime(self.value,
                                                    self.date_format)
         except Exception:
-            date_time = dateutil.parser.parse(self.value)
+            date_time = dateutil.parser.parse(
+                self.value, ignoretz=True, fuzzy=True)
 
         return date_time
