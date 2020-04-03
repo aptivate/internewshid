@@ -533,8 +533,7 @@ def test_add_new_item_returns_template_response(an_item_type):
         list_term.return_value = [an_item_type]
         (view, response) = make_request(
             AddEditItemView,
-            'add-item',
-            kwargs={'item_type': 'an-item-type'},
+            'add-item',            kwargs={'item_type': 'an-item-type'},
         )
 
     assert type(response) is TemplateResponse
