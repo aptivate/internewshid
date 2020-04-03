@@ -20,6 +20,9 @@ class ItemTable(tables.Table):
         attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
         template_name = 'hid/table.html'
         order_by = '-timestamp'
+        row_attrs = {
+            "class": lambda record: f"risk risk-{record['risk']}" if (record['risk']) else ''
+        }
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
