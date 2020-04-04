@@ -14,6 +14,45 @@ except ImportError:
     raise ImproperlyConfigured('Could not import django-picklefield.')
 
 
+class Key(models.Model):
+
+    key = models.CharField(
+        verbose_name=_('Key'),
+        max_length=190,
+        help_text=_('Key'),
+        unique=True,
+        db_index=True,
+    )
+
+    def __str__(self):
+        return self.key
+
+
+class Value(models.Model):
+
+    value = models.CharField(
+        verbose_name=_('Value'),
+        max_length=190,
+        help_text=_('Value'),
+    )
+
+    key = models.ForeignKey(
+        Key,
+        verbose_name=_('Key'),
+        on_delete=models.CASCADE
+    )
+
+    message = models.ForeignKey(
+        "Message",
+        related_name='values',
+        verbose_name=_('Message'),
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.value
+
+
 class DataLayerModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)

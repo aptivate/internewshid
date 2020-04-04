@@ -533,8 +533,7 @@ def test_add_new_item_returns_template_response(an_item_type):
         list_term.return_value = [an_item_type]
         (view, response) = make_request(
             AddEditItemView,
-            'add-item',
-            kwargs={'item_type': 'an-item-type'},
+            'add-item',            kwargs={'item_type': 'an-item-type'},
         )
 
     assert type(response) is TemplateResponse
@@ -662,7 +661,7 @@ def test_item_can_be_deleted_with_post_request(item):
 @pytest.mark.django_db
 def test_item_can_be_updated(view, update_form):
     new_text = "What is the cause of Ebola?"
-    update_form.cleaned_data['body'] = new_text,
+    update_form.cleaned_data['body'] = new_text
 
     view.form_valid(update_form)
     item = transport.items.get(view.item['id'])
