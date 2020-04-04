@@ -26,8 +26,14 @@ table,
       color: #fff;
     }
   }
+  .form-control {
+	  line-height: 1em;
+	  height: inherit;
+	  padding: 5px;
+	  font-size: inherit;
+	  width: auto;
+  }
 }
-
 
 .table-no-border > thead > tr > th,
 .table > tbody > tr > th,
@@ -41,113 +47,198 @@ table,
     background-color: #fff;
 }
 
+// table headers
 thead{
-  background-color: @brand-secondary;
+  	background-color: @brand-secondary;
 	text-transform: uppercase;
 	font-size: 1rem;
 	th {
-        border-bottom: 0!important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        resize: horizontal;
-        white-space: nowrap;
-        position: sticky;
-        top: 0;
-        background-color: @brand-secondary;
-        z-index: @zindex-navbar-fixed;
-        color: fade(#fff, 80%);
-        vertical-align: middle!important;
-        padding: 0;
+	    border-bottom: 0!important;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    resize: horizontal;
+	    white-space: nowrap;
+	    position: sticky;
+	    top: 0;
+	    background-color: @brand-secondary;
+	    z-index: @zindex-navbar-fixed;
+	    color: fade(#fff, 80%);
+	    vertical-align: middle!important;
+	    padding: 0;
 
-        &.orderable {
-            // ORDERED COLUMN HILITE
-            &.asc, &.desc{
-                background-color: @brand-primary;
+	    &.orderable {
+	        // ORDERED COLUMN HILITE
+	        &.asc, &.desc{
+	            background-color: @brand-primary;
 
-                a:after{
-                    font-family: 'fontawesome';
-                    margin-left: 5px;
-                    color: #fff;
-                }
-            }
-            &.desc a:after{ content: '\f0ab';}
-            &.asc a:after{ content: '\f0aa';}
+	            a:after{
+	                font-family: 'fontawesome';
+	                margin-left: 5px;
+	                color: #fff;
+	            }
+	        }
+	        &.desc a:after{ content: '\f0ab';}
+	        &.asc a:after{ content: '\f0aa';}
 
-            a{
-                padding: @table-cell-padding;
-                color: #fff;
-                text-decoration: none!important;
+	        a{
+	            padding: @table-cell-padding;
+	            color: #fff;
+	            text-decoration: none!important;
 
-                &:hover, &:focus{
-                    background-color: fade(@brand-primary, 80%);
-                    color: #fff;
-                }
-            }
+	            &:hover, &:focus{
+	                background-color: fade(@brand-primary, 80%);
+	                color: #fff;
+	            }
+	        }
+	    }
+	    /* set column widths
+	    Definitions could be set in the admin for flexibility in deployments
+	    */
 
-
-
-
-        }
-        /* set column widths
-        Definitions could be set in the admin for flexibility in deployments
-        */
-
-        &#header-select{width: 4em}
-        &#header-imported{}
-        &#header-created{width: 10em}
-        &#header-feedback{}
-        &#header-translation{}
-        &#header-theme{width: 12em}
-        &#header-type{width:8em}
-        &#header-tag{width: 8%}
-        &#header-gender{width: 6em}
-        &#header-age{width: 4em}
-        &#header-location{width: 8%}
-        &#header-sub-location{width: 8%}
-        &#header-contributor{width: 9em}
-        &#header-collection-type{width: 6%}
-    }
+	    &#header-select{width: 4em}
+	    &#header-imported{}
+	    &#header-created{width: 10em}
+	    &#header-feedback{}
+	    &#header-translation{}
+	    &#header-theme{width: 12em}
+	    &#header-type{width:8em}
+	    &#header-tag{width: 8%}
+	    &#header-gender{width: 6em}
+	    &#header-age{width: 4em}
+	    &#header-location{width: 8%}
+	    &#header-sub-location{width: 8%}
+	    &#header-contributor{width: 9em}
+	    &#header-collection-type{width: 6%}
+	}
 
 }
+
 
 tbody {
     font-size: @font-size-small;
-	td {
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
-        vertical-align: middle!important;
+
+	tr{
+		transition: background-color 0.25s ease;
+
+		td {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			vertical-align: middle!important;
+
+			&.created, &.timestamp {
+				color:@gray;
+				font-size:@font-size-small;
+			}
+
+			// default select icons
+			div.select-item-id-checkbox {
+				//Hover
+				> input[type="checkbox"] + label:hover > .fa-check-circle:before {
+					color: @gray-darker;
+				}
+
+			   > input[type="checkbox"] + .fa-check-circle:before,
+			   > input[type="checkbox"] + label > .fa-check-circle:before {
+				   font-size:25px;
+				   content: "\f058";
+				   color:@gray;
+				   cursor: pointer;
+			   }
+			// selected
+			   > input[type="checkbox"]:checked + .fa-check-circle:before,
+			   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+				   color:#fff!important;
+			   }
+
+			   > input[type="checkbox"] {
+				 display:none;
+			   }
+			}
+
+		}
+
+
+		&:hover{
+			background-color: @no-risk-hover;
+
+			&.low-risk{
+		        background-color: @risk-1-hover!important;
+		    }
+		    &.medium-risk{
+		        background-color: @risk-2-hover!important;
+		    }
+		    &.high-risk{
+		        background-color: @risk-3-hover!important;
+		    }
+		    &.bad-data{
+		        background-color: @bad-data-hover!important;
+		    }
+		}
+
+		&.selected{
+			background-color: @no-risk-bg!important;
+			box-shadow: 0px 2px 18px 0px rgba(0,0,0,0.5);
+
+			&.low-risk{
+		        background-color: @risk-1-bg!important;
+		    }
+		    &.medium-risk{
+		        background-color: @risk-2-bg!important;
+		    }
+		    &.high-risk{
+		        background-color: @risk-3-bg!important;
+		    }
+		    &.bad-data{
+		        background-color: @bad-data-bg!important;
+		    }
+
+			td{
+				color: #fff;
+				z-index: 10;
+			}
+		}
+
+		&.low-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-1;
+		    }
+		}
+
+		&.medium-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-2;
+		    }
+		}
+		&.high-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-3;
+			}
+		}
+
+		&.bad-data .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@bad-data;
+		    }
+
+		}
+
 	}
-    td.created, td.timestamp {
-        color:@gray;
-        font-size:@font-size-small;
-    }
-    select option{
-        line-height: 2;
-        padding: 10px;
-        &:hover{
-            background-color: @brand-primary;
-            color: #fff;
-        }
-    }
 }
 
-.table-striped > tbody > tr.selected.odd,
-.table-striped > tbody > tr.selected.even{
-    background-color: #e3edf8;
-    transition: background-color 0.25s ease;
-    &:hover{
-        background-color: darken(#e3edf8, 10%);
-    }
-}
+// To be refactored below...
 
-
-.table .form-control {
-    line-height: 1em;
-    height: inherit;
-    padding: 5px;
-    font-size: inherit;
-    width: auto;
+select option{
+	line-height: 2;
+	padding: 10px;
+	&:hover{
+		background-color: @brand-primary;
+		color: #fff;
+	}
 }
 
 @media(max-width:@screen-sm){
@@ -215,9 +306,6 @@ tbody {
   }
 }
 
-
-
-
 //circle navigation
 
 .pagination-circle-nav .btn-primary,
@@ -262,28 +350,6 @@ th.select_action {
   text-align:center;
 }
 
-
-.select-item-id-checkbox {
-   > input[type="checkbox"] + .fa-check-circle:before,
-   > input[type="checkbox"] + label > .fa-check-circle:before {
-       font-size:25px;
-       content: "\f058";
-       color:@gray;
-       &:hover{
-           color: red;
-       }
-   }
-
-   > input[type="checkbox"]:checked + .fa-check-circle:before,
-   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
-       color:@brand-primary;
-   }
-
-   > input[type="checkbox"] {
-     display:none;
-   }
-}
-
 @-moz-document url-prefix() {
     input[type="checkbox"] {
        background-image:none;
@@ -291,20 +357,16 @@ th.select_action {
   }
 
 input[type="checkbox"]:hover {
-   background-position:top center;
+   	background-position:top center;
     background-color:@brand-primary;
 }
 
 input[type="checkbox"]:checked {
- background-color:@brand-primary;
- background-position:top right;
- outline:0;
- border:none;
+	background-color:@brand-primary;
+	background-position:top right;
+	outline:0;
+	border:none;
 }
-
-
-
-
 
 .missing-body {
   color: @brand-danger;
