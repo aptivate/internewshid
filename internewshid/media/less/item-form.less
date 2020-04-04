@@ -14,7 +14,10 @@
     color: #fff;
 }
 
-
+.form-control[disabled], fieldset[disabled] .form-control{
+    color: @gray-base;
+    border: none;
+}
 // View Edit feedback item
 
 .item-attributes{
@@ -33,7 +36,7 @@
 
 
         label{
-            font-size: @font-size-small;
+            font-size: smaller;
             font-weight: bold;
             text-transform: capitalize;
 			margin:0 1rem 0 0;
@@ -114,19 +117,21 @@
         display: flex;
         flex-wrap: wrap;
         padding: 1rem;
+
         [class^="item-"]{
             flex-basis: 50%;
-             display: flex;
+            display: flex;
+            align-items: baseline;
+
             label{
                 flex-basis: 45%;
-                font-size: 12px;
+                font-size: smaller;
             }
+
             .form-control{
-                font-size: 12px;
                 height: auto;
                 background-color: rgba(255,255,255,0.7);
-                border: none;
-                padding: 0;
+                padding: @table-cell-padding;
                 box-shadow: none;
                 margin: 0 5px 10px;
                 &:focus,
