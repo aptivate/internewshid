@@ -116,17 +116,50 @@ body {
       clear: none;
   }
 }
-
+.dropdown-menu li{
+    border-bottom: solid 1px #ccc;
+    &:last-child{
+        border-bottom:none;
+    }
+}
 // Utilities Upload/Export/Settings
 .nav-utilities{
     font-size: @font-size-medium;
 
     .dropdown-menu {
+        font-size: @font-size-medium;
         z-index: @zindex-upload-dropdown;
+        margin: 0;
+        padding: 0;
 
         & > li > a:hover,
         & > li > a:focus {
             background-image: none;
+        }
+        .auto-upload-file{
+            padding: 0;
+            margin: 0;
+            .form-group{
+                display: block;
+                div{
+                    display: flex;
+                    flex-direction: column;
+                    .radio{
+                        display: block;
+                        label{
+                            display: block;
+                            padding: @table-cell-padding;
+                            border-bottom: solid 1px #ccc;
+                            &:hover,
+                            &:focus{
+                                background-color: @brand-primary;
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
