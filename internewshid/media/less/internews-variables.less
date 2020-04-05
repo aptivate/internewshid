@@ -23,6 +23,25 @@
 @brand-warning:         #F29E30;
 @brand-danger:          #D8502F;
 
+@no-risk:               #e3edf8;
+@no-risk-bg:            darken(@no-risk, 30%);
+@no-risk-hover:         lighten(@no-risk, 30%);
+
+@risk-1:                 #56ac4a;
+@risk-1-bg:              #56ac4a !important;
+@risk-1-hover:           lighten(@risk-1, 30%);
+
+@risk-2:                 orange;
+@risk-2-bg:              orange;
+@risk-2-hover:           lighten(@risk-2, 30%);
+
+@risk-3:                 #ea4444;
+@risk-3-bg:              #ea4444;
+@risk-3-hover:           lighten(@risk-3, 30%);
+
+@bad-data:               #bcb0c1;
+@bad-data-bg:            #bcb0c1;
+@bad-data-hover:         #d1d1d2;
 
 //== Scaffolding
 //
@@ -135,7 +154,7 @@
 //** Background color used for `.table-striped`.
 @table-bg-accent:               #f9f9f9;
 //** Background color used for `.table-hover`.
-@table-bg-hover:                #f9f9e0;
+@table-bg-hover:                #c9e5f5;
 @table-bg-active:               @table-bg-hover;
 
 //** Border color for table and cell borders.
@@ -376,7 +395,7 @@
 // Navbar links
 @navbar-default-link-color:                @gray-dark;
 @navbar-default-link-hover-color:          @brand-secondary;
-@navbar-default-link-hover-bg:             darken(@navbar-default-bg, 10%);
+@navbar-default-link-hover-bg:             fade(@brand-primary, 20%);
 @navbar-default-link-active-color:         @navbar-default-link-hover-color;
 @navbar-default-link-active-bg:            @navbar-default-link-hover-bg;
 @navbar-default-link-disabled-color:       #ccc;
@@ -650,6 +669,7 @@
 //== Progress bars
 //
 //##
+
 
 //** Background color of the whole progress component
 @progress-bg:                 #ccc;

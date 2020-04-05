@@ -1,0 +1,376 @@
+// View/edit
+
+
+// Tables =====================================================================
+
+table,
+.table {
+	table-layout: fixed;
+	background-color:white;
+
+  a:not(.btn) {
+    text-decoration: none;
+  }
+
+  .dropdown-menu a {
+    text-decoration: none;
+  }
+
+  .success,
+  .warning,
+  .danger,
+  .info {
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
+  }
+  .form-control {
+	  line-height: 1em;
+	  height: inherit;
+	  padding: 5px;
+	  font-size: inherit;
+	  width: auto;
+  }
+}
+
+.table-no-border > thead > tr > th,
+.table > tbody > tr > th,
+.table-no-border > tfoot > tr > th,
+.table > thead > tr > td,
+.table-no-border > tbody > tr > td,
+.table > tfoot > tr > td {
+    border: none;
+}
+.table-background{
+    background-color: #fff;
+}
+
+// table headers
+thead{
+  	background-color: @brand-secondary;
+	text-transform: uppercase;
+	font-size: 1rem;
+	th {
+	    border-bottom: 0!important;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    resize: horizontal;
+	    white-space: nowrap;
+	    position: sticky;
+	    top: 0;
+	    background-color: @brand-secondary;
+	    z-index: @zindex-navbar-fixed;
+	    color: fade(#fff, 80%);
+	    vertical-align: middle!important;
+	    padding: 0;
+
+	    &.orderable {
+			&:hover, &:focus{
+				background-color: fade(@brand-primary, 80%);
+			}
+
+	        // ORDERED COLUMN HILITE
+	        &.asc, &.desc{
+	            background-color: @brand-primary;
+
+	            a:after{
+	                font-family: 'fontawesome';
+	                margin-left: 5px;
+	                color: #fff;
+	            }
+	        }
+	        &.desc a:after{ content: '\f0ab';}
+	        &.asc a:after{ content: '\f0aa';}
+
+	        a{
+	            padding: @table-cell-padding;
+	            color: #fff;
+	            text-decoration: none!important;
+
+	            &:hover, &:focus{
+	                color: fade(#fff, 80%);
+	            }
+	        }
+	    }
+	    /* set column widths
+	    Definitions could be set in the admin for flexibility in deployments
+	    */
+
+	    &#header-select{width: 4em}
+	    &#header-created{width:6%}
+	    &#header-feedback{}
+	    &#header-translation{}
+	    &#header-theme{width: 12em}
+	    &#header-tag{width: 8%}
+		&#header-type{width:8em}
+	    &#header-gender{width: 6em}
+	    &#header-age{width: 6em}
+	    &#header-location{width: 7%}
+		&#header-language{width:7%}
+	    &#header-contributor{width: 7%}
+	    &#header-collection-type{width: 7%}
+		&#header-external-id{width:5%}
+	}
+
+}
+
+
+tbody {
+    font-size: @font-size-small;
+
+	tr{
+		transition: background-color 0.25s ease;
+
+		td {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			vertical-align: middle!important;
+
+			&.created, &.timestamp {
+				color:@gray;
+				font-size:@font-size-small;
+			}
+
+			// default select icons
+			div.select-item-id-checkbox {
+				//Hover
+				> input[type="checkbox"] + label:hover > .fa-check-circle:before {
+					color: @gray-darker;
+				}
+
+			   > input[type="checkbox"] + .fa-check-circle:before,
+			   > input[type="checkbox"] + label > .fa-check-circle:before {
+				   font-size:25px;
+				   content: "\f058";
+				   color:@gray;
+				   cursor: pointer;
+			   }
+			// selected
+			   > input[type="checkbox"]:checked + .fa-check-circle:before,
+			   > input[type="checkbox"]:checked + label > .fa-check-circle:before {
+				   color:#fff!important;
+			   }
+
+			   > input[type="checkbox"] {
+				 display:none;
+			   }
+			}
+
+		}
+
+
+		&:hover{
+			background-color: @no-risk-hover;
+
+			&.low-risk{
+		        background-color: @risk-1-hover!important;
+		    }
+		    &.medium-risk{
+		        background-color: @risk-2-hover!important;
+		    }
+		    &.high-risk{
+		        background-color: @risk-3-hover!important;
+		    }
+		    &.bad-data{
+		        background-color: @bad-data-hover!important;
+		    }
+		}
+
+		&.selected{
+			background-color: @no-risk-bg!important;
+			box-shadow: 0px 2px 18px 0px rgba(0,0,0,0.5);
+
+			&.low-risk{
+		        background-color: @risk-1-bg!important;
+		    }
+		    &.medium-risk{
+		        background-color: @risk-2-bg!important;
+		    }
+		    &.high-risk{
+		        background-color: @risk-3-bg!important;
+		    }
+		    &.bad-data{
+		        background-color: @bad-data-bg!important;
+		    }
+
+			td{
+				color: #fff;
+				z-index: 10;
+			}
+		}
+
+		&.low-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-1;
+		    }
+		}
+
+		&.medium-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-2;
+		    }
+		}
+		&.high-risk .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@risk-3;
+			}
+		}
+
+		&.bad-data .select-item-id-checkbox {
+		   > input[type="checkbox"] + .fa-check-circle:before,
+		   > input[type="checkbox"] + label > .fa-check-circle:before {
+		       color:@bad-data;
+		    }
+
+		}
+
+	}
+}
+
+// To be refactored below...
+
+select option{
+	line-height: 2;
+	padding: 10px;
+	&:hover{
+		background-color: @brand-primary;
+		color: #fff;
+	}
+}
+
+@media(max-width:@screen-sm){
+  select.form-control[name="batchaction-bottom"],
+  select.form-control[name="batchaction-top"]{
+    width:45%!important;
+  }
+}
+
+
+
+.select_action > label {
+  margin-bottom:0;
+}
+
+.view-items-actions {
+  position:relative;
+  bottom:65px;
+  padding-right:0;
+}
+
+
+// Table pagination
+.view-items-form {
+  .pagination-wrapper {
+    color:white;
+    display:flex;
+    margin-bottom:10px;
+    justify-content:space-between;
+
+    > .box {
+      flex:1;
+      display:inline-flex;
+      justify-content:center;
+    }
+
+    > .box:first-child > span {
+      margin-right:auto;
+    }
+
+    > .box:last-child > span {
+      margin-left:auto;
+    }
+
+    > .pagination-pages {
+      flex-grow:2;
+    }
+  }
+
+  .pagination {
+    margin:0;
+    padding:0;
+    li {
+      padding:10px;
+
+      > a {
+        position:static;
+        float:none;
+        color:white;
+        background-color:@brand-secondary;
+        border:none;
+        padding:0;
+      }
+    }
+  }
+}
+
+//circle navigation
+
+.pagination-circle-nav .btn-primary,
+.pagination-circle-nav > li:first-child > a {
+  border:none;
+  padding:7px;
+  background-color:@brand-primary;
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+  float:inherit;
+}
+
+// Add/upload buttons
+/*
+.panel-heading .btn-group .btn {
+    margin-left: 15px;
+}
+*/
+
+// Button header (and footer) for tables
+.panel-body form .table-button-group {
+    margin-bottom: @padding-base-vertical;
+}
+
+.panel-body form .table-button-group .form-control {
+    float: left;
+    width: auto;
+    height: auto;
+    padding: @padding-xs-horizontal @padding-base-vertical;
+    margin-right: @padding-small-horizontal;
+}
+
+.panel-body .table-button-group select option[default] {
+    font-weight: bold;
+}
+
+// Checkboxes
+
+td.select_action,
+th.select_action {
+  background-color:rgba(0,0,0,0.05);
+  text-align:center;
+}
+
+@-moz-document url-prefix() {
+    input[type="checkbox"] {
+       background-image:none;
+    }
+  }
+
+input[type="checkbox"]:hover {
+   	background-position:top center;
+    background-color:@brand-primary;
+}
+
+input[type="checkbox"]:checked {
+	background-color:@brand-primary;
+	background-position:top right;
+	outline:0;
+	border:none;
+}
+
+.missing-body {
+  color: @brand-danger;
+}
