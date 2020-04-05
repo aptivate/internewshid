@@ -1,0 +1,98 @@
+// Search Filters
+.filter-container {
+  display: flex;
+  background-color: #fff;
+  padding: .5rem 0 .5rem 1rem;
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1vh;
+
+    [class^="filter-"] {
+      display: flex;
+      margin-right: 1vw;
+      margin-top: 1vh;
+      align-items: baseline;
+
+
+      label {
+        font-size: @font-size-small;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0 0.5rem 0 0;
+        padding: 0.25rem 0 0.125rem 1rem;
+      }
+
+      // input & selects
+      .form-control {
+        border-radius: 8px !important;
+        font-size: @font-size-small;
+        padding: .1rem .5rem;
+        color: @brand-primary;
+        height: 3rem;
+        width: auto;
+        max-width: 11em;
+      }
+
+      // add space between when two or more input boxes are adjacent
+      .form-control + .form-control {
+        margin-left: 1.5%;
+        flex-wrap: nowrap;
+      }
+
+      // Apply and cancel buttons
+      &:last-child {
+        border-right: none;
+        flex-wrap: nowrap;
+        padding-right: 0;
+      }
+    }
+
+    .filter-dates {
+      > input[type=date] {
+        line-height: inherit;
+        flex-basis: 48%;
+      }
+    }
+
+    .filter-age{
+      > input[type=number] {
+        line-height: inherit;
+        max-width: 4em;
+      }
+    }
+  }
+
+  .filter-buttons {
+    display: flex;
+    align-items: center;
+
+    button[name="button-apply"] {
+      background-color: @brand-primary;
+      color: #fff;
+      font-weight: bold;
+      line-height: 1.8;
+      border-radius: @border-radius-large;
+      border: solid 1px @brand-primary;
+      white-space: nowrap;
+      &:hover,
+      &:focus{
+        background-color: lighten(@brand-primary, 10%);
+      }
+      &:active{
+        background: darken(@brand-primary, 10%)
+      }
+    }
+
+    button[name="button-clear"] {
+      font-size: smaller;
+    }
+  }
+}
+
+
+@media(max-width:@screen-sm){
+    [class^="filter-"]{
+        flex-direction: column!important;}
+}

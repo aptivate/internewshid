@@ -1,0 +1,130 @@
+
+// Panel customisation
+
+.huge {
+    font-size: 40px;
+}
+
+.panel  {
+  border:none;
+  border-color:transparent;
+  .box-shadow(0px, 0px, 5px, 4);
+}
+
+.panel-heading {
+ font-weight:bold;
+ border:none;
+ & h2 {
+    display: inline;
+    font-size: @font-size-base;
+    font-weight: bold;
+ }
+ .fa {
+   font-size:22px;
+   position:relative;
+   top:3px;
+ }
+}
+
+.panel-heading-large {
+  padding:25px 15px;
+}
+
+.panel-blue, .panel-primary {
+    border-color: @brand-primary;
+    .panel-heading {
+        border-color: @brand-primary;
+        color: white;
+        background-color: @brand-primary;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-success;
+        &:hover {
+            color: darken(@brand-success, 15%);
+        }
+    }
+}
+
+.panel-green {
+    border-color: @brand-success;
+    .panel-heading {
+        border-color: @brand-success;
+        color: white;
+        background-color: @brand-success;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-success;
+        &:hover {
+            color: darken(@brand-success, 15%);
+        }
+    }
+}
+
+.panel-red {
+    border-color: @brand-danger;
+    .panel-heading {
+        border-color: @brand-danger;
+        color: white;
+        background-color: @brand-danger;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-danger;
+        &:hover {
+            color: darken(@brand-danger, 15%);
+        }
+    }
+}
+
+.panel-yellow {
+    border-color: @brand-warning;
+    .panel-heading {
+        border-color: @brand-warning;
+        color: white;
+        background-color: @brand-warning;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-warning;
+        &:hover {
+            color: darken(@brand-warning, 15%);
+        }
+    }
+}
+
+.panel-gray {
+    border-color: @gray;
+    background-color: @gray-lightest;
+    .panel-heading {
+        border-color: @gray;
+        color: white;
+        background-color: @gray;
+        .fa {
+        color:white;
+      }
+    }
+    a {
+        color: @brand-warning;
+        &:hover {
+            color: darken(@brand-warning, 15%);
+        }
+    }
+}
+
+.panel-body-list-table{
+    padding: 0;
+}
+
+.panel-rounded{
+    border-radius: 10px;
+}

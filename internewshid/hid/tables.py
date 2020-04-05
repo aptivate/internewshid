@@ -17,7 +17,7 @@ class NamedCheckBoxColumn(tables.CheckBoxColumn):
 class ItemTable(tables.Table):
 
     class Meta:
-        attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
+        attrs = {'class': 'table table-hover table-striped', 'cols': '14'}
         template_name = 'hid/table.html'
         order_by = '-timestamp'
         row_attrs = {
@@ -102,11 +102,6 @@ class ItemTable(tables.Table):
         template_name='hid/language_column.html',
         verbose_name=_('Language'),
         attrs={'th': {'id': 'header-language'}}
-    )
-    risk = tables.TemplateColumn(
-        template_name='hid/risk_column.html',
-        verbose_name=_('Risk'),
-        attrs={'th': {'id': 'header-risk'}}
     )
     contributor = tables.TemplateColumn(
         template_name='hid/contributor_column.html',

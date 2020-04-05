@@ -18,31 +18,31 @@ class AddEditItemForm(forms.Form):
         required=False
     )
     location = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     sub_location = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     language = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     risk = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     gender = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     contributor = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     collection_type = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.TextInput,
         required=False
     )
     timestamp = forms.DateTimeField(required=True)

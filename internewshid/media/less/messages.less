@@ -1,0 +1,31 @@
+
+.messages-box {
+  margin: 0 -30px;
+	position: fixed;
+	z-index: @zindex-messages;
+	top: 0;
+	width: 100%;
+
+    ul{
+       color:#fff;
+        li {
+            text-align: center;
+        }
+    }
+}
+
+.alert-dismissable {
+    > .close {
+        top: 0;
+        right: 0;
+        opacity: 1;
+    }
+}
+
+
+@media(max-width:@screen-sm){
+  .messages-box {
+      margin-top:0;
+      min-height:0;
+  }
+}
