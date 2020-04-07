@@ -36,7 +36,7 @@ class TableWidget(object):
             items,
             categories=[],
             orderable=False,
-            exclude=('category', 'select_item', 'network_provider')
+            exclude=('category', 'select_item', 'network_provider', 'age')
         )
 
         # And return context
