@@ -121,7 +121,11 @@ class AddEditItemForm(forms.Form):
             # internationalisation is possible but we need to account for
             # where there is no 'long_name' and should fall back on 'name'
             # see also view_and_edit_table.py
-            choices += tuple((t['name'], t['name']) for t in sorted_terms)
+
+            # use a capitalised version of name if long_name is missing
+            for t in sorted_terms:
+                choice_text = t.get('long_name', t['name'].title())
+                choices += ((t['name'], choice_text),)
 
             return choices
 
