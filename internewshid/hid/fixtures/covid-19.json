@@ -96,7 +96,7 @@
       "name": "feedback",
       "page": 1,
       "position": 2,
-      "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"timestamp\",\"body\",\"translation\",\"category\",\"tags\",\"feedback_type\",\"gender\",\"age\",\"location\",\"language\",\"risk\",\"contributor\",\"collection_type\",\"external_id\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\",\"tags\",\"gender\",\"feedback_type\",\"age_range\",\"location\",\"language\",\"risk\",\"contributor\",\"collection_type\",\"external_id\"],\"categories\":[\"covid19-theme\"]}",
+      "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"timestamp\",\"body\",\"translation\",\"category\",\"tags\",\"feedback_type\",\"gender\",\"age_range\",\"location\",\"language\",\"risk\",\"contributor\",\"collection_type\",\"external_id\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\",\"tags\",\"gender\",\"feedback_type\",\"age_range\",\"location\",\"language\",\"risk\",\"contributor\",\"collection_type\",\"external_id\"],\"categories\":[\"covid19-theme\"]}",
       "tab_type": "view-and-edit-table"
     },
     "model": "tabbed_page.tabinstance",
