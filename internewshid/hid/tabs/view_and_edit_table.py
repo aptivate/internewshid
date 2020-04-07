@@ -190,6 +190,10 @@ class ViewAndEditTableTab(object):
 
         all_terms = transport_terms.list(taxonomy=taxonomy_slugs[0])
         all_terms.sort(key=lambda e: e['name'].lower())
+        # TODO: We should use 'name' and 'long_name' so that
+        # internationalisation is possible but we need to account for
+        # where there is no 'long_name' and should fall back on 'name'
+        # see also forms/item.py
         return tuple((t['name'], t['name']) for t in all_terms)
 
     def _get_location_options(self, items_list, **kwargs):
