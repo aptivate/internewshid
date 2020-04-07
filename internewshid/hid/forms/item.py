@@ -113,10 +113,19 @@ class AddEditItemForm(forms.Form):
         )
 
         if len(terms) > 0:
-            sorted_terms = sorted(terms, key=lambda k: k['long_name'])
+            sorted_terms = sorted(terms, key=lambda k: k['name'].lower())
 
             choices = (('', '-----'),)
-            choices += tuple((t['name'], t['long_name']) for t in sorted_terms)
+
+            # TODO: We should use 'name' and 'long_name' so that
+            # internationalisation is possible but we need to account for
+            # where there is no 'long_name' and should fall back on 'name'
+            # see also view_and_edit_table.py
+
+            # use a capitalised version of name if long_name is missing
+            for t in sorted_terms:
+                choice_text = t.get('long_name', t['name'].title())
+                choices += ((t['name'], choice_text),)
 
             return choices
 
