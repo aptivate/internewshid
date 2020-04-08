@@ -12,7 +12,7 @@
       "dashboard": 1,
       "height": "tall",
       "row": 1,
-      "settings": "{\"text\":\"<p>Covid-19</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: date\"}",
+      "settings": "{\"text\":\"<p>Covid-19</p>\",\"html\":true,\"title\":\"Situation Report: date\"}",
       "widget_type": "basic-text-widget",
       "width": 4
     },
@@ -109,6 +109,22 @@
     },
     "model": "data_layer.customconstance",
     "pk": 1
+  },
+  {
+    "model": "data_layer.customconstance",
+    "pk": 2,
+    "fields": {
+      "key": "CONTEXT_LOCATION",
+      "value": "gAJYCAAAAENvdmlkLTE5cQAu"
+    }
+  },
+  {
+    "model": "data_layer.customconstance",
+    "pk": 5,
+    "fields": {
+      "key": "GLOBAL_DATA_SOURCE",
+      "value": "gAJYBwAAAENvdmlkIDFxAC4="
+    }
   },
   {
     "fields": {
