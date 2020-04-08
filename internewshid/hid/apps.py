@@ -11,10 +11,12 @@ class HidAppConfig(AppConfig):
             AgeRangeFilter,
             CategoryFilter,
             CollectionTypeFilter,
-            EnumeratorFilter,
+            ContributorFilter,
             ExternalIdFilter,
             FeedbackTypeFilter,
             GenderFilter,
+            LanguageFilter,
+            RiskFilter,
             LocationFilter,
             SearchFilter,
             SubLocationFilter,
@@ -31,9 +33,11 @@ class HidAppConfig(AppConfig):
         register_filter('time_range', TimeRangeFilter())
         register_filter('location', LocationFilter())
         register_filter('sub_location', SubLocationFilter())
+        register_filter('language', LanguageFilter())
+        register_filter('risk', RiskFilter())
         register_filter('gender', GenderFilter())
         register_filter('age_range', AgeRangeFilter())
-        register_filter('enumerator', EnumeratorFilter())
+        register_filter('contributor', ContributorFilter())
         register_filter('collection_type', CollectionTypeFilter())
         register_filter('tags', TagsFilter())
         register_filter('feedback_type', FeedbackTypeFilter())

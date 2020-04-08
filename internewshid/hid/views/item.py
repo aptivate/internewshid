@@ -159,8 +159,10 @@ class AddEditItemView(FormView):
                 'translation': self.item.get('translation', ''),
                 'location': self.item.get('location', ''),
                 'sub_location': self.item.get('sub_location', ''),
+                'language': self.item.get('language', ''),
+                'risk': self.item.get('risk', ''),
                 'gender': self.item.get('gender', ''),
-                'enumerator': self.item.get('enumerator', ''),
+                'contributor': self.item.get('contributor', ''),
                 'collection_type': self.item.get('collection_type', ''),
                 'timestamp': self.item['timestamp'],
                 'next': self.request.GET.get(
@@ -221,6 +223,10 @@ class AddEditItemView(FormView):
 
         # Add item and form mode to the context
         context['item'] = self.item
+        # Stashing values in the context because of a naming clash with a method on self.item
+        # prevent us from referencing values directly in the template
+        if self.item:
+            context['keyvalues'] = self.item.get('values')
         context['update'] = self.item is not None
 
         # Add the type label to the context

@@ -1,0 +1,12 @@
+{% if contributor.items %}
+  {% load i18n %}
+  <div class="filter-contributor input-group">
+      <label class="control-label" for="contributor-selector">{% trans "Contributor" %}</label>
+      <select id="contributor-selector" name="contributor" class="form-control">
+        <option value="All Contributors" selected="selected">{% trans "All Contributors" %}</option>
+        {% for contributor in contributor.items %}
+          <option value="{{ contributor }}"{% if contributor == request.GET.contributor %} selected="selected"{% endif %}>{{ contributor }}</option>
+        {% endfor %}
+      </select>
+  </div>
+{% endif %}

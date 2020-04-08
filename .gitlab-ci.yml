@@ -17,7 +17,7 @@ stages:
 
 
 code-sanity:
-  image: python:3.6
+  image: python:3.6.10
   services:
   - mysql:5.7
   stage: sanity
@@ -36,7 +36,7 @@ code-sanity:
 
 
 code-lint:
-  image: python:3.6
+  image: python:3.6.10
   services:
   - mysql:5.7
   stage: lint
@@ -53,7 +53,7 @@ code-lint:
 
 
 unit-test:
-  image: python:3.6
+  image: python:3.6.10
   services:
   - mysql:5.7
   stage: test

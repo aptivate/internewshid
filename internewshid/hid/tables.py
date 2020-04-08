@@ -17,9 +17,12 @@ class NamedCheckBoxColumn(tables.CheckBoxColumn):
 class ItemTable(tables.Table):
 
     class Meta:
-        attrs = {'class': 'table table-hover table-striped', 'cols': '11'}
+        attrs = {'class': 'table table-hover table-striped', 'cols': '14'}
         template_name = 'hid/table.html'
         order_by = '-timestamp'
+        row_attrs = {
+            "class": lambda record: f"risk {str(record['risk']).lower().replace(' ', '-')}" if (record['risk']) else ''
+        }
 
     select_item = tables.TemplateColumn(
         template_name='hid/select_item_id_checkbox_column.html',
@@ -95,10 +98,15 @@ class ItemTable(tables.Table):
         verbose_name=_('Sub-Location'),
         attrs={'th': {'id': 'header-sub-location'}}
     )
-    enumerator = tables.TemplateColumn(
-        template_name='hid/enumerator_column.html',
-        verbose_name=_('Enumerator'),
-        attrs={'th': {'id': 'header-enumerator'}}
+    language = tables.TemplateColumn(
+        template_name='hid/language_column.html',
+        verbose_name=_('Language'),
+        attrs={'th': {'id': 'header-language'}}
+    )
+    contributor = tables.TemplateColumn(
+        template_name='hid/contributor_column.html',
+        verbose_name=_('Contributor'),
+        attrs={'th': {'id': 'header-contributor'}}
     )
     collection_type = tables.TemplateColumn(
         template_name='hid/collection_type_column.html',

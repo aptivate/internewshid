@@ -1,8 +1,10 @@
 .ansible
 *.pyc
 .coverage
+.idea
 .pytest_cache
 internewshid/local_settings.py
+internewshid/local_settings.py.ian
 internewshid/private_settings.py
 internewshid/.ve
 internewshid/distribute-*.tar.gz

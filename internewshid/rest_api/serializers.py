@@ -79,6 +79,10 @@ class ItemSerializer(serializers.ModelSerializer):
 
     timestamp = IgnoreMicrosecondsDateTimeField()
     terms = TermSerializer(many=True, required=False)
+    values = serializers.SerializerMethodField()
+
+    def get_values(self, item):
+        return {kv.key.key: kv.value for kv in item.values.all()}
 
     def create(self, validated_data):
         """ Create an item with nested metadata terms."""
@@ -138,7 +142,7 @@ class ItemExportSerializer(ItemSerializer):
             'age',
             'body',
             'collection_type',
-            'enumerator',
+            'contributor',
             'external_id',
             'gender',
             'location',

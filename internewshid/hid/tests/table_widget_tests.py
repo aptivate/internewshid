@@ -34,5 +34,5 @@ class TestTableWidget(TestCase):
                 widget.get_context_data()
                 excludes = mock_table.call_args[1]['exclude']
                 self.assertEqual(set(excludes), set([
-                    'category', 'select_item', 'network_provider'
+                    'category', 'select_item', 'network_provider', 'age'
                 ]))

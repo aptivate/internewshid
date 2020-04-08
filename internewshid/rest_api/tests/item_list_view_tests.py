@@ -156,18 +156,18 @@ def test_filter_by_location():
 
 
 @pytest.mark.django_db
-def test_filter_by_enumerator():
+def test_filter_by_contributor():
     create_item(
         body='item1',
-        enumerator='Yasmin')
+        contributor='Yasmin')
     create_item(
         body='item2',
-        enumerator='Collected by ....Mohammed yousuf@ Mohammed Ullah'
+        contributor='Collected by ....Mohammed yousuf@ Mohammed Ullah'
     )
 
     payload = get(
         data={
-            'enumerator': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
+            'contributor': 'Collected by ....Mohammed yousuf@ Mohammed Ullah',
         }
     ).data
 

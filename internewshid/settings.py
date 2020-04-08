@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = (
     'djangojs',
     'django_assets',
     'floppyforms',
+    'jsoneditor',
     'widget_tweaks'
 )
 
@@ -251,6 +252,7 @@ for attr in dir(local_settings):
 ALLOWED_HOSTS = [
     '*',
 ]
+
 
 TEMPLATES = [
     {

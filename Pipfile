@@ -32,6 +32,8 @@ pytz = "*"
 rest-pandas = "*"
 mysqlclient = "*"
 django-debug-toolbar-template-timings = "*"
+ipdb = "*"
+django-jsoneditor = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

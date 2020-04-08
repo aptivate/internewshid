@@ -139,6 +139,7 @@ def test_order_columns_with_first_row_return_first_row_order(importer):
     assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
+@pytest.mark.skip("importing all columns")  # Now importing all missing columns as key value pairs
 def test_order_columns_ignores_extra_columns_in_first_row(importer):
     cleaned = _make_columns_row(COLUMN_LIST)
     first_row = ['Message', 'Province', 'Sub-Province', 'None', 'None', 'None']
@@ -148,6 +149,7 @@ def test_order_columns_ignores_extra_columns_in_first_row(importer):
     assert ordered == [cleaned[2], cleaned[0], cleaned[1]]
 
 
+@pytest.mark.skip("importing all columns")  # Now importing all missing columns as key value pairs
 def test_order_columns_ignores_none_and_missing_columns_in_first_row(importer):
     first_row = ['Province', None]
 
@@ -410,14 +412,14 @@ def test_save_rows_creates_item_with_term(importer):
 
 
 @pytest.mark.django_db
-def test_save_rows_handles_invalid_enumerator(importer):
-    invalid_enumerator = "Yakub=Aara smart card no point in Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum soyi ensaf takito aarari Thor Sara nohoito"
+def test_save_rows_handles_invalid_contributor(importer):
+    invalid_contributor = "Yakub=Aara smart card no point in Kialla hoi lay smart card hoday yan gor Sara Thor Sara ,hetalli bolli aara loi bolla nosir ,zodi aara Thor Sara oi tum aara smart card loi tum .Aara tum Thor asi day yan bishi manshe zani ar bishi goba asi ,Bormar shorkari aarari zeyan hor yan oilday hetarar bolor hota .kinto hetarar aarari forok gorid day ,zodi Burmar shor karotum soyi ensaf takito aarari Thor Sara nohoito"
 
     objects = [
         {
             'body': "Text",
             'timestamp': datetime.datetime(2014, 7, 21),
-            'enumerator': invalid_enumerator,
+            'contributor': invalid_contributor,
             'terms': [],
             '_row_number': 29,
         }
@@ -427,7 +429,7 @@ def test_save_rows_handles_invalid_enumerator(importer):
         {
             'name': 'Ennumerator',
             'type': 'text',
-            'field': 'enumerator',
+            'field': 'contributor',
         },
     ]
 
@@ -436,7 +438,7 @@ def test_save_rows_handles_invalid_enumerator(importer):
 
     assert str(excinfo.value) == (
         "There was a problem with row 29 of the spreadsheet:\n"
-        "Column: 'Ennumerator' (enumerator)\n"
+        "Column: 'Ennumerator' (contributor)\n"
         "Error (max_length): 'Ensure this field has no more "
         "than 190 characters.'\n\n"
         "Value: Yakub=Aara smart card no point in "
@@ -524,7 +526,7 @@ def test_duplicate_records_not_imported(importer):
         {
             'body': "Text",
             'timestamp': datetime.datetime(2014, 7, 21),
-            'enumerator': 'Mohammed',
+            'contributor': 'Mohammed',
             'terms': [],
             '_row_number': 1,
         }
@@ -538,7 +540,7 @@ def test_duplicate_records_not_imported(importer):
         {
             'body': "Text",
             'timestamp': datetime.datetime(2014, 7, 21),
-            'enumerator': 'Mohammed',
+            'contributor': 'Mohammed',
             'terms': [],
             '_row_number': 1,
         },
@@ -546,7 +548,7 @@ def test_duplicate_records_not_imported(importer):
         {
             'body': "Another bit of Text",
             'timestamp': datetime.datetime(2014, 7, 21),
-            'enumerator': 'Mohammed',
+            'contributor': 'Mohammed',
             'terms': [],
             '_row_number': 2,
         }
@@ -567,7 +569,7 @@ def test_can_save_rows_without_terms(importer):
         {
             'body': "Text",
             'timestamp': datetime.datetime(2014, 7, 21),
-            'enumerator': 'Mohammed',
+            'contributor': 'Mohammed',
             '_row_number': 1,
         }
     ]

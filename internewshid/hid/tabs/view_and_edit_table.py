@@ -89,13 +89,21 @@ class ViewAndEditTableTab(object):
         if sub_locations and sub_locations == 'All Sub-Locations':
             filters.pop('sub_location')
 
+        languages = filters.get('language')
+        if languages and languages == 'All Languages':
+            filters.pop('language')
+
+        risks = filters.get('risk')
+        if risks and risks == 'All Risks':
+            filters.pop('risk')
+
         genders = filters.get('gender')
         if genders and genders == 'All Genders':
             filters.pop('gender')
 
-        enumerators = filters.get('enumerator')
-        if enumerators and enumerators == 'All Enumerators':
-            filters.pop('enumerator')
+        contributors = filters.get('contributor')
+        if contributors and contributors == 'All Contributors':
+            filters.pop('contributor')
 
         collection_type = filters.get('collection_type')
         if collection_type and collection_type == 'All Collection Types':
@@ -182,6 +190,10 @@ class ViewAndEditTableTab(object):
 
         all_terms = transport_terms.list(taxonomy=taxonomy_slugs[0])
         all_terms.sort(key=lambda e: e['name'].lower())
+        # TODO: We should use 'name' and 'long_name' so that
+        # internationalisation is possible but we need to account for
+        # where there is no 'long_name' and should fall back on 'name'
+        # see also forms/item.py
         return tuple((t['name'], t['name']) for t in all_terms)
 
     def _get_location_options(self, items_list, **kwargs):
@@ -192,13 +204,21 @@ class ViewAndEditTableTab(object):
         sub_locations = transport_items.list_options('sub_location')
         return {'items': sub_locations}
 
+    def _get_language_options(self, items_list, **kwargs):
+        languages = transport_items.list_options('language')
+        return {'items': languages}
+
+    def _get_risk_options(self, items_list, **kwargs):
+        risks = transport_items.list_options('risk')
+        return {'items': risks}
+
     def _get_gender_options(self, items_list, **kwargs):
         genders = transport_items.list_options('gender')
         return {'items': genders}
 
-    def _get_enumerator_options(self, items_list, **kwargs):
-        enumerators = transport_items.list_options('enumerator')
-        return {'items': enumerators}
+    def _get_contributor_options(self, items_list, **kwargs):
+        contributors = transport_items.list_options('contributor')
+        return {'items': contributors}
 
     def _get_collection_type_options(self, items_list, **kwargs):
         collection_types = transport_items.list_options('collection_type')
@@ -255,8 +275,10 @@ class ViewAndEditTableTab(object):
         category_options = self._get_category_options(**kwargs)
         location_options = self._get_location_options(items, **kwargs)
         sub_location_options = self._get_sub_location_options(items, **kwargs)
+        language_options = self._get_language_options(items, **kwargs)
+        risk_options = self._get_risk_options(items, **kwargs)
         gender_options = self._get_gender_options(items, **kwargs)
-        enumerator_options = self._get_enumerator_options(items, **kwargs)
+        contributor_options = self._get_contributor_options(items, **kwargs)
         collection_type_options = self._get_collection_type_options(items, **kwargs)
         feedback_type_options = self._get_feedback_type_options()
         age_range_options = self._get_age_range_options()
@@ -295,8 +317,10 @@ class ViewAndEditTableTab(object):
             'selected_age_ranges': selected_age_ranges,
             'locations': location_options,
             'sub_locations': sub_location_options,
+            'languages': language_options,
+            'risks': risk_options,
             'gender': gender_options,
-            'enumerator': enumerator_options,
+            'contributor': contributor_options,
             'collection_type_filters': collection_type_options,
             'next': reverse('tabbed-page', kwargs={
                 'name': tab_instance.page.name,

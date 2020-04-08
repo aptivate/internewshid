@@ -51,6 +51,22 @@ class SubLocationFilter(object):
             filters.update(sub_location=sub_location)
 
 
+class LanguageFilter(object):
+
+    def apply(self, filters, query_dict, **kwargs):
+        language = query_dict.get('language', None)
+        if language is not None:
+            filters.update(language=language)
+
+
+class RiskFilter(object):
+
+    def apply(self, filters, query_dict, **kwargs):
+        risk = query_dict.get('risk', None)
+        if risk is not None:
+            filters.update(risk=risk)
+
+
 class GenderFilter(object):
 
     def apply(self, filters, query_dict, **kwargs):
@@ -70,12 +86,12 @@ class AgeRangeFilter(object):
         filters['terms_or'] = filters.get('terms_or', []) + age_range_terms
 
 
-class EnumeratorFilter(object):
+class ContributorFilter(object):
 
     def apply(self, filters, query_dict, **kwargs):
-        enumerator = query_dict.get('enumerator', None)
-        if enumerator is not None:
-            filters.update(enumerator=enumerator)
+        contributor = query_dict.get('contributor', None)
+        if contributor is not None:
+            filters.update(contributor=contributor)
 
 
 class CollectionTypeFilter(object):
