@@ -10,7 +10,7 @@ python_version = "3.6"
 asgiref = "*"
 "django-bootstrap3" = "*"
 "django-tables2" = "*"
-"django.js" = {editable = true,git = "https://git@github.com/aptivate/django.js.git",ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19"}
+"django.js" = {ref = "ca328a94b00023bd64f4fc1c908675edaaf2ac19",git = "https://git@github.com/aptivate/django.js.git",editable = true}
 "linecache2" = "*"
 Django = ">2.2.8,<3.0"
 Pillow = "*"
@@ -33,6 +33,7 @@ rest-pandas = "*"
 mysqlclient = "*"
 django-debug-toolbar-template-timings = "*"
 ipdb = "*"
+django-jsoneditor = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"

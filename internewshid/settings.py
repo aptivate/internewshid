@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = (
     'djangojs',
     'django_assets',
     'floppyforms',
+    'jsoneditor',
     'widget_tweaks'
 )
 
