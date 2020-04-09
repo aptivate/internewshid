@@ -30,10 +30,10 @@
                             {% trans "Type" %}
                             {% if form.feedback_type.errors %} <span class='help-block'>({{ form.feedback_type.errors|join:", " }})</span> {% endif %}
                         </label>
-                        <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type.name">
+                        <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type.name" multiple autocomplete="off">
                             {% for choice in form.feedback_type.field.choices %}
-                            {% if form.initial.feedback_type == choice.0 %}
-                            <option selected="" value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% if choice.0 in form.initial.feedback_types %}
+                            <option selected="selected" value="{{ choice.0 }}">{{ choice.1 }}</option>
                             {% else %}
                             <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                             {% endif %}

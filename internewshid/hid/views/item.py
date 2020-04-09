@@ -49,7 +49,10 @@ class AddEditItemView(FormView):
             ItemTypeNotFound: If the item type was not found
         """
         self.item = None
+
+        # TODO remove singular item_type once we've got multiple working
         self.item_type = None
+
         self.item_terms = {}
         if item_id:
             try:
@@ -77,6 +80,10 @@ class AddEditItemView(FormView):
         # We guarantee there is always an item type
         if self.item_type is None:
             self.item_type = DEFAULT_ITEM_TYPE
+            if 'item-types' not in self.item_terms:
+                self.item_terms['item-types'] = []
+            self.item_terms['item-types'].append(DEFAULT_ITEM_TYPE)
+
 
     def get(self, request, *args, **kwargs):
         """ get request handler
@@ -185,7 +192,12 @@ class AddEditItemView(FormView):
                 initial[taxonomy] = self.tag_delimiter.join(term_names)
 
         if 'item-types' in self.item_terms:
+            # TODO when multiple types are fully supported delete the single feedback_type
             initial['feedback_type'] = self.item_terms['item-types'][0]['name']
+
+            terms = self.item_terms['item-types']
+            feedback_names = [t['name'] for t in terms]
+            initial['feedback_types'] = feedback_names
 
         if 'age-ranges' in self.item_terms:
             initial['age_range'] = self.item_terms['age-ranges'][0]['name']
