@@ -12,7 +12,7 @@
       "dashboard": 1,
       "height": "tall",
       "row": 1,
-      "settings": "{\"text\":\"<p>Covid-19</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: date\"}",
+      "settings": "{\"text\":\"<p>Covid-19</p>\",\"html\":true,\"title\":\"Situation Report: date\"}",
       "widget_type": "basic-text-widget",
       "width": 4
     },
@@ -71,7 +71,7 @@
     "pk": 7,
     "fields": {
       "label": "Covid 1",
-      "profile": "{\"name\": \"TWB - Covid 1\", \"format\": \"excel\", \"label\": \"Covid 1\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"CREATED\", \"date_format\": \"%d-%m-%Y %Z %H:%M\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"FEEDBACK DATA\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"LANGUAGE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Followers/Views/members/retweets/Reach\"}, {\"field\": \"translation\", \"type\": \"text\", \"name\": \"TRANSLATION, NOTES\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"NOTES\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"THEME\", \"taxonomy\": \"covid19-theme\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"HASHTAGS\", \"taxonomy\": \"tags\"}, {\"field\": \"item-types\", \"type\": \"taxonomy\", \"name\": \"TYPE\", \"taxonomy\": \"item-types\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"GENDER\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"AGE\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"LOCATION /Platform\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"SUB-LOCATION\"}, {\"field\": \"contributor\", \"type\": \"text\", \"name\": \"CONTRIBUTER\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"COLLECTION TYPE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"CONTENT CREATOR TYPE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"SECONDARY DATE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"COMMUNITY TYPE\"}, {\"field\": \"risk\", \"type\": \"text\", \"name\": \"RISK\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"LOCATION TYPE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"TAGS\"}]}"
+      "profile": "{\"name\": \"TWB - Covid 1\", \"format\": \"excel\", \"label\": \"Covid 1\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"CREATED\", \"date_format\": \"%d-%m-%Y %Z %H:%M\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"FEEDBACK DATA\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"LANGUAGE\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Followers/Views/members/retweets/Reach\"}, {\"field\": \"translation\", \"type\": \"text\", \"name\": \"TRANSLATION, NOTES\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"NOTES\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"THEME\", \"taxonomy\": \"covid19-theme\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"HASHTAGS\", \"taxonomy\": \"tags\"}, {\"field\": \"item-types\", \"type\": \"taxonomy\", \"name\": \"TYPE\", \"taxonomy\": \"item-types\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"GENDER\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"AGE\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"LOCATION /Platform\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"SUB-LOCATION\"}, {\"field\": \"contributor\", \"type\": \"text\", \"name\": \"CONTRIBUTOR\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"COLLECTION TYPE\"}, {\"field\": \"risk\", \"type\": \"text\", \"name\": \"RISK\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"TAGS\"}]}"
     }
   },
   {
@@ -79,7 +79,7 @@
     "pk": 8,
     "fields": {
       "label": "Covid 2",
-      "profile": "{\"name\": \"SBTF - Covid 2\", \"format\": \"excel\", \"label\": \"Covid 2\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"Date of posting\", \"date_format\": \"%d-%b-%Y\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Link\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Source type FB, TW, media etc\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Followers/ Views/ Members\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"Original Language\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Specific country referenced?\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Relatation to Covid-19\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"brief summary\"}, {\"field\": \"translation\", \"type\": \"text\", \"name\": \"Extra Notes\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Hashtags\", \"taxonomy\": \"tags\"}]}"
+      "profile": "{\"name\": \"SBTF - Covid 2\", \"format\": \"excel\", \"label\": \"Covid 2\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"Date of posting\", \"date_format\": \"%d-%b-%Y\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"Original Language\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"brief summary\"}, {\"field\": \"translation\", \"type\": \"text\", \"name\": \"Extra Notes\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Hashtags\", \"taxonomy\": \"tags\"}]}"
     }
   },
   {
@@ -105,10 +105,26 @@
   {
     "fields": {
       "key": "ITEM_TYPE_CATEGORY",
-      "value": "gAJYLAAAAHsiYWxsIjogImJhbmdsYWRlc2gtcmVmdWdlZS1jcmlzaXMtc2VjdG9ycyJ9cQEu"
+      "value": "gAJYGAAAAHsiYWxsIjogImNvdmlkMTktdGhlbWUifXEALg=="
     },
     "model": "data_layer.customconstance",
     "pk": 1
+  },
+  {
+    "model": "data_layer.customconstance",
+    "pk": 2,
+    "fields": {
+      "key": "CONTEXT_LOCATION",
+      "value": "gAJYCAAAAENvdmlkLTE5cQAu"
+    }
+  },
+  {
+    "model": "data_layer.customconstance",
+    "pk": 5,
+    "fields": {
+      "key": "GLOBAL_DATA_SOURCE",
+      "value": "gAJYBwAAAENvdmlkIDFxAC4="
+    }
   },
   {
     "fields": {
@@ -529,6 +545,15 @@
       "name": "Criticism",
       "taxonomy": 2,
       "long_name": "Criticism"
+    }
+  },
+  {
+    "model": "taxonomies.term",
+    "pk": 434,
+    "fields": {
+      "name": "unknown",
+      "taxonomy": 8,
+      "long_name": "unknown"
     }
   }
 ]
