@@ -346,12 +346,13 @@ class AddEditItemView(FormView):
         else:
             transport.items.delete_all_terms(item_id, category_taxonomy)
 
-        # if feedback_type:
-        #     item = transport.items.add_terms(item_id, 'item-types', feedback_type)
-        #
-        #     self.item_type = self._get_item_type_term(item)
-        # else:
-        #     transport.items.delete_all_terms(item_id, 'item-types')
+        # TODO this should be removed once we get updating working for multiple feedback types
+        if feedback_types:
+            item = transport.items.add_terms(item_id, 'item-types', feedback_types[0])
+
+            self.item_type = self._get_item_type_term(item)
+        else:
+            transport.items.delete_all_terms(item_id, 'item-types')
 
         if age_range:
             transport.items.add_terms(item_id, 'age-ranges', age_range)
