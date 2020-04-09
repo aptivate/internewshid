@@ -48,12 +48,18 @@
         }
 
         init();
-        
-        // Highlight single row on select 
+
+        // Highlight single row on select
         $( "input[type=checkbox]" ).click(function(event){
-            console.log('aaa');
             $( event.target ).closest( "tr" ).toggleClass('selected');
+            // Check if we have a risk class
+            if ( $(event.target).closest("div").is('[class*=risk]') ) {
+                // get the second class name containing risk
+                var risk_level = $(event.target).closest("div").attr('class').split(' ')[1];
+                // Copy the risk class from the div to the tr
+                $( event.target ).closest( "tr" ).toggleClass(risk_level);
+            }
         });
-        
+
     });
 })(jQuery);
