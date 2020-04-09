@@ -1,0 +1,22 @@
+import private_settings
+
+DEBUG = False
+ASSETS_DEBUG = DEBUG
+ASSETS_AUTO_BUILD = DEBUG
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'internewshid',
+        'USER': 'internewshid',
+        'PASSWORD': private_settings.DB_PASSWORD,
+        'OPTIONS': {
+          'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+    }
+}
+
+EMAIL_HOST = 'localhost'
+SITE_HOSTNAME = 'lin-internewshid-coronavirus.aptivate.org'
+
+LANGUAGE_CODE = 'en'
