@@ -6,7 +6,7 @@ $(document).ready(function() {
         numberDisplayed: 1
     });
     $('#feedback_type').multiselect({
-        nonSelectedText: gettext('All Ages'),
+        nonSelectedText: gettext('none'),
         buttonClass: 'form-control',
         includeResetOption: true,
         numberDisplayed: 2
