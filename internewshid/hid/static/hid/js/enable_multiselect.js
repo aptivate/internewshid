@@ -6,10 +6,10 @@ $(document).ready(function() {
         numberDisplayed: 1
     });
     $('#feedback_type.name').multiselect({
-        nonSelectedText: gettext('All Ages'),
+        nonSelectedText: gettext('All Types'),
         buttonClass: 'form-control',
         includeResetOption: true,
-        numberDisplayed: 1
+        numberDisplayed: 2
     });
 
 
