@@ -5,8 +5,8 @@ $(document).ready(function() {
         includeResetOption: true,
         numberDisplayed: 1
     });
-    $('#feedback_type.name').multiselect({
-        nonSelectedText: gettext('All Types'),
+    $('#feedback_type').multiselect({
+        nonSelectedText: gettext('none'),
         buttonClass: 'form-control',
         includeResetOption: true,
         numberDisplayed: 2

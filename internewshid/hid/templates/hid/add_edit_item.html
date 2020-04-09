@@ -26,11 +26,11 @@
 
                     {% if form.feedback_type %}
                     <div class="item-feedback-type form-group input-group {% if form.feedback_type.errors %}has-error{% endif %}">
-                        <label class="control-label" for="feedback_type.name">
+                        <label class="control-label" for="feedback_type">
                             {% trans "Type" %}
                             {% if form.feedback_type.errors %} <span class='help-block'>({{ form.feedback_type.errors|join:", " }})</span> {% endif %}
                         </label>
-                        <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type.name" multiple autocomplete="off">
+                        <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type" multiple autocomplete="off">
                             {% for choice in form.feedback_type.field.choices %}
                             {% if choice.0 in form.initial.feedback_types %}
                             <option selected="selected" value="{{ choice.0 }}">{{ choice.1 }}</option>
