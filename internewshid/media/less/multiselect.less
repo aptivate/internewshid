@@ -78,6 +78,7 @@ span.multiselect-native-select select {
 .multiselect-container > li > a > label.checkbox,
 .multiselect-container > li > a > label.radio {
     margin: 0;
+    padding-right: 1rem;
 }
 
 .multiselect-container > li > a > label > input[type=checkbox] {
@@ -122,7 +123,7 @@ span.multiselect-native-select select {
     }
 }
 
-.filter-container .filters .multiselect-container .checkbox {
+.multiselect-container .checkbox {
     text-transform: initial;
     font-weight: normal;
     margin: 0 5px;
@@ -133,4 +134,9 @@ span.multiselect-native-select select {
         position: static;
         margin-left: 0;
     }
+}
+
+button.multiselect.dropdown-toggle{
+    white-space: nowrap;
+    max-width: none!important;
 }
