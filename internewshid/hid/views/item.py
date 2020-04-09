@@ -84,7 +84,6 @@ class AddEditItemView(FormView):
                 self.item_terms['item-types'] = []
             self.item_terms['item-types'].append(DEFAULT_ITEM_TYPE)
 
-
     def get(self, request, *args, **kwargs):
         """ get request handler
 
@@ -296,20 +295,23 @@ class AddEditItemView(FormView):
     def _separate_form_data(self, form):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
-        feedback_type = data.pop('feedback_type', None)
+        # feedback_types = data.pop('feedback_types', None)
         age_range = data.pop('age_range', None)
         data.pop('id', None)
 
         tags = {}
         regular_fields = {}
+        feedback_types = {}
 
         for (field_name, field_value) in data.items():
             if field_name in self.tag_fields:
                 tags[field_name] = field_value
+            elif field_name == 'feedback_types':
+                feedback_types['feedback_types'] = field_value
             else:
                 regular_fields[field_name] = field_value
 
-        return category, tags, feedback_type, age_range, regular_fields
+        return category, tags, feedback_types, age_range, regular_fields
 
     def _add_tags(self, item_id, tags):
         for (taxonomy, value) in tags.items():
@@ -331,7 +333,7 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        (category, tags, feedback_type, age_range,
+        (category, tags, feedback_types, age_range,
          regular_fields) = self._separate_form_data(form)
 
         transport.items.update(item_id, regular_fields)
@@ -344,18 +346,19 @@ class AddEditItemView(FormView):
         else:
             transport.items.delete_all_terms(item_id, category_taxonomy)
 
-        if feedback_type:
-            item = transport.items.add_terms(item_id, 'item-types', feedback_type)
-
-            self.item_type = self._get_item_type_term(item)
-        else:
-            transport.items.delete_all_terms(item_id, 'item-types')
+        # if feedback_type:
+        #     item = transport.items.add_terms(item_id, 'item-types', feedback_type)
+        #
+        #     self.item_type = self._get_item_type_term(item)
+        # else:
+        #     transport.items.delete_all_terms(item_id, 'item-types')
 
         if age_range:
             transport.items.add_terms(item_id, 'age-ranges', age_range)
         else:
             transport.items.delete_all_terms(item_id, 'age-ranges')
 
+        self._add_tags(item_id, feedback_types)
         self._add_tags(item_id, tags)
 
     def _create_item(self, form, taxonomy):
