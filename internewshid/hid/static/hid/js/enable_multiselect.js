@@ -5,11 +5,11 @@ $(document).ready(function() {
         includeResetOption: true,
         numberDisplayed: 1
     });
-    $('#feedback_type.name').multiselect({
+    $('#feedback_type').multiselect({
         nonSelectedText: gettext('All Ages'),
         buttonClass: 'form-control',
         includeResetOption: true,
-        numberDisplayed: 1
+        numberDisplayed: 2
     });
 
 
