@@ -981,7 +981,6 @@ def test_feedback_type_for_new_item(add_view, new_form):
     terms = [t for t in item['terms'] if t['taxonomy'] == 'item-types']
 
     assert len(terms) == 1
-
     assert terms[0]['name'] == 'rumour'
     assert_message(add_view.request,
                    messages.SUCCESS,

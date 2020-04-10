@@ -33,7 +33,7 @@ def importer():
 def taxonomies():
     taxonomy_names = (
         'Item Types', 'Tags', 'Data Origins', 'Countries', 'Contexts',
-        'Bangladesh Refugee Crisis Sectors', 'Age Ranges'
+        'Bangladesh Refugee Crisis Sectors', 'Age Ranges', 'Covid19 Theme'
     )
     taxonomies = {name: TaxonomyFactory(name=name) for name in taxonomy_names}
 
