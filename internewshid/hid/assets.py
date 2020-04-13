@@ -23,7 +23,8 @@ from django_assets import Bundle, register
 
 _assets = [
     # Stylesheets
-    'fonts/font-awesome-4.3.0/css/font-awesome.min.css',
+    # 'fonts/font-awesome-4.3.0/css/font-awesome.css',
+    'fonts/fontello/css/fontello.css',
     'less/internews-setup.less',
     'dashboard/dashboard.css',
 
