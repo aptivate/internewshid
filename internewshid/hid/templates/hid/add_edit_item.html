@@ -32,7 +32,7 @@
                         </label>
                         <select name="{{ form.feedback_type.name }}" class="form-control" id="feedback_type" multiple autocomplete="off">
                             {% for choice in form.feedback_type.field.choices %}
-                            {% if choice.0 in form.initial.feedback_types %}
+                            {% if choice.0 in form.initial.feedback_type %}
                             <option selected="selected" value="{{ choice.0 }}">{{ choice.1 }}</option>
                             {% else %}
                             <option value="{{ choice.0 }}">{{ choice.1 }}</option>

@@ -51,7 +51,7 @@ class AddEditItemView(FormView):
         self.item = None
 
         # TODO remove singular item_type once we've got multiple working
-        self.item_type = None
+        self.item_type = []
 
         self.item_terms = {}
         if item_id:
@@ -63,7 +63,7 @@ class AddEditItemView(FormView):
             for term in self.item['terms']:
                 taxonomy = term['taxonomy']
                 if taxonomy == 'item-types':
-                    self.item_type = term
+                    self.item_type.append(term)
                 if taxonomy not in self.item_terms:
                     self.item_terms[taxonomy] = []
                 self.item_terms[taxonomy].append(term)
@@ -75,11 +75,11 @@ class AddEditItemView(FormView):
             if len(matches) == 0:
                 raise ItemTypeNotFound()
             else:
-                self.item_type = matches[0]
+                self.item_type = [matches[0]]
 
         # We guarantee there is always an item type
-        if self.item_type is None:
-            self.item_type = DEFAULT_ITEM_TYPE
+        if not self.item_type:
+            self.item_type = [DEFAULT_ITEM_TYPE]
             if 'item-types' not in self.item_terms:
                 self.item_terms['item-types'] = []
             self.item_terms['item-types'].append(DEFAULT_ITEM_TYPE)
@@ -196,7 +196,7 @@ class AddEditItemView(FormView):
 
             terms = self.item_terms['item-types']
             feedback_names = [t['name'] for t in terms]
-            initial['feedback_types'] = feedback_names
+            initial['feedback_type'] = feedback_names
 
         if 'age-ranges' in self.item_terms:
             initial['age_range'] = self.item_terms['age-ranges'][0]['name']
@@ -241,7 +241,8 @@ class AddEditItemView(FormView):
         context['update'] = self.item is not None
 
         # Add the type label to the context
-        context['item_type_label'] = self.item_type['long_name']
+        # This isn't currently used in any templates so just returning the first item type.
+        context['item_type_label'] = self.item_type[0]['long_name']
 
         # Add the width of the option row to the context
         option_row_widget_count = 1  # We always have 'created'
@@ -295,23 +296,20 @@ class AddEditItemView(FormView):
     def _separate_form_data(self, form):
         data = dict(form.cleaned_data)
         category = data.pop('category', None)
-        # feedback_types = data.pop('feedback_types', None)
+        feedback_type = data.pop('feedback_type', None)
         age_range = data.pop('age_range', None)
         data.pop('id', None)
 
         tags = {}
         regular_fields = {}
-        feedback_types = {}
 
         for (field_name, field_value) in data.items():
             if field_name in self.tag_fields:
                 tags[field_name] = field_value
-            elif field_name == 'feedback_types':
-                feedback_types['feedback_types'] = field_value
             else:
                 regular_fields[field_name] = field_value
 
-        return category, tags, feedback_types, age_range, regular_fields
+        return category, tags, feedback_type, age_range, regular_fields
 
     def _add_tags(self, item_id, tags):
         for (taxonomy, value) in tags.items():
@@ -319,6 +317,9 @@ class AddEditItemView(FormView):
             term_names = [t.strip() for t in value.split(self.tag_delimiter)]
 
             transport.items.add_terms(item_id, taxonomy, term_names)
+
+    def _add_feedback(self, item_id, feedback):
+        pass
 
     def _update_item(self, item_id, form):
         """ Update the given item
@@ -333,7 +334,7 @@ class AddEditItemView(FormView):
                 TransportException: On API errors
         """
 
-        (category, tags, feedback_types, age_range,
+        (category, tags, feedback_type, age_range,
          regular_fields) = self._separate_form_data(form)
 
         transport.items.update(item_id, regular_fields)
@@ -347,10 +348,12 @@ class AddEditItemView(FormView):
             transport.items.delete_all_terms(item_id, category_taxonomy)
 
         # TODO this should be removed once we get updating working for multiple feedback types
-        if feedback_types:
-            item = transport.items.add_terms(item_id, 'item-types', feedback_types[0])
-
-            self.item_type = self._get_item_type_term(item)
+        if feedback_type:
+            transport.items.delete_all_terms(item_id, 'item-types')
+            self.item_type = []
+            for feedback_type_item in feedback_type:
+                item = transport.items.add_terms(item_id, 'item-types', feedback_type_item)
+                self.item_type.append(self._get_item_type_term(item))
         else:
             transport.items.delete_all_terms(item_id, 'item-types')
 
@@ -359,7 +362,7 @@ class AddEditItemView(FormView):
         else:
             transport.items.delete_all_terms(item_id, 'age-ranges')
 
-        self._add_tags(item_id, feedback_types)
+        self._add_feedback(item_id, feedback_type)
         self._add_tags(item_id, tags)
 
     def _create_item(self, form, taxonomy):
@@ -381,7 +384,7 @@ class AddEditItemView(FormView):
          regular_fields) = self._separate_form_data(form)
 
         if not feedback_type:
-            feedback_type = self.item_type['name']
+            feedback_type = [self.item_type[0]['name']]
 
         created_item = transport.items.create(regular_fields)
 
@@ -391,10 +394,12 @@ class AddEditItemView(FormView):
         transport.items.add_terms(
             created_item['id'], 'data-origins', 'Form Entry',
         )
-        updated_item = transport.items.add_terms(
-            created_item['id'], 'item-types', feedback_type
-        )
-        self.item_type = self._get_item_type_term(updated_item)
+        for feedback_type_item in feedback_type:
+            self.item_type = []
+            updated_item = transport.items.add_terms(
+                created_item['id'], 'item-types', feedback_type_item
+            )
+            self.item_type.append(self._get_item_type_term(updated_item))
 
         if taxonomy and category:
             transport.items.add_terms(created_item['id'], taxonomy, category)
@@ -451,11 +456,12 @@ class AddEditItemView(FormView):
         return next_url
 
     def _get_item_description(self):
-        return self.item_type['long_name']
+        return ','.join([x['long_name'] for x in self.item_type])
 
+    # TODO should probably change this to supporting multiple types directly.
     def _get_item_type_term(self, item):
         for term in item['terms']:
             if term['taxonomy'] == 'item-types':
                 return term
 
-        return self.item_type
+        return self.item_type[0]

@@ -165,7 +165,7 @@ def test_render_feedback_type_passes_context_to_template(mock_loader):
     args, kwargs = mock_template.render.call_args
 
     assert args[0]['record'] == record
-    assert args[0]['feedback_types'] == 'Concern, Rumour'
+    assert args[0]['feedback_type'] == 'Concern, Rumour'
 
 
 @mock.patch('hid.tables.loader')

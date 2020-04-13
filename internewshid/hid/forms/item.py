@@ -85,10 +85,9 @@ class AddEditItemForm(forms.Form):
         choices = self._get_feedback_type_choices()
 
         if choices is not None:
-            self.fields['feedback_type'] = forms.ChoiceField(
+            self.fields['feedback_type'] = forms.MultipleChoiceField(
                 choices=choices,
-                required=False,
-                widget=forms.RadioSelect()
+                required=False
             )
 
     def _get_feedback_type_choices(self):

@@ -195,13 +195,12 @@ class ItemTable(tables.Table):
 
         context = self.context
 
-        feedback_types = []
+        feedback_type = []
         for term in value:
             if term['taxonomy'] == 'item-types':
-                feedback_types.append(term['long_name'])
-
+                feedback_type.append(term['long_name'])
         context['record'] = record
-        context['feedback_types'] = ', '.join(sorted(feedback_types))
+        context['feedback_type'] = ', '.join(sorted(feedback_type))
 
         return Template.render(context.flatten())
 
