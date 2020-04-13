@@ -2,7 +2,7 @@
   {% load i18n %}
   <div class="filter-language input-group">
       <label class="control-label" for="language-selector">{% trans "Language" %}</label>
-      <select id="location-selector" name="language" class="form-control">
+      <select id="language-selector" name="language" class="form-control">
         <option value="All Languages" selected="selected">{% trans "All Languages" %}</option>
         {% for language in languages.items %}
           <option value="{{ language }}"{% if language == request.GET.language %} selected="selected"{% endif %}>{{ language }}</option>
