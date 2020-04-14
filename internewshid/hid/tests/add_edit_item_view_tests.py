@@ -17,7 +17,7 @@ from taxonomies.models import Taxonomy
 from taxonomies.tests.factories import TaxonomyFactory, TermFactory
 from transport.exceptions import TransportException
 
-from ..views.item import DEFAULT_ITEM_TYPE, AddEditItemView
+from ..views.item import AddEditItemView
 from .views_tests import assert_message, assert_no_messages, fix_messages
 
 
@@ -236,26 +236,6 @@ def test_the_item_type_is_added_to_the_view_on_get_requests(generic_item):
 
 
 @pytest.mark.django_db
-def test_there_is_a_default_item_type_on_get_requests(item_without_item_type):
-    default_item_type = {
-        'name': 'a-default-type',
-        'long_name': 'A Default Type',
-        'taxonomy': 'item-types'
-    }
-
-    with patch.dict(DEFAULT_ITEM_TYPE, default_item_type):
-        with patch('hid.views.item.transport.items.get') as get_item:
-            get_item.return_value = item_without_item_type
-            (view, response) = make_request(
-                AddEditItemView,
-                'edit-item',
-                kwargs={'item_id': 103}
-            )
-
-        assert view.item_type[0] == default_item_type
-
-
-@pytest.mark.django_db
 def test_the_item_terms_are_added_to_the_view_on_get_requests(generic_item):
     with patch('hid.views.item.transport.items.get') as get_item:
         get_item.return_value = generic_item
@@ -313,31 +293,6 @@ def test_the_item_type_is_added_to_the_view_on_post_requests(generic_item):
         )
 
     assert view.item_type[0]['name'] == 'generic'
-
-
-@pytest.mark.django_db
-def test_there_is_a_default_item_type_on_post_requests(item_without_item_type):
-    default_item_type = {
-        'name': 'a-default-type',
-        'long_name': 'A Default Type',
-        'taxonomy': 'item-types'
-    }
-
-    with patch.dict(DEFAULT_ITEM_TYPE, default_item_type):
-        with patch('hid.views.item.transport.items.get') as get_item:
-            get_item.return_value = item_without_item_type
-            (view, response) = make_request(
-                AddEditItemView,
-                'edit-item',
-                kwargs={'item_id': 103},
-                request_type='post',
-                post={
-                    'action': 'cancel',
-                    'next': ''
-                }
-            )
-
-        assert view.item_type[0] == default_item_type
 
 
 @pytest.mark.django_db
@@ -442,20 +397,6 @@ def test_context_data_includes_the_item(generic_item):
 
     assert 'item' in response.context_data
     assert response.context_data['item']['id'] == 1001
-
-
-@pytest.mark.django_db
-def test_context_data_includes_item_type_label(generic_item):
-    with patch('hid.views.item.transport.items.get') as get_item:
-        get_item.return_value = generic_item
-        (view, response) = make_request(
-            AddEditItemView,
-            'edit-item',
-            kwargs={'item_id': 103},
-        )
-
-    assert 'item_type_label' in response.context_data
-    assert response.context_data['item_type_label'] == 'Generic'
 
 
 @pytest.mark.django_db
@@ -763,7 +704,7 @@ def test_item_feedback_type_can_be_unset(view, update_form, taxonomies):  # noqa
     # Message defaults to Question
     assert_message(view.request,
                    messages.SUCCESS,
-                   "Question %s successfully updated." % view.item['id'])
+                   "Feedback %s successfully updated." % view.item['id'])
 
 
 @pytest.mark.django_db
@@ -822,14 +763,12 @@ def test_item_update_logs_message_and_redirects(view, update_form, taxonomies): 
     item_type_taxonomy = Taxonomy.objects.get(name='Item Types')
     TermFactory(taxonomy=item_type_taxonomy, name='Ebola origins')
 
-    view.item_type[0]['long_name'] = 'Question'
-
     response = view.form_valid(update_form)
     assert response.url == update_form.cleaned_data['next']
 
     assert_message(view.request,
                    messages.SUCCESS,
-                   "Question %s successfully updated." % view.item['id'])
+                   "Feedback %s successfully updated." % view.item['id'])
 
 
 @pytest.mark.django_db
