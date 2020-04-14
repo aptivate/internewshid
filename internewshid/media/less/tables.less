@@ -75,7 +75,8 @@ thead{
 			background-color: fade(@brand-primary, 80%);
 		}
 
-	    &.orderable {
+	    &#header-select,
+		&.orderable {
 			&:hover, &:focus{
 				background-color: fade(@brand-primary, 80%);
 			}
@@ -90,6 +91,7 @@ thead{
 	                color: #fff;
 	            }
 	        }
+
 	        &.desc a:after{ content: '\f0ab';}
 	        &.asc a:after{ content: '\f0aa';}
 
@@ -121,6 +123,10 @@ thead{
 	    &#header-contributor{width: 7%}
 	    &#header-collection-type{width: 7%}
 		&#header-external-id{width:5%}
+
+		&#header-select{
+			cursor: copy;
+		}
 	}
 
 }
