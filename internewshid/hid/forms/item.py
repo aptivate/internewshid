@@ -127,6 +127,11 @@ class AddEditItemForm(forms.Form):
             # use a capitalised version of name if long_name is missing
             for t in sorted_terms:
                 choice_text = t.get('long_name', t['name'].title())
+
+                # If there is a blank string in long_name then use the short name.
+                if not choice_text:
+                    choice_text = t['name'].title()
+
                 choices += ((t['name'], choice_text),)
 
             return choices
