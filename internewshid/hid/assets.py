@@ -40,7 +40,8 @@ _assets = [
     'hid/js/enable_multiselect.js',
     'js/bootstrap-multiselect.js',
     'js/bootstrap-tagsinput.js',
-    'hid/js/select_all_checkbox.js'
+    'hid/js/select_all_checkbox.js',
+    'hid/js/colResizable-1.6.js',
 ]
 
 

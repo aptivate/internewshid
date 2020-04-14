@@ -50,16 +50,26 @@
         init();
 
         // Highlight single row on select
-        $( "input[type=checkbox]" ).click(function(event){
-            $( event.target ).closest( "tr" ).toggleClass('selected');
-            // Check if we have a risk class
-            if ( $(event.target).closest("div").is('[class*=risk]') ) {
-                // get the second class name containing risk
-                var risk_level = $(event.target).closest("div").attr('class').split(' ')[1];
-                // Copy the risk class from the div to the tr
-                $( event.target ).closest( "tr" ).toggleClass(risk_level);
-            }
+        $( "input[type=checkbox]" ).click(function(e){
+            $( e.target ).closest( "tr" ).toggleClass('selected');
         });
+
+        // Table resizing
+        var onDraggingCol = function(e){
+            var thisTable = $(e.currentTarget); //reference to the resized table
+            $(thisTable).find("th").addClass('resizing');
+        }
+        var onResized = function(e){
+            $("th").removeClass('resizing');
+        }
+        $("table").colResizable({
+            'postbackSafe':true,
+            'liveDrag':true,
+            'onDrag':onDraggingCol,
+            'onResize':onResized,
+            'minWidth':30
+            }
+        );
 
     });
 })(jQuery);
