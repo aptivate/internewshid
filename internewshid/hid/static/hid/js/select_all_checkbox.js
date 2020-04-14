@@ -49,8 +49,13 @@
 
         init();
 
+        // Select all rows
+        $( "#header-select" ).click(function(e){
+            $(".select-item-id-checkbox input[type=checkbox]").click();
+        });
+
         // Highlight single row on select
-        $( "input[type=checkbox]" ).click(function(e){
+        $( ".select-item-id-checkbox input[type=checkbox]" ).click(function(e){
             $( e.target ).closest( "tr" ).toggleClass('selected');
         });
 
