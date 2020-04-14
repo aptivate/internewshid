@@ -48,12 +48,28 @@
         }
 
         init();
-        
-        // Highlight single row on select 
-        $( "input[type=checkbox]" ).click(function(event){
-            console.log('aaa');
-            $( event.target ).closest( "tr" ).toggleClass('selected');
+
+        // Highlight single row on select
+        $( "input[type=checkbox]" ).click(function(e){
+            $( e.target ).closest( "tr" ).toggleClass('selected');
         });
-        
+
+        // Table resizing
+        var onDraggingCol = function(e){
+            var thisTable = $(e.currentTarget); //reference to the resized table
+            $(thisTable).find("th").addClass('resizing');
+        }
+        var onResized = function(e){
+            $("th").removeClass('resizing');
+        }
+        $("table").colResizable({
+            'postbackSafe':true,
+            'liveDrag':true,
+            'onDrag':onDraggingCol,
+            'onResize':onResized,
+            'minWidth':30
+            }
+        );
+
     });
 })(jQuery);

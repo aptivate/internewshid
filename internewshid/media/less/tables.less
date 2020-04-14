@@ -54,9 +54,9 @@ thead{
 	font-size: 1rem;
 	th {
 	    border-bottom: 0!important;
+		border-right:dotted 1px fade(#fff, 20%);
 	    overflow: hidden;
 	    text-overflow: ellipsis;
-	    resize: horizontal;
 	    white-space: nowrap;
 	    position: sticky;
 	    top: 0;
@@ -65,6 +65,15 @@ thead{
 	    color: fade(#fff, 80%);
 	    vertical-align: middle!important;
 	    padding: 0;
+
+		&:last-child{
+			border-right: none;
+		}
+
+		// When columns are being resized
+		&.resizing{
+			background-color: fade(@brand-primary, 80%);
+		}
 
 	    &.orderable {
 			&:hover, &:focus{
