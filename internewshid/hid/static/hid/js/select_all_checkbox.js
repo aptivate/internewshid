@@ -11,47 +11,23 @@
  */
 (function($) {
     $(document).ready(function() {
-        var selectors = {
-            td_input : 'form td.select_item input[type="checkbox"]',
-            th_select : 'form th.select_item'
-        };
-
-        function addCheckbox(selector, check_id_base) {
-            $(selector).each(function(i, column_header) {
-                var input_id = check_id_base + '-' + i;
-                var check = $('<input>', {
-                        type: 'checkbox',
-                        id: input_id
-                    });
-                $(column_header).html("")
-                           .append(check);
-            });
-        }
-
-        function toggleSelection(e) {
-            var checked = $(e.target).prop("checked");
-            $(selectors.td_input).prop("checked", checked);
-        }
-
-        function setSelectAll(e) {
-            var checked = $(selectors.td_input + ':checked').length,
-                all = $(selectors.td_input).length,
-                checked_all = all === checked;
-            $(selectors.th_select + ' input').prop("checked", checked_all);
-        }
-
-        function init() {
-            addCheckbox(selectors.th_select, 'select-all-items');
-
-            $(selectors.th_select + ' input').on('change', toggleSelection);
-            $(selectors.td_input).on('change', setSelectAll);
-        }
-
-        init();
 
         // Select all rows
-        $( "#header-select" ).click(function(e){
-            $(".select-item-id-checkbox input[type=checkbox]").click();
+        $("#header-select").click(function(){
+            var clicks = $(this).data('clicks');
+
+            if (!clicks){
+                // select all
+                $( "tr" ).removeClass('selected');
+                $(".select-item-id-checkbox input[type=checkbox]").prop( "checked", true );
+                $( "tr" ).addClass('selected');
+            }
+            else{
+                // select none
+                $( "tr" ).removeClass('selected');
+                $(".select-item-id-checkbox input[type=checkbox]").prop( "checked", false );
+            }
+            $(this).data("clicks", !clicks);
         });
 
         // Highlight single row on select
