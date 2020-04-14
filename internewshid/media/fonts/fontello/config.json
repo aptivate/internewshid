@@ -86,7 +86,7 @@
     },
     {
       "uid": "266d5d9adf15a61800477a5acf9a4462",
-      "css": "bar-chart-o",
+      "css": "bar-chart-o ",
       "code": 59404,
       "src": "fontawesome"
     },
@@ -142,6 +142,18 @@
       "uid": "178053298e3e5b03551d754d4b9acd8b",
       "css": "doc-inv",
       "code": 61787,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "55ae6ea25cd707fe34af5b52b2001cdc",
+      "css": "down-circled",
+      "code": 61611,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "2b8e9b027181aafd210bf29c5486d4a0",
+      "css": "up-circled",
+      "code": 61610,
       "src": "fontawesome"
     }
   ]
