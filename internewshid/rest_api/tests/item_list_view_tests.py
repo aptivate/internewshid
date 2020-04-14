@@ -278,8 +278,8 @@ def test_filter_by_external_id_fragment():
     ).data
 
     assert len(payload) == 2
-    assert payload[0]['body'] == 'Matching 1'
-    assert payload[1]['body'] == 'Matching 2'
+    assert ((payload[0]['body'] == 'Matching 1' and payload[1]['body'] == 'Matching 2') or
+            (payload[0]['body'] == 'Matching 1' and payload[1]['body'] == 'Matching 2'))
 
 
 @pytest.mark.django_db

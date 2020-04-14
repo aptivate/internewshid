@@ -229,9 +229,9 @@ class ViewAndEditTableTab(object):
 
         sorted_terms = sorted(terms, key=lambda k: k['long_name'])
 
-        feedback_types = [(t['name'], t['long_name'],) for t in sorted_terms]
+        feedback_type = [(t['name'], t['long_name'],) for t in sorted_terms]
 
-        return feedback_types
+        return feedback_type
 
     def _get_age_range_options(self):
         terms = transport_terms.list(taxonomy='age-ranges')

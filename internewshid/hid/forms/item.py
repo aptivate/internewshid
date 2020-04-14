@@ -79,20 +79,19 @@ class AddEditItemForm(forms.Form):
             )
 
     def _get_category_choices(self):
-        return self._get_term_choices(ITEM_TYPE_CATEGORY['all'])
+        return self._get_term_choices(ITEM_TYPE_CATEGORY['all'], createBlank=True)
 
     def _maybe_add_feedback_type_field(self):
         choices = self._get_feedback_type_choices()
 
         if choices is not None:
-            self.fields['feedback_type'] = forms.ChoiceField(
+            self.fields['feedback_type'] = forms.MultipleChoiceField(
                 choices=choices,
-                required=False,
-                widget=forms.RadioSelect()
+                required=False
             )
 
     def _get_feedback_type_choices(self):
-        return self._get_term_choices('item-types')
+        return self._get_term_choices('item-types', createBlank=False)
 
     def _maybe_add_age_range_field(self):
         choices = self._get_age_range_choices()
@@ -105,9 +104,9 @@ class AddEditItemForm(forms.Form):
             )
 
     def _get_age_range_choices(self):
-        return self._get_term_choices('age-ranges')
+        return self._get_term_choices('age-ranges', createBlank=True)
 
-    def _get_term_choices(self, taxonomy):
+    def _get_term_choices(self, taxonomy, createBlank):
         terms = transport.terms.list(
             taxonomy=taxonomy
         )
@@ -115,7 +114,10 @@ class AddEditItemForm(forms.Form):
         if len(terms) > 0:
             sorted_terms = sorted(terms, key=lambda k: k['name'].lower())
 
-            choices = (('', '-----'),)
+            if createBlank:
+                choices = (('', '-----'),)
+            else:
+                choices = ()
 
             # TODO: We should use 'name' and 'long_name' so that
             # internationalisation is possible but we need to account for

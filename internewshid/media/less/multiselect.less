@@ -28,60 +28,74 @@ span.multiselect-native-select select {
     top: 30px;
 }
 
+
 .multiselect-container {
     position: absolute;
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
+    z-index: 4;
 
-.multiselect-container .input-group {
-    margin: 5px;
-}
+    li {
+        padding: 0;
+    }
 
-.multiselect-container .multiselect-reset .input-group {
-    width: 93%;
-}
+    li.multiselect-reset {
+        .input-group {
+            .btn-default {
+                padding: 5px 10px;
+                font-size: @font-size-small;
+                background-color: @brand-primary;
+                color: #fff;
+                border-radius: @border-radius-large;
+                border: solid 1px @brand-primary;
+            }
+        }
+    }
 
-.multiselect-container > li {
-    padding: 0;
-}
+    > li > a.multiselect-all label {
+        font-weight: 700;
+    }
 
-.multiselect-container > li > a.multiselect-all label {
-    font-weight: 700;
-}
+    > li.multiselect-group label {
+        margin: 0;
+        padding: 3px 20px;
+        height: 100%;
+        font-weight: 700;
+    }
 
-.multiselect-container > li.multiselect-group label {
-    margin: 0;
-    padding: 3px 20px;
-    height: 100%;
-    font-weight: 700;
-}
+    > li.multiselect-group-clickable label {
+        cursor: pointer;
+    }
 
-.multiselect-container > li.multiselect-group-clickable label {
-    cursor: pointer;
-}
+    > li > a {
+        padding: 0;
 
-.multiselect-container > li > a {
-    padding: 0;
-}
+        > label {
+            margin: 0;
+            height: 100%;
+            cursor: pointer;
+            font-weight: 400;
+            padding: 3px 20px 3px 40px;
 
-.multiselect-container > li > a > label {
-    margin: 0;
-    height: 100%;
-    cursor: pointer;
-    font-weight: 400;
-    padding: 3px 20px 3px 40px;
+            &.checkbox,
+            &.radio {
+                margin: 0;
+            }
+            > input[type=checkbox] {
+                margin-bottom: 5px;
+            }
+        }
+    }
 }
 
 .multiselect-container > li > a > label.checkbox,
 .multiselect-container > li > a > label.radio {
     margin: 0;
+    padding-right: 1rem;
 }
 
-.multiselect-container > li > a > label > input[type=checkbox] {
-    margin-bottom: 5px;
-}
+
 
 .btn-group > .btn-group:nth-child(2) > .multiselect.btn {
     border-top-left-radius: 4px;
@@ -101,27 +115,10 @@ span.multiselect-native-select select {
 
 
 .multiselect-container {
-  border: 1px solid @input-border;
-  border-radius: @input-border-radius;
-  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
-  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
 
-    > .multiselect-reset {
-        > .input-group {
-            width: auto;
-            > .btn-default {
-                padding: 5px 10px;
-                font-size: @font-size-small;
-                background-color: @brand-primary;
-                color: #fff;
-                border-radius: @border-radius-large;
-                border: solid 1px @brand-primary;
-            }
-        }
-    }
 }
 
-.filter-container .filters .multiselect-container .checkbox {
+.multiselect-container .checkbox {
     text-transform: initial;
     font-weight: normal;
     margin: 0 5px;
@@ -132,4 +129,9 @@ span.multiselect-native-select select {
         position: static;
         margin-left: 0;
     }
+}
+
+button.multiselect.dropdown-toggle{
+    white-space: nowrap;
+    max-width: none!important;
 }

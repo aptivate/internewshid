@@ -128,7 +128,7 @@
   },
   {
     "fields": {
-      "multiplicity": "optional",
+      "multiplicity": "multiple",
       "name": "Item Types",
       "slug": "item-types",
       "vocabulary": "closed"
