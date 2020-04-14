@@ -16,6 +16,8 @@
 .fa-up-open:before { content: '\e80e'; } /* '' */
 .fa-doc:before { content: '\e80f'; } /* '' */
 .fa-link-ext:before { content: '\f08e'; } /* '' */
+.fa-up-circled:before { content: '\f0aa'; } /* '' */
+.fa-down-circled:before { content: '\f0ab'; } /* '' */
 .fa-align-justify:before { content: '\f0c9'; } /* '' */
 .fa-table:before { content: '\f0ce'; } /* '' */
 .fa-doc-text:before { content: '\f0f6'; } /* '' */
