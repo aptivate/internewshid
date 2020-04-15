@@ -74,7 +74,6 @@ def test_form_has_feedback_types_if_defined(
             },
         ]
         expected_choices = [
-            ('', '-----'),
             ('concern', 'Concern'),
             ('question', 'Question'),
             ('rumour', 'Rumour')

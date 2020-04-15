@@ -64,7 +64,9 @@
 			margin: 0;
         }
     }
-
+    .item-feedback-type{
+        max-width: none;
+    }
 
     .item-tags{
         flex-grow: 2;
@@ -114,9 +116,14 @@
         background-color: #fff;
         margin: 0;
         }
-        .form-control{
+
+        textarea.form-control{
             border-color: #fff;
+            resize: vertical;
         }
+    }
+    .item-translation-text textarea.form-control{
+        height: 92%;
     }
 
     .item-source-meta{

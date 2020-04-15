@@ -23,8 +23,8 @@ from django_assets import Bundle, register
 
 _assets = [
     # Stylesheets
-    'fonts/font-awesome-4.3.0/css/font-awesome.min.css',
     'less/internews-setup.less',
+    'fonts/fontello/css/fontello.css',
     'dashboard/dashboard.css',
 
     # Javascript librairies
@@ -40,7 +40,8 @@ _assets = [
     'hid/js/enable_multiselect.js',
     'js/bootstrap-multiselect.js',
     'js/bootstrap-tagsinput.js',
-    'hid/js/select_all_checkbox.js'
+    'hid/js/select_all_checkbox.js',
+    'hid/js/colResizable-1.6.js',
 ]
 
 

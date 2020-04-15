@@ -23,6 +23,7 @@
             var $button = $('.upload-button', $form);
             var $file_input = $('[type="file"]', $form);
             var $input_group = $file_input.closest('.form-group');
+            var $dropdown_menu = $form.closest('.dropdown-menu');
 
             // Hide the file input group and show the alternative button.
             if ($button.length > 0) {
@@ -30,16 +31,21 @@
                 $button.show();
             }
 
+            // Alternative upload button
+            // File browser is open
+            $button.on('click', function(e) {
+                e.preventDefault();
+                console.log('this');
+                $file_input.click();
+            });
+
             // Auto-submit
+            // File chosen and auto uploaded
             $file_input.on('change', function(e) {
                 e.preventDefault();
                 $form.submit();
-            });
-
-            // Alternative upload button
-            $button.on('click', function(e) {
-                e.preventDefault();
-                $file_input.click();
+                $dropdown_menu.hide();
+                console.log('that');
             });
         });
     });

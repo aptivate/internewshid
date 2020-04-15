@@ -1,0 +1,26 @@
+
+.fa-check-circle:before { content: '\e800'; } /* '' */
+.fa-caret-left:before { content: '\e801'; } /* '' */
+.fa-gear:before { content: '\e802'; } /* '' */
+.fa-user:before { content: '\e803'; } /* '' */
+.fa-caret-up:before { content: '\e804'; } /* '' */
+.fa-caret-right:before { content: '\e805'; } /* '' */
+.fa-caret-down:before { content: '\e806'; } /* '' */
+.fa-down-open:before { content: '\e807'; } /* '' */
+.fa-left-open:before { content: '\e808'; } /* '' */
+.fa-search:before { content: '\e809'; } /* '' */
+.fa-sign-out:before { content: '\e80a'; } /* '' */
+.fa-upload:before { content: '\e80b'; } /* '' */
+.fa-bar-chart-o :before { content: '\e80c'; } /* '' */
+.fa-right-open:before { content: '\e80d'; } /* '' */
+.fa-up-open:before { content: '\e80e'; } /* '' */
+.fa-doc:before { content: '\e80f'; } /* '' */
+.fa-link-ext:before { content: '\f08e'; } /* '' */
+.fa-up-circled:before { content: '\f0aa'; } /* '' */
+.fa-down-circled:before { content: '\f0ab'; } /* '' */
+.fa-align-justify:before { content: '\f0c9'; } /* '' */
+.fa-table:before { content: '\f0ce'; } /* '' */
+.fa-doc-text:before { content: '\f0f6'; } /* '' */
+.fa-doc-inv:before { content: '\f15b'; } /* '' */
+.fa-doc-text-inv:before { content: '\f15c'; } /* '' */
+.fa-user-circle:before { content: '\f2bd'; } /* '' */
