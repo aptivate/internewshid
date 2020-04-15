@@ -10,7 +10,8 @@
      </div>
     <div class="filter-buttons">
         {% bootstrap_button _('Apply filters') name="button-apply" value="apply" button_class="btn btn-default btn-md" %}
-        {% bootstrap_button _('Reset filters') name="button-clear" value="clear" button_class="btn btn-link" %}
+        {% url "tabbed-page" name="main" tab_name="all" as reset_link %}
+        {% bootstrap_button _('Reset filters') name="button-clear" value="clear" button_class="btn btn-link" href=reset_link %}
     </div>
   </div>
 </form>
