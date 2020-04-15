@@ -2,10 +2,10 @@
   {% load i18n %}
   <div class="filter-collection-type input-group">
     <label class="control-label" for="collection-type-selector">{% trans "Collection Type" %}</label>
-    <select id="collection-type-selector" name="collection-type" class="form-control">
+    <select id="collection-type-selector" name="collection_type" class="form-control">
     <option value="All Collection Types" selected="selected">{% trans "All Collection Types" %}</option>
     {% for collection_type in collection_type_filters.items %}
-      <option value="{{ collection_type }}">{{ collection_type }}</option>
+      <option value="{{ collection_type }}" {% if collection_type == request.GET.collection_type %} selected="selected"{% endif %}>{{ collection_type }}</option>
     {% endfor %}
     </select>
   </div>

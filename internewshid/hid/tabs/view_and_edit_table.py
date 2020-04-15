@@ -122,7 +122,6 @@ class ViewAndEditTableTab(object):
 
     def _get_filters(self, request, **kwargs):
         filters = kwargs.pop('filters', {})
-
         self._apply_dynamic_filters(filters, request, **kwargs)
 
         # If we've hit the 'clear filters' button
