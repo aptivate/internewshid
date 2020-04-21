@@ -1,38 +1,40 @@
 [
     {
+        "model": "dashboard.dashboard",
+        "pk": 1,
         "fields": {
             "name": "main"
-        },
-        "model": "dashboard.dashboard",
-        "pk": 1
+        }
     },
     {
+        "model": "dashboard.widgetinstance",
+        "pk": 1,
         "fields": {
             "column": 1,
             "dashboard": 1,
             "height": "tall",
             "row": 1,
-            "settings": "{\"text\":\"<p>Some of these rumours are also being addressed in the Internews HIS narrowcast programme \\u2018Bala-Bura\\u2019 (played in listening groups throughout the camps) and the Internews HRSM radio programme \\u2018Talking Peace\\u2019 (every Monday 16.00h on Radio Naf).</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: 26-Sep-2018\"}",
+            "settings": "{\"text\":\"<p>DRC</p><p>Heard a rumour? Want to give feedback? Please send your rumours, questions and feedback to <a href='mailto:bd-rumours@internews.org'>bd-rumours@internews.org</a></p>\",\"html\":true,\"title\":\"Situation Report: Date\"}",
             "widget_type": "basic-text-widget",
             "width": 4
-        },
-        "model": "dashboard.widgetinstance",
-        "pk": 1
+        }
     },
     {
+        "model": "dashboard.widgetinstance",
+        "pk": 2,
         "fields": {
             "column": 0,
             "dashboard": 1,
             "height": "tall",
             "row": 1,
-            "settings": "{\"taxonomy\":\"drc\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"2018-09-13\",\"end_time\":\"2018-09-20\"}],\"title\":\"All feedback (recent)\"}",
+            "settings": "{\"taxonomy\":\"drc\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"2020-02-01\",\"end_time\":\"2020-09-01\"}],\"title\":\"All feedback (recent)\"}",
             "widget_type": "term-count-chart",
             "width": 8
-        },
-        "model": "dashboard.widgetinstance",
-        "pk": 2
+        }
     },
     {
+        "model": "dashboard.widgetinstance",
+        "pk": 3,
         "fields": {
             "column": 0,
             "dashboard": 1,
@@ -41,65 +43,651 @@
             "settings": "{\"count\":25,\"order_by\":\"-timestamp\",\"filters\":{},\"title\":\"Recent Updates\"}",
             "widget_type": "table-widget",
             "width": 12
-        },
-        "model": "dashboard.widgetinstance",
-        "pk": 3
+        }
     },
     {
+        "model": "dashboard.widgetinstance",
+        "pk": 4,
         "fields": {
             "column": 0,
             "dashboard": 1,
             "height": "tall",
             "row": 3,
-            "settings": "{\"taxonomy\":\"drc\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"1970-01-01\",\"end_time\":\"2100-01-01\"}],\"title\":\"All feedback\"}",
+            "settings":"{\"taxonomy\":\"drc\",\"exclude_categories\":[\"Unknown\"],\"periods\":[{\"start_time\":\"1970-01-01\",\"end_time\":\"2100-01-01\"}],\"title\":\"All feedback\"}",
             "widget_type": "term-count-chart",
             "width": 12
-        },
-        "model": "dashboard.widgetinstance",
-        "pk": 4
+        }
     },
     {
-        "fields": {
-            "label": "kobo",
-            "profile": "{\"name\":\"Kobo\",\"format\":\"excel\",\"label\":\"kobo\",\"skip_header\":2,\"taxonomies\":{},\"columns\":[{\"field\":\"timestamp\",\"type\":\"date\",\"name\":\"start\",\"date_format\":\"%Y-%m-%dT%H: %M: %S.%f%z\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"end\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"username\"},{\"field\":\"body\",\"type\":\"text\",\"name\":\"What is the feedback or rumour?\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"date\"},{\"field\":\"gender\",\"type\":\"text\",\"name\":\"gender\"},{\"field\":\"age\",\"type\":\"text\",\"name\":\"Age\"},{\"field\":\"location\",\"type\":\"text\",\"name\":\"Location\"},{\"field\":\"language\",\"type\":\"text\",\"name\":\"Langue\"},{\"field\":\"risk\",\"type\":\"text\",\"name\":\"Risk\"},{\"field\":\"contributor\",\"type\":\"text\",\"name\":\"comment\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_id\"},{\"field\":\"external_id\",\"type\":\"text\",\"name\":\"_uuid\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_submission_time\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_validation_status\"},{\"field\":\"ignore\",\"type\":\"ignore\",\"name\":\"_index\"}]}"
-        },
-        "model": "chn_spreadsheet.sheetprofile",
-        "pk": 3
+      "model": "chn_spreadsheet.sheetprofile",
+      "pk": 3,
+      "fields": {
+        "label": "kobo",
+        "profile": "{\"name\": \"Kobo\", \"format\": \"excel\", \"label\": \"kobo\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"start\", \"date_format\": \"%Y-%m-%dT%H: %M: %S.%f%z\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"end\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"username\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"What is the feedback or rumour?\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"date\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"gender\"}, {\"field\": \"age\", \"type\": \"text\", \"name\": \"Age\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"Location\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"Langue\"}, {\"field\": \"risk\", \"type\": \"text\", \"name\": \"Risk\"}, {\"field\": \"contributor\", \"type\": \"text\", \"name\": \"comment\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_id\"}, {\"field\": \"external_id\", \"type\": \"text\", \"name\": \"_uuid\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_submission_time\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_validation_status\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_index\"}]}"
+      }
     },
     {
       "model": "chn_spreadsheet.sheetprofile",
       "pk": 7,
       "fields": {
-          "label": "DRC",
-          "profile": "{\"name\": \"DRC\", \"format\": \"excel\", \"label\": \"ssudan\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"start\", \"date_format\": \"%Y-%m-%dT%H: %M: %S.%f%z\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"end\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"Localit\\u00e9\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"Langue\"}, {\"field\": \"risk\", \"type\": \"text\", \"name\": \"Risque\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"Zone de sant\\u00e9\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Village/Ville\", \"taxonomy\": \"village-ville\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"Type de collecte\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"Genre\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Age\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Entrer date et l'heure\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"Rumeur ou Feedback\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Nom du Staff\"}, {\"field\": \"terms\", \"type\": \"protection_concern\", \"name\": \" \\u26a0  La rumeur ou les commentaires n\\u00e9cessitent-ils une action urgente ou imm\\u00e9diate?\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Si oui, appelez votre superviseur.\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_id\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_uuid\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_submission_time\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_validation_status\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_index\"}]}"
+        "label": "DRC",
+        "profile": "{\"name\": \"DRC\", \"format\": \"excel\", \"label\": \"drc\", \"skip_header\": 2, \"taxonomies\": {}, \"columns\": [{\"field\": \"timestamp\", \"type\": \"date\", \"name\": \"start\", \"date_format\": \"%Y-%m-%dT%H: %M: %S.%f%z\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"end\"}, {\"field\": \"location\", \"type\": \"text\", \"name\": \"Localit\\u00e9\"}, {\"field\": \"sub_location\", \"type\": \"text\", \"name\": \"Zone de sant\\u00e9\"}, {\"field\": \"collection_type\", \"type\": \"text\", \"name\": \"Type de collecte\"}, {\"field\": \"gender\", \"type\": \"text\", \"name\": \"Genre\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Age\", \"taxonomy\": \"age-ranges\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Entrer date et l'heure\"}, {\"field\": \"body\", \"type\": \"text\", \"name\": \"Rumeur ou Feedback\"}, {\"field\": \"contributor\", \"type\": \"text\", \"name\": \"Nom du Staff\"}, {\"field\": \"terms\", \"type\": \"taxonomy\", \"name\": \"Categorie\", \"taxonomy\": \"drc\"}, {\"field\": \"terms\", \"type\": \"protection_concern\", \"name\": \" \\u26a0  La rumeur ou les commentaires n\\u00e9cessitent-ils une action urgente ou imm\\u00e9diate?\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"Si oui, appelez votre superviseur.\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_id\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_uuid\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_submission_time\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_validation_status\"}, {\"field\": \"ignore\", \"type\": \"ignore\", \"name\": \"_index\"}, {\"field\": \"risk\", \"type\": \"text\", \"name\": \"Risque\"}, {\"field\": \"language\", \"type\": \"text\", \"name\": \"Langue\"}]}"
       }
-    }
-    {
-        "fields": {
-            "name": "main"
-        },
-        "model": "tabbed_page.tabbedpage",
-        "pk": 1
     },
     {
-        "fields": {
-            "default": false,
-            "label": "Feedback",
-            "name": "feedback",
-            "page": 1,
-            "position": 2,
-            "settings": "{\"label\":\"Feedback\",\"columns\":[\"select_item\",\"timestamp\",\"body\",\"translation\",\"category\",\"tags\",\"feedback_type\",\"gender\",\"age\",\"location\",\"language\",\"contributor\",\"source\",\"external_id\"],\"filters\":{\"terms\":[]},\"dynamic_filters\":[\"time_range\",\"category\",\"tags\",\"gender\",\"feedback_type\",\"age_range\",\"location\",\"language\",\"risk\",\"contributor\",\"source\",\"external_id\"],\"categories\":[\"drc\"]}",
-            "tab_type": "view-and-edit-table"
-        },
-        "model": "tabbed_page.tabinstance",
-        "pk": 4
+      "model": "tabbed_page.tabbedpage",
+      "pk": 1,
+      "fields": {
+        "name": "main"
+      }
     },
     {
+      "model": "tabbed_page.tabinstance",
+      "pk": 4,
+      "fields": {
+        "settings": "{\"label\": \"Feedback\", \"columns\": [\"select_item\", \"timestamp\", \"body\", \"translation\", \"category\", \"tags\", \"gender\", \"age_range\", \"location\", \"feedback_type\", \"sub_location\", \"contributor\"], \"filters\": {\"terms\": []}, \"dynamic_filters\": [\"time_range\", \"category\", \"tags\", \"gender\", \"age_range\", \"location\", \"sub_location\", \"feedback_type\", \"contributor\"], \"categories\": [\"drc\"]}",
+        "tab_type": "view-and-edit-table",
+        "page": 1,
+        "name": "feedback",
+        "default": false,
+        "position": 2,
+        "label": "Feedback"
+      }
+    },
+    {
+        "model": "data_layer.customconstance",
+        "pk": 1,
         "fields": {
             "key": "ITEM_TYPE_CATEGORY",
-            "value": "gAJYLAAAAHsiYWxsIjogImJhbmdsYWRlc2gtcmVmdWdlZS1jcmlzaXMtc2VjdG9ycyJ9cQEu"
-        },
+            "value": "gAJYDgAAAHsiYWxsIjogImRyYyJ9cQAu"
+        }
+    },
+    {
         "model": "data_layer.customconstance",
-        "pk": 1
+        "pk": 2,
+        "fields": {
+            "key": "CONTEXT_LOCATION",
+            "value": "gAJYAwAAAERSQ3EALg=="
+        }
+    },
+    {
+        "model": "data_layer.customconstance",
+        "pk": 5,
+        "fields": {
+            "key": "GLOBAL_DATA_SOURCE",
+            "value": "gAJYAwAAAGRyY3EALg=="
+        }
+    },
+    {
+        "model": "data_layer.customconstance",
+        "pk": 6,
+        "fields": {
+            "key": "DEFAULT_TABBED_PAGE_NAME",
+            "value": "gAJYBAAAAG1haW5xAC4="
+        }
+    },
+    {
+        "model": "data_layer.customconstance",
+        "pk": 7,
+        "fields": {
+            "key": "DEFAULT_TAB_NAME",
+            "value": "gAJYAwAAAGFsbHEALg=="
+        }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 2,
+      "fields": {
+        "name": "Item Types",
+        "slug": "item-types",
+        "multiplicity": "multiple",
+        "vocabulary": "closed"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 3,
+      "fields": {
+        "name": "Tags",
+        "slug": "tags",
+        "multiplicity": "multiple",
+        "vocabulary": "open"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 4,
+      "fields": {
+        "name": "Data Origins",
+        "slug": "data-origins",
+        "multiplicity": "optional",
+        "vocabulary": "closed"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 5,
+      "fields": {
+        "name": "Countries",
+        "slug": "countries",
+        "multiplicity": "optional",
+        "vocabulary": "closed"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 6,
+      "fields": {
+        "name": "Contexts",
+        "slug": "contexts",
+        "multiplicity": "optional",
+        "vocabulary": "closed"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 7,
+      "fields": {
+        "name": "DRC",
+        "slug": "drc",
+        "multiplicity": "optional",
+        "vocabulary": "open"
+      }
+    },
+    {
+      "model": "taxonomies.taxonomy",
+      "pk": 8,
+      "fields": {
+        "name": "Age Ranges",
+        "slug": "age-ranges",
+        "multiplicity": "optional",
+        "vocabulary": "closed"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 29,
+      "fields": {
+        "name": "question",
+        "taxonomy": 2,
+        "long_name": "Question"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 30,
+      "fields": {
+        "name": "rumour",
+        "taxonomy": 2,
+        "long_name": "Rumour"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 31,
+      "fields": {
+        "name": "Geopoll Spreadsheet",
+        "taxonomy": 4,
+        "long_name": "Geopoll Spreadsheet"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 32,
+      "fields": {
+        "name": "Rapidpro Spreadsheet",
+        "taxonomy": 4,
+        "long_name": "Rapidpro Spreadsheet"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 33,
+      "fields": {
+        "name": "Form Entry",
+        "taxonomy": 4,
+        "long_name": "Form Entry"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 34,
+      "fields": {
+        "name": "Liberia",
+        "taxonomy": 5,
+        "long_name": "Liberia"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 35,
+      "fields": {
+        "name": "Ebola-Liberia",
+        "taxonomy": 6,
+        "long_name": "Ebola-Liberia"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 54,
+      "fields": {
+        "name": "Water Sanitation Hygiene (WASH)",
+        "taxonomy": 7,
+        "long_name": "Water Sanitation Hygiene (WASH)"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 55,
+      "fields": {
+        "name": "Articles non alimentaires / Abri",
+        "taxonomy": 7,
+        "long_name": "Articles non alimentaires / Abri"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 56,
+      "fields": {
+        "name": "Sant\u00e9",
+        "taxonomy": 7,
+        "long_name": "Sant\u00e9"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 57,
+      "fields": {
+        "name": "Education",
+        "taxonomy": 7,
+        "long_name": "Education"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 58,
+      "fields": {
+        "name": "Nutrition",
+        "taxonomy": 7,
+        "long_name": "Nutrition"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 59,
+      "fields": {
+        "name": "Protection des enfants",
+        "taxonomy": 7,
+        "long_name": "Protection des enfants"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 60,
+      "fields": {
+        "name": "S\u00e9curit\u00e9 alimentaire",
+        "taxonomy": 7,
+        "long_name": "S\u00e9curit\u00e9 alimentaire"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 61,
+      "fields": {
+        "name": "Violence Sexuelle",
+        "taxonomy": 7,
+        "long_name": "Violence Sexuelle"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 62,
+      "fields": {
+        "name": "Gestion de site",
+        "taxonomy": 7,
+        "long_name": "Gestion de site"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 63,
+      "fields": {
+        "name": "Protection",
+        "taxonomy": 7,
+        "long_name": "Protection"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 64,
+      "fields": {
+        "name": "Camp Coordination and Camp Management (CCCM)",
+        "taxonomy": 7,
+        "long_name": "Camp Coordination and Camp Management (CCCM)"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 65,
+      "fields": {
+        "name": "Camp Coordination and Camp Management (CCCM) Education Health",
+        "taxonomy": 7,
+        "long_name": "Camp Coordination and Camp Management (CCCM) Education Health"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 66,
+      "fields": {
+        "name": "concern",
+        "taxonomy": 2,
+        "long_name": "Concern"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 67,
+      "fields": {
+        "name": "Emergency Shelter and NFI",
+        "taxonomy": 7,
+        "long_name": "Emergency Shelter and NFI"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 68,
+      "fields": {
+        "name": "Food Security and Livelihoods (FSL)",
+        "taxonomy": 7,
+        "long_name": "Food Security and Livelihoods (FSL)"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 69,
+      "fields": {
+        "name": "Food Security and Livelihoods (FSL) Protection",
+        "taxonomy": 7,
+        "long_name": "Food Security and Livelihoods (FSL) Protection"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 70,
+      "fields": {
+        "name": "Security",
+        "taxonomy": 7,
+        "long_name": "Security"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 73,
+      "fields": {
+        "name": "Camp Coordination and Camp Management (CCCM) Protection",
+        "taxonomy": 7,
+        "long_name": "Camp Coordination and Camp Management (CCCM) Protection"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 420,
+      "fields": {
+        "name": "<11",
+        "taxonomy": 8,
+        "long_name": "<11"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 421,
+      "fields": {
+        "name": "11-14",
+        "taxonomy": 8,
+        "long_name": "11-14"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 422,
+      "fields": {
+        "name": "15-18",
+        "taxonomy": 8,
+        "long_name": "15-18"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 423,
+      "fields": {
+        "name": "19-25",
+        "taxonomy": 8,
+        "long_name": "19-25"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 424,
+      "fields": {
+        "name": "26-35",
+        "taxonomy": 8,
+        "long_name": "26-35"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 425,
+      "fields": {
+        "name": "36-45",
+        "taxonomy": 8,
+        "long_name": "36-45"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 426,
+      "fields": {
+        "name": "46-60",
+        "taxonomy": 8,
+        "long_name": "46-60"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 427,
+      "fields": {
+        "name": "60+",
+        "taxonomy": 8,
+        "long_name": "60+"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 430,
+      "fields": {
+        "name": "Beliefs_observations",
+        "taxonomy": 2,
+        "long_name": "Beliefs_observations"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 431,
+      "fields": {
+        "name": "Suggestion_requests",
+        "taxonomy": 2,
+        "long_name": "Suggestion_requests"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 432,
+      "fields": {
+        "name": "Appreciation_encouragement",
+        "taxonomy": 2,
+        "long_name": "Appreciation_encouragement"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 433,
+      "fields": {
+        "name": "Criticism",
+        "taxonomy": 2,
+        "long_name": "Criticism"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 434,
+      "fields": {
+        "name": "unknown",
+        "taxonomy": 8,
+        "long_name": "unknown"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 435,
+      "fields": {
+        "name": "Vaccination",
+        "taxonomy": 7,
+        "long_name": "Vaccination"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 436,
+      "fields": {
+        "name": "Coronavirus",
+        "taxonomy": 7,
+        "long_name": "Coronavirus"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 437,
+      "fields": {
+        "name": "Communication",
+        "taxonomy": 7,
+        "long_name": "Communication"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 438,
+      "fields": {
+        "name": "S\u00e9curit\u00e9",
+        "taxonomy": 7,
+        "long_name": "S\u00e9curit\u00e9"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 439,
+      "fields": {
+        "name": "Coordination",
+        "taxonomy": 7,
+        "long_name": ""
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 440,
+      "fields": {
+        "name": "Prise en charge psychosociale",
+        "taxonomy": 7,
+        "long_name": "Prise en charge psychosociale"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 441,
+      "fields": {
+        "name": "PCI",
+        "taxonomy": 7,
+        "long_name": "PCI"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 442,
+      "fields": {
+        "name": "CTE",
+        "taxonomy": 7,
+        "long_name": "CTE"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 443,
+      "fields": {
+        "name": "Surveillance",
+        "taxonomy": 7,
+        "long_name": "Surveillance"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 444,
+      "fields": {
+        "name": "Prise en charge m\u00e9dicale",
+        "taxonomy": 7,
+        "long_name": "Prise en charge m\u00e9dicale"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 445,
+      "fields": {
+        "name": "EDS",
+        "taxonomy": 7,
+        "long_name": "EDS"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 446,
+      "fields": {
+        "name": "Face \u00e0 face",
+        "taxonomy": 2,
+        "long_name": "Face \u00e0 face"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 447,
+      "fields": {
+        "name": "Club d'\u00e9coute",
+        "taxonomy": 2,
+        "long_name": "Club d'\u00e9coute"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 448,
+      "fields": {
+        "name": "Table Ronde",
+        "taxonomy": 2,
+        "long_name": "Table Ronde"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 449,
+      "fields": {
+        "name": "D\u00e9bat public",
+        "taxonomy": 2,
+        "long_name": "D\u00e9bat public"
+      }
+    },
+    {
+      "model": "taxonomies.term",
+      "pk": 450,
+      "fields": {
+        "name": "",
+        "taxonomy": 3,
+        "long_name": ""
+      }
     }
 ]

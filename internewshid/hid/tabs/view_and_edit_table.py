@@ -122,12 +122,13 @@ class ViewAndEditTableTab(object):
 
     def _get_filters(self, request, **kwargs):
         filters = kwargs.pop('filters', {})
-        self._apply_dynamic_filters(filters, request, **kwargs)
 
         # If we've hit the 'clear filters' button
         if 'clear' == request.GET.get('button-clear'):
             request.session[self.SESSION_FILTERS_KEY] = {}
-            return {}
+            return filters
+
+        self._apply_dynamic_filters(filters, request, **kwargs)
 
         # If we've just saved an Item, then pass through filters
         if (self.SESSION_FILTERS_KEY in request.session and
